@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:ignore="ContentDescription">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/singPic"
+            android:layout_width="64dp"
+            android:layout_height="64dp" />
+
+        <TextView
+            android:id="@+id/titleName"
+            style="@style/NotificationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@+id/singPic"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/def_text"
+            android:textSize="15dp" />
+
+        <ImageButton
+            android:id="@+id/showdeslrc"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/titleName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/singPic"
+            android:background="@drawable/nofify_showdeslrc" />
+
+        <ImageButton
+            android:id="@+id/hidedeslrc"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/titleName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/singPic"
+            android:background="@drawable/nofify_hidedeslrc" />
+
+        <ImageButton
+            android:id="@+id/deslrcUnlock"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/titleName"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/singPic"
+            android:background="@drawable/nofify_deslrcunlock" />
+
+        <ImageButton
+            android:id="@+id/prew"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="2dp"
+            android:background="@drawable/bar_buttombg"
+            android:src="@drawable/statusbar_btn_prev" />
+
+        <ImageButton
+            android:id="@+id/play"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/prew"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/prew"
+            android:background="@drawable/bar_buttombg"
+            android:src="@drawable/statusbar_btn_play" />
+
+        <ImageButton
+            android:id="@+id/pause"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/prew"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/prew"
+            android:background="@drawable/bar_buttombg"
+            android:src="@drawable/statusbar_btn_pause" />
+
+        <ImageButton
+            android:id="@+id/next"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/prew"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/play"
+            android:background="@drawable/bar_buttombg"
+            android:src="@drawable/statusbar_btn_next" />
+    </RelativeLayout>
+
+</LinearLayout>

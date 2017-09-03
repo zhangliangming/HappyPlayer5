@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_pop"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+        <RelativeLayout
+            android:id="@+id/pop_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/centerLine"
+            android:layout_marginTop="-55dp"
+            android:clickable="true">
+
+            <RelativeLayout
+                android:id="@+id/titlelayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="#fff">
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical|center"
+                    android:layout_marginLeft="10dp"
+                    android:singleLine="true"
+                    android:text="播放列表"
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="15dp" />
+
+
+                <TextView
+                    android:id="@+id/list_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical|center"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/title"
+                    android:singleLine="true"
+                    android:text="000"
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="15dp" />
+
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/modeAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:layout_toLeftOf="@+id/hLine"
+                    android:text="@string/mode_all"
+                    android:textColor="#888"
+                    android:textSize="22dp"
+                    android:visibility="invisible" />
+
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/modeRandom"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/hLine"
+                    android:text="@string/mode_random"
+                    android:textColor="#888"
+                    android:textSize="22dp" />
+
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/modeSingle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/hLine"
+                    android:text="@string/mode_single"
+                    android:textColor="#888"
+                    android:textSize="25dp" />
+
+
+                <View
+                    android:id="@+id/hLine"
+                    android:layout_width="0.5dip"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toLeftOf="@+id/delete"
+                    android:background="#e5e5e5"></View>
+
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/delete_img"
+                    android:textColor="#888"
+                    android:textSize="25dp" />
+
+
+            </RelativeLayout>
+
+
+            <View
+                android:id="@+id/line"
+                android:layout_width="wrap_content"
+                android:layout_height="0.8dip"
+                android:layout_below="@+id/titlelayout"
+                android:layout_centerVertical="true"
+                android:background="#e5e5e5"></View>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/line"
+                android:background="#fff"
+                android:orientation="vertical">
+
+                <com.zlm.hp.widget.LinearLayoutRecyclerView
+                    android:id="@+id/curplaylist_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"></com.zlm.hp.widget.LinearLayoutRecyclerView>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/centerLine"
+            android:layout_width="wrap_content"
+            android:layout_height="0.5dip"
+            android:layout_centerVertical="true"></View>
+    </RelativeLayout>
+
+</LinearLayout>

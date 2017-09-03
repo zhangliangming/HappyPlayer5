@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="vertical"
+    tools:context="com.zlm.hp.ui.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <com.zlm.hp.widget.SlidingMenuLayout
+            android:id="@+id/slidingMenuLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/main_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <include
+                    android:id="@+id/title"
+                    layout="@layout/layout_main_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/title_height"></include>
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"></android.support.v4.view.ViewPager>
+
+            </LinearLayout>
+
+
+        </com.zlm.hp.widget.SlidingMenuLayout>
+
+        <include
+            layout="@layout/layout_main_pop"
+            android:paddingBottom="@dimen/player_height"></include>
+
+        <LinearLayout
+            android:id="@+id/playerBarParent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical">
+
+            <com.zlm.hp.widget.DividerView
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="2dp" />
+
+            <com.zlm.hp.widget.SwipeoutLayout
+                android:id="@+id/playerBar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/player_height"></com.zlm.hp.widget.SwipeoutLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+
+</LinearLayout>

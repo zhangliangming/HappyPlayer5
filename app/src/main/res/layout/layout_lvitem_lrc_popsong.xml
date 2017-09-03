@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+
+    <com.zlm.hp.widget.PopListItemRelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/songitem_height"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/songIndex"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical|center"
+            android:layout_marginLeft="10dp"
+            android:gravity="center|center_vertical"
+            android:singleLine="true"
+            android:text="000"
+            android:textColor="#fff"
+            android:textSize="15dp" />
+
+
+        <com.zlm.hp.libs.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/singPic"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/singer_def"
+            android:visibility="invisible"
+            app:civ_border_color="#ffffff"
+            app:civ_border_width="2dp" />
+
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/delete"
+            android:layout_toRightOf="@+id/songIndex"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/songName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="歌曲名称"
+                android:textColor="#fff"
+                android:textSize="15dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/islocal"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
+                    android:background="@mipmap/ald"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/singerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="歌手名称"
+                    android:textColor="#fff"
+                    android:textSize="12dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="10dp"
+            android:text="@string/delete_img"
+            android:textColor="#fff"
+            android:textSize="25dp" />
+        />
+
+    </com.zlm.hp.widget.PopListItemRelativeLayout>
+
+</LinearLayout>

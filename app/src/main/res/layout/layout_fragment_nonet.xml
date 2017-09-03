@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/net_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/player_height"
+        android:clickable="true">
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/nonet_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="@string/no_net_img"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="@dimen/base_img_height" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nonet_img"
+            android:layout_marginTop="10dp"
+            android:gravity="center|center_vertical"
+            android:singleLine="true"
+            android:text="当前网络不可用，点击屏幕刷新"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="18dp" />
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>

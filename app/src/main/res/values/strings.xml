@@ -1,0 +1,66 @@
+<resources>
+    <string name="app_name">乐乐音乐</string>
+    <string name="back_tip">再按一次返回桌面</string>
+    <string name="exit_tip">程序出现异常,即将退出！</string>
+
+    <string name="title_icon">&#xe8a3;</string>
+    <string name="title_user">我的</string>
+    <string name="title_recommend">排行</string>
+    <string name="title_special">歌单</string>
+    <string name="title_search">&#xe600;</string>
+
+    <string name="def_text">乐乐音乐，开心每一天</string>
+    <string name="def_artist">乐乐音乐</string>
+    <string name="def_songName">开心每一天</string>
+    <string name="copyright">copyright ©2015-2017 zhangliangming All Rights Reserved.</string>
+
+    <string name="loadmore">点击加载更多</string>
+    <string name="loading">正在加载...</string>
+    <string name="nomore">已经到底了</string>
+    <string name="nodata">数据为空</string>
+
+    <!-- tab my -->
+    <string name="tab_localmusic">本地音乐</string>
+    <string name="tab_like">喜欢</string>
+    <string name="tab_download">下载</string>
+    <string name="tab_centent">最近</string>
+    <string name="tab_wifi">仅wifi联网</string>
+    <string name="tab_wifi_img">&#xe8a0;</string>
+    <string name="tab_desktoplrc">桌面歌词</string>
+    <string name="tab_desktoplrc_img">&#xe89f;</string>
+    <string name="tab_locklrc">锁屏歌词</string>
+    <string name="tab_locklrc_img">&#xe884;</string>
+    <string name="tab_hello">问候语</string>
+    <string name="tab_hello_img">&#xe8a2;</string>
+    <string name="tab_control">耳机线控</string>
+    <string name="tab_control_img">&#xe8a1;</string>
+    <string name="tab_close">退出程序</string>
+    <string name="tab_close_img">&#xe812;</string>
+
+    <string name="no_net_img">&#xe62d;</string>
+    <string name="loading_img">&#xe68e;</string>
+
+    <string name="title_cancel">取消</string>
+    <string name="clean_img">&#xe63f;</string>
+    <string name="scan_img">&#xe640;</string>
+    <string name="close_img">&#xe689;</string>
+
+
+    //
+    <string name="delete_img">&#xe76b;</string>
+    <string name="like_img">&#xe616;</string>
+    <string name="liked_img">&#xe628;</string>
+    <string name="download_img">&#xe632;</string>
+    <string name="more_img">&#xe602;</string>
+
+    //字体
+    <string name="ziti_jia">&#xe6f9;</string>
+    <string name="ziti_jian">&#xe6f6;</string>
+
+    //播放模式
+    <string name="mode_all">&#xe630;</string>
+    <string name="mode_random">&#xe660;</string>
+    <string name="mode_single">&#xe62f;</string>
+
+
+</resources>

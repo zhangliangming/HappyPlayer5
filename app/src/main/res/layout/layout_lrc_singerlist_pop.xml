@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/singerListPopLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent">
+
+
+        <com.zlm.hp.widget.PlayListBGRelativeLayout
+            android:id="@+id/pop_singerlist_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:clickable="true">
+
+            <RelativeLayout
+                android:id="@+id/spltitlelayout"
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+
+                <TextView
+                    android:id="@+id/tipText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical|center"
+                    android:singleLine="true"
+                    android:text="请选择歌手"
+                    android:textColor="#fff"
+                    android:textSize="15dp" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/splline"
+                android:layout_width="wrap_content"
+                android:layout_height="0.1dip"
+                android:layout_below="@+id/spltitlelayout"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#50ffffff"></View>
+
+            <LinearLayout
+                android:id="@+id/listviewp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_below="@+id/splline"
+                android:orientation="vertical">
+
+                <com.zlm.hp.widget.LinearLayoutRecyclerView
+                    android:id="@+id/singerlist_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"></com.zlm.hp.widget.LinearLayoutRecyclerView>
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/splcline"
+                android:layout_width="wrap_content"
+                android:layout_height="0.1dip"
+                android:layout_below="@+id/listviewp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#50ffffff"></View>
+
+            <LinearLayout
+                android:id="@+id/splcalcel"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/lrc_pop_item_height"
+                android:layout_below="@+id/splcline"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="取消"
+                    android:textColor="#fff"
+                    android:textSize="13dp"></TextView>
+            </LinearLayout>
+
+        </com.zlm.hp.widget.PlayListBGRelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

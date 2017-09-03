@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/songitem_height"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/list_size_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="共有0首歌曲"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="14.0dip" />
+
+        <com.zlm.hp.widget.DividerView
+            android:layout_width="match_parent"
+            android:layout_height="1.5dip"
+            android:layout_alignParentBottom="true" />
+    </RelativeLayout>
+
+</LinearLayout>

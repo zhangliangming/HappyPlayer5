@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context="com.zlm.hp.ui.SearchLrcActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#efefef"
+        android:orientation="vertical">
+
+        <include
+            layout="@layout/layout_search_lrc_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/title_height"></include>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical">
+
+            <com.zlm.hp.widget.BaseEditTextBG
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/songtext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:text="歌曲:"
+                    android:textColor="#888"
+                    android:textSize="18dp" />
+
+                <EditText
+                    android:id="@+id/songNameEt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toRightOf="@+id/songtext"
+                    android:background="@color/transparent"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingRight="35dp"
+                    android:singleLine="true"
+                    android:textColor="#000" />
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/songclean_img"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="@string/clean_img"
+                    android:textColor="#888"
+                    android:textSize="@dimen/title_icon_size"
+                    android:visibility="invisible" />
+            </com.zlm.hp.widget.BaseEditTextBG>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_margin="10dp">
+
+                <com.zlm.hp.widget.BaseEditTextBG
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toLeftOf="@+id/searchbtn">
+
+                    <TextView
+                        android:id="@+id/singertext"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:text="歌手:"
+                        android:textColor="#888"
+                        android:textSize="18dp" />
+
+                    <EditText
+                        android:id="@+id/singerNameEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/singertext"
+                        android:background="@color/transparent"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:paddingRight="35dp"
+                        android:singleLine="true"
+                        android:textColor="#555555" />
+
+                    <com.zlm.hp.widget.IconfontTextView
+                        android:id="@+id/singclean_img"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="@string/clean_img"
+                        android:textColor="#888"
+                        android:textSize="@dimen/title_icon_size"
+                        android:visibility="invisible" />
+
+
+                </com.zlm.hp.widget.BaseEditTextBG>
+
+                <TextView
+                    android:id="@+id/searchbtn"
+                    android:layout_width="@dimen/title_height"
+                    android:layout_height="@dimen/title_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="搜索"
+                    android:textColor="#0288d1"
+                    android:textSize="@dimen/title_size"></TextView>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/cur_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/line"
+                android:text="00"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="5dp"
+                android:text="/"
+                android:textColor="#888" />
+
+            <TextView
+                android:id="@+id/sum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/line"
+                android:text="00"
+                android:textColor="#888" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <RelativeLayout
+                android:id="@+id/loading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <com.zlm.hp.widget.IconfontTextView
+                    android:id="@+id/load_img"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/loading_img"
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="@dimen/base_img_height" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/viewpage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:overScrollMode="never"></android.support.v4.view.ViewPager>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+</LinearLayout>

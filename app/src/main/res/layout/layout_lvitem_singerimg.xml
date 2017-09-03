@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_margin="15dp">
+
+        <ImageView
+            android:id="@+id/singPic"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/picture_manager_default" />
+
+        <ImageView
+            android:id="@+id/unselect"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@mipmap/brv" />
+
+        <ImageView
+            android:id="@+id/selected"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@mipmap/bru"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+</LinearLayout>

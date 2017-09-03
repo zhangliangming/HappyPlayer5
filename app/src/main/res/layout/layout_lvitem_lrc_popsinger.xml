@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+
+    <com.zlm.hp.widget.PopListItemRelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/songitem_height"
+        android:clickable="true">
+
+
+        <com.zlm.hp.libs.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/singPic"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:src="@mipmap/singer_def"
+            app:civ_border_color="#ffffff"
+            app:civ_border_width="2dp" />
+
+
+        <TextView
+            android:id="@+id/singerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/singPic"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:text="歌手名称"
+            android:textColor="#fff"
+            android:textSize="16dp" />
+
+    </com.zlm.hp.widget.PopListItemRelativeLayout>
+
+</LinearLayout>

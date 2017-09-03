@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+    android:background="@color/defColor">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/closebtn"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/close_img"
+            android:textColor="#fff"
+            android:textSize="@dimen/title_icon_size" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/right_flag"
+            android:layout_toRightOf="@+id/closebtn"
+            android:ellipsize="marquee"
+            android:gravity="center|center_horizontal"
+            android:singleLine="true"
+            android:text="标题"
+            android:textColor="#fff"
+            android:textSize="@dimen/title_size" />
+
+        <TextView
+            android:id="@+id/right_flag"
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
+            android:layout_alignParentRight="true"
+            android:layout_margin="5dp"></TextView>
+    </RelativeLayout>
+
+
+</LinearLayout>

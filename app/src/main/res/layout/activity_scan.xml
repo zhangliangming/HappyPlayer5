@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:orientation="vertical"
+    tools:context="com.zlm.hp.ui.ScanActivity">
+
+    <include layout="@layout/layout_scan_title"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="@dimen/scaning_img"
+            android:layout_height="@dimen/scaning_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@mipmap/b00" />
+
+        <ImageView
+            android:id="@+id/scaning_img"
+            android:layout_width="@dimen/scaning_img"
+            android:layout_height="@dimen/scaning_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:background="@mipmap/b02"
+            android:visibility="invisible" />
+
+        <RelativeLayout
+            android:id="@+id/scan"
+            android:layout_width="@dimen/scaning_img"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scaning_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/scan_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="一键扫描手机内的歌曲文件"
+                android:textColor="@color/def_bar_title_color">
+
+            </TextView>
+
+            <com.zlm.hp.widget.ButtonRelativeLayout
+                android:id="@+id/start_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/scan_tip"
+                android:layout_marginTop="30dp"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="8dp"
+                    android:text="开始扫描"
+                    android:textColor="#fff" />
+
+
+            </com.zlm.hp.widget.ButtonRelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/scaning"
+            android:layout_width="@dimen/scaning_img"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scaning_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/scaning_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="已扫描0首歌曲"
+                android:textColor="@color/def_bar_title_color">
+
+            </TextView>
+
+            <com.zlm.hp.widget.ButtonRelativeLayout
+                android:id="@+id/stop_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/scaning_text"
+                android:layout_marginTop="30dp"
+                android:clickable="true">
+
+                <TextView
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="8dp"
+                    android:text="停止扫描"
+                    android:textColor="#fff" />
+
+
+            </com.zlm.hp.widget.ButtonRelativeLayout>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/scan_finish"
+            android:layout_width="@dimen/scaning_img"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scaning_img"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:visibility="invisible">
+
+
+            <com.zlm.hp.widget.ButtonRelativeLayout
+                android:id="@+id/finish_scan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="30dp"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/scaning_finish_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="8dp"
+                    android:text="更新本地歌曲"
+                    android:textColor="#fff" />
+
+
+            </com.zlm.hp.widget.ButtonRelativeLayout>
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
