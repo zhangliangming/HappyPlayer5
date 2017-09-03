@@ -27,7 +27,7 @@
 
 # 部分动态图 #
 
-![](https://i.imgur.com/hIrMMyW.gif)
+![](http://upload-images.jianshu.io/upload_images/4111431-d8538149d0f6e24f.gif?imageMogr2/auto-orient/strip)
 
 # 效果图 #
 - 主界面
