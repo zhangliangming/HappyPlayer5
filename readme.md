@@ -25,6 +25,10 @@
 - 窗口右滑关闭
 - 歌曲边缓存边播放
 
+# 部分动态图 #
+
+![](https://i.imgur.com/hIrMMyW.gif)
+
 # 效果图 #
 - 主界面
 
@@ -59,6 +63,9 @@
 
 # 声明 #
 仅用于学习用途
+
+# 项目地址 #
+[https://github.com/zhangliangming/HappyPlayer5.git](https://github.com/zhangliangming/HappyPlayer5.git)
 
 # 联系方式 #
 316257874@qq.com
