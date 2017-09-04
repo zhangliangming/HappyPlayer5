@@ -228,17 +228,22 @@ public class HPApplication extends Application {
         return curAudioInfos;
     }
 
-    public void setCurAudioInfos(List<AudioInfo> curAudioInfos) {
+    public void setCurAudioInfos(final List<AudioInfo> curAudioInfos) {
         this.curAudioInfos = curAudioInfos;
-        String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfos.ser";
-        if (curAudioInfos != null) {
-            SerializableObjUtil.saveObj(filePath, curAudioInfos);
-        } else {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
+        new Thread() {
+            @Override
+            public void run() {
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfos.ser";
+                if (curAudioInfos != null) {
+                    SerializableObjUtil.saveObj(filePath, curAudioInfos);
+                } else {
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
             }
-        }
+        }.start();
     }
 
     public AudioInfo getCurAudioInfo() {
@@ -250,17 +255,24 @@ public class HPApplication extends Application {
         return curAudioInfo;
     }
 
-    public void setCurAudioInfo(AudioInfo curAudioInfo) {
+    public void setCurAudioInfo(final AudioInfo curAudioInfo) {
         this.curAudioInfo = curAudioInfo;
-        String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfo.ser";
-        if (curAudioInfo != null) {
-            SerializableObjUtil.saveObj(filePath, curAudioInfo);
-        } else {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
+        new Thread() {
+            @Override
+            public void run() {
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfo.ser";
+                if (curAudioInfo != null) {
+                    SerializableObjUtil.saveObj(filePath, curAudioInfo);
+                } else {
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
             }
-        }
+        }.start();
+
+
     }
 
     public AudioMessage getCurAudioMessage() {
@@ -272,17 +284,22 @@ public class HPApplication extends Application {
         return curAudioMessage;
     }
 
-    public void setCurAudioMessage(AudioMessage curAudioMessage) {
+    public void setCurAudioMessage(final AudioMessage curAudioMessage) {
         this.curAudioMessage = curAudioMessage;
-        String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioMessage.ser";
-        if (curAudioMessage != null) {
-            SerializableObjUtil.saveObj(filePath, curAudioMessage);
-        } else {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
+        new Thread() {
+            @Override
+            public void run() {
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioMessage.ser";
+                if (curAudioMessage != null) {
+                    SerializableObjUtil.saveObj(filePath, curAudioMessage);
+                } else {
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
             }
-        }
+        }.start();
     }
 
     public RankListResult getRankListResult() {
@@ -294,17 +311,22 @@ public class HPApplication extends Application {
         return rankListResult;
     }
 
-    public void setRankListResult(RankListResult rankListResult) {
+    public void setRankListResult(final RankListResult rankListResult) {
         this.rankListResult = rankListResult;
-        String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "rankListResult.ser";
-        if (rankListResult != null) {
-            SerializableObjUtil.saveObj(filePath, rankListResult);
-        } else {
-            File file = new File(filePath);
-            if (file.exists()) {
-                file.delete();
+        new Thread() {
+            @Override
+            public void run() {
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "rankListResult.ser";
+                if (rankListResult != null) {
+                    SerializableObjUtil.saveObj(filePath, rankListResult);
+                } else {
+                    File file = new File(filePath);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
             }
-        }
+        }.start();
     }
 
     public boolean isLrcSeekTo() {

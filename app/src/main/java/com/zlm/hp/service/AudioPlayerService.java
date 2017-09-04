@@ -577,13 +577,31 @@ public class AudioPlayerService extends Service {
 
         if (mHPApplication.getCurAudioInfo() != null) {
             if (!mHPApplication.getCurAudioInfo().getHash().equals(audioInfo.getHash())) {
+
+
+                //设置当前播放数据
+                mHPApplication.setCurAudioMessage(audioMessage);
+                //设置当前正在播放的歌曲数据
+                mHPApplication.setCurAudioInfo(audioInfo);
+                //设置当前的播放索引
+                mHPApplication.setPlayIndexHashID(audioInfo.getHash());
+
                 //发送init的广播
                 Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
                 //initIntent.putExtra(AudioMessage.KEY, audioMessage);
                 initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 sendBroadcast(initIntent);
             }
+
         } else {
+
+            //设置当前播放数据
+            mHPApplication.setCurAudioMessage(audioMessage);
+            //设置当前正在播放的歌曲数据
+            mHPApplication.setCurAudioInfo(audioInfo);
+            //设置当前的播放索引
+            mHPApplication.setPlayIndexHashID(audioInfo.getHash());
+
             //发送init的广播
             Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
             //initIntent.putExtra(AudioMessage.KEY, audioMessage);
@@ -591,12 +609,6 @@ public class AudioPlayerService extends Service {
             sendBroadcast(initIntent);
         }
 
-        //设置当前播放数据
-        mHPApplication.setCurAudioMessage(audioMessage);
-        //设置当前正在播放的歌曲数据
-        mHPApplication.setCurAudioInfo(audioInfo);
-        //设置当前的播放索引
-        mHPApplication.setPlayIndexHashID(audioInfo.getHash());
 
         if (audioInfo.getType() == AudioInfo.LOCAL) {
             //播放本地歌曲

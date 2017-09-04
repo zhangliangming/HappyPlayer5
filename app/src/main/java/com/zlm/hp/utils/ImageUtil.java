@@ -129,7 +129,7 @@ public class ImageUtil {
             protected void onPostExecute(Bitmap result) {
 
                 if (result != null) {
-                    if (imageView.getTag().equals(key)) {
+                    if (imageView.getTag() != null && imageView.getTag().equals(key)) {
                         imageView.setImageDrawable(new BitmapDrawable(result));
                     }
                     if (sImageCache.get(key) == null) {

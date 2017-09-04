@@ -337,20 +337,23 @@ public class AudioInfoDB {
      * @param audioInfo
      */
     public boolean addRecentOrLikeAudio(AudioInfo audioInfo, boolean isRecent) {
-
-        if (audioInfo.getType() == AudioInfo.NET) {
+        int type = audioInfo.getType();
+        if (type == AudioInfo.NET) {
             if (isRecent)
-                audioInfo.setType(AudioInfo.RECENT_NET);
-            else audioInfo.setType(AudioInfo.LIKE_NET);
+                type = AudioInfo.RECENT_NET;
+            else type = AudioInfo.LIKE_NET;
         } else {
             if (isRecent)
-                audioInfo.setType(AudioInfo.RECENT_LOCAL);
-            else audioInfo.setType(AudioInfo.LIKE_LOCAL);
+                type = AudioInfo.RECENT_LOCAL;
+            else type = AudioInfo.LIKE_LOCAL;
         }
+
         //更新创建时间
         audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
         List<ContentValues> values = new ArrayList<ContentValues>();
         ContentValues value = getContentValues(audioInfo);
+        value.put("type", type);
+
         values.add(value);
 
         return insert(values);
