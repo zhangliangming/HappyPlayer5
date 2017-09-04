@@ -234,7 +234,7 @@ public class SwipeoutLayout extends LinearLayout {
                 // logger.e("mDragViewLeftX=" + mDragViewLeftX + "  mDragViewRightX=" + mDragViewRightX);
                 //  logger.e("event.getRawX() = " + event.getRawX());
                 //按下焦点在手动view里面
-                if ((mDragViewLeftX <= event.getRawX() && event.getRawX() <= mDragViewRightX)) {
+                if (isMenuViewShow() || (mDragViewLeftX <= event.getRawX() && event.getRawX() <= mDragViewRightX)) {
                     isTouchMove = true;
                 }
             }
