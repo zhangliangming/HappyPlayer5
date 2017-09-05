@@ -143,6 +143,13 @@ public class LikeMusicFragment extends BaseFragment {
                 }
             }
 
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
+            mAdapter.reshViewHolder(null);
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
+            //初始化
+            // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
+            mAdapter.reshViewHolder(audioInfo);
         }
     }
 
