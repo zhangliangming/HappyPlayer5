@@ -185,7 +185,7 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
      *
      * @param audioInfo
      */
-    public void reshViewHolder(AudioInfo audioInfo) {
+    public void reshViewHolder(AudioInfo audioInfo, boolean isAdd) {
         if (playIndexPosition != -1) {
             notifyItemChanged(playIndexPosition);
         }
@@ -198,7 +198,7 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
         playIndexPosition = getPlayIndexPosition(audioInfo);
         if (playIndexPosition != -1) {
             notifyItemChanged(playIndexPosition);
-        } else {
+        } else if (isAdd) {
             mDatas.add(0, audioInfo);
         }
         playIndexHash = audioInfo.getHash();

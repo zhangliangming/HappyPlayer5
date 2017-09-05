@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.zlm.hp.model.DownloadThreadInfo;
@@ -14,7 +15,7 @@ import com.zlm.hp.model.DownloadThreadInfo;
  *
  * @author zhangliangming
  */
-public class DownloadThreadDB {
+public class DownloadThreadDB extends SQLiteOpenHelper {
     /**
      * 表名
      */
@@ -29,10 +30,9 @@ public class DownloadThreadDB {
 
     private static DownloadThreadDB _downloadThreadDB;
 
-    private SQLDBHlper mDBHlper;
 
     public DownloadThreadDB(Context context) {
-        mDBHlper = SQLDBHlper.getSQLDBHlper(context);
+        super(context, "hp_download.db", null, 2);
     }
 
     public static DownloadThreadDB getDownloadThreadDB(Context context) {
@@ -67,7 +67,7 @@ public class DownloadThreadDB {
      * @return: void
      */
     private void insert(ContentValues values) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.insert(TBL_NAME, null, values);
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class DownloadThreadDB {
      * @return
      */
     public DownloadThreadInfo getDownloadThreadInfo(String tid, int threadNum, int threadID) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         // 第一个参数String：表名
         // 第二个参数String[]:要查询的列名
         // 第三个参数String：查询条件
@@ -133,7 +133,7 @@ public class DownloadThreadDB {
      */
     public void update(String tid, int threadNum, int threadID,
                        int downloadedSize) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("downloadedSize", downloadedSize);
 
@@ -155,7 +155,7 @@ public class DownloadThreadDB {
      * @return
      */
     public boolean isExists(String tid, int threadNum, int threadID) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         // 第一个参数String：表名
         // 第二个参数String[]:要查询的列名
         // 第三个参数String：查询条件
@@ -177,7 +177,7 @@ public class DownloadThreadDB {
      * 删除hash对应的数据
      */
     public void delete(String tid, int threadNum) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.delete(TBL_NAME, "tid=? and threadNum=?", new String[]{tid, threadNum + ""});
         } catch (SQLException e) {
@@ -192,7 +192,7 @@ public class DownloadThreadDB {
      * @return
      */
     public int getDownloadedSize(String tid) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {tid};
         Cursor cursor = db.rawQuery("SELECT sum(downloadedSize) as downloadedSize from " + TBL_NAME
                 + " WHERE tid=?", args);
@@ -202,4 +202,22 @@ public class DownloadThreadDB {
         return 0;
     }
 
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            db.execSQL(CREATE_TBL);
+        } catch (SQLException e) {
+            Log.i("error", "create table failed");
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        try {
+            db.execSQL("drop table if exists " + TBL_NAME);
+        } catch (SQLException e) {
+            Log.i("error", "drop table failed");
+        }
+        onCreate(db);
+    }
 }

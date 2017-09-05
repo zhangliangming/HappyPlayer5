@@ -9,7 +9,7 @@ public class PreferencesConstants {
     /**
      * 应用是否是第一次启动key
      */
-    public static String isFrist_KEY = "isFrist_KEY";
+    public static String isFrist_KEY = "isFrist_version2_KEY";
 
     /**
      * 应用是否在wifi下联网key

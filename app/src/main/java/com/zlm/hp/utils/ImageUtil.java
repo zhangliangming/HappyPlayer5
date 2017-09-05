@@ -245,21 +245,21 @@ public class ImageUtil {
                 int screensWidth = display.getWidth();
                 int screensHeight = display.getHeight();
 
+                String[] singerNameArray = null;
+                if (singerName.contains("、")) {
 
-                List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(hash);
+                    String regex = "\\s*、\\s*";
+                    singerNameArray = singerName.split(regex);
+
+
+                } else {
+                    singerNameArray = new String[1];
+                    singerNameArray[0] = singerName;
+                }
+
+                List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray,true);
                 if (list == null || list.size() == 0) {
 
-                    String[] singerNameArray = null;
-                    if (singerName.contains("、")) {
-
-                        String regex = "\\s*、\\s*";
-                        singerNameArray = singerName.split(regex);
-
-
-                    } else {
-                        singerNameArray = new String[1];
-                        singerNameArray[0] = singerName;
-                    }
                     for (int i = 0; i < singerNameArray.length; i++) {
                         String searchSingerName = singerNameArray[i];
                         List<SearchArtistPicResult> datas = SearchArtistPicUtil.searchArtistPic(hPApplication, context, searchSingerName, screensWidth + "", screensHeight + "", "app");

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.model.AudioInfo;
@@ -19,7 +21,8 @@ import java.util.List;
  * 音频数据库处理
  * Created by zhangliangming on 2017/8/5.
  */
-public class AudioInfoDB {
+public class AudioInfoDB extends SQLiteOpenHelper {
+
     /**
      * 表名
      */
@@ -36,12 +39,11 @@ public class AudioInfoDB {
             + "type long," + "category text," + "childCategory text"
             + ")";
 
-    private SQLDBHlper mDBHlper;
 
     private static AudioInfoDB _AudioInfoDB;
 
     public AudioInfoDB(Context context) {
-        mDBHlper = SQLDBHlper.getSQLDBHlper(context);
+        super(context, "hp_audioinfo.db", null, 2);
     }
 
     public static AudioInfoDB getAudioInfoDB(Context context) {
@@ -127,7 +129,7 @@ public class AudioInfoDB {
      * @return
      */
     private boolean insert(List<ContentValues> values) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.beginTransaction(); // 手动设置开始事务
 
@@ -149,7 +151,7 @@ public class AudioInfoDB {
      * 删除hash对应的数据
      */
     public void delete(String hash) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.delete(TBL_NAME, "hash=?", new String[]{hash});
         } catch (SQLException e) {
@@ -164,7 +166,7 @@ public class AudioInfoDB {
      * @return
      */
     public boolean isExists(String hash) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TBL_NAME, new String[]{},
                 " hash=?", new String[]{hash}, null, null, null);
@@ -180,7 +182,7 @@ public class AudioInfoDB {
      * 删除表
      */
     public void deleteTab() {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.execSQL("drop table if exists " + TBL_NAME);
             db.execSQL(CREATE_TBL);
@@ -195,7 +197,7 @@ public class AudioInfoDB {
      * @return
      */
     public int getLocalAudioCount() {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.LOCAL + "", AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
                 + " WHERE type=? or ( type=? and status=? )", args);
@@ -220,7 +222,7 @@ public class AudioInfoDB {
         // 第六个参数String：对分组的结果进行限制
         // 第七个参数String：对查询的结果进行排序
         List<String> list = new ArrayList<String>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.LOCAL + "", AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
         Cursor cursor = db.query(true, TBL_NAME, new String[]{"category"},
                 "type=? or ( type=? and status=? )", args,
@@ -244,7 +246,7 @@ public class AudioInfoDB {
      */
     public List<AudioInfo> getLocalAudio(String category) {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {category, AudioInfo.LOCAL + "", AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
         Cursor cursor = db.query(TBL_NAME, null,
                 "category= ? and type=? or ( type=? and status=? )", args, null, null,
@@ -264,7 +266,7 @@ public class AudioInfoDB {
      */
     public List<AudioInfo> getAllLocalAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.LOCAL + "", AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
         Cursor cursor = db.query(TBL_NAME, null,
                 "type=? or ( type=? and status=? )", args, null, null,
@@ -288,7 +290,7 @@ public class AudioInfoDB {
      * @return
      */
     public AudioInfo getAudioInfoByHash(String hash) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery("select * from " + TBL_NAME
                 + " where hash=?", new String[]{hash + ""});
         if (!cursor.moveToNext()) {
@@ -378,7 +380,7 @@ public class AudioInfoDB {
             else typeString = AudioInfo.LIKE_LOCAL + "";
         }
 
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TBL_NAME, new String[]{},
                 " hash=? and type=?", new String[]{hash, typeString}, null, null, null);
@@ -404,7 +406,7 @@ public class AudioInfoDB {
                 typeString = AudioInfo.RECENT_LOCAL + "";
             else typeString = AudioInfo.LIKE_LOCAL + "";
         }
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.delete(TBL_NAME, "hash=? and type=?", new String[]{hash, typeString});
         } catch (SQLException e) {
@@ -429,7 +431,7 @@ public class AudioInfoDB {
                 typeString = AudioInfo.RECENT_LOCAL + "";
             else typeString = AudioInfo.LIKE_LOCAL + "";
         }
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("createTime", DateUtil.parseDateToString(new Date()));
 
@@ -449,7 +451,7 @@ public class AudioInfoDB {
      * @return
      */
     public int getRecentAudioCount() {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
                 + " WHERE type=? or type=? ", args);
@@ -465,7 +467,7 @@ public class AudioInfoDB {
      * @return
      */
     public int getLikeAudioCount() {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
                 + " WHERE type=? or type=? ", args);
@@ -482,7 +484,7 @@ public class AudioInfoDB {
      */
     public List<AudioInfo> getAllRecentAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
                 "type=? or type=?", args, null, null,
@@ -508,7 +510,7 @@ public class AudioInfoDB {
      */
     public List<AudioInfo> getAllLikeAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
                 "type=? or type=?", args, null, null,
@@ -525,5 +527,24 @@ public class AudioInfoDB {
         }
         cursor.close();
         return list;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            db.execSQL(CREATE_TBL);
+        } catch (SQLException e) {
+            Log.i("error", "create table failed");
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        try {
+            db.execSQL("drop table if exists " + TBL_NAME);
+        } catch (SQLException e) {
+            Log.i("error", "drop table failed");
+        }
+        onCreate(db);
     }
 }

@@ -58,12 +58,14 @@ public class SplashActivity extends BaseActivity {
             MediaUtil.scanLocalMusic(getApplicationContext(), new MediaUtil.ForeachListener() {
                 @Override
                 public void foreach(AudioInfo audioInfo) {
-                    audioInfos.add(audioInfo);
+                    if (audioInfo != null) {
+                        audioInfos.add(audioInfo);
+                    }
                 }
 
                 @Override
                 public boolean filter(String hash) {
-                    return false;
+                    return AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(hash);
                 }
             });
             if (audioInfos.size() > 0) {

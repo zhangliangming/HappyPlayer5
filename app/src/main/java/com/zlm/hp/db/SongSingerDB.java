@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.model.SongSingerInfo;
@@ -20,7 +22,7 @@ import java.util.Map;
  * Created by zhangliangming on 2017/9/2.
  */
 
-public class SongSingerDB {
+public class SongSingerDB extends SQLiteOpenHelper {
 
     /**
      * 表名
@@ -33,12 +35,10 @@ public class SongSingerDB {
     public static final String CREATE_TBL = "create table " + TBL_NAME + "("
             + "hash text,imgUrl text,createTime text,singerName text" + ")";
 
-    private SQLDBHlper mDBHlper;
-
     private static SongSingerDB _SongSingerDB;
 
     public SongSingerDB(Context context) {
-        mDBHlper = SQLDBHlper.getSQLDBHlper(context);
+        super(context, "hp_songsinger.db", null, 2);
     }
 
     public static SongSingerDB getSongSingerDB(Context context) {
@@ -88,7 +88,7 @@ public class SongSingerDB {
      * @return
      */
     private boolean insert(List<ContentValues> values) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+        SQLiteDatabase db = getWritableDatabase();
         try {
             db.beginTransaction(); // 手动设置开始事务
 
@@ -107,27 +107,15 @@ public class SongSingerDB {
     }
 
     /**
-     * 删除hash对应的数据
-     */
-    public void delete(String hash, String singerName) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
-        try {
-            db.delete(TBL_NAME, "hash=? and singerName=? ", new String[]{hash, singerName});
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * 删除数据
      *
-     * @param hash
+     * @param singerName
      * @param imgUrl
      */
-    public void deleteFromImgUrl(String hash, String imgUrl) {
-        SQLiteDatabase db = mDBHlper.getWritableDatabase();
+    public void deleteFromSI(String singerName, String imgUrl) {
+        SQLiteDatabase db = getWritableDatabase();
         try {
-            db.delete(TBL_NAME, "hash=? and imgUrl=? ", new String[]{hash, imgUrl});
+            db.delete(TBL_NAME, "singerName=? and imgUrl=? ", new String[]{singerName, imgUrl});
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -141,7 +129,7 @@ public class SongSingerDB {
      * @return
      */
     public boolean isExists(String hash, String imgUrl) {
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TBL_NAME, new String[]{},
                 " hash=? and imgUrl=? ", new String[]{hash, imgUrl}, null, null, null);
@@ -153,23 +141,27 @@ public class SongSingerDB {
         return true;
     }
 
+
     /**
-     * 获取所有的歌手写真
+     * 获取歌手写真图片
      *
-     * @param hash
+     * @param singerNameArray
      * @return
      */
-    public List<SongSingerInfo> getAllSingerImg(String hash) {
+    public List<SongSingerInfo> getAllSingerImg(String[] singerNameArray, boolean loadOtherSinger) {
         List<SongSingerInfo> list = new ArrayList<SongSingerInfo>();
-        List<String> singerNames = getAllSingerImgCategory(hash);
-        for (int i = 0; i < singerNames.size(); i++) {
+        for (int i = 0; i < singerNameArray.length; i++) {
             List<SongSingerInfo> temp = new ArrayList<SongSingerInfo>();
-            String singerName = singerNames.get(i);
-            SQLiteDatabase db = mDBHlper.getReadableDatabase();
-            String args[] = {hash, singerName};
+            String singerName = singerNameArray[i];
+            SQLiteDatabase db = getReadableDatabase();
+            String args[] = {singerName};
             Cursor cursor = db.query(TBL_NAME, null,
-                    "hash=? and singerName=?", args, null, null,
+                    "singerName=?", args, null, null,
                     "createTime desc", null);
+            //存在其它歌手头像为空的情况，需要加载其他的歌手写真
+            if (!cursor.moveToNext() && loadOtherSinger) {
+                return new ArrayList<SongSingerInfo>();
+            }
             while (cursor.moveToNext()) {
 
                 SongSingerInfo songSingerInfo = new SongSingerInfo();
@@ -180,7 +172,6 @@ public class SongSingerDB {
                 //
                 songSingerInfo.setCreateTime(createTime);
                 songSingerInfo.setImgUrl(url);
-                songSingerInfo.setHash(hash);
                 songSingerInfo.setSingerName(singerName);
 
                 temp.add(songSingerInfo);
@@ -213,45 +204,18 @@ public class SongSingerDB {
         return list;
     }
 
-    /**
-     * 获取歌手写真分类
-     *
-     * @param hash
-     * @return
-     */
-    public List<String> getAllSingerImgCategory(String hash) {
-        // 第一个参数String：表名
-        // 第二个参数String[]:要查询的列名
-        // 第三个参数String：查询条件
-        // 第四个参数String[]：查询条件的参数
-        // 第五个参数String:对查询的结果进行分组
-        // 第六个参数String：对分组的结果进行限制
-        // 第七个参数String：对查询的结果进行排序
-        List<String> list = new ArrayList<String>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
-        String args[] = {hash};
-        Cursor cursor = db.query(true, TBL_NAME, new String[]{"singerName"},
-                "hash=?", args,
-                null, null, "createTime desc", null);
-        while (cursor.moveToNext()) {
-            list.add(cursor.getString(cursor.getColumnIndex("singerName")));
-        }
-        cursor.close();
-
-        return list;
-    }
 
     /**
      * 获取所有的歌手写真图片
      *
      * @return
      */
-    public Map<String, String> getAllImgUrl(String hash, String singerName) {
+    public Map<String, String> getAllImgUrlBySingerName(String singerName) {
         Map<String, String> result = new HashMap<String, String>();
-        SQLiteDatabase db = mDBHlper.getReadableDatabase();
-        String args[] = {hash, singerName};
+        SQLiteDatabase db = getReadableDatabase();
+        String args[] = {singerName};
         Cursor cursor = db.query(TBL_NAME, null,
-                "hash=? and singerName=?", args, null, null,
+                "singerName=?", args, null, null,
                 "createTime desc", null);
         while (cursor.moveToNext()) {
 
@@ -264,5 +228,25 @@ public class SongSingerDB {
         cursor.close();
         return result;
     }
+
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        try {
+            db.execSQL(CREATE_TBL);
+        } catch (SQLException e) {
+            Log.i("error", "create table failed");
+        }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+        try {
+            db.execSQL("drop table if exists " + TBL_NAME);
+        } catch (SQLException e) {
+            Log.i("error", "drop table failed");
+        }
+        onCreate(db);
+    }
+
 
 }

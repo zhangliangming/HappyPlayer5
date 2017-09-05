@@ -11,11 +11,6 @@ import java.io.File;
 public class ResourceConstants {
 
     /**
-     * 数据库名
-     */
-    public static final String DB_NAME = "happy_player.db";
-
-    /**
      * app应用名
      */
     public final static String APPNAME = "HappyPlayer";

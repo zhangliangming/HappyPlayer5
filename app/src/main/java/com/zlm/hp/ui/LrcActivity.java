@@ -431,10 +431,24 @@ public class LrcActivity extends BaseActivity {
             if (mHPApplication.getCurAudioInfo() != null) {
                 String hash = intent.getStringExtra("hash");
                 if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
-
                     mSingerImageView.setVisibility(View.VISIBLE);
+
+                    String singerName = intent.getStringExtra("singerName");
+                    String[] singerNameArray = null;
+                    if (singerName.contains("、")) {
+
+                        String regex = "\\s*、\\s*";
+                        singerNameArray = singerName.split(regex);
+
+
+                    } else {
+                        singerNameArray = new String[1];
+                        singerNameArray[0] = singerName;
+                    }
+
+
                     //设置数据
-                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(hash);
+                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray,false);
                     mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), list);
                 }
             }
@@ -556,7 +570,7 @@ public class LrcActivity extends BaseActivity {
                     ToastUtil.showTextToast(getApplicationContext(), "已添加收藏");
 
                     mUnLikeImgBtn.setVisibility(View.GONE);
-                    mLikeImgBtn.setVisibility(View.VISIBLE );
+                    mLikeImgBtn.setVisibility(View.VISIBLE);
 
                     //添加喜欢歌曲
                     Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);

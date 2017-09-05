@@ -317,11 +317,11 @@ public class SearchSingerActivity extends BaseActivity {
             public void onClick(View view) {
 
                 //获取数据库数据
-                Map<String, String> oldData = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrl(mAudioInfo.getHash(), mCurSingerName);
+                Map<String, String> oldData = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrlBySingerName(mCurSingerName);
                 for (Map.Entry<String, String> entry : oldData.entrySet()) {
                     if (!mSelectDatas.containsKey(entry.getKey())) {
                         //删除数据
-                        SongSingerDB.getSongSingerDB(getApplicationContext()).deleteFromImgUrl(mAudioInfo.getHash(), entry.getValue());
+                        SongSingerDB.getSongSingerDB(getApplicationContext()).deleteFromSI(mCurSingerName, entry.getValue());
                     }
                 }
 
@@ -465,7 +465,7 @@ public class SearchSingerActivity extends BaseActivity {
             public void doInBackground() {
                 //
                 String singerName = mSearchEditText.getText().toString();
-                mSelectDatas = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrl(mAudioInfo.getHash(), mCurSingerName);
+                mSelectDatas = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrlBySingerName(mCurSingerName);
                 mDatas = SearchArtistPicUtil.searchArtistPic(mHPApplication, getApplicationContext(), singerName, mScreensWidth + "", mScreensHeight + "", "app");
             }
 

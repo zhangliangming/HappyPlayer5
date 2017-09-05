@@ -26,7 +26,6 @@ import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.db.SQLDBHlper;
 import com.zlm.hp.fragment.DownloadMusicFragment;
 import com.zlm.hp.fragment.LikeMusicFragment;
 import com.zlm.hp.fragment.LocalMusicFragment;
@@ -1259,9 +1258,6 @@ public class MainActivity extends BaseActivity {
 
         //Fragment广播
         mFragmentReceiver.unregisterReceiver(getApplicationContext());
-
-        //关闭数据库
-        SQLDBHlper.getSQLDBHlper(getApplicationContext()).close();
 
         super.onDestroy();
     }

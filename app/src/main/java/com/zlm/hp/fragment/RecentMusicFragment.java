@@ -120,12 +120,12 @@ public class RecentMusicFragment extends BaseFragment {
 
 
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
-            mAdapter.reshViewHolder(null);
+            mAdapter.reshViewHolder(null,false);
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
             // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
-            mAdapter.reshViewHolder(audioInfo);
+            mAdapter.reshViewHolder(audioInfo,true);
         }
     }
 
