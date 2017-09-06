@@ -158,10 +158,7 @@ public class SongSingerDB extends SQLiteOpenHelper {
             Cursor cursor = db.query(TBL_NAME, null,
                     "singerName=?", args, null, null,
                     "createTime desc", null);
-            //存在其它歌手头像为空的情况，需要加载其他的歌手写真
-            if (!cursor.moveToNext() && loadOtherSinger) {
-                return new ArrayList<SongSingerInfo>();
-            }
+
             while (cursor.moveToNext()) {
 
                 SongSingerInfo songSingerInfo = new SongSingerInfo();
@@ -177,6 +174,11 @@ public class SongSingerDB extends SQLiteOpenHelper {
                 temp.add(songSingerInfo);
             }
             cursor.close();
+
+            //存在其它歌手头像为空的情况，需要加载其他的歌手写真
+            if(temp.size() == 0 && loadOtherSinger) {
+                return new ArrayList<SongSingerInfo>();
+            }
 
             int k = 0;
             for (int j = 0; j < temp.size(); j++) {
