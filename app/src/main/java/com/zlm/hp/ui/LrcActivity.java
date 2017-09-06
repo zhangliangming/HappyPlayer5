@@ -169,6 +169,8 @@ public class LrcActivity extends BaseActivity {
     private IconfontTextView modeRandomTv;
     private IconfontTextView modeSingleTv;
 
+    //删除播放列表
+    private IconfontTextView mDeleteTv;
     /**
      * 当前播放列表
      */
@@ -448,7 +450,7 @@ public class LrcActivity extends BaseActivity {
 
 
                     //设置数据
-                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray,false);
+                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, false);
                     mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), list);
                 }
             }
@@ -800,6 +802,15 @@ public class LrcActivity extends BaseActivity {
             }
         });
         initPLPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
+
+        //删除播放列表
+        mDeleteTv = findViewById(R.id.delete);
+        mDeleteTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     /**

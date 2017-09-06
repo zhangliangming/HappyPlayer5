@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#fff"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="vertical">
 
 

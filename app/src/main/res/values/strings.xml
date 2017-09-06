@@ -47,10 +47,12 @@
 
 
     //
+
+    <string name="detail_img">&#xe601;</string>
     <string name="delete_img">&#xe76b;</string>
     <string name="like_img">&#xe616;</string>
     <string name="liked_img">&#xe628;</string>
-    <string name="download_img">&#xe632;</string>
+    <string name="download_img">&#xe65b;</string>
     <string name="more_img">&#xe602;</string>
 
     //字体

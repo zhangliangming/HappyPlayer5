@@ -97,7 +97,7 @@ public class RecentMusicFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<AudioInfo>();
-        mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas, true);
         mRecyclerView.setAdapter(mAdapter);
 
         showLoadingView();
@@ -120,12 +120,12 @@ public class RecentMusicFragment extends BaseFragment {
 
 
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
-            mAdapter.reshViewHolder(null,false);
+            mAdapter.reshViewHolder(null, false);
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
             // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
-            mAdapter.reshViewHolder(audioInfo,true);
+            mAdapter.reshViewHolder(audioInfo, true);
         }
     }
 

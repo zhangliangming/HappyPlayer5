@@ -99,7 +99,7 @@ public class LikeMusicFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<AudioInfo>();
-        mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas,false);
         mRecyclerView.setAdapter(mAdapter);
 
         showLoadingView();

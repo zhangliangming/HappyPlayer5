@@ -116,6 +116,14 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             viewHolder.getIslocalImg().setVisibility(View.GONE);
         }
 
+        //删除按钮
+        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
             playIndexPosition = position;
             playIndexHash = mHPApplication.getPlayIndexHashID();
@@ -288,24 +296,12 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
          * 是否存在本地
          */
         private ImageView islocalImg;
-        /**
-         * 下载未完成按钮
-         */
-        private ImageView downloadImg;
-        /**
-         * 添加喜欢按钮
-         */
-        private IconfontTextView unlikeTv;
 
         /**
-         * 下载完成按钮
+         * 删除按钮
          */
-        private ImageView downloadedImg;
+        private IconfontTextView deleteImgBtn;
 
-        /**
-         * 喜欢按钮
-         */
-        private ImageView likeImg;
 
         public LrcPopListViewHolder(View view) {
             super(view);
@@ -355,32 +351,11 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return songIndexTv;
         }
 
-        public ImageView getDownloadImg() {
-            if (downloadImg == null) {
-                downloadImg = view.findViewById(R.id.download);
+        public IconfontTextView getDeleteImgBtn() {
+            if (deleteImgBtn == null) {
+                deleteImgBtn = view.findViewById(R.id.delete);
             }
-            return downloadImg;
-        }
-
-        public IconfontTextView getUnLikeTv() {
-            if (unlikeTv == null) {
-                unlikeTv = view.findViewById(R.id.unlike);
-            }
-            return unlikeTv;
-        }
-
-        public ImageView getDownloadedImg() {
-            if (downloadedImg == null) {
-                downloadedImg = view.findViewById(R.id.downloaded);
-            }
-            return downloadedImg;
-        }
-
-        public ImageView getLikedImg() {
-            if (likeImg == null) {
-                likeImg = view.findViewById(R.id.liked);
-            }
-            return likeImg;
+            return deleteImgBtn;
         }
     }
 

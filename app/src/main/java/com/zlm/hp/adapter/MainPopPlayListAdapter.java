@@ -126,6 +126,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.getLikedImg().setVisibility(View.INVISIBLE);
             viewHolder.getUnLikeTv().setVisibility(View.VISIBLE);
         }
+        //喜欢按钮
         viewHolder.getLikedImg().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,6 +141,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 mContext.sendBroadcast(delIntent);
             }
         });
+        //取消喜欢按钮
         viewHolder.getUnLikeTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -152,6 +154,30 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 addIntent.putExtra(AudioInfo.KEY, audioInfo);
                 addIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(addIntent);
+            }
+        });
+
+        //删除
+        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        //下载按钮
+        viewHolder.getDownloadImg().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        //下载完成
+        viewHolder.getDownloadedImg().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
 
@@ -347,6 +373,12 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
          */
         private ImageView likeImg;
 
+
+        /**
+         * 删除按钮
+         */
+        private IconfontTextView deleteImgBtn;
+
         public PopListViewHolder(View view) {
             super(view);
             this.view = view;
@@ -421,6 +453,13 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 likeImg = view.findViewById(R.id.liked);
             }
             return likeImg;
+        }
+
+        public IconfontTextView getDeleteImgBtn() {
+            if (deleteImgBtn == null) {
+                deleteImgBtn = view.findViewById(R.id.delete);
+            }
+            return deleteImgBtn;
         }
     }
 
