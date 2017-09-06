@@ -176,7 +176,7 @@ public class SongSingerDB extends SQLiteOpenHelper {
             cursor.close();
 
             //存在其它歌手头像为空的情况，需要加载其他的歌手写真
-            if(temp.size() == 0 && loadOtherSinger) {
+            if (temp.size() == 0 && loadOtherSinger) {
                 return new ArrayList<SongSingerInfo>();
             }
 
@@ -229,6 +229,23 @@ public class SongSingerDB extends SQLiteOpenHelper {
         }
         cursor.close();
         return result;
+    }
+
+
+    /**
+     * 获取歌手写真图片个数
+     *
+     * @return
+     */
+    public int getAllImgUrlCount(String singerName) {
+        SQLiteDatabase db = getReadableDatabase();
+        String args[] = {singerName};
+        Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
+                + " WHERE singerName=? ", args);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
     }
 
     @Override

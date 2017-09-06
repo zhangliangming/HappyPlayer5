@@ -105,7 +105,7 @@ public class RankSongHttpUtil {
                         audioInfo.setFileSizeText(MediaUtil.getFileSize(audioInfo.getFileSize()));
                         audioInfo.setHash(infoDataNode.getString("hash"));
                         audioInfo.setSongName(songName);
-                        audioInfo.setSingerName(singerName);
+                        audioInfo.setSingerName(singerName.equals("")?"未知":singerName);
                         audioInfo.setFileExt(infoDataNode.getString("extname"));
                         audioInfo.setDuration(infoDataNode.getInt("duration") * 1000);
                         audioInfo.setDurationText(MediaUtil.parseTimeToString((int) audioInfo.getDuration()));

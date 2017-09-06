@@ -257,11 +257,14 @@ public class ImageUtil {
                     singerNameArray[0] = singerName;
                 }
 
-                List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray,true);
+                List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, true);
                 if (list == null || list.size() == 0) {
 
                     for (int i = 0; i < singerNameArray.length; i++) {
                         String searchSingerName = singerNameArray[i];
+                        if (SongSingerDB.getSongSingerDB(context).getAllImgUrlCount(searchSingerName) > 0) {
+                            continue;
+                        }
                         List<SearchArtistPicResult> datas = SearchArtistPicUtil.searchArtistPic(hPApplication, context, searchSingerName, screensWidth + "", screensHeight + "", "app");
                         if (datas != null && datas.size() > 0)
                             for (int j = 0; j < datas.size(); j++) {

@@ -981,6 +981,7 @@ public class AudioPlayerService extends Service {
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
+        System.gc();
     }
 
     /**
