@@ -483,6 +483,9 @@ public class ManyLineLyricsView extends View {
      */
     private void drawTwoLineLrcText(Canvas canvas) {
 
+        mPaint.setAlpha(mMaxAlpha);
+        mPaintHL.setAlpha(mMaxAlpha);
+
         if (mLyricsLineNum == -1) {
             int textHeight = getTextHeight(mPaint);
             mCentreY = getHeight() - getLineHeight(mPaint) - mSpaceLineHeight - textHeight * 0.5f;
