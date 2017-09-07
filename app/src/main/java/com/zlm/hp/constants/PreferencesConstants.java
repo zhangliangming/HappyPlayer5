@@ -53,6 +53,11 @@ public class PreferencesConstants {
      * 是否线控key
      */
     public static String isWire_KEY = "isWire_KEY";
+
+    /**
+     * 是否是多行歌词
+     */
+    public static String isManyLineLrc_KEY = "isManyLineLrc_KEY";
     ///////////////////////////////如下是临时变量key//////////////////////////////////////////
     /**
      * 播放状态key

@@ -477,7 +477,8 @@ public class LrcActivity extends BaseActivity {
 
             @Override
             public void onClick() {
-                logger.e("点击歌词事件");
+                mManyLineLyricsView.setManyLineLrc(!mManyLineLyricsView.isManyLineLrc());
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mRotateLinearLayout.resetView();
@@ -511,6 +512,7 @@ public class LrcActivity extends BaseActivity {
         mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
         int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
         mManyLineLyricsView.setLrcColor(lrcColor);
+        mManyLineLyricsView.setManyLineLrc(mHPApplication.isManyLineLrc());
         //歌手写真
         mSingerImageView = findViewById(R.id.singerimg);
         mSingerImageView.setVisibility(View.INVISIBLE);

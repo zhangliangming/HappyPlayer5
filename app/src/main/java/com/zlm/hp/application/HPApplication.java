@@ -123,6 +123,10 @@ public class HPApplication extends Application {
      */
     private boolean isWire = true;
 
+    /**
+     * 是否是多行歌词
+     */
+    private boolean isManyLineLrc = true;
     private static HPApplication instance;
 
     public static HPApplication getInstance() {
@@ -362,6 +366,15 @@ public class HPApplication extends Application {
     public void setWire(boolean wire) {
         isWire = wire;
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isWire_KEY, isWire);
+    }
+
+    public boolean isManyLineLrc() {
+        return isManyLineLrc;
+    }
+
+    public void setManyLineLrc(boolean manyLineLrc) {
+        isManyLineLrc = manyLineLrc;
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isManyLineLrc_KEY, isManyLineLrc);
     }
 
     ///////////////////////
