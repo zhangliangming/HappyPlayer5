@@ -39,6 +39,7 @@ import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
+import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
@@ -435,7 +436,7 @@ public class MainActivity extends BaseActivity {
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
             if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId());
+                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
                 double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
                 mLrcSeekBar.setSecondaryProgress(downloadProgress);
@@ -566,8 +567,8 @@ public class MainActivity extends BaseActivity {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LOCALUPDATE)) {
             //
             //更新当前的播放列表
-            List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(getApplicationContext()).getAllLocalAudio();
-            mHPApplication.setCurAudioInfos(data);
+//            List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(getApplicationContext()).getAllLocalAudio();
+//            mHPApplication.setCurAudioInfos(data);
 
         }
 //        else if (action.equals(AudioBroadcastReceiver.ACTION_MUSICRESTART)) {

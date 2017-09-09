@@ -43,7 +43,7 @@ public class SongInfoHttpUtil {
                             * 1000 + "");
                     songInfoResult.setExtName(jsonNode.getString("extName"));
                     songInfoResult.setFileSize(jsonNode.getString("fileSize"));
-                    songInfoResult.setHash(jsonNode.getString("hash"));
+                    songInfoResult.setHash(jsonNode.getString("hash").toLowerCase());
                     songInfoResult.setImgUrl(jsonNode.getString("imgUrl")
                             .replace("{size}", "400"));
                     songInfoResult.setSingerName(jsonNode.getString("singerName"));

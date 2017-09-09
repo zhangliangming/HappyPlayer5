@@ -7,6 +7,7 @@ import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.utils.TaskThreadUtil;
+import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.util.ArrayList;
@@ -270,6 +271,9 @@ public class DownloadTaskManage {
             }
         }.start();
 
+        if (taskEvent != null) {
+
+        }
     }
 
     /**
@@ -285,15 +289,23 @@ public class DownloadTaskManage {
         TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
                 isTheOneTaskThreadFristStart);
         task.setTaskThreadUtil(taskThreadUtil);
+
+        //
+        if (tasks.size() == 0 || tasks.size() > 0) {
+            task.setStatus(DownloadTaskConstant.WAIT.getValue());
+            if (taskEvent != null) {
+                taskEvent.taskWaiting(task);
+            }
+        }
         //
         tasks.add(task);
         // 任务队列不为0
         // if (tasks.size() > 0) {
         DownloadTask temp = tasks.get(0);
-       // logger.e("isWaiting = " + isWaiting + " 任务当前状态是否是初始化：" + (temp.getStatus() == DownloadTaskConstant.INT.getValue()));
+        // logger.e("isWaiting = " + isWaiting + " 任务当前状态是否是初始化：" + (temp.getStatus() == DownloadTaskConstant.INT.getValue()));
 
         // 如果等于初始化
-        if (temp.getStatus() == DownloadTaskConstant.INT.getValue()) {
+        if (temp.getStatus() == DownloadTaskConstant.WAIT.getValue()) {
             if (isWaiting) {
                 synchronized (mainRunnable) {
                     mainRunnable.notify();
@@ -302,6 +314,53 @@ public class DownloadTaskManage {
                 startTaskThread();
             }
 
+
+        }
+//        }
+    }
+
+    /**
+     * 根据添加时间顺序下载
+     *
+     * @param task
+     * @throws Exception
+     */
+    public synchronized void addMultiThreadSingleTaskOrderByTime(DownloadTask task) throws Exception {
+        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
+                isTheOneTaskThreadFristStart);
+        task.setTaskThreadUtil(taskThreadUtil);
+
+        int i = 0;
+        for (; i < tasks.size(); i++) {
+            DownloadTask temp = tasks.get(i);
+            if (DateUtil.parseDateToString(temp.getCreateTime()).compareTo(DateUtil.parseDateToString(task.getCreateTime())) > 0) {
+                break;
+            }
+        }
+
+        if (tasks.size() == 0 || tasks.size() > 0) {
+            task.setStatus(DownloadTaskConstant.WAIT.getValue());
+            if (taskEvent != null) {
+                taskEvent.taskWaiting(task);
+            }
+        }
+        tasks.add(i, task);
+        //
+
+
+        // 任务队列不为0
+//        if (tasks.size() > 0) {
+        DownloadTask temp = tasks.get(0);
+        // logger.e("isWaiting = " + isWaiting + " 任务当前状态是否是初始化：" + (temp.getStatus() == DownloadTaskConstant.INT.getValue()));
+        // 如果等于初始化
+        if (temp.getStatus() == DownloadTaskConstant.WAIT.getValue()) {
+            if (isWaiting) {
+                synchronized (mainRunnable) {
+                    mainRunnable.notify();
+                }
+            } else {
+                startTaskThread();
+            }
 
         }
 //        }
@@ -355,7 +414,7 @@ public class DownloadTaskManage {
     protected synchronized void startTaskThread() {
         if (tasks.size() > 0) {
             DownloadTask task = tasks.get(0);
-            if (task.getStatus() == DownloadTaskConstant.INT.getValue()) {
+            if (task.getStatus() == DownloadTaskConstant.WAIT.getValue()) {
                 task.setStatus(DownloadTaskConstant.DOWNLOADING.getValue());
                 TaskThreadUtil taskThreadUtil = task.getTaskThreadUtil();
                 taskThreadUtil.startTask(context);

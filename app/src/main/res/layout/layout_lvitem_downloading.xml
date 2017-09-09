@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+
+    <com.zlm.hp.widget.ListItemRelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/songitem_height"
+        android:clickable="true">
+
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/pause_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical|center"
+            android:layout_marginLeft="10dp"
+            android:gravity="center|center_vertical"
+            android:text="@string/downloadpause_img"
+            android:textColor="#888"
+            android:textSize="30dp" />
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/download_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical|center"
+            android:layout_marginLeft="10dp"
+            android:gravity="center|center_vertical"
+            android:text="@string/downloading_img"
+            android:textColor="#888"
+            android:textSize="30dp" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toLeftOf="@+id/delete"
+            android:layout_toRightOf="@+id/pause_img"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/titleName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="歌手-歌名"
+                android:textColor="#000"
+                android:textSize="15dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+
+                <TextView
+                    android:id="@+id/download_tip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="点击继续下载"
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="12dp" />
+
+
+                <TextView
+                    android:id="@+id/downloadSizeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    android:text="00.00M/00.00M"
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="12dp" />
+
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:text="@string/delete_img"
+            android:textColor="#888"
+            android:textSize="25dp" />
+
+        <com.zlm.hp.widget.DividerView
+            android:layout_width="match_parent"
+            android:layout_height="1.5dip"
+            android:layout_alignLeft="@+id/content"
+            android:layout_alignParentBottom="true" />
+    </com.zlm.hp.widget.ListItemRelativeLayout>
+
+</LinearLayout>

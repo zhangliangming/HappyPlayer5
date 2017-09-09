@@ -58,12 +58,6 @@ public class TabMyFragment extends BaseFragment {
      */
     private int mLikeCount = 0;
 
-
-    /**
-     * 下载音乐
-     */
-    private LinearLayout mDownloadMusic;
-
     /**
      * wifi设置按钮
      */
@@ -101,6 +95,10 @@ public class TabMyFragment extends BaseFragment {
      * 更新喜欢音乐
      */
     private final int UPDATELIKECOUNT = 2;
+    /**
+     * 更新下载音乐
+     */
+    private final int UPDATEDOWNLOADCOUNT = 3;
     /////////////////////////////////////////////////////////
 
     /**
@@ -118,6 +116,21 @@ public class TabMyFragment extends BaseFragment {
     private int mRecentCount = 0;
 
     ////////////////////////////////////////////////////////
+
+    /**
+     * 下载音乐
+     */
+    private LinearLayout mDownloadMusic;
+    /**
+     * 下载音乐个数
+     */
+    private TextView mDownloadCountTv;
+    /**
+     * 下载音乐个数
+     */
+    private int mDownloadCount = 0;
+
+    ////////////////////////////////
     /**
      *
      */
@@ -133,6 +146,9 @@ public class TabMyFragment extends BaseFragment {
                     break;
                 case UPDATELIKECOUNT:
                     mLikeCountTv.setText(mLikeCount + "");
+                    break;
+                case UPDATEDOWNLOADCOUNT:
+                    mDownloadCountTv.setText(mDownloadCount + "");
                     break;
             }
         }
@@ -214,6 +230,7 @@ public class TabMyFragment extends BaseFragment {
                 mActivity.sendBroadcast(openIntent);
             }
         });
+        mDownloadCountTv = mainView.findViewById(R.id.download_music_count);
 
         //最近音乐
         mRecentMusic = mainView.findViewById(R.id.tab_centent_music);
@@ -320,6 +337,29 @@ public class TabMyFragment extends BaseFragment {
         loadLocalCount();
         loadRecentCount();
         loadLikeCount();
+        loadDownloadCount();
+    }
+
+    /**
+     * 加载喜欢歌曲列表
+     */
+    private void loadDownloadCount() {
+        new AsyncTaskUtil() {
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                mHandler.sendEmptyMessage(UPDATEDOWNLOADCOUNT);
+            }
+
+            @Override
+            protected Void doInBackground(String... strings) {
+
+                mDownloadCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDonwloadAudioCount();
+
+                return super.doInBackground(strings);
+            }
+        }.execute("");
     }
 
     /**
@@ -413,6 +453,8 @@ public class TabMyFragment extends BaseFragment {
                 }
                 loadRecentCount();
             }
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE)) {
+            loadDownloadCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEADD)) {
             //添加喜欢
             AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);

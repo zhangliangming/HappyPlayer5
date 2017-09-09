@@ -12,11 +12,14 @@ import android.widget.TextView;
 
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.manager.DownloadAudioManager;
+import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -109,14 +112,18 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
      * @param audioInfo
      */
     private void reshViewHolder(final int position, final PopListViewHolder viewHolder, final AudioInfo audioInfo) {
-        //
-        //
-        int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash());
-        if (audioInfo.getType() == AudioInfo.LOCAL || downloadSize >= audioInfo.getFileSize()) {
+        //判断是否已缓存到本地或者下载到本地
+        if (AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
             viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
         } else {
-            viewHolder.getIslocalImg().setVisibility(View.GONE);
+            int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash(), OnLineAudioManager.threadNum);
+            if (downloadSize >= audioInfo.getFileSize()) {
+                viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.getIslocalImg().setVisibility(View.GONE);
+            }
         }
+
         //判断是否是喜欢歌曲
         boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
         if (isLike) {
@@ -165,11 +172,30 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
         });
 
+        if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
+
+            //下载
+            if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
+
+                viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
+                viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
+            } else {
+                viewHolder.getDownloadedImg().setVisibility(View.INVISIBLE);
+                viewHolder.getDownloadImg().setVisibility(View.VISIBLE);
+            }
+
+        } else {
+            viewHolder.getDownloadedImg().setVisibility(View.INVISIBLE);
+            viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
+        }
+
         //下载按钮
         viewHolder.getDownloadImg().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(audioInfo);
+                viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
+                viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
             }
         });
 
@@ -177,7 +203,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         viewHolder.getDownloadedImg().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(audioInfo);
             }
         });
 

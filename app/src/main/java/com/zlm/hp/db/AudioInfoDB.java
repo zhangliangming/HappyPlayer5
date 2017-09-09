@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.utils.PingYinUtil;
 
 import java.io.File;
@@ -22,6 +23,8 @@ import java.util.List;
  * Created by zhangliangming on 2017/8/5.
  */
 public class AudioInfoDB extends SQLiteOpenHelper {
+
+    private Context mContext;
 
     /**
      * 表名
@@ -44,6 +47,7 @@ public class AudioInfoDB extends SQLiteOpenHelper {
 
     public AudioInfoDB(Context context) {
         super(context, "hp_audioinfo.db", null, 2);
+        this.mContext = context;
     }
 
     public static AudioInfoDB getAudioInfoDB(Context context) {
@@ -244,12 +248,12 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      * @param category
      * @return
      */
-    public List<AudioInfo> getLocalAudio(String category) {
-        List<AudioInfo> list = new ArrayList<AudioInfo>();
+    public List<Object> getLocalAudio(String category) {
+        List<Object> list = new ArrayList<Object>();
         SQLiteDatabase db = getReadableDatabase();
         String args[] = {category, AudioInfo.LOCAL + "", AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
         Cursor cursor = db.query(TBL_NAME, null,
-                "category= ? and type=? or ( type=? and status=? )", args, null, null,
+                "category= ? and (type=? or ( type=? and status=? ))", args, null, null,
                 "childCategory asc", null);
         while (cursor.moveToNext()) {
             AudioInfo audioInfo = getAudioInfoFrom(cursor);
@@ -330,6 +334,153 @@ public class AudioInfoDB extends SQLiteOpenHelper {
 
         return audioInfo;
     }
+    //、、、、、、、、、、、、、、、、、、、、、、、、、、、下载、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
+
+
+    /**
+     * 判断网络歌曲是否在本地
+     *
+     * @param hash
+     * @return
+     */
+    public boolean isNetAudioExists(String hash) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TBL_NAME, new String[]{},
+                " hash=? and status=?", new String[]{hash, AudioInfo.FINISH + ""}, null, null, null);
+        if (!cursor.moveToNext()) {
+            cursor.close();
+            return false;
+        }
+        cursor.close();
+        return true;
+    }
+
+    /**
+     * 获取正在下载任务
+     *
+     * @return
+     */
+    public List<Object> getDownloadingAudio() {
+        List<Object> list = new ArrayList<Object>();
+        SQLiteDatabase db = getReadableDatabase();
+        String args[] = {AudioInfo.DOWNLOAD + "", AudioInfo.INIT + "", AudioInfo.DOWNLOADING + ""};
+        Cursor cursor = db.query(TBL_NAME, null,
+                "type=? and (status=? or status=?)", args, null, null,
+                "createTime desc", null);
+        while (cursor.moveToNext()) {
+            AudioInfo audioInfo = getAudioInfoFrom(cursor);
+            File audioFile = new File(audioInfo.getFilePath());
+            if (!audioFile.exists() && audioInfo.getStatus() == AudioInfo.FINISH) {
+                continue;
+            }
+            //
+            DownloadInfo downloadInfo = new DownloadInfo();
+            downloadInfo.setAudioInfo(audioInfo);
+            //获取下载进度
+            DownloadInfoDB.getAudioInfoDB(mContext).getDownloadInfoByHash(downloadInfo, audioInfo.getHash());
+
+            list.add(downloadInfo);
+        }
+        cursor.close();
+        return list;
+    }
+
+    /**
+     * 获取已下载
+     *
+     * @return
+     */
+    public List<Object> getDownloadedAudio() {
+        List<Object> list = new ArrayList<Object>();
+        SQLiteDatabase db = getReadableDatabase();
+        String args[] = {AudioInfo.DOWNLOAD + "", AudioInfo.FINISH + ""};
+        Cursor cursor = db.query(TBL_NAME, null,
+                "type=? and status=?", args, null, null,
+                "createTime desc", null);
+        while (cursor.moveToNext()) {
+            AudioInfo audioInfo = getAudioInfoFrom(cursor);
+            File audioFile = new File(audioInfo.getFilePath());
+            if (!audioFile.exists() && audioInfo.getStatus() == AudioInfo.FINISH) {
+                continue;
+            }
+            //
+            DownloadInfo downloadInfo = new DownloadInfo();
+            downloadInfo.setAudioInfo(audioInfo);
+            //获取下载进度
+            DownloadInfoDB.getAudioInfoDB(mContext).getDownloadInfoByHash(downloadInfo, audioInfo.getHash());
+
+            list.add(downloadInfo);
+        }
+        cursor.close();
+        return list;
+    }
+
+    /**
+     * 更新
+     *
+     * @param hash
+     */
+    public void updateDonwloadInfo(String hash, int status) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("status", status);
+
+        try {
+            db.update(TBL_NAME, values,
+                    "type=? and hash=? ",
+                    new String[]{AudioInfo.DOWNLOAD + "", hash});
+        } catch (SQLException e) {
+            Log.i("error", "update failed");
+        }
+    }
+
+    /**
+     * 获取下载歌曲个数
+     *
+     * @return
+     */
+    public int getDonwloadAudioCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        String args[] = {AudioInfo.DOWNLOAD + ""};
+        Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
+                + " WHERE type=? ", args);
+        cursor.moveToFirst();
+        int count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
+
+
+    /**
+     * 删除hash对应的数据
+     */
+    public void deleteDonwloadAudio(String hash) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.delete(TBL_NAME, "hash=? and type=?", new String[]{hash, AudioInfo.DOWNLOAD + ""});
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 添加
+     *
+     * @param audioInfo
+     */
+    public boolean addDonwloadAudio(AudioInfo audioInfo) {
+
+        List<ContentValues> values = new ArrayList<ContentValues>();
+        ContentValues value = getContentValues(audioInfo);
+
+        value.put("type", AudioInfo.DOWNLOAD);
+        value.put("status", AudioInfo.INIT);
+
+        values.add(value);
+
+        return insert(values);
+    }
 
     /////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\///最近、喜欢///////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\/////////////////////
 
@@ -338,6 +489,7 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      *
      * @param audioInfo
      */
+
     public boolean addRecentOrLikeAudio(AudioInfo audioInfo, boolean isRecent) {
         int type = audioInfo.getType();
         if (type == AudioInfo.NET) {

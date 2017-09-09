@@ -8,13 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.manager.DownloadAudioManager;
+import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -222,25 +226,49 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 }
             });
-            //下载
-            viewHolder.getDownloadImgBtn().setOnClickListener(new View.OnClickListener() {
+            if (audioInfo.getType() == AudioInfo.NET) {
+                viewHolder.getDownloadParentRl().setVisibility(View.VISIBLE);
+                //
+                //下载
+                if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
+
+                    viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
+                    viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
+                } else {
+                    viewHolder.getDownloadedImg().setVisibility(View.INVISIBLE);
+                    viewHolder.getDownloadImg().setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                viewHolder.getDownloadParentRl().setVisibility(View.GONE);
+            }
+
+            //下载按钮
+            viewHolder.getDownloadImg().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(audioInfo);
+                    viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
+                    viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
                 }
             });
+
             //
             viewHolder.getMenuLinearLayout().setVisibility(View.VISIBLE);
         } else {
             viewHolder.getMenuLinearLayout().setVisibility(View.GONE);
         }
 
-        //
-        int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash());
-        if (downloadSize >= audioInfo.getFileSize()) {
+        //判断是否已缓存到本地或者下载到本地
+        if (AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
             viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
         } else {
-            viewHolder.getIslocalImg().setVisibility(View.GONE);
+            int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash(), OnLineAudioManager.threadNum);
+            if (downloadSize >= audioInfo.getFileSize()) {
+                viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.getIslocalImg().setVisibility(View.GONE);
+            }
         }
 
         if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
@@ -408,9 +436,18 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
          */
         private IconfontImageButtonTextView likedImgBtn;
         /**
+         * 下载布局
+         */
+        private RelativeLayout downloadParentRl;
+
+        /**
+         * 下载完成按钮
+         */
+        private ImageView downloadedImg;
+        /**
          * 下载按钮
          */
-        private IconfontImageButtonTextView downloadImgBtn;
+        private ImageView downloadImg;
         /**
          * 详情按钮
          */
@@ -498,12 +535,26 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return unLikeImgBtn;
         }
 
-        public IconfontImageButtonTextView getDownloadImgBtn() {
-            if (downloadImgBtn == null) {
-                downloadImgBtn = view.findViewById(R.id.download_menu);
+
+        public RelativeLayout getDownloadParentRl() {
+            if (downloadParentRl == null) {
+                downloadParentRl = view.findViewById(R.id.downloadParent);
             }
-            downloadImgBtn.setConvert(true);
-            return downloadImgBtn;
+            return downloadParentRl;
+        }
+
+        public ImageView getDownloadedImg() {
+            if (downloadedImg == null) {
+                downloadedImg = view.findViewById(R.id.downloaded_menu);
+            }
+            return downloadedImg;
+        }
+
+        public ImageView getDownloadImg() {
+            if (downloadImg == null) {
+                downloadImg = view.findViewById(R.id.download_menu);
+            }
+            return downloadImg;
         }
 
         public IconfontImageButtonTextView getDetailImgBtn() {

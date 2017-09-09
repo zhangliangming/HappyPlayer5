@@ -16,7 +16,6 @@ public class AudioInfo implements Serializable {
     public static final int FINISH = 0;
     public static final int DOWNLOADING = 1;
     public static final int INIT = 2;
-
     /**
      * 类型
      */

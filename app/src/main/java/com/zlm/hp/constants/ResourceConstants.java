@@ -41,6 +41,10 @@ public class ResourceConstants {
      */
     public final static String PATH_AUDIO = PATH_TEMP + File.separator + "audio";
     /**
+     * 歌曲临时保存路径
+     */
+    public final static String PATH_AUDIO_TEMP = PATH_AUDIO + File.separator + "temp";
+    /**
      * 歌手写真目录
      */
     public final static String PATH_SINGER = PATH_TEMP + File.separator

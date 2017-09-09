@@ -208,7 +208,7 @@ public class ScanActivity extends BaseActivity {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                MediaUtil.scanLocalMusic(getApplicationContext(), new MediaUtil.ForeachListener() {
+                MediaUtil.scanLocalMusic(ScanActivity.this, new MediaUtil.ForeachListener() {
                     @Override
                     public void foreach(AudioInfo audioInfo) {
 

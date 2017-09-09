@@ -55,7 +55,7 @@ public class SplashActivity extends BaseActivity {
         if (isFrist) {
             //第一次使用扫描本地歌曲
             final List<AudioInfo> audioInfos = new ArrayList<AudioInfo>();
-            MediaUtil.scanLocalMusic(getApplicationContext(), new MediaUtil.ForeachListener() {
+            MediaUtil.scanLocalMusic(SplashActivity.this, new MediaUtil.ForeachListener() {
                 @Override
                 public void foreach(AudioInfo audioInfo) {
                     if (audioInfo != null) {

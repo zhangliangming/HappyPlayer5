@@ -201,8 +201,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 }
             });
-            //下载
-            viewHolder.getDownloadImgBtn().setVisibility(View.GONE);
+
             //
             viewHolder.getMenuLinearLayout().setVisibility(View.VISIBLE);
         } else {
@@ -356,6 +355,8 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             int categoryIndex = position - categroyFirstIndex;
             if (categoryIndex == 0) {
                 return CATEGORYTITLE;
+            } else if (categoryIndex < size) {
+                break;
             }
             categroyFirstIndex += size;
         }
@@ -395,10 +396,10 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         int count = 0;
         for (int i = 0; i < mDatas.size(); i++) {
             Category category = mDatas.get(i);
-            List<AudioInfo> tempAudioInfos = category.getCategoryItem();
+            List<Object> tempAudioInfos = category.getCategoryItem();
             int j = 0;
             for (; j < tempAudioInfos.size(); j++) {
-                if (tempAudioInfos.get(j).getHash().equals(audioInfo.getHash())) {
+                if (((AudioInfo) tempAudioInfos.get(j)).getHash().equals(audioInfo.getHash())) {
                     //标题分类所以要+1
                     return count + j + 1;
                 }
@@ -453,10 +454,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
          * 不喜欢按钮
          */
         private IconfontImageButtonTextView likedImgBtn;
-        /**
-         * 下载按钮
-         */
-        private IconfontImageButtonTextView downloadImgBtn;
+
         /**
          * 详情按钮
          */
@@ -535,14 +533,6 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
             unLikeImgBtn.setConvert(true);
             return unLikeImgBtn;
-        }
-
-        public IconfontImageButtonTextView getDownloadImgBtn() {
-            if (downloadImgBtn == null) {
-                downloadImgBtn = view.findViewById(R.id.download_menu);
-            }
-            downloadImgBtn.setConvert(true);
-            return downloadImgBtn;
         }
 
         public IconfontImageButtonTextView getDetailImgBtn() {

@@ -527,7 +527,7 @@ public class AudioPlayerService extends Service {
         //如果是网络歌曲，先进行下载，再进行播放
         if (mHPApplication.getCurAudioInfo() != null && mHPApplication.getCurAudioInfo().getType() == AudioInfo.NET) {
             //如果进度为0，表示上一次下载直接错误。
-            int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(mHPApplication.getPlayIndexHashID());
+            int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(mHPApplication.getPlayIndexHashID(), OnLineAudioManager.threadNum);
             if (downloadedSize == 0) {
                 //发送init的广播
                 Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
@@ -614,7 +614,7 @@ public class AudioPlayerService extends Service {
             //播放本地歌曲
             playLocalMusic(audioMessage);
         } else {
-            String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName() + " - " + audioInfo.getHash();
+            String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt();
             //设置文件路径
             audioInfo.setFilePath(filePath);
@@ -642,7 +642,7 @@ public class AudioPlayerService extends Service {
         public void run() {
             if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYNET) {
 
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(mHPApplication.getPlayIndexHashID());
+                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(mHPApplication.getPlayIndexHashID(), OnLineAudioManager.threadNum);
                 logger.e("在线播放任务名称：" + mHPApplication.getCurAudioInfo().getSongName() + "  缓存播放时，监听已下载大小：" + downloadedSize);
 
                 mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);

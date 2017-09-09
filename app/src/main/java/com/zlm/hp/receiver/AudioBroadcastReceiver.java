@@ -87,6 +87,8 @@ public class AudioBroadcastReceiver {
     public static final String ACTION_LOCALUPDATE = "com.zlm.hp.local.update.music";
     //最近歌曲更新
     public static final String ACTION_RECENTUPDATE = "com.zlm.hp.recent.update.music";
+    //下载歌曲更新
+    public static final String ACTION_DOWNLOADUPDATE = "com.zlm.hp.download.update.music";
     //喜欢歌曲更新
     public static final String ACTION_LIKEUPDATE = "com.zlm.hp.like.update.music";
     //添加喜欢歌曲
@@ -139,6 +141,7 @@ public class AudioBroadcastReceiver {
         //
         mAudioIntentFilter.addAction(ACTION_LOCALUPDATE);
         mAudioIntentFilter.addAction(ACTION_RECENTUPDATE);
+        mAudioIntentFilter.addAction(ACTION_DOWNLOADUPDATE);
         mAudioIntentFilter.addAction(ACTION_LIKEUPDATE);
         mAudioIntentFilter.addAction(ACTION_LIKEADD);
         mAudioIntentFilter.addAction(ACTION_LIKEDELETE);

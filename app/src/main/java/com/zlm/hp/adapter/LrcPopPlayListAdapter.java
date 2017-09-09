@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -108,12 +110,16 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      */
     private void reshViewHolder(final int position, final LrcPopListViewHolder viewHolder, final AudioInfo audioInfo) {
         //
-        //
-        int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash());
-        if (audioInfo.getType() == AudioInfo.LOCAL || downloadSize >= audioInfo.getFileSize()) {
+        //判断是否已缓存到本地或者下载到本地
+        if (AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
             viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
         } else {
-            viewHolder.getIslocalImg().setVisibility(View.GONE);
+            int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash(), OnLineAudioManager.threadNum);
+            if (downloadSize >= audioInfo.getFileSize()) {
+                viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
+            } else {
+                viewHolder.getIslocalImg().setVisibility(View.GONE);
+            }
         }
 
         //删除按钮

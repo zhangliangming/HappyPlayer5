@@ -14,8 +14,11 @@ import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.DownloadThreadInfo;
+import com.zlm.hp.net.api.SongInfoHttpUtil;
+import com.zlm.hp.net.entity.SongInfoResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
+import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -56,7 +59,7 @@ public class OnLineAudioManager {
     /**
      * 线程个数
      */
-    private int threadNum = 1;
+    public static final int threadNum = 1;
 
     public OnLineAudioManager(HPApplication hpApplication, Context context) {
         logger = LoggerUtil.getZhangLogger(context);
@@ -198,45 +201,58 @@ public class OnLineAudioManager {
      *
      * @param audioInfo
      */
-    public synchronized void addTask(AudioInfo audioInfo) {
+    public synchronized void addTask(final AudioInfo audioInfo) {
         //暂停旧的任务
         if (!mCurTaskId.equals("-1")) {
             pauseTask(mCurTaskId);
         }
-        // String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName() + " - " + audioInfo.getHash();
+        // String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
+        //重新获取歌曲下载路径
+        new AsyncTaskUtil() {
+            @Override
+            protected Void doInBackground(String... strings) {
 
-        DownloadTask task = new DownloadTask();
-        task.setCreateTime(new Date());
-        task.setStatus(DownloadTaskConstant.INT.getValue());
-        task.setTaskExt(audioInfo.getFileExt());
-        task.setTaskId(audioInfo.getHash());
-        task.setTaskHash(audioInfo.getHash());
-        task.setTaskFileSize(audioInfo.getFileSize());
-        task.setTaskName(audioInfo.getSongName());
-        //  task.setTaskPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt());
-        task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO) + File.separator + audioInfo.getHash() + ".temp");
-        task.setTaskUrl(audioInfo.getDownloadUrl());
-        task.setThreadNum(threadNum);
-        //
-        File temlpFile = new File(task.getTaskTempPath());
-        //缓存文件不存在
-        if (!temlpFile.exists()) {
-            //删除缓存任务
-            DownloadThreadDB.getDownloadThreadDB(mContext).delete(task.getTaskId(), task.getThreadNum());
-        }
+                //获取歌曲下载路径
+
+                SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
+                if (songInfoResult != null) {
+                    audioInfo.setDownloadUrl(songInfoResult.getUrl());
+                }
+                DownloadTask task = new DownloadTask();
+                task.setCreateTime(new Date());
+                task.setStatus(DownloadTaskConstant.INT.getValue());
+                task.setTaskExt(audioInfo.getFileExt());
+                task.setTaskId(audioInfo.getHash());
+                task.setTaskHash(audioInfo.getHash());
+                task.setTaskFileSize(audioInfo.getFileSize());
+                task.setTaskName(audioInfo.getSongName());
+                //  task.setTaskPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt());
+                task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO) + File.separator + audioInfo.getHash() + ".temp");
+                task.setTaskUrl(audioInfo.getDownloadUrl());
+                task.setThreadNum(threadNum);
+                //
+                File temlpFile = new File(task.getTaskTempPath());
+                //缓存文件不存在
+                if (!temlpFile.exists()) {
+                    //删除缓存任务
+                    DownloadThreadDB.getDownloadThreadDB(mContext).delete(task.getTaskId(), task.getThreadNum());
+                }
 
 
-        logger.e("添加在线缓存任务：" + task.getTaskName() + " 任务id为：" + task.getTaskHash());
+                logger.e("添加在线缓存任务：" + task.getTaskName() + " 任务id为：" + task.getTaskHash());
 
 
-        try {
-            mDownloadTaskManage.addMultiThreadSingleTask(task);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                try {
+                    mDownloadTaskManage.addMultiThreadSingleTask(task);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
 
-        mCurTaskId = task.getTaskId();
+                mCurTaskId = task.getTaskId();
+                return super.doInBackground(strings);
+            }
+        }.execute("");
     }
 
     /**

@@ -17,7 +17,7 @@ public class Category {
     /**
      * 分类的内容
      */
-    private List<AudioInfo> categoryItem = new ArrayList<AudioInfo>();
+    private List<Object> categoryItem = new ArrayList<Object>();
 
     public String getCategoryName() {
         return categoryName;
@@ -27,11 +27,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public List<AudioInfo> getCategoryItem() {
+    public List<Object> getCategoryItem() {
         return categoryItem;
     }
 
-    public void setCategoryItem(List<AudioInfo> categoryItem) {
+    public void setCategoryItem(List<Object> categoryItem) {
         this.categoryItem = categoryItem;
     }
 

@@ -22,12 +22,15 @@ import com.happy.lyrics.utils.LyricsIOUtils;
 import com.zlm.hp.adapter.LrcPopPlayListAdapter;
 import com.zlm.hp.adapter.LrcPopSingerListAdapter;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.LyricsManager;
+import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
@@ -127,7 +130,8 @@ public class LrcActivity extends BaseActivity {
 
     /////////////////////////////菜单///////////////////////////
     private IconfontImageButtonTextView mMoreMenuImgBtn;
-    private IconfontImageButtonTextView mDownloadImgBtn;
+    private ImageView mDownloadImgBtn;
+    private ImageView mDownloadedImgBtn;
     private IconfontImageButtonTextView mLikeImgBtn;
     private IconfontImageButtonTextView mUnLikeImgBtn;
 
@@ -224,7 +228,7 @@ public class LrcActivity extends BaseActivity {
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
             if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId());
+                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
                 double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
                 mLrcSeekBar.setSecondaryProgress(downloadProgress);
@@ -279,6 +283,11 @@ public class LrcActivity extends BaseActivity {
             //设置喜欢
             mUnLikeImgBtn.setVisibility(View.VISIBLE);
             mLikeImgBtn.setVisibility(View.GONE);
+
+
+            //下载
+            mDownloadedImgBtn.setVisibility(View.INVISIBLE);
+            mDownloadImgBtn.setVisibility(View.VISIBLE);
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
@@ -339,6 +348,25 @@ public class LrcActivity extends BaseActivity {
             } else {
                 mUnLikeImgBtn.setVisibility(View.VISIBLE);
                 mLikeImgBtn.setVisibility(View.GONE);
+            }
+
+            //
+
+            if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
+
+                //下载
+                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())) {
+
+                    mDownloadedImgBtn.setVisibility(View.VISIBLE);
+                    mDownloadImgBtn.setVisibility(View.INVISIBLE);
+                } else {
+                    mDownloadedImgBtn.setVisibility(View.INVISIBLE);
+                    mDownloadImgBtn.setVisibility(View.VISIBLE);
+                }
+
+            } else {
+                mDownloadedImgBtn.setVisibility(View.VISIBLE);
+                mDownloadImgBtn.setVisibility(View.INVISIBLE);
             }
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
@@ -534,14 +562,34 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
-        mDownloadImgBtn = findViewById(R.id.download_menu);
-        mDownloadImgBtn.setConvert(true);
+        //下载按钮
+        mDownloadImgBtn = findViewById(R.id.download_img);
         mDownloadImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                if (audioInfo != null) {
+                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, getApplicationContext()).addTask(audioInfo);
+                    mDownloadedImgBtn.setVisibility(View.VISIBLE);
+                    mDownloadImgBtn.setVisibility(View.INVISIBLE);
+                }
+
             }
         });
+        //已下载按钮
+        mDownloadedImgBtn = findViewById(R.id.downloaded_img);
+        mDownloadedImgBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                if (audioInfo != null) {
+                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, getApplicationContext()).addTask(audioInfo);
+
+                }
+            }
+        });
+        mDownloadedImgBtn.setVisibility(View.INVISIBLE);
 
         //喜欢按钮
         mLikeImgBtn = findViewById(R.id.liked_menu);

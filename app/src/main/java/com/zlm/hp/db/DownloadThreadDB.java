@@ -191,11 +191,11 @@ public class DownloadThreadDB extends SQLiteOpenHelper {
      * @param tid
      * @return
      */
-    public int getDownloadedSize(String tid) {
+    public int getDownloadedSize(String tid, int threadNum) {
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {tid};
+        String args[] = {tid, threadNum + ""};
         Cursor cursor = db.rawQuery("SELECT sum(downloadedSize) as downloadedSize from " + TBL_NAME
-                + " WHERE tid=?", args);
+                + " WHERE tid=? and threadNum=?", args);
         if (cursor.moveToNext()) {
             return cursor.getInt(cursor.getColumnIndex("downloadedSize"));
         }

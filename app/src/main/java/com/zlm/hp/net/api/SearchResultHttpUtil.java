@@ -77,7 +77,7 @@ public class SearchResultHttpUtil {
                         audioInfo.setFileExt(infoDataNode.getString("extname"));
                         audioInfo.setFileSize(infoDataNode.getLong("filesize"));
                         audioInfo.setFileSizeText(MediaUtil.getFileSize(audioInfo.getFileSize()));
-                        audioInfo.setHash(infoDataNode.getString("hash"));
+                        audioInfo.setHash(infoDataNode.getString("hash").toLowerCase());
 
                         String singerName = infoDataNode.getString("singername");
                         audioInfo.setSingerName(singerName.equals("")?"未知":singerName);

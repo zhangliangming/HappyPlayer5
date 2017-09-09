@@ -390,13 +390,13 @@ public class TaskThreadUtil {
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        finally {
-//            if (oldfile != null) {
-//                System.gc();
-//                oldfile.delete();
-//            }
-//
-//        }
+        finally {
+            if (oldfile != null) {
+                System.gc();
+                oldfile.delete();
+            }
+
+        }
     }
 
 }

@@ -158,7 +158,7 @@ public class LocalMusicFragment extends BaseFragment {
                     Category category = new Category();
                     String categoryName = categorys.get(i);
                     category.setCategoryName(categoryName);
-                    List<AudioInfo> audioInfos = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLocalAudio(categoryName);
+                    List<Object> audioInfos = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLocalAudio(categoryName);
                     category.setCategoryItem(audioInfos);
 
                     mDatas.add(category);
