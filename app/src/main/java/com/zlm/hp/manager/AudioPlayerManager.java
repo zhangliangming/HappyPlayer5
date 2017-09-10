@@ -90,15 +90,22 @@ public class AudioPlayerManager {
                 AudioInfo temp = curAudioInfos.get(i);
                 if (temp.getHash().equals(playInfoHashID)) {
                     flag = true;
+
+
                     //发送init的广播
                     AudioMessage curAudioMessage = new AudioMessage();
                     curAudioMessage.setAudioInfo(temp);
+
+
+                    mHPApplication.setCurAudioMessage(curAudioMessage);
+                    mHPApplication.setCurAudioInfo(temp);
+
                     Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
                     initIntent.putExtra(AudioMessage.KEY, curAudioMessage);
                     initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     mContext.sendBroadcast(initIntent);
 
-                    mHPApplication.setCurAudioMessage(curAudioMessage);
+
                 }
             }
             if (!flag) {

@@ -112,7 +112,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="10dp">
 
-                    <com.zlm.hp.widget.lrc.ManyLineLyricsView
+                    <com.zlm.hp.widget.lrc.ManyLineLyricsViewV2
                         android:id="@+id/manyLineLyricsView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />

@@ -85,8 +85,8 @@ public class LyricsUtil {
      * @param fileName
      */
     public void loadLrc(byte[] base64ByteArray, File saveLrcFile, String fileName) {
-        if(saveLrcFile != null)
-        mLrcFilePath = saveLrcFile.getPath();
+        if (saveLrcFile != null)
+            mLrcFilePath = saveLrcFile.getPath();
         LyricsFileReader lyricsFileReader = LyricsIOUtils.getLyricsFileReader(fileName);
         try {
             mLyricsIfno = lyricsFileReader.readLrcText(base64ByteArray, saveLrcFile);
@@ -168,6 +168,75 @@ public class LyricsUtil {
         }
         return 0;
     }
+    //--------分割歌词-------//
+
+    /**
+     * 获取分割后的歌词列表
+     *
+     * @param lyricsLineInfo 原歌词集合
+     * @param textMaxWidth
+     * @param paint
+     * @return
+     */
+    public List<LyricsLineInfo> getSplitLyrics(LyricsLineInfo lyricsLineInfo, int textMaxWidth, Paint paint) {
+        final List<LyricsLineInfo> lyricsLineInfos = new ArrayList<LyricsLineInfo>();
+
+        splitLyrics(lyricsLineInfo, paint, textMaxWidth, new ForeachListener() {
+            @Override
+            public void foreach(LyricsLineInfo lyricsLineInfo) {
+                lyricsLineInfos.add(0, lyricsLineInfo);
+            }
+        });
+        return lyricsLineInfos;
+    }
+
+    /**
+     * 根据歌词字索引，获取分割后的歌词索引行
+     *
+     * @param lyricsLineInfos     分割后的歌词列表
+     * @param lyricsDisWordsIndex 当前的歌词字索引
+     * @return
+     */
+    public int getSplitLyricsLineNum(List<LyricsLineInfo> lyricsLineInfos, int lyricsDisWordsIndex) {
+        int index = 0;
+        for (int i = 0; i < lyricsLineInfos.size(); i++) {
+            LyricsLineInfo temp = lyricsLineInfos.get(i);
+            index += temp.getLyricsWords().length;
+            if (index > lyricsDisWordsIndex) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 根据歌词字索引和分割后的当前行索引，获取分割后的歌词字索引
+     *
+     * @param lyricsLineInfos
+     * @param lyricsLineNum
+     * @param lyricsDisWordsIndex @return
+     */
+    public int getSplitLyricsWordIndex(List<LyricsLineInfo> lyricsLineInfos, int lyricsLineNum, int lyricsDisWordsIndex) {
+
+        int ldwSum = 0;
+        for (int i = 0; i < lyricsLineNum; i++) {
+            ldwSum += lyricsLineInfos.get(i).getLyricsWords().length - 1;
+        }
+        String[] lyricsWords = lyricsLineInfos.get(lyricsLineNum).getLyricsWords();
+        for (int j = 0; j < lyricsWords.length; j++) {
+
+            if (ldwSum == lyricsDisWordsIndex) {
+                return j;
+            }
+
+            ldwSum++;
+        }
+
+        return -1;
+    }
+
+
+    //
 
     //--------重构歌词-------//
 
@@ -207,8 +276,28 @@ public class LyricsUtil {
      * @param textMaxWidth
      */
     private void reconstructLyrics(LyricsLineInfo lyricsLineInfo,
-                                   SortedMap<Integer, LyricsLineInfo> lyricsLineInfosTemp,
+                                   final SortedMap<Integer, LyricsLineInfo> lyricsLineInfosTemp,
                                    Paint paint, int textMaxWidth) {
+
+        splitLyrics(lyricsLineInfo, paint, textMaxWidth, new ForeachListener() {
+            @Override
+            public void foreach(LyricsLineInfo lyricsLineInfo) {
+                lyricsLineInfosTemp.put(lyricsLineInfo.getStartTime(),
+                        lyricsLineInfo);
+            }
+        });
+
+    }
+
+    /**
+     * 分割歌词
+     *
+     * @param lyricsLineInfo
+     * @param paint
+     * @param textMaxWidth
+     * @param foreachListener
+     */
+    private void splitLyrics(LyricsLineInfo lyricsLineInfo, Paint paint, int textMaxWidth, ForeachListener foreachListener) {
         String lineLyrics = lyricsLineInfo.getLineLyrics();
         // 行歌词数组
         String[] lyricsWords = lyricsLineInfo.getLyricsWords();
@@ -238,11 +327,9 @@ public class LyricsUtil {
                     LyricsLineInfo newLyricsLineInfo = getNewLyricsLineInfo(
                             lyricsLineInfo, i, lastIndex);
 
-                    if (newLyricsLineInfo != null)
-                        //
-                        lyricsLineInfosTemp.put(
-                                newLyricsLineInfo.getStartTime(),
-                                newLyricsLineInfo);
+                    if (newLyricsLineInfo != null && foreachListener != null) {
+                        foreachListener.foreach(newLyricsLineInfo);
+                    }
 
                     //
                     lastIndex = i - 1;
@@ -251,17 +338,16 @@ public class LyricsUtil {
                     LyricsLineInfo newLyricsLineInfo = getNewLyricsLineInfo(
                             lyricsLineInfo, 0, lastIndex);
 
-                    if (newLyricsLineInfo != null)
-                        //
-                        lyricsLineInfosTemp.put(
-                                newLyricsLineInfo.getStartTime(),
-                                newLyricsLineInfo);
+                    if (newLyricsLineInfo != null && foreachListener != null) {
+                        foreachListener.foreach(newLyricsLineInfo);
+                    }
                 }
             }
 
         } else {
-            lyricsLineInfosTemp.put(lyricsLineInfo.getStartTime(),
-                    lyricsLineInfo);
+            if (foreachListener != null) {
+                foreachListener.foreach(lyricsLineInfo);
+            }
         }
     }
 
@@ -420,4 +506,18 @@ public class LyricsUtil {
     public void setHash(String mHash) {
         this.mHash = mHash;
     }
+
+    /**
+     *
+     */
+    public interface ForeachListener {
+        /**
+         * 遍历
+         *
+         * @param lyricsLineInfo
+         */
+        public void foreach(LyricsLineInfo lyricsLineInfo);
+
+    }
+
 }

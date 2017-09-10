@@ -26,14 +26,16 @@ import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.LyricsUtil;
 import com.zlm.hp.utils.MediaUtil;
 
+import java.util.List;
 import java.util.TreeMap;
 
 /**
- * 多行歌词:歌词行号和view所在位置关联,Scroller只做动画处理，不去移动view
+ * 多行歌词第二版:歌词行号和view所在位置关联,Scroller只做动画处理，不去移动view
+ * 该版本将支持翻译歌词
  * Created by zhangliangming on 2017/8/19.
  */
 
-public class ManyLineLyricsView extends View {
+public class ManyLineLyricsViewV2 extends View {
     private Context mContext;
     /**
      * 默认提示文本
@@ -83,7 +85,6 @@ public class ManyLineLyricsView extends View {
      */
     private int mLrcColor = ColorUtil.parserColor("#fada83");
     private int mDefLrcColor = ColorUtil.parserColor("#ffffff");
-
     /**
      * 歌词的最大宽度
      */
@@ -218,7 +219,7 @@ public class ManyLineLyricsView extends View {
                     } else {
                         //
                         isTouchMove = false;
-                        int deltaY = mLyricsLineNum * getLineHeight(mPaint) - mScroller.getFinalY();
+                        int deltaY = (int) getSpliteCurLrcLineHeight(mLyricsLineNum) - mScroller.getFinalY();
                         mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
                         invalidateView();
                     }
@@ -240,22 +241,22 @@ public class ManyLineLyricsView extends View {
      */
     private boolean isManyLineLrc = true;
 
-    public ManyLineLyricsView(Context context) {
+    public ManyLineLyricsViewV2(Context context) {
         super(context);
         init(context);
     }
 
-    public ManyLineLyricsView(Context context, @Nullable AttributeSet attrs) {
+    public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ManyLineLyricsView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
     }
 
-    public ManyLineLyricsView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
     }
@@ -551,103 +552,18 @@ public class ManyLineLyricsView extends View {
 
             }
 
-            //画当前动感歌词行
-            drawDGLineLrc(canvas, 0, false);
+            //画当前双行动感歌词行
+            drawTwoDGLineLrc(canvas);
 
         }
     }
 
-
     /**
-     * 画歌词
+     * 画当前双行动感歌词行
      *
      * @param canvas
      */
-    private void drawManyLineLrcText(Canvas canvas) {
-        mCentreY = (getHeight() + getTextHeight(mPaintHL)) * 0.5f + mLyricsLineNum * getLineHeight(mPaint) - mOffsetY;
-        // logger.e("mCentreY=" + mCentreY);
-
-        //获取要透明度要渐变的高度大小
-        if (mShadeHeight == 0) {
-            initShadeHeight();
-        }
-
-        // 画当前歌词之前的歌词
-        for (int i = mLyricsLineNum - 1; i >= 0; i--) {
-            String text = mLyricsLineTreeMap.get(i).getLineLyrics();
-            float textY = mCentreY
-                    - (mLyricsLineNum - i) * getLineHeight(mPaint);
-
-            //超出上视图
-            if (textY < getLineHeight(mPaint)) {
-                break;
-            }
-            //超出下视图
-            if (textY + mSpaceLineHeight > getHeight()) {
-                continue;
-            }
-
-            //计算颜色透明度
-            int alpha = mMaxAlpha;
-            if (textY < mShadeHeight) {
-
-                alpha = mMaxAlpha - (int) ((mShadeHeight - textY) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
-
-            } else if (textY > getHeight() - mShadeHeight) {
-                alpha = mMaxAlpha - (int) ((textY - (getHeight() - mShadeHeight)) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
-            }
-            alpha = Math.max(alpha, 0);
-            mPaint.setAlpha(alpha);
-
-            float textWidth = getTextWidth(mPaint, text);
-            float textX = (getWidth() - textWidth) * 0.5f;
-            canvas.drawText(text, textX, textY, mPaint);
-        }
-
-        //画当前行歌词
-        drawDGLineLrc(canvas, mShadeHeight, true);
-
-        // 画当前歌词之后的歌词
-        for (int i = mLyricsLineNum + 1; i < mLyricsLineTreeMap.size(); i++) {
-            String text = mLyricsLineTreeMap.get(i).getLineLyrics();
-            float textY = mCentreY
-                    + (i - mLyricsLineNum) * getLineHeight(mPaint);
-            //超出上视图
-            if (textY < getLineHeight(mPaint)) {
-                continue;
-            }
-            //超出下视图
-            if (textY + mSpaceLineHeight > getHeight()) {
-                break;
-            }
-
-            //计算颜色透明度
-            int alpha = mMaxAlpha;
-            if (textY < mShadeHeight) {
-
-                alpha = mMaxAlpha - (int) ((mShadeHeight - textY) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
-
-
-            } else if (textY > getHeight() - mShadeHeight) {
-                alpha = mMaxAlpha - (int) ((textY - (getHeight() - mShadeHeight)) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
-                // logger.e("alpha=" + alpha);
-            }
-            alpha = Math.max(alpha, 0);
-            mPaint.setAlpha(alpha);
-
-            float textWidth = getTextWidth(mPaint, text);
-            float textX = (getWidth() - textWidth) * 0.5f;
-            canvas.drawText(text, textX, textY, mPaint);
-        }
-    }
-
-    /**
-     * 绘画动感歌词
-     *
-     * @param canvas
-     * @param shadeHeight
-     */
-    private void drawDGLineLrc(Canvas canvas, int shadeHeight, boolean isAlphaShade) {
+    private void drawTwoDGLineLrc(Canvas canvas) {
 
         LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
                 .get(mLyricsLineNum);
@@ -695,16 +611,6 @@ public class ManyLineLyricsView extends View {
         //计算颜色透明度
         int alpha = mMaxAlpha;
 
-        //颜色透明度过渡
-        if (isAlphaShade) {
-            if (mCentreY < shadeHeight) {
-                alpha = mMaxAlpha - (int) ((shadeHeight - mCentreY) * (mMaxAlpha - mMinAlpha) / shadeHeight);
-            } else if (mCentreY > getHeight() - shadeHeight) {
-                alpha = mMaxAlpha - (int) ((mCentreY - (getHeight() - shadeHeight)) * (mMaxAlpha - mMinAlpha) / shadeHeight);
-            }
-        }
-
-        alpha = Math.max(alpha, 0);
         mPaint.setAlpha(alpha);
         mPaintHL.setAlpha(alpha);
 
@@ -721,6 +627,271 @@ public class ManyLineLyricsView extends View {
         // 画当前歌词
         canvas.drawText(curLyrics, curTextX, mCentreY, mPaintHL);
         canvas.restore();
+    }
+
+    /**
+     * 画歌词
+     *
+     * @param canvas
+     */
+    private void drawManyLineLrcText(Canvas canvas) {
+        mCentreY = (getHeight() + getTextHeight(mPaintHL)) * 0.5f + getSpliteCurLrcLineHeight(mLyricsLineNum) - mOffsetY;
+
+        //获取要透明度要渐变的高度大小
+        if (mShadeHeight == 0) {
+            initShadeHeight();
+        }
+
+        //画中间歌词
+        float[] topAndBottomY = drawDGLineLrc(canvas);
+
+        //画下面歌词
+
+        drawDownLineLrc(canvas, topAndBottomY[1]);
+
+        //画上面歌词
+        drawUpLineLrc(canvas, topAndBottomY[0]);
+    }
+
+    /**
+     * 画下面歌词
+     *
+     * @param canvas
+     * @param centreLastBottomY
+     */
+    private void drawDownLineLrc(Canvas canvas, float centreLastBottomY) {
+        // 画当前歌词之后的歌词
+        for (int i = mLyricsLineNum + 1; i < mLyricsLineTreeMap.size(); i++) {
+            LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
+                    .get(i);
+            //获取分割后的歌词列表
+            List<LyricsLineInfo> lyricsLineInfos = mLyricsUtil.getSplitLyrics(lyricsLineInfo, mTextMaxWidth, mPaint);
+            for (int j = 0; j < lyricsLineInfos.size(); j++) {
+
+                String text = lyricsLineInfos.get(j).getLineLyrics();
+                centreLastBottomY = centreLastBottomY + getLineHeight(mPaint);
+
+                //超出上视图
+                if (centreLastBottomY < getLineHeight(mPaint)) {
+                    continue;
+                }
+                //超出下视图
+                if (centreLastBottomY + mSpaceLineHeight > getHeight()) {
+                    break;
+                }
+
+                //计算颜色透明度
+                int alpha = mMaxAlpha;
+                if (centreLastBottomY < mShadeHeight) {
+
+                    alpha = mMaxAlpha - (int) ((mShadeHeight - centreLastBottomY) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+
+
+                } else if (centreLastBottomY > getHeight() - mShadeHeight) {
+                    alpha = mMaxAlpha - (int) ((centreLastBottomY - (getHeight() - mShadeHeight)) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+
+                }
+                alpha = Math.max(alpha, 0);
+                mPaint.setAlpha(alpha);
+
+                //
+                float textWidth = getTextWidth(mPaint, text);
+                float textX = (getWidth() - textWidth) * 0.5f;
+                canvas.drawText(text, textX, centreLastBottomY, mPaint);
+            }
+        }
+    }
+
+    /**
+     * 画上面歌词
+     *
+     * @param canvas
+     * @param centreLastTopY 中线最后一次的y轴
+     */
+    private void drawUpLineLrc(Canvas canvas, float centreLastTopY) {
+        // 画当前歌词之前的歌词
+        for (int i = mLyricsLineNum - 1; i >= 0; i--) {
+            LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
+                    .get(i);
+
+            //获取分割后的歌词列表
+            List<LyricsLineInfo> lyricsLineInfos = mLyricsUtil.getSplitLyrics(lyricsLineInfo, mTextMaxWidth, mPaint);
+            for (int j = lyricsLineInfos.size() - 1; j >= 0; j--) {
+
+                String text = lyricsLineInfos.get(j).getLineLyrics();
+                centreLastTopY = centreLastTopY - getLineHeight(mPaint);
+
+                //超出上视图
+                if (centreLastTopY < getLineHeight(mPaint)) {
+                    break;
+                }
+                //超出下视图
+                if (centreLastTopY + mSpaceLineHeight > getHeight()) {
+                    continue;
+                }
+
+                //计算颜色透明度
+                int alpha = mMaxAlpha;
+                if (centreLastTopY < mShadeHeight) {
+
+                    alpha = mMaxAlpha - (int) ((mShadeHeight - centreLastTopY) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+
+                } else if (centreLastTopY > getHeight() - mShadeHeight) {
+                    alpha = mMaxAlpha - (int) ((centreLastTopY - (getHeight() - mShadeHeight)) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+                }
+                alpha = Math.max(alpha, 0);
+                mPaint.setAlpha(alpha);
+
+                //
+                float textWidth = getTextWidth(mPaint, text);
+                float textX = (getWidth() - textWidth) * 0.5f;
+                canvas.drawText(text, textX, centreLastTopY, mPaint);
+            }
+        }
+
+    }
+
+    /**
+     * 绘画动感歌词
+     *
+     * @param canvas
+     */
+    private float[] drawDGLineLrc(Canvas canvas) {
+        float[] topAndBottomY = new float[2];
+
+        //
+        float topY = mCentreY;
+        float bottomY = mCentreY;
+
+        LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
+                .get(mLyricsLineNum);
+        //获取分割后的歌词列表
+        List<LyricsLineInfo> lyricsLineInfos = mLyricsUtil.getSplitLyrics(lyricsLineInfo, mTextMaxWidth, mPaintHL);
+        int curLyricsLineNum = mLyricsUtil.getSplitLyricsLineNum(lyricsLineInfos, mLyricsWordIndex);
+        int curLyricsWordIndex = mLyricsUtil.getSplitLyricsWordIndex(lyricsLineInfos, curLyricsLineNum, mLyricsWordIndex);
+        if (curLyricsWordIndex == -1) {
+            //设置为最后索引，防止跳转到下一句时，前面歌词不是高亮的问题
+            curLyricsLineNum = lyricsLineInfos.size() - 1;
+        }
+        //往下绘画歌词
+        for (int i = 0; i < lyricsLineInfos.size(); i++) {
+            String text = lyricsLineInfos.get(i).getLineLyrics();
+
+
+            //计算颜色透明度
+            int alpha = mMaxAlpha;
+
+            //颜色透明度过渡
+
+            if (bottomY < mShadeHeight) {
+                alpha = mMaxAlpha - (int) ((mShadeHeight - bottomY) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+            } else if (bottomY > getHeight() - mShadeHeight) {
+                alpha = mMaxAlpha - (int) ((bottomY - (getHeight() - mShadeHeight)) * (mMaxAlpha - mMinAlpha) / mShadeHeight);
+            }
+
+            alpha = Math.max(alpha, 0);
+            mPaint.setAlpha(alpha);
+            mPaintHL.setAlpha(alpha);
+
+            float textWidth = getTextWidth(mPaint, text);
+            float textX = (getWidth() - textWidth) * 0.5f;
+            //
+            if (i < curLyricsLineNum) {
+                canvas.drawText(text, textX, bottomY, mPaintHL);
+            } else if (i == curLyricsLineNum) {
+                //绘画动感歌词
+                drawDGCurLineLrc(canvas, lyricsLineInfos.get(i), bottomY, curLyricsWordIndex);
+            } else if (i > curLyricsLineNum) {
+                canvas.drawText(text, textX, bottomY, mPaint);
+            }
+
+            bottomY = bottomY + getLineHeight(mPaint);
+
+        }
+
+        //
+        topAndBottomY[0] = topY;
+        topAndBottomY[1] = bottomY - getLineHeight(mPaint);
+        return topAndBottomY;
+    }
+
+    /**
+     * 画动感歌词当前行歌词
+     *
+     * @param canvas
+     * @param centreLastBottomY
+     */
+    private void drawDGCurLineLrc(Canvas canvas, LyricsLineInfo lyricsLineInfo, float centreLastBottomY, int curLyricsWordIndex) {
+
+        // 整行歌词
+        String curLyrics = lyricsLineInfo.getLineLyrics();
+        int curLyricsHeight = getTextHeight(mPaintHL);
+        float curLyricsWidth = getTextWidth(mPaintHL, curLyrics);
+
+        // 歌词
+        if (curLyricsWordIndex == -1) {
+            //设置等于当行歌词的大小，防止跳转下一行歌词后，该行歌词不为高亮状态
+            mLineLyricsHLWidth = curLyricsWidth;
+        } else {
+            String lyricsWords[] = lyricsLineInfo.getLyricsWords();
+            int wordsDisInterval[] = lyricsLineInfo
+                    .getWordsDisInterval();
+            // 当前歌词之前的歌词
+            String lyricsBeforeWord = "";
+            for (int i = 0; i < curLyricsWordIndex; i++) {
+                lyricsBeforeWord += lyricsWords[i];
+            }
+            // 当前歌词
+            String lyricsNowWord = lyricsWords[curLyricsWordIndex].trim();// 去掉空格
+
+            // 当前歌词之前的歌词长度
+            float lyricsBeforeWordWidth = getTextWidth(mPaintHL, lyricsBeforeWord);
+
+            // 当前歌词长度
+            float lyricsNowWordWidth = getTextWidth(mPaintHL, lyricsNowWord);
+
+            float len = lyricsNowWordWidth
+                    / wordsDisInterval[curLyricsWordIndex]
+                    * mLyricsWordHLTime;
+            mLineLyricsHLWidth = lyricsBeforeWordWidth + len;
+        }
+        float curTextX = (getWidth() - curLyricsWidth) * 0.5f;
+
+
+        // save和restore是为了剪切操作不影响画布的其它元素
+        canvas.save();
+
+        // 画当前歌词
+        canvas.drawText(curLyrics, curTextX, centreLastBottomY, mPaint);
+
+        // 设置过渡的颜色和进度
+        canvas.clipRect(curTextX, centreLastBottomY - curLyricsHeight - mAdjustLrcHeightNum, curTextX + mLineLyricsHLWidth,
+                centreLastBottomY + curLyricsHeight + mAdjustLrcHeightNum);
+
+        // 画当前歌词
+        canvas.drawText(curLyrics, curTextX, centreLastBottomY, mPaintHL);
+        canvas.restore();
+
+    }
+
+
+    /**
+     * 获取分割后的当前行歌词高度
+     *
+     * @param lyricsLineNum
+     * @return
+     */
+    private float getSpliteCurLrcLineHeight(int lyricsLineNum) {
+        int lineHeight = 0;
+        for (int i = 0; i < lyricsLineNum; i++) {
+            LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
+                    .get(i);
+            //获取分割后的歌词列表
+            List<LyricsLineInfo> lyricsLineInfos = mLyricsUtil.getSplitLyrics(lyricsLineInfo, mTextMaxWidth, mPaintHL);
+            lineHeight += getLineHeight(mPaint) * lyricsLineInfos.size();
+
+        }
+        return lineHeight;
     }
 
     @Override
@@ -759,7 +930,7 @@ public class ManyLineLyricsView extends View {
                         if (finalY < -getLineHeight(mPaint)) {
                             dy = dy / 2;
                             isOverScroll = true;
-                        } else if (finalY > (mLyricsLineTreeMap.size() + 1) * getLineHeight(mPaint)) {
+                        } else if (finalY > getSpliteCurLrcLineHeight(mLyricsLineTreeMap.size() - 1) + 2 * getLineHeight(mPaint)) {
                             dy = dy / 2;
                             isOverScroll = true;
                         }
@@ -793,7 +964,7 @@ public class ManyLineLyricsView extends View {
                         int maxX = 0;
 
                         //
-                        int lrcSumHeight = mLyricsLineTreeMap.size() * getLineHeight(mPaint);
+                        int lrcSumHeight = (int) getSpliteCurLrcLineHeight(mLyricsLineTreeMap.size() - 1);
                         int minY = -getHeight() / 4;
                         int maxY = lrcSumHeight + getHeight() / 4;
                         mScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
@@ -861,12 +1032,12 @@ public class ManyLineLyricsView extends View {
 
         if (mOffsetY < 0) {
 
-            int deltaY = 0 * getLineHeight(mPaint) - mScroller.getFinalY();
+            int deltaY = -mScroller.getFinalY();
             mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
             invalidateView();
         } else if (mOffsetY > (mLyricsLineTreeMap.size() + 1) * getLineHeight(mPaint)) {
 
-            int deltaY = (mLyricsLineTreeMap.size() - 1) * getLineHeight(mPaint) - mScroller.getFinalY();
+            int deltaY = (int) getSpliteCurLrcLineHeight((mLyricsLineTreeMap.size() - 1)) - mScroller.getFinalY();
             mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
             invalidateView();
 
@@ -883,7 +1054,21 @@ public class ManyLineLyricsView extends View {
         if (mLyricsLineTreeMap == null || mLyricsLineTreeMap.size() == 0) {
             return 0;
         }
-        int scrollLrcLineNum = (int) (offsetY / getLineHeight(mPaint) + 0.5f);
+
+        int scrollLrcLineNum = 0;
+        int lineHeight = 0;
+        for (int i = 0; i < mLyricsLineTreeMap.size(); i++) {
+            LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
+                    .get(i);
+            //获取分割后的歌词列表
+            List<LyricsLineInfo> lyricsLineInfos = mLyricsUtil.getSplitLyrics(lyricsLineInfo, mTextMaxWidth, mPaintHL);
+            lineHeight += getLineHeight(mPaint) * lyricsLineInfos.size();
+            if (lineHeight > offsetY) {
+                scrollLrcLineNum = i;
+                break;
+            }
+        }
+
         if (scrollLrcLineNum >= mLyricsLineTreeMap.size()) {
             scrollLrcLineNum = mLyricsLineTreeMap.size() - 1;
         } else if (scrollLrcLineNum < 0) {
@@ -977,7 +1162,7 @@ public class ManyLineLyricsView extends View {
         this.mLyricsUtil = mLyricsUtil;
         this.mTextMaxWidth = textMaxWidth;
         if (mLyricsUtil != null) {
-            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(textMaxWidth, mPaint);
+            mLyricsLineTreeMap = mLyricsUtil.getDefLyricsLineTreeMap();
         } else {
             mLyricsLineTreeMap = null;
         }
@@ -1081,7 +1266,8 @@ public class ManyLineLyricsView extends View {
 
             if (!isTouchMove) {
                 //
-                int deltaY = newLyricsLineNum * getLineHeight(mPaint) - mScroller.getFinalY();
+
+                int deltaY = (int) getSpliteCurLrcLineHeight(newLyricsLineNum) - mScroller.getFinalY();
                 mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
 
             }
@@ -1133,12 +1319,11 @@ public class ManyLineLyricsView extends View {
         isReconstruct = true;
         mFontSize = fontSize;
         initFontSize();
-        mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(mTextMaxWidth, mPaint);
         int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, curPlayingTime + mLyricsUtil.getPlayOffset());
         if (newLyricsLineNum != mLyricsLineNum) {
             mLyricsLineNum = newLyricsLineNum;
         }
-        mOffsetY = mLyricsLineNum * getLineHeight(mPaint);
+        mOffsetY = getSpliteCurLrcLineHeight(mLyricsLineNum);
         mScroller.setFinalY((int) mOffsetY);
         isReconstruct = false;
         invalidateView();
@@ -1165,9 +1350,18 @@ public class ManyLineLyricsView extends View {
         mTouchIntercept = true;
     }
 
-    public void setManyLineLrc(boolean manyLineLrc) {
+    public synchronized void setManyLineLrc(boolean manyLineLrc, int curPlayingTime) {
         isManyLineLrc = manyLineLrc;
-        invalidateView();
+        if (mLyricsUtil != null && !isManyLineLrc) {
+            isReconstruct = true;
+            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(mTextMaxWidth, mPaint);
+            isReconstruct = false;
+        } else if (mLyricsUtil != null) {
+            isReconstruct = true;
+            mLyricsLineTreeMap = mLyricsUtil.getDefLyricsLineTreeMap();
+            isReconstruct = false;
+        }
+        updateView(curPlayingTime);
     }
 
     public boolean isManyLineLrc() {
