@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.happy.lyrics.utils.FileUtils;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.utils.ToastUtil;
@@ -22,7 +23,9 @@ import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.Category;
 import com.zlm.hp.model.DownloadInfo;
+import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
+import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.ui.R;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
 import com.zlm.hp.widget.IconfontTextView;
@@ -222,6 +225,28 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.getDeleteTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).taskIsExists(downloadInfo.getDHash())) {
+                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).cancelTask(downloadInfo.getDHash());
+                } else {
+
+                    //更新
+                    DownloadInfoDB.getAudioInfoDB(mContext).delete(downloadInfo.getDHash());
+
+                    DownloadMessage downloadMessage = new DownloadMessage();
+                    downloadMessage.setTaskHash(downloadInfo.getDHash());
+                    downloadMessage.setTaskId(downloadInfo.getDHash());
+
+                    //发送取消广播
+                    Intent cancelIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNCANCEL);
+                    cancelIntent.putExtra(DownloadMessage.KEY, downloadMessage);
+                    cancelIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(cancelIntent);
+
+                    //发送更新下载歌曲总数广播
+                    Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
+                    updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(updateIntent);
+                }
 
             }
         });

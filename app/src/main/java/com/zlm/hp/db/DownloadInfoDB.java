@@ -8,7 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.zlm.hp.constants.ResourceConstants;
+import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.model.DownloadInfo;
+import com.zlm.hp.utils.ResourceFileUtil;
+
+import java.io.File;
 
 /**
  * 下载数据处理
@@ -97,8 +102,18 @@ public class DownloadInfoDB extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         try {
             db.delete(TBL_NAME, "dhash=?", new String[]{dhash});
-            AudioInfoDB.getAudioInfoDB(mContext).deleteDonwloadAudio(dhash);
 
+            //删除歌曲
+            AudioInfoDB.getAudioInfoDB(mContext).deleteDonwloadAudio(dhash);
+            //删除任务线程
+            DownloadThreadDB.getDownloadThreadDB(mContext).delete(dhash, DownloadAudioManager.threadNum);
+
+            //删除本地缓存文件
+            String tempFilePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP) + File.separator + dhash + ".temp";
+            File tempFile = new File(tempFilePath);
+            if (tempFile.exists()) {
+                tempFile.delete();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

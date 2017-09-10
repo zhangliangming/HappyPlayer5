@@ -90,6 +90,8 @@ public class DownloadAudioManager {
                     return;
                 }
 
+                //更新
+                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.DOWNLOADING);
 
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
@@ -101,8 +103,6 @@ public class DownloadAudioManager {
                 mContext.sendBroadcast(downloadingIntent);
 
 
-                //更新
-                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.DOWNLOADING);
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务下载中，进度为：" + downloadedSize);
             }
 
@@ -113,6 +113,8 @@ public class DownloadAudioManager {
                     return;
                 }
 
+                //更新
+                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.DOWNLOADING);
 
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
@@ -123,25 +125,30 @@ public class DownloadAudioManager {
                 pauseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(pauseIntent);
 
-                //更新
-                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.DOWNLOADING);
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务暂停");
             }
 
             @Override
             public void taskCancel(DownloadTask task) {
 
+                //删除任务
+                DownloadInfoDB.getAudioInfoDB(mContext).delete(task.getTaskHash());
+
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
 
+                //发送取消广播
                 Intent cancelIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNCANCEL);
                 cancelIntent.putExtra(DownloadMessage.KEY, downloadMessage);
                 cancelIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(cancelIntent);
 
-                //更新
-                DownloadInfoDB.getAudioInfoDB(mContext).delete(task.getTaskHash());
+                //发送更新下载歌曲总数广播
+                Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
+                updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                mContext.sendBroadcast(updateIntent);
+
 
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务取消");
             }
@@ -149,6 +156,9 @@ public class DownloadAudioManager {
             @Override
             public void taskFinish(DownloadTask task, int downloadedSize) {
 
+
+                //更新
+                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.FINISH);
 
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
@@ -160,8 +170,6 @@ public class DownloadAudioManager {
                 finishIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(finishIntent);
 
-                //更新
-                DownloadInfoDB.getAudioInfoDB(mContext).update(task.getTaskHash(), downloadedSize, AudioInfo.FINISH);
 
                 //发送更新本地歌曲广播
                 Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
@@ -173,6 +181,8 @@ public class DownloadAudioManager {
 
             @Override
             public void taskError(DownloadTask task, String msg) {
+
+                ToastUtil.showTextToast(mContext, "歌曲：" + task.getTaskName() + "，下载出错");
 
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务下载失败，错误信息为：" + msg);
 
@@ -276,13 +286,13 @@ public class DownloadAudioManager {
         } else if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
             //下载任务已经存在
             if (taskIsExists(audioInfo.getHash())) {
-                ToastUtil.showTextToast(mContext, "歌曲任务已存在，请到下载管理页面查看!");
+                ToastUtil.showTextToast(mContext, "歌曲已添加!");
 
                 return;
             } else {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(downloadInfo.getDHash(), DownloadAudioManager.threadNum);
                 if (downloadedSize >= audioInfo.getFileSize()) {
-                    ToastUtil.showTextToast(mContext, "歌曲已下载完成，不用重复下载!");
+                    ToastUtil.showTextToast(mContext, "歌曲已下载!");
 
                     return;
                 }
@@ -290,6 +300,9 @@ public class DownloadAudioManager {
 
         } else {
             DownloadInfoDB.getAudioInfoDB(mContext).add(downloadInfo);
+
+
+            ToastUtil.showTextToast(mContext, "已添加到下载");
 
 
             //添加下载任务

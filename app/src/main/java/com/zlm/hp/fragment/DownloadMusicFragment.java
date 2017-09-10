@@ -112,7 +112,6 @@ public class DownloadMusicFragment extends BaseFragment {
                     mAdapter.reshViewHolder(null);
                 }
 
-                ToastUtil.showTextToast(mActivity.getApplicationContext(), downloadMessage.getErrorMsg());
             }
         }
     };
