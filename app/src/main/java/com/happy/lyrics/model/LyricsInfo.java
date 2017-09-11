@@ -1,7 +1,6 @@
 package com.happy.lyrics.model;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -22,7 +21,11 @@ public class LyricsInfo {
     /**
      * 翻译歌词集合
      */
-    private List<TranslateLyricsInfo> translateLyricsInfos;
+    private TranslateLyricsInfo translateLyricsInfo;
+    /**
+     * 音译歌词集合
+     */
+    private TransliterationLyricsInfo transliterationLyricsInfo;
     /**
      * 歌词标签
      */
@@ -40,12 +43,20 @@ public class LyricsInfo {
         return lyricsLineInfos;
     }
 
-    public List<TranslateLyricsInfo> getTranslateLyricsInfos() {
-        return translateLyricsInfos;
+    public TranslateLyricsInfo getTranslateLyricsInfo() {
+        return translateLyricsInfo;
     }
 
-    public void setTranslateLyricsInfos(List<TranslateLyricsInfo> translateLyricsInfos) {
-        this.translateLyricsInfos = translateLyricsInfos;
+    public void setTranslateLyricsInfo(TranslateLyricsInfo translateLyricsInfo) {
+        this.translateLyricsInfo = translateLyricsInfo;
+    }
+
+    public TransliterationLyricsInfo getTransliterationLyricsInfo() {
+        return transliterationLyricsInfo;
+    }
+
+    public void setTransliterationLyricsInfo(TransliterationLyricsInfo transliterationLyricsInfo) {
+        this.transliterationLyricsInfo = transliterationLyricsInfo;
     }
 
     public void setLyricsLineInfos(

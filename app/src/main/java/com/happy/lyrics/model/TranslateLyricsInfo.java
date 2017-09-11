@@ -1,6 +1,6 @@
 package com.happy.lyrics.model;
 
-import java.util.TreeMap;
+import java.util.List;
 
 /**
  * 翻译歌词
@@ -8,35 +8,16 @@ import java.util.TreeMap;
  */
 
 public class TranslateLyricsInfo {
-    private String language;
-    private String type;
-
     /**
-     * 翻译歌词集合
+     * 翻译行歌词
      */
-    private TreeMap<Integer, LyricsLineInfo> lyricsLineInfos;
+    private List<TranslateLrcLineInfo> translateLrcLineInfos;
 
-    public String getLanguage() {
-        return language;
+    public List<TranslateLrcLineInfo> getTranslateLrcLineInfos() {
+        return translateLrcLineInfos;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public TreeMap<Integer, LyricsLineInfo> getLyricsLineInfos() {
-        return lyricsLineInfos;
-    }
-
-    public void setLyricsLineInfos(TreeMap<Integer, LyricsLineInfo> lyricsLineInfos) {
-        this.lyricsLineInfos = lyricsLineInfos;
+    public void setTranslateLrcLineInfos(List<TranslateLrcLineInfo> translateLrcLineInfos) {
+        this.translateLrcLineInfos = translateLrcLineInfos;
     }
 }
