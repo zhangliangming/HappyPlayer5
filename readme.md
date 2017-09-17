@@ -1,3 +1,12 @@
+# 更新日志 #
+- 支持翻译歌词和音译歌词
+- 新增歌曲下载功能
+- 图片预览
+1. 音译歌词
+![](https://i.imgur.com/WPaPfRT.jpg)
+2. 翻译歌词
+![](https://i.imgur.com/mw7myD8.jpg)
+
 # 简介 #
 乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词，界面高仿酷狗。
 
