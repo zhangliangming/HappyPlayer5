@@ -20,10 +20,10 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
 import com.happy.lyrics.model.LyricsLineInfo;
+import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.ui.R;
-import com.zlm.hp.utils.LyricsUtil;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.util.TreeMap;
@@ -976,8 +976,8 @@ public class ManyLineLyricsView extends View {
     public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth) {
         this.mLyricsUtil = mLyricsUtil;
         this.mTextMaxWidth = textMaxWidth;
-        if (mLyricsUtil != null) {
-            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(textMaxWidth, mPaint);
+        if (mLyricsUtil != null && textMaxWidth != 0) {
+            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(textMaxWidth, mPaint);
         } else {
             mLyricsLineTreeMap = null;
         }
@@ -1075,7 +1075,6 @@ public class ManyLineLyricsView extends View {
     public void updateView(int playProgress) {
         if (mLyricsUtil == null || isReconstruct) return;
         //
-        playProgress += mLyricsUtil.getPlayOffset();
         int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, playProgress);
         if (newLyricsLineNum != mLyricsLineNum) {
 
@@ -1133,8 +1132,8 @@ public class ManyLineLyricsView extends View {
         isReconstruct = true;
         mFontSize = fontSize;
         initFontSize();
-        mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(mTextMaxWidth, mPaint);
-        int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, curPlayingTime + mLyricsUtil.getPlayOffset());
+        mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(mTextMaxWidth, mPaint);
+        int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, curPlayingTime);
         if (newLyricsLineNum != mLyricsLineNum) {
             mLyricsLineNum = newLyricsLineNum;
         }

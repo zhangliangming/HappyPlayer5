@@ -8,7 +8,6 @@ import com.happy.lyrics.model.LyricsLineInfo;
 import com.happy.lyrics.model.LyricsTag;
 import com.happy.lyrics.model.TranslateLrcLineInfo;
 import com.happy.lyrics.model.TranslateLyricsInfo;
-import com.happy.lyrics.model.TransliterationLrcLineInfo;
 import com.happy.lyrics.model.TransliterationLyricsInfo;
 import com.happy.lyrics.utils.StringCompressUtils;
 
@@ -150,7 +149,7 @@ public class KrcLyricsFileReader extends LyricsFileReader {
             // 设置歌词的标签类
             lyricsIfno.setLyricsTags(lyricsTags);
             //
-            lyricsIfno.setLyricsLineInfos(lyricsLineInfos);
+            lyricsIfno.setLyricsLineInfoTreeMap(lyricsLineInfos);
         }
         return lyricsIfno;
     }
@@ -310,17 +309,22 @@ public class KrcLyricsFileReader extends LyricsFileReader {
 
         //音译歌词集合
         TransliterationLyricsInfo transliterationLyricsInfo = new TransliterationLyricsInfo();
-        List<TransliterationLrcLineInfo> transliterationLrcLineInfos = new ArrayList<TransliterationLrcLineInfo>();
+        List<LyricsLineInfo> transliterationLrcLineInfos = new ArrayList<LyricsLineInfo>();
         //获取歌词内容
         for (int j = 0; j < lyricContentArrayObj.length(); j++) {
             JSONArray lrcDataArrayObj = lyricContentArrayObj.getJSONArray(j);
             //音译行歌词
-            TransliterationLrcLineInfo transliterationLrcLineInfo = new TransliterationLrcLineInfo();
+            LyricsLineInfo transliterationLrcLineInfo = new LyricsLineInfo();
             String[] lyricsWords = new String[lrcDataArrayObj.length()];
             String lineLyrics = "";
             for (int k = 0; k < lrcDataArrayObj.length(); k++) {
-                lyricsWords[k] = lrcDataArrayObj.getString(k);
-                lineLyrics += lrcDataArrayObj.getString(k).trim() + " ";
+                if (k == lrcDataArrayObj.length() - 1) {
+                    lyricsWords[k] = lrcDataArrayObj.getString(k).trim();
+                    lineLyrics += lrcDataArrayObj.getString(k).trim();
+                } else {
+                    lyricsWords[k] = lrcDataArrayObj.getString(k).trim() + " ";
+                    lineLyrics += lrcDataArrayObj.getString(k).trim() + " ";
+                }
             }
             transliterationLrcLineInfo.setLineLyrics(lineLyrics);
             transliterationLrcLineInfo.setLyricsWords(lyricsWords);

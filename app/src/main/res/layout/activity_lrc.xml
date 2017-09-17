@@ -117,6 +117,76 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
+                    <ImageView
+                        android:id="@+id/hideTranslateImg"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bql"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/showTranslateImg"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqm"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/showTransliterationImg"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqo"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/hideTransliterationImg"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqn"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/showTTToTranslateImg"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqi"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/showTTToTransliterationImg"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqj"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
+                    <ImageView
+                        android:id="@+id/hideTTImg"
+                        android:layout_width="50dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:background="@mipmap/bqk"
+                        android:clickable="true"
+                        android:visibility="invisible" />
+
                 </RelativeLayout>
 
 
@@ -137,23 +207,27 @@
         layout="@layout/layout_lrc_list_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"></include>
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"></include>
 
     <include
         layout="@layout/layout_lrc_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"></include>
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"></include>
 
     <include
         layout="@layout/layout_lrc_singerlist_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"></include>
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"></include>
 
     <include
         layout="@layout/layout_lrc_songinfo_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"></include>
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible"></include>
 </RelativeLayout>

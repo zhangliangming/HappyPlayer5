@@ -12,13 +12,13 @@ public class TransliterationLyricsInfo {
     /**
      * 音译歌词行
      */
-    private List<TransliterationLrcLineInfo> transliterationLrcLineInfos;
+    private List<LyricsLineInfo> transliterationLrcLineInfos;
 
-    public List<TransliterationLrcLineInfo> getTransliterationLrcLineInfos() {
+    public List<LyricsLineInfo> getTransliterationLrcLineInfos() {
         return transliterationLrcLineInfos;
     }
 
-    public void setTransliterationLrcLineInfos(List<TransliterationLrcLineInfo> transliterationLrcLineInfos) {
+    public void setTransliterationLrcLineInfos(List<LyricsLineInfo> transliterationLrcLineInfos) {
         this.transliterationLrcLineInfos = transliterationLrcLineInfos;
     }
 }

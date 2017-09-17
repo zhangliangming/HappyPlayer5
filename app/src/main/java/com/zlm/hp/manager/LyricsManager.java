@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.happy.lyrics.model.LyricsInfo;
 import com.happy.lyrics.utils.LyricsIOUtils;
+import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.LoggerUtil;
@@ -12,7 +13,6 @@ import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.net.api.DownloadLyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AsyncTaskUtil;
-import com.zlm.hp.utils.LyricsUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;

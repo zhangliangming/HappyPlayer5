@@ -16,7 +16,7 @@ public class LyricsLineInfo extends LrcLyricsLineInfo {
     /**
      * 数组，用来存放每个歌词的时间
      */
-    public int[] wordsDisInterval;
+    private int[] wordsDisInterval;
 
     /**
      * 分割歌词行歌词
@@ -45,5 +45,21 @@ public class LyricsLineInfo extends LrcLyricsLineInfo {
 
     public void setWordsDisInterval(int[] wordsDisInterval) {
         this.wordsDisInterval = wordsDisInterval;
+    }
+
+    /**
+     * 复制
+     *
+     * @param dist 要复制的实体类
+     * @param orig 原始实体类
+     */
+    public void copy(LyricsLineInfo dist, LyricsLineInfo orig) {
+
+        dist.setWordsDisInterval(orig.getWordsDisInterval());
+        dist.setStartTime(orig.getStartTime());
+        dist.setEndTime(orig.getEndTime());
+        dist.setLyricsWords(orig.getLyricsWords());
+        dist.setLineLyrics(orig.getLineLyrics());
+
     }
 }

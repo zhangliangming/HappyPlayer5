@@ -94,17 +94,14 @@ public abstract class BaseFragment extends StatedFragment {
     private RefreshListener mRefreshListener;
 
     public BaseFragment() {
-
+        if (getArguments() == null && !isVisible()) {
+            setArguments(new Bundle());
+        }
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (savedInstanceState == null) {
-            setArguments(new Bundle());
-        }
-
         //
         LayoutInflater inflater = mActivity.getLayoutInflater();
         mainView = (ViewGroup) inflater.inflate(R.layout.layout_fragment_base, null, false);

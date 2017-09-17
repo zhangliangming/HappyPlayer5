@@ -10,10 +10,10 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.happy.lyrics.model.LyricsLineInfo;
+import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.ui.R;
-import com.zlm.hp.utils.LyricsUtil;
 
 import java.util.TreeMap;
 
@@ -311,8 +311,8 @@ public class FloatLyricsView extends View {
 
     public void setLyricsUtil(LyricsUtil mLyricsUtil) {
         this.mLyricsUtil = mLyricsUtil;
-        if (mLyricsUtil != null) {
-            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyricsLineTreeMap(getWidth() / 4 * 3, mPaint);
+        if (mLyricsUtil != null && getWidth() != 0) {
+            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(getWidth() / 4 * 3, mPaint);
         } else {
             mLyricsLineTreeMap = null;
         }
@@ -336,6 +336,7 @@ public class FloatLyricsView extends View {
      */
     public void updateView(int playProgress) {
         if (mLyricsUtil == null) return;
+
         int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, playProgress);
         if (newLyricsLineNum != mLyricsLineNum) {
             mLyricsLineNum = newLyricsLineNum;

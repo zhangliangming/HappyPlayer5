@@ -10,6 +10,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 
+import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
@@ -17,7 +18,6 @@ import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.ui.R;
-import com.zlm.hp.utils.LyricsUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.widget.ButtonRelativeLayout;
 import com.zlm.hp.widget.lrc.ManyLineLyricsView;

@@ -61,7 +61,7 @@ public class DownloadAudioManager {
     /**
      * 线程个数
      */
-    public static final int threadNum = 1;
+    public static final int threadNum = 5;
 
     public DownloadAudioManager(HPApplication hpApplication, Context context) {
         logger = LoggerUtil.getZhangLogger(context);

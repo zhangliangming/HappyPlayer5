@@ -22,9 +22,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
-import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.fragment.DownloadMusicFragment;
 import com.zlm.hp.fragment.LikeMusicFragment;
@@ -52,7 +52,6 @@ import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.service.AudioPlayerService;
 import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ImageUtil;
-import com.zlm.hp.utils.LyricsUtil;
 import com.zlm.hp.utils.MediaUtil;
 import com.zlm.hp.utils.ToastShowUtil;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
@@ -588,9 +587,13 @@ public class MainActivity extends BaseActivity {
                     //
                     LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
                     if (lyricsUtil != null) {
-                        lyricsUtil.setHash(hash);
-                        mFloatLyricsView.setLyricsUtil(lyricsUtil);
-                        mFloatLyricsView.updateView((int) curAudioMessage.getPlayProgress());
+                        if (lyricsUtil.getHash() != null && lyricsUtil.getHash().equals(hash) && mFloatLyricsView.getLyricsUtil() != null) {
+                            //已加载歌词，不用重新加载
+                        } else {
+                            lyricsUtil.setHash(hash);
+                            mFloatLyricsView.setLyricsUtil(lyricsUtil);
+                            mFloatLyricsView.updateView((int) curAudioMessage.getPlayProgress());
+                        }
                     }
                 }
             }

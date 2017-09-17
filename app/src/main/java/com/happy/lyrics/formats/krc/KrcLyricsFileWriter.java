@@ -62,7 +62,7 @@ public class KrcLyricsFileWriter extends LyricsFileWriter {
 
 		// [1679,1550]<0,399,0>作<399,200,0>词<599,250,0>：<849,301,0>李<1150,400,0>健
 		TreeMap<Integer, LyricsLineInfo> lyricsLineInfos = lyricsIfno
-				.getLyricsLineInfos();
+				.getLyricsLineInfoTreeMap();
 		// 每行歌词内容
 		for (int i = 0; i < lyricsLineInfos.size(); i++) {
 			LyricsLineInfo lyricsLineInfo = lyricsLineInfos.get(i);

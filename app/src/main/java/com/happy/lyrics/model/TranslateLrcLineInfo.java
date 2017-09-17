@@ -34,4 +34,8 @@ public class TranslateLrcLineInfo {
     public void setLineLyrics(String lineLyrics) {
         this.lineLyrics = lineLyrics;
     }
+
+    public void copy(TranslateLrcLineInfo dist, TranslateLrcLineInfo orig) {
+        dist.setLineLyrics(orig.getLineLyrics());
+    }
 }

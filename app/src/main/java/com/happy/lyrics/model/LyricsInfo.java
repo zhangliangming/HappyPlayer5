@@ -17,7 +17,7 @@ public class LyricsInfo {
     /**
      * 所有的歌词行数据
      */
-    private TreeMap<Integer, LyricsLineInfo> lyricsLineInfos;
+    private TreeMap<Integer, LyricsLineInfo> lyricsLineInfoTreeMap;
     /**
      * 翻译歌词集合
      */
@@ -39,10 +39,6 @@ public class LyricsInfo {
         this.lyricsTags = lyricsTags;
     }
 
-    public TreeMap<Integer, LyricsLineInfo> getLyricsLineInfos() {
-        return lyricsLineInfos;
-    }
-
     public TranslateLyricsInfo getTranslateLyricsInfo() {
         return translateLyricsInfo;
     }
@@ -59,17 +55,20 @@ public class LyricsInfo {
         this.transliterationLyricsInfo = transliterationLyricsInfo;
     }
 
-    public void setLyricsLineInfos(
-            TreeMap<Integer, LyricsLineInfo> lyricsLineInfos) {
-        this.lyricsLineInfos = lyricsLineInfos;
-    }
-
     public String getLyricsFileExt() {
         return lyricsFileExt;
     }
 
     public void setLyricsFileExt(String lyricsFileExt) {
         this.lyricsFileExt = lyricsFileExt;
+    }
+
+    public TreeMap<Integer, LyricsLineInfo> getLyricsLineInfoTreeMap() {
+        return lyricsLineInfoTreeMap;
+    }
+
+    public void setLyricsLineInfoTreeMap(TreeMap<Integer, LyricsLineInfo> lyricsLineInfoTreeMap) {
+        this.lyricsLineInfoTreeMap = lyricsLineInfoTreeMap;
     }
 
     public void setTitle(String title) {

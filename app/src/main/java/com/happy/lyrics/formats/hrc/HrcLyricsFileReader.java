@@ -128,7 +128,7 @@ public class HrcLyricsFileReader extends LyricsFileReader {
 			// 设置歌词的标签类
 			lyricsIfno.setLyricsTags(lyricsTags);
 			//
-			lyricsIfno.setLyricsLineInfos(lyricsLineInfos);
+			lyricsIfno.setLyricsLineInfoTreeMap(lyricsLineInfos);
 		}
 		return lyricsIfno;
 	}

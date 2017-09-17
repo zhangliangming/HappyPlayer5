@@ -115,7 +115,7 @@ public class HrcxLyricsFileWriter extends LyricsFileWriter {
 		}
 		// 每行歌词内容
 		TreeMap<Integer, LyricsLineInfo> lyricsLineInfos = lyricsIfno
-				.getLyricsLineInfos();
+				.getLyricsLineInfoTreeMap();
 		// 将每行歌词，放到有序的map，判断已重复的歌词
 		LinkedHashMap<String, List<Integer>> lyricsLineInfoMapResult = new LinkedHashMap<String, List<Integer>>();
 		for (int i = 0; i < lyricsLineInfos.size(); i++) {
