@@ -38,6 +38,10 @@ public class KrcLyricsFileWriter extends LyricsFileWriter {
      */
     private final static String LEGAL_OFFSET_PREFIX = "[offset:";
     /**
+     * 额外歌词字符串
+     */
+    private final static String LEGAL_LANGUAGE_PREFIX = "[language:";
+    /**
      * 解码参数
      */
     private static final char[] key = {'@', 'G', 'a', 'w', '^', '2', 't', 'G',
@@ -121,7 +125,7 @@ public class KrcLyricsFileWriter extends LyricsFileWriter {
         //
         extraLyricsObj.put("content", contentArray);
         // 添加翻译和音译歌词
-        lyricsCom += "[language:"
+        lyricsCom += LEGAL_LANGUAGE_PREFIX
                 + Base64.encodeToString(extraLyricsObj.toString()
                 .getBytes(), Base64.NO_WRAP) + "]\n";
 

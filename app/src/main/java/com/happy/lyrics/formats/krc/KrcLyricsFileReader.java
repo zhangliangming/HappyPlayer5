@@ -56,6 +56,9 @@ public class KrcLyricsFileReader extends LyricsFileReader {
     private final static String LEGAL_SIGN_PREFIX = "[sign:";
     private final static String LEGAL_QQ_PREFIX = "[qq:";
     private final static String LEGAL_TOTAL_PREFIX = "[total:";
+    /**
+     * 额外歌词字符串
+     */
     private final static String LEGAL_LANGUAGE_PREFIX = "[language:";
     /**
      * 解码参数
