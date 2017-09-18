@@ -245,7 +245,7 @@ public class ManyLineLyricsViewV2 extends View {
     /**
      * 额外歌词监听事件
      */
-    private ExtraLrcLyricsListener mExtraLrcLyricsListener;
+    private ExtraLyricsListener mExtraLyricsListener;
 
     /**
      * 判断歌词集合是否在重构
@@ -1792,30 +1792,30 @@ public class ManyLineLyricsViewV2 extends View {
      * 额外歌词类型回调
      */
     private void extraLrcTypeCallBack() {
-        if (mLyricsUtil != null && mExtraLrcLyricsListener != null) {
+        if (mLyricsUtil != null && mExtraLyricsListener != null) {
             int extraLrcType = mLyricsUtil.getExtraLrcType();
             if (extraLrcType == LyricsUtil.TRANSLATE_AND_TRANSLITERATION_LRC) {
                 //有翻译歌词和音译歌词
-                if (mExtraLrcLyricsListener != null) {
-                    mExtraLrcLyricsListener.hasTranslateAndTransliterationLrcCallback();
+                if (mExtraLyricsListener != null) {
+                    mExtraLyricsListener.hasTranslateAndTransliterationLrcCallback();
                 }
             } else if (extraLrcType == LyricsUtil.TRANSLATE_LRC) {
                 //有翻译歌词
-                if (mExtraLrcLyricsListener != null) {
-                    mExtraLrcLyricsListener.hasTranslateLrcCallback();
+                if (mExtraLyricsListener != null) {
+                    mExtraLyricsListener.hasTranslateLrcCallback();
                 }
             } else if (extraLrcType == LyricsUtil.TRANSLITERATION_LRC) {
                 //音译歌词
-                if (mExtraLrcLyricsListener != null) {
-                    mExtraLrcLyricsListener.hasTransliterationLrcCallback();
+                if (mExtraLyricsListener != null) {
+                    mExtraLyricsListener.hasTransliterationLrcCallback();
                 }
             } else {
                 //无翻译歌词和音译歌词
-                mExtraLrcLyricsListener.noExtraLrcCallback();
+                mExtraLyricsListener.noExtraLrcCallback();
             }
         } else {
-            if (mExtraLrcLyricsListener != null) {
-                mExtraLrcLyricsListener.noExtraLrcCallback();
+            if (mExtraLyricsListener != null) {
+                mExtraLyricsListener.noExtraLrcCallback();
             }
         }
         mExtraLrcStatus = NOSHOWEXTRALRC;
@@ -1926,7 +1926,7 @@ public class ManyLineLyricsViewV2 extends View {
     /**
      * 额外歌词事件
      */
-    public interface ExtraLrcLyricsListener {
+    public interface ExtraLyricsListener {
 
         /**
          * 有翻译歌词回调
@@ -1949,8 +1949,8 @@ public class ManyLineLyricsViewV2 extends View {
         void noExtraLrcCallback();
     }
 
-    public void setExtraLrcLyricsListener(ExtraLrcLyricsListener mExtraLrcLyricsListener) {
-        this.mExtraLrcLyricsListener = mExtraLrcLyricsListener;
+    public void setExtraLyricsListener(ExtraLyricsListener mExtraLyricsListener) {
+        this.mExtraLyricsListener = mExtraLyricsListener;
     }
 
     /**

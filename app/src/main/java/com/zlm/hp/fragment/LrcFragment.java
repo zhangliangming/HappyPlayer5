@@ -332,7 +332,7 @@ public class LrcFragment extends BaseFragment {
         });
 
         //
-        mManyLineLyricsView.setExtraLrcLyricsListener(new ManyLineLyricsViewV2.ExtraLrcLyricsListener() {
+        mManyLineLyricsView.setExtraLyricsListener(new ManyLineLyricsViewV2.ExtraLyricsListener() {
 
             @Override
             public void hasTranslateLrcCallback() {

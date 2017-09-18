@@ -753,7 +753,7 @@ public class LrcActivity extends BaseActivity {
 
 
         //设置额外歌词回调事件
-        mManyLineLyricsView.setExtraLrcLyricsListener(new ManyLineLyricsViewV2.ExtraLrcLyricsListener() {
+        mManyLineLyricsView.setExtraLyricsListener(new ManyLineLyricsViewV2.ExtraLyricsListener() {
 
             @Override
             public void hasTranslateLrcCallback() {

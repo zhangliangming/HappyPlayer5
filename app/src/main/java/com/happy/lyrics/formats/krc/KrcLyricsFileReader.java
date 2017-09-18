@@ -186,29 +186,28 @@ public class KrcLyricsFileReader extends LyricsFileReader {
                 || lineInfo.startsWith(LEGAL_SIGN_PREFIX)
                 || lineInfo.startsWith(LEGAL_QQ_PREFIX)
                 || lineInfo.startsWith(LEGAL_TOTAL_PREFIX)
-                || lineInfo.startsWith(LEGAL_AL_PREFIX)
-                || lineInfo.startsWith(LEGAL_LANGUAGE_PREFIX)) {
+                || lineInfo.startsWith(LEGAL_AL_PREFIX)) {
 
             int startIndex = lineInfo.indexOf("[") + 1;
             int endIndex = lineInfo.lastIndexOf("]");
             String temp[] = lineInfo.substring(startIndex, endIndex).split(":");
             lyricsTags.put(temp[0], temp.length == 1 ? "" : temp[1]);
 
-            if (lineInfo.startsWith(LEGAL_LANGUAGE_PREFIX)) {
-                //解析翻译歌词
-                //获取json base64字符串
-                String translateJsonBase64String = temp.length == 1 ? "" : temp[1];
-                if (!translateJsonBase64String.equals("")) {
-                    try {
-                        //
-                        String translateJsonString = new String(Base64.decode(translateJsonBase64String, Base64.NO_WRAP));
-                        parserOtherLrc(lyricsIfno, translateJsonString);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
+        } else if (lineInfo.startsWith(LEGAL_LANGUAGE_PREFIX)) {
+            int startIndex = lineInfo.indexOf("[") + 1;
+            int endIndex = lineInfo.lastIndexOf("]");
+            String temp[] = lineInfo.substring(startIndex, endIndex).split(":");
+            //解析翻译歌词
+            //获取json base64字符串
+            String translateJsonBase64String = temp.length == 1 ? "" : temp[1];
+            if (!translateJsonBase64String.equals("")) {
+                try {
+                    //
+                    String translateJsonString = new String(Base64.decode(translateJsonBase64String, Base64.NO_WRAP));
+                    parserOtherLrc(lyricsIfno, translateJsonString);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
         } else {
             // 匹配歌词行
