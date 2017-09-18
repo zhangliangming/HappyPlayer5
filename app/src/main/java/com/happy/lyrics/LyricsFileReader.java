@@ -16,7 +16,7 @@ public abstract class LyricsFileReader {
 	/**
 	 * 默认编码
 	 */
-	protected Charset defaultCharset = Charset.forName("iso8859-1");
+	protected Charset defaultCharset = Charset.forName("utf-8");
 
 	/**
 	 * 读取歌词文件

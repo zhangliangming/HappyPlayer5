@@ -14,7 +14,7 @@ public abstract class LyricsFileWriter {
 	/**
 	 * 默认编码
 	 */
-	protected Charset defaultCharset = Charset.forName("iso8859-1");
+	protected Charset defaultCharset = Charset.forName("utf-8");
 
 	/**
 	 * 支持文件格式

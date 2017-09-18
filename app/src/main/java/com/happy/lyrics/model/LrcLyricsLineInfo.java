@@ -40,6 +40,6 @@ public class LrcLyricsLineInfo {
     }
 
     public void setLineLyrics(String lineLyrics) {
-        this.lineLyrics = lineLyrics;
+        this.lineLyrics = lineLyrics.replaceAll("\r", "");
     }
 }

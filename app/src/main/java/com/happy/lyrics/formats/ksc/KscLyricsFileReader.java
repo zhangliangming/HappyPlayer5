@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -53,8 +52,6 @@ public class KscLyricsFileReader extends LyricsFileReader {
     public final static String LEGAL_TAG_PREFIX = "karaoke.tag";
 
     public KscLyricsFileReader() {
-        // 设置编码
-        setDefaultCharset(Charset.forName("GB2312"));
     }
 
     @Override
@@ -133,6 +130,8 @@ public class KscLyricsFileReader extends LyricsFileReader {
 
     /**
      * 解析每行的歌词内容
+     * <p>
+     * 歌词列表
      *
      * @param lyricsTags 歌词标签
      * @param lineInfo   行歌词内容

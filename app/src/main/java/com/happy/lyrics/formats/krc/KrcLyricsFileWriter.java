@@ -14,7 +14,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -48,8 +47,6 @@ public class KrcLyricsFileWriter extends LyricsFileWriter {
             'Q', '6', '1', '-', 'Î', 'Ò', 'n', 'i'};
 
     public KrcLyricsFileWriter() {
-        // 设置编码
-        setDefaultCharset(Charset.forName("utf-8"));
     }
 
     private String parseLyricsInfo(LyricsInfo lyricsIfno) throws Exception {

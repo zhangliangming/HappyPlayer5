@@ -3,6 +3,7 @@ package com.happy.lyrics.utils;
 import android.content.Context;
 import android.graphics.Paint;
 import android.util.Base64;
+import android.util.Log;
 
 import com.happy.lyrics.LyricsFileReader;
 import com.happy.lyrics.model.LyricsInfo;
@@ -111,7 +112,12 @@ public class LyricsUtil {
             mLyricsIfno = lyricsFileReader.readFile(lyricsFile);
             Map<String, Object> tags = mLyricsIfno.getLyricsTags();
             if (tags.containsKey(LyricsTag.TAG_OFFSET)) {
-                mDefOffset = Integer.parseInt((String) tags.get(LyricsTag.TAG_OFFSET));
+                mDefOffset = 0;
+                try {
+                    mDefOffset = Integer.parseInt((String) tags.get(LyricsTag.TAG_OFFSET));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 mDefOffset = 0;
             }
@@ -152,7 +158,12 @@ public class LyricsUtil {
             mLyricsIfno = lyricsFileReader.readLrcText(base64ByteArray, saveLrcFile);
             Map<String, Object> tags = mLyricsIfno.getLyricsTags();
             if (tags.containsKey(LyricsTag.TAG_OFFSET)) {
-                mDefOffset = Integer.parseInt((String) tags.get(LyricsTag.TAG_OFFSET));
+                mDefOffset = 0;
+                try {
+                    mDefOffset = Integer.parseInt((String) tags.get(LyricsTag.TAG_OFFSET));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 mDefOffset = 0;
             }
@@ -318,6 +329,7 @@ public class LyricsUtil {
         LyricsLineInfo lyrLine = lyricsLineTreeMap.get(lyricsLineNum);
         int elapseTime = lyrLine.getStartTime();
         for (int i = 0; i < lyrLine.getLyricsWords().length; i++) {
+            Log.e("",lyrLine.getLineLyrics());
             elapseTime += lyrLine.getWordsDisInterval()[i];
             if (curPlayingTime < elapseTime) {
                 return i;

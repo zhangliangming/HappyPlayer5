@@ -27,6 +27,33 @@ public class CharUtils {
 	}
 
 	/**
+	 * 是否是日语平假名
+	 * 
+	 * @param c
+	 * @return
+	 */
+	public static boolean isHiragana(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.HIRAGANA) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 是否是韩语
+	 * 
+	 * @return
+	 */
+	public static boolean isHangulSyllables(char c) {
+		Character.UnicodeBlock ub = Character.UnicodeBlock.of(c);
+		if (ub == Character.UnicodeBlock.HANGUL_SYLLABLES) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * 判断该歌词是不是字母
 	 * 
 	 * @param c
