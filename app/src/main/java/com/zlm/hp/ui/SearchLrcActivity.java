@@ -57,6 +57,9 @@ public class SearchLrcActivity extends BaseActivity {
     private TextView mSearchBtn;
     //
     private String mDuration = "";
+    private String mHash = "";
+    private AudioInfo mCurAudioInfo;
+    private boolean mResetLrcViewFlag = false;
     //
     private final int LOADDATA = 0;
     private final int INITDATA = 1;
@@ -381,11 +384,12 @@ public class SearchLrcActivity extends BaseActivity {
      * 初始化数据
      */
     private void initData() {
-        AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
-        if (curAudioInfo != null) {
-            mSongNameEditText.setText(curAudioInfo.getSongName());
-            mSingerNameEditText.setText(curAudioInfo.getSingerName());
-            mDuration = curAudioInfo.getDuration() + "";
+        mCurAudioInfo = mHPApplication.getCurAudioInfo();
+        if (mCurAudioInfo != null) {
+            mSongNameEditText.setText(mCurAudioInfo.getSongName());
+            mSingerNameEditText.setText(mCurAudioInfo.getSingerName());
+            mDuration = mCurAudioInfo.getDuration() + "";
+            mHash = mCurAudioInfo.getHash();
 
             loadDataUtil(500);
         }
@@ -476,7 +480,7 @@ public class SearchLrcActivity extends BaseActivity {
 
                 for (int i = 0; i < mDatas.size(); i++) {
                     DownloadLyricsResult downloadLyricsResult = mDatas.get(i);
-                    LrcFragment lrcFragment = new LrcFragment(downloadLyricsResult);
+                    LrcFragment lrcFragment = new LrcFragment(downloadLyricsResult, mCurAudioInfo);
                     mLrcViews.add(lrcFragment);
                 }
                 //
@@ -505,22 +509,31 @@ public class SearchLrcActivity extends BaseActivity {
      * @param context
      * @param intent
      */
+
     private void doAudioReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            //播放中
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            if (audioMessage != null) {
-
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
-                if (audioInfo != null) {
+            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            if (audioInfo != null && audioInfo.getHash().equals(mHash)) {
+                //播放中
+                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+                if (audioMessage != null) {
                     if (mLrcViews != null && mLrcViews.size() > 0) {
                         for (int i = 0; i < mLrcViews.size(); i++) {
                             LrcFragment lrcFragment = (LrcFragment) mLrcViews.get(i);
                             lrcFragment.updateView((int) audioMessage.getPlayProgress(), audioInfo.getHash());
                         }
                     }
-
+                }
+            } else {
+                if (!mResetLrcViewFlag) {
+                    mResetLrcViewFlag = true;
+                    if (mLrcViews != null && mLrcViews.size() > 0) {
+                        for (int i = 0; i < mLrcViews.size(); i++) {
+                            LrcFragment lrcFragment = (LrcFragment) mLrcViews.get(i);
+                            lrcFragment.updateView(0, mHash);
+                        }
+                    }
                 }
 
             }

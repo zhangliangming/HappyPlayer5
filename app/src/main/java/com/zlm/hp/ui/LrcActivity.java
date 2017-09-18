@@ -751,12 +751,9 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
-        //
-        mManyLineLyricsView.setManyLineLyricsListener(new ManyLineLyricsViewV2.ManyLineLyricsListener() {
-            @Override
-            public void onLrcPlayClicked(int progress, boolean isLrcSeekTo) {
-                seekToMusic(progress, isLrcSeekTo);
-            }
+
+        //设置额外歌词回调事件
+        mManyLineLyricsView.setExtraLrcLyricsListener(new ManyLineLyricsViewV2.ExtraLrcLyricsListener() {
 
             @Override
             public void hasTranslateLrcCallback() {
@@ -778,6 +775,14 @@ public class LrcActivity extends BaseActivity {
                 mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
             }
         });
+        //
+        mManyLineLyricsView.setOnLrcClickListener(new ManyLineLyricsViewV2.OnLrcClickListener() {
+            @Override
+            public void onLrcPlayClicked(int progress, boolean isLrcSeekTo) {
+                seekToMusic(progress, isLrcSeekTo);
+            }
+        });
+
         //
         mRotateLinearLayout.setVerticalScrollView(mManyLineLyricsView);
         //设置字体大小和歌词颜色

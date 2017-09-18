@@ -5,6 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.util.DisplayMetrics;
@@ -153,6 +159,71 @@ public class ImageUtil {
 
     }
 
+    /**
+     * 获取转换颜色的图标
+     *
+     * @param imageView
+     * @param resourceId     图片资源id
+     * @param translateColor 需要转换成的颜色
+     * @return
+     */
+    public static void getTranslateColorImg(final Context context, final ImageView imageView, final int resourceId, final int translateColor) {
+
+        final String key = resourceId + "";
+
+        new AsyncTask<String, Integer, Bitmap>() {
+
+            @Override
+            protected Bitmap doInBackground(String... params) {
+
+                if (sImageCache.get(key) != null) {
+                    return sImageCache.get(key);
+                }
+
+                Bitmap baseBitmap = BitmapFactory.decodeResource(context.getResources(), resourceId);
+
+                Bitmap defBitmap = Bitmap.createBitmap(baseBitmap.getWidth(),
+                        baseBitmap.getHeight(), baseBitmap.getConfig());
+                Canvas pCanvas = new Canvas(defBitmap);
+                Paint paint = new Paint();
+                paint.setDither(true);
+                paint.setAntiAlias(true);
+
+                float progressR = Color.red(translateColor) / 255f;
+                float progressG = Color.green(translateColor) / 255f;
+                float progressB = Color.blue(translateColor) / 255f;
+                float progressA = Color.alpha(translateColor) / 255f;
+
+                // 根据SeekBar定义RGBA的矩阵
+                float[] src = new float[]{progressR, 0, 0, 0, 0, 0, progressG, 0,
+                        0, 0, 0, 0, progressB, 0, 0, 0, 0, 0, progressA, 0};
+                // 定义ColorMatrix，并指定RGBA矩阵
+                ColorMatrix colorMatrix = new ColorMatrix();
+                colorMatrix.set(src);
+                // 设置Paint的颜色
+                paint.setColorFilter(new ColorMatrixColorFilter(src));
+                // 通过指定了RGBA矩阵的Paint把原图画到空白图片上
+                pCanvas.drawBitmap(baseBitmap, new Matrix(), paint);
+
+
+                return defBitmap;
+            }
+
+            @SuppressLint("NewApi")
+            @Override
+            protected void onPostExecute(Bitmap result) {
+
+                if (result != null) {
+                    imageView.setImageDrawable(new BitmapDrawable(result));
+
+                    if (sImageCache.get(key) == null) {
+                        sImageCache.put(key, result);
+                    }
+                }
+            }
+        }.execute("");
+    }
+
 
     /**
      * 获取通知栏图标
@@ -162,6 +233,7 @@ public class ImageUtil {
      * @param singerName
      * @return
      */
+
     public static Bitmap getNotifiIcon(HPApplication hPApplication, Context context, String singerName) {
         //多个歌手，则取第一个歌手头像
         String regex = "、";

@@ -32,7 +32,7 @@ import java.util.TreeMap;
 
 /**
  * 多行歌词第二版:歌词行号和view所在位置关联,Scroller只做动画处理，不去移动view
- * 该版本将支持翻译歌词
+ * 该版本将支持翻译歌词和音译歌词
  * Created by zhangliangming on 2017/8/19.
  */
 
@@ -238,7 +238,14 @@ public class ManyLineLyricsViewV2 extends View {
         }
     };
 
-    private ManyLineLyricsListener mManyLineLyricsListener;
+    /**
+     * 歌词快进事件
+     */
+    private OnLrcClickListener mOnLrcClickListener;
+    /**
+     * 额外歌词监听事件
+     */
+    private ExtraLrcLyricsListener mExtraLrcLyricsListener;
 
     /**
      * 判断歌词集合是否在重构
@@ -437,7 +444,7 @@ public class ManyLineLyricsViewV2 extends View {
             }
         }
         //多行歌词才绘画时间线
-        if (isTouchMove && mManyLineLyricsListener != null && isManyLineLrc)
+        if (isTouchMove && mOnLrcClickListener != null && isManyLineLrc)
             drawIndicator(canvas);
     }
 
@@ -906,6 +913,7 @@ public class ManyLineLyricsViewV2 extends View {
             float textX = (getWidth() - textWidth) * 0.5f;
             //
             if (i < curLyricsLineNum) {
+                canvas.drawText(text, textX, bottomY, mPaint);
                 canvas.drawText(text, textX, bottomY, mPaintHL);
             } else if (i == curLyricsLineNum) {
                 //绘画动感歌词
@@ -1290,6 +1298,7 @@ public class ManyLineLyricsViewV2 extends View {
 
                 //
                 if (i < curLyricsLineNum) {
+                    canvas.drawText(text, textX, newBottomY, mExtraLrcPaint);
                     canvas.drawText(text, textX, newBottomY, mExtraLrcPaintHL);
                 } else if (i == curLyricsLineNum) {
                     //绘画音译的动感歌词
@@ -1529,7 +1538,7 @@ public class ManyLineLyricsViewV2 extends View {
 
                         handler.removeMessages(RESETLRCVIEW);
 
-                        if (mManyLineLyricsListener != null) {
+                        if (mOnLrcClickListener != null) {
 
                             //
 
@@ -1538,7 +1547,7 @@ public class ManyLineLyricsViewV2 extends View {
                             //logger.e("LineLyrics = " + mLyricsLineTreeMap.get(scrollLrcLineNum).getLineLyrics());
                             int startTime = mLyricsLineTreeMap.get(scrollLrcLineNum).getStartTime();
                             int theFristWordTime = mLyricsLineTreeMap.get(scrollLrcLineNum).getWordsDisInterval()[0];
-                            mManyLineLyricsListener.onLrcPlayClicked(startTime + theFristWordTime, true);
+                            mOnLrcClickListener.onLrcPlayClicked(startTime + theFristWordTime, true);
 
                         }
 
@@ -1783,30 +1792,30 @@ public class ManyLineLyricsViewV2 extends View {
      * 额外歌词类型回调
      */
     private void extraLrcTypeCallBack() {
-        if (mLyricsUtil != null && mManyLineLyricsListener != null) {
+        if (mLyricsUtil != null && mExtraLrcLyricsListener != null) {
             int extraLrcType = mLyricsUtil.getExtraLrcType();
             if (extraLrcType == LyricsUtil.TRANSLATE_AND_TRANSLITERATION_LRC) {
                 //有翻译歌词和音译歌词
-                if (mManyLineLyricsListener != null) {
-                    mManyLineLyricsListener.hasTranslateAndTransliterationLrcCallback();
+                if (mExtraLrcLyricsListener != null) {
+                    mExtraLrcLyricsListener.hasTranslateAndTransliterationLrcCallback();
                 }
             } else if (extraLrcType == LyricsUtil.TRANSLATE_LRC) {
                 //有翻译歌词
-                if (mManyLineLyricsListener != null) {
-                    mManyLineLyricsListener.hasTranslateLrcCallback();
+                if (mExtraLrcLyricsListener != null) {
+                    mExtraLrcLyricsListener.hasTranslateLrcCallback();
                 }
             } else if (extraLrcType == LyricsUtil.TRANSLITERATION_LRC) {
                 //音译歌词
-                if (mManyLineLyricsListener != null) {
-                    mManyLineLyricsListener.hasTransliterationLrcCallback();
+                if (mExtraLrcLyricsListener != null) {
+                    mExtraLrcLyricsListener.hasTransliterationLrcCallback();
                 }
             } else {
                 //无翻译歌词和音译歌词
-                mManyLineLyricsListener.noExtraLrcCallback();
+                mExtraLrcLyricsListener.noExtraLrcCallback();
             }
         } else {
-            if (mManyLineLyricsListener != null) {
-                mManyLineLyricsListener.noExtraLrcCallback();
+            if (mExtraLrcLyricsListener != null) {
+                mExtraLrcLyricsListener.noExtraLrcCallback();
             }
         }
         mExtraLrcStatus = NOSHOWEXTRALRC;
@@ -1898,17 +1907,26 @@ public class ManyLineLyricsViewV2 extends View {
 
     ////////////////////
 
-
     /**
      * 歌词事件
      */
-    public interface ManyLineLyricsListener {
+    public interface OnLrcClickListener {
         /**
          * 歌词快进播放
          *
          * @param progress
          */
         void onLrcPlayClicked(int progress, boolean isLrcSeekTo);
+    }
+
+    public void setOnLrcClickListener(OnLrcClickListener mOnLrcClickListener) {
+        this.mOnLrcClickListener = mOnLrcClickListener;
+    }
+
+    /**
+     * 额外歌词事件
+     */
+    public interface ExtraLrcLyricsListener {
 
         /**
          * 有翻译歌词回调
@@ -1931,8 +1949,8 @@ public class ManyLineLyricsViewV2 extends View {
         void noExtraLrcCallback();
     }
 
-    public void setManyLineLyricsListener(ManyLineLyricsListener mManyLineLyricsListener) {
-        this.mManyLineLyricsListener = mManyLineLyricsListener;
+    public void setExtraLrcLyricsListener(ExtraLrcLyricsListener mExtraLrcLyricsListener) {
+        this.mExtraLrcLyricsListener = mExtraLrcLyricsListener;
     }
 
     /**
