@@ -8,13 +8,14 @@ import com.happy.lyrics.LyricsFileReader;
 import com.happy.lyrics.LyricsFileWriter;
 import com.happy.lyrics.formats.hrc.HrcLyricsFileReader;
 import com.happy.lyrics.formats.hrc.HrcLyricsFileWriter;
+import com.happy.lyrics.formats.hrcs.HrcsLyricsFileReader;
+import com.happy.lyrics.formats.hrcs.HrcsLyricsFileWriter;
 import com.happy.lyrics.formats.hrcx.HrcxLyricsFileReader;
 import com.happy.lyrics.formats.hrcx.HrcxLyricsFileWriter;
 import com.happy.lyrics.formats.krc.KrcLyricsFileReader;
 import com.happy.lyrics.formats.krc.KrcLyricsFileWriter;
 import com.happy.lyrics.formats.ksc.KscLyricsFileReader;
 import com.happy.lyrics.formats.ksc.KscLyricsFileWriter;
-import com.happy.lyrics.utils.FileUtils;
 
 /**
  * 歌词io操作
@@ -27,6 +28,7 @@ public class LyricsIOUtils {
 
 	static {
 		readers = new ArrayList<LyricsFileReader>();
+		readers.add(new HrcsLyricsFileReader());
 		readers.add(new HrcxLyricsFileReader());
 		readers.add(new HrcLyricsFileReader());
 		readers.add(new KscLyricsFileReader());
@@ -34,6 +36,7 @@ public class LyricsIOUtils {
 
 		//
 		writers = new ArrayList<LyricsFileWriter>();
+		writers.add(new HrcsLyricsFileWriter());
 		writers.add(new HrcxLyricsFileWriter());
 		writers.add(new HrcLyricsFileWriter());
 		writers.add(new KscLyricsFileWriter());

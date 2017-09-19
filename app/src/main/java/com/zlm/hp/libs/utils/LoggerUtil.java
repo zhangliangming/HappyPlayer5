@@ -55,7 +55,7 @@ public class LoggerUtil {
 
         String time = logfile.format(new Date());
         String fileName = time + ".log";
-        String path = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LOGCAT) + File.separator + fileName;
+        String path = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LOGCAT, fileName);
         logConfigurator.setFileName(path);
         // 输出内容的格式
         logConfigurator.setFilePattern("%d{yyyy-MM-dd HH:mm:ss} <%m>%n");
@@ -75,16 +75,18 @@ public class LoggerUtil {
      * 清除过期的log文件
      */
     private void cleanOldLogFile() {
-        File logFileParent = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LOGCAT));
+        File logFileParent = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LOGCAT, null));
         if (logFileParent.exists()) {
             String needDelTime = logfile.format(getDateBefore());
             File[] files = logFileParent.listFiles();
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
-                    String fileName = files[i].getName();
-                    fileName = fileName.substring(0, fileName.lastIndexOf("."));
-                    if (needDelTime.compareTo(fileName) > 0) {
-                        files[i].delete();
+                    if (files[i].isFile()) {
+                        String fileName = files[i].getName();
+                        fileName = fileName.substring(0, fileName.lastIndexOf("."));
+                        if (needDelTime.compareTo(fileName) > 0) {
+                            files[i].delete();
+                        }
                     }
                 }
             }

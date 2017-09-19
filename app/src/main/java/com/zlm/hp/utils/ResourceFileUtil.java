@@ -26,7 +26,7 @@ public class ResourceFileUtil {
      * @param tempFilePath 文件的临时路径
      * @return
      */
-    public static String getFilePath(Context context, String tempFilePath) {
+    public static String getFilePath(Context context, String tempFilePath, String fileName) {
         if (baseFilePath == null) {
             List<StorageInfo> storageInfos = StorageListUtil.listAvaliableStorage(context);
             for (int i = 0; i < storageInfos.size(); i++) {
@@ -39,10 +39,16 @@ public class ResourceFileUtil {
         }
 
         //
-        String filePath = baseFilePath + File.separator + tempFilePath;
+        if (fileName == null) {
+            fileName = "";
+        }
+
+        //
+        String filePath = baseFilePath + File.separator + tempFilePath + File.separator + fileName;
+
         File file = new File(filePath);
-        if (!file.exists()) {
-            file.mkdirs();
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
         }
 
         return filePath;

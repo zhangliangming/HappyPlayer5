@@ -192,7 +192,7 @@ public class LrcFragment extends BaseFragment {
                 } else {
                     fileName = mCurAudioInfo.getSingerName() + " - " + mCurAudioInfo.getSongName();
                 }
-                mLrcFilePath = ResourceFileUtil.getFilePath(mActivity.getApplicationContext(), ResourceConstants.PATH_LYRICS) + File.separator + fileName + ".krc";
+                mLrcFilePath = ResourceFileUtil.getFilePath(mActivity.getApplicationContext(), ResourceConstants.PATH_LYRICS, fileName + ".krc");
 
                 //
                 LyricsUtil lyricsUtil = new LyricsUtil();

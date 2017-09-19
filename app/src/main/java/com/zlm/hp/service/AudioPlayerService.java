@@ -615,7 +615,7 @@ public class AudioPlayerService extends Service {
             playLocalMusic(audioMessage);
         } else {
             String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt();
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_AUDIO, fileName + "." + audioInfo.getFileExt());
             //设置文件路径
             audioInfo.setFilePath(filePath);
             File audioFile = new File(filePath);
@@ -664,7 +664,7 @@ public class AudioPlayerService extends Service {
      */
     private void playNetMusic() {
         if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_AUDIO) + File.separator + mHPApplication.getCurAudioInfo().getHash() + ".temp";
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_AUDIO, mHPApplication.getCurAudioInfo().getHash() + ".temp");
             try {
                 mMediaPlayer = new IjkMediaPlayer();
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);

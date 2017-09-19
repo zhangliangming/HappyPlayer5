@@ -172,7 +172,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             // 用于格式化日期,作为日志文件名的一部分
             String time = crashfile.format(new Date());
             String fileName = time + ".log";
-            String path = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CRASH) + File.separator;
+            String path = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CRASH, null);
             FileOutputStream fos = new FileOutputStream(path + fileName);
             fos.write(sb.toString().getBytes());
             fos.close();
@@ -187,17 +187,19 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
      * 清除过期的日志文件
      */
     private void cleanOldLogFile() {
-        File logFileParent = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CRASH));
+        File logFileParent = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CRASH, null));
         if (logFileParent.exists()) {
             String needDelTime = crashfile.format(getDateBefore());
             File[] files = logFileParent.listFiles();
             if (files != null) {
                 for (int i = 0; i < files.length; i++) {
-                    String fileName = files[i].getName();
-                    fileName = fileName.substring(0,
-                            fileName.lastIndexOf("."));
-                    if (needDelTime.compareTo(fileName) > 0) {
-                        files[i].delete();
+                    if (files[i].isFile()) {
+                        String fileName = files[i].getName();
+                        fileName = fileName.substring(0,
+                                fileName.lastIndexOf("."));
+                        if (needDelTime.compareTo(fileName) > 0) {
+                            files[i].delete();
+                        }
                     }
                 }
             }

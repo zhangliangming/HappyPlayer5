@@ -118,7 +118,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             }
         });
         //
-        String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_IMAGE) + File.separator + rankListResult.getImgUrl().hashCode() + ".jpg";
+        String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_IMAGE,rankListResult.getImgUrl().hashCode() + ".jpg");
         ImageUtil.loadImage(mContext, viewHolder.getItemImg(), filePath, rankListResult.getImgUrl(), R.mipmap.bpz);
     }
 

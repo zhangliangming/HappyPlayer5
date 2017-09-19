@@ -32,7 +32,7 @@ public class TranslateLrcLineInfo {
     }
 
     public void setLineLyrics(String lineLyrics) {
-        this.lineLyrics = lineLyrics.replaceAll("\r", "");
+        this.lineLyrics = lineLyrics.replaceAll("\r|\n","");
     }
 
     public void copy(TranslateLrcLineInfo dist, TranslateLrcLineInfo orig) {

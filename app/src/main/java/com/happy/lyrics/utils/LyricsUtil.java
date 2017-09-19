@@ -3,7 +3,6 @@ package com.happy.lyrics.utils;
 import android.content.Context;
 import android.graphics.Paint;
 import android.util.Base64;
-import android.util.Log;
 
 import com.happy.lyrics.LyricsFileReader;
 import com.happy.lyrics.model.LyricsInfo;
@@ -90,8 +89,7 @@ public class LyricsUtil {
     public static File getLrcFile(Context context, String fileName) {
         List<String> lrcExts = LyricsIOUtils.getSupportLyricsExts();
         for (int i = 0; i < lrcExts.size(); i++) {
-            String lrcFilePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_LYRICS) + File.separator
-                    + fileName + "." + lrcExts.get(i);
+            String lrcFilePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_LYRICS, fileName + "." + lrcExts.get(i));
             File lrcFile = new File(lrcFilePath);
             if (lrcFile.exists()) {
                 return lrcFile;
@@ -329,7 +327,7 @@ public class LyricsUtil {
         LyricsLineInfo lyrLine = lyricsLineTreeMap.get(lyricsLineNum);
         int elapseTime = lyrLine.getStartTime();
         for (int i = 0; i < lyrLine.getLyricsWords().length; i++) {
-            Log.e("",lyrLine.getLineLyrics());
+
             elapseTime += lyrLine.getWordsDisInterval()[i];
             if (curPlayingTime < elapseTime) {
                 return i;

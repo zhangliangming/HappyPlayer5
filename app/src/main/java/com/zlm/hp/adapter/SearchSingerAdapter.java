@@ -104,7 +104,7 @@ public class SearchSingerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
      * @param searchArtistPicResult
      */
     private void reshViewHolder(final int position, final SearchSingerViewHolder viewHolder, final SearchArtistPicResult searchArtistPicResult) {
-        String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_SINGER) + File.separator + searchArtistPicResult.getSinger() + File.separator + searchArtistPicResult.getImgUrl().hashCode() + ".jpg";
+        String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_SINGER, (searchArtistPicResult.getSinger() + File.separator + searchArtistPicResult.getImgUrl().hashCode() + ".jpg"));
         ImageUtil.loadImage(mContext, viewHolder.getSingPicImg(), filePath, searchArtistPicResult.getImgUrl(), R.mipmap.picture_manager_default);
         if (mSelectDatas.containsKey(searchArtistPicResult.getImgUrl().hashCode() + "")) {
             viewHolder.getSelectedImg().setVisibility(View.VISIBLE);

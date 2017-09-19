@@ -86,7 +86,7 @@ public class ImageUtil {
             searchSingerName = singerName.split(regex)[0];
         }
 
-        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER) + File.separator + searchSingerName + File.separator + searchSingerName + ".jpg";
+        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER, searchSingerName + File.separator + searchSingerName + ".jpg");
         final String key = filePath.hashCode() + "";
         //如果当前的图片与上一次一样，则不操作
         if (imageView.getTag() != null && imageView.getTag().equals(key)) {
@@ -242,7 +242,7 @@ public class ImageUtil {
             searchSingerName = singerName.split(regex)[0];
         }
 
-        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER) + File.separator + searchSingerName + File.separator + searchSingerName + ".jpg";
+        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER, searchSingerName + File.separator + searchSingerName + ".jpg");
         final String key = filePath.hashCode() + "";
 
         Bitmap bitmap = null;
@@ -269,7 +269,7 @@ public class ImageUtil {
      * @return
      */
     public static Bitmap getSingerImgBitmap(final HPApplication hPApplication, final Context context, final String hash, final String singerName, String imgUrl, boolean maybeFormNet) {
-        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER) + File.separator + singerName + File.separator + imgUrl.hashCode() + ".jpg";
+        final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER, singerName + File.separator + imgUrl.hashCode() + ".jpg");
         final String key = filePath.hashCode() + "";
 
         Bitmap bitmap = null;

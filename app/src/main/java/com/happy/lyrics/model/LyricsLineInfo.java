@@ -38,7 +38,7 @@ public class LyricsLineInfo extends LrcLyricsLineInfo {
 
 	public void setLyricsWords(String[] lyricsWords) {
 		for (int i = 0; i < lyricsWords.length; i++) {
-			lyricsWords[i] = lyricsWords[i].replaceAll("\r", "");
+			lyricsWords[i] = lyricsWords[i].replaceAll("\r|\n","");
 		}
 
 		this.lyricsWords = lyricsWords;

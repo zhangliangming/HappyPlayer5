@@ -225,7 +225,7 @@ public class HPApplication extends Application {
     public List<AudioInfo> getCurAudioInfos() {
         if (curAudioInfos == null) {
             logger.e("curAudioInfos为空，从本地获取");
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfos.ser";
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfos.ser");
             curAudioInfos = (List<AudioInfo>) SerializableObjUtil.readObj(filePath);
         }
 
@@ -237,7 +237,7 @@ public class HPApplication extends Application {
         new Thread() {
             @Override
             public void run() {
-                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfos.ser";
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfos.ser");
                 if (curAudioInfos != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioInfos);
                 } else {
@@ -253,7 +253,7 @@ public class HPApplication extends Application {
     public AudioInfo getCurAudioInfo() {
         if (curAudioInfo == null) {
             logger.e("curAudioInfo为空，从本地获取");
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfo.ser";
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfo.ser");
             curAudioInfo = (AudioInfo) SerializableObjUtil.readObj(filePath);
         }
         return curAudioInfo;
@@ -264,7 +264,7 @@ public class HPApplication extends Application {
         new Thread() {
             @Override
             public void run() {
-                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioInfo.ser";
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfo.ser");
                 if (curAudioInfo != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioInfo);
                 } else {
@@ -282,7 +282,7 @@ public class HPApplication extends Application {
     public AudioMessage getCurAudioMessage() {
         if (curAudioMessage == null) {
             logger.e("curAudioMessage为空，从本地获取");
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioMessage.ser";
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioMessage.ser");
             curAudioMessage = (AudioMessage) SerializableObjUtil.readObj(filePath);
         }
         return curAudioMessage;
@@ -293,7 +293,7 @@ public class HPApplication extends Application {
         new Thread() {
             @Override
             public void run() {
-                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "curAudioMessage.ser";
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioMessage.ser");
                 if (curAudioMessage != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioMessage);
                 } else {
@@ -309,7 +309,7 @@ public class HPApplication extends Application {
     public RankListResult getRankListResult() {
         if (rankListResult == null) {
             logger.e("rankListResult为空，从本地获取");
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "rankListResult.ser";
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "rankListResult.ser");
             rankListResult = (RankListResult) SerializableObjUtil.readObj(filePath);
         }
         return rankListResult;
@@ -320,7 +320,7 @@ public class HPApplication extends Application {
         new Thread() {
             @Override
             public void run() {
-                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE) + File.separator + "rankListResult.ser";
+                String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "rankListResult.ser");
                 if (rankListResult != null) {
                     SerializableObjUtil.saveObj(filePath, rankListResult);
                 } else {

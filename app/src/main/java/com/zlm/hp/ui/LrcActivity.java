@@ -454,7 +454,7 @@ public class LrcActivity extends BaseActivity {
             if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
                 //下载
-                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())) {
+                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())) {
 
                     mDownloadedImgBtn.setVisibility(View.VISIBLE);
                     mDownloadImgBtn.setVisibility(View.INVISIBLE);
@@ -1392,7 +1392,7 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
-        //歌曲进度减少按钮
+        //歌词进度减少按钮
         ButtonRelativeLayout lrcProgressJianBtn = findViewById(R.id.lyric_progress_jian);
         lrcProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         lrcProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
@@ -1404,12 +1404,7 @@ public class LrcActivity extends BaseActivity {
                     ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
 
-                        if (mHPApplication.getCurAudioMessage() != null) {
 
-                            seekToMusic((int) mHPApplication.getCurAudioMessage().getPlayProgress(), false);
-
-
-                        }
                         //保存歌词文件
                         saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
 
@@ -1417,7 +1412,7 @@ public class LrcActivity extends BaseActivity {
                 }
             }
         });
-        //进度重置
+        //歌词进度重置
         ButtonRelativeLayout resetProgressJianBtn = findViewById(R.id.lyric_progress_reset);
         resetProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         resetProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
@@ -1430,11 +1425,6 @@ public class LrcActivity extends BaseActivity {
                     ToastUtil.showTextToast(LrcActivity.this, "还原了");
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
 
-                        if (mHPApplication.getCurAudioMessage() != null) {
-
-                            seekToMusic((int) mHPApplication.getCurAudioMessage().getPlayProgress(), false);
-
-                        }
                         //保存歌词文件
                         saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
 
@@ -1442,7 +1432,7 @@ public class LrcActivity extends BaseActivity {
                 }
             }
         });
-        //进度增加
+        //歌词进度增加
         ButtonRelativeLayout lrcProgressJiaBtn = findViewById(R.id.lyric_progress_jia);
         lrcProgressJiaBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         lrcProgressJiaBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
@@ -1454,11 +1444,6 @@ public class LrcActivity extends BaseActivity {
                     ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
 
-                        if (mHPApplication.getCurAudioMessage() != null) {
-
-                            seekToMusic((int) mHPApplication.getCurAudioMessage().getPlayProgress(), false);
-
-                        }
                         //保存歌词文件
                         saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
 

@@ -109,7 +109,7 @@ public class DownloadInfoDB extends SQLiteOpenHelper {
             DownloadThreadDB.getDownloadThreadDB(mContext).delete(dhash, DownloadAudioManager.threadNum);
 
             //删除本地缓存文件
-            String tempFilePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP) + File.separator + dhash + ".temp";
+            String tempFilePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP, dhash + ".temp");
             File tempFile = new File(tempFilePath);
             if (tempFile.exists()) {
                 tempFile.delete();

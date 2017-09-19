@@ -111,7 +111,7 @@ public class LyricsManager {
                     mContext.sendBroadcast(downloadingIntent);
 
                     //下载歌词
-                    File saveLrcFile = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LYRICS) + File.separator + fileName + ".krc");
+                    File saveLrcFile = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LYRICS, fileName + ".krc"));
                     byte[] base64ByteArray = DownloadLyricsUtil.downloadLyric(mHPApplication, mContext, keyword, duration, hash);
                     if (base64ByteArray != null && base64ByteArray.length > 1024) {
                         LyricsUtil lyricsUtil = new LyricsUtil();

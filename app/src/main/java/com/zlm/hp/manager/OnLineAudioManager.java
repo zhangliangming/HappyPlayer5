@@ -227,7 +227,7 @@ public class OnLineAudioManager {
                 task.setTaskFileSize(audioInfo.getFileSize());
                 task.setTaskName(audioInfo.getSongName());
                 //  task.setTaskPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt());
-                task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO) + File.separator + audioInfo.getHash() + ".temp");
+                task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_CACHE_AUDIO, audioInfo.getHash() + ".temp"));
                 task.setTaskUrl(audioInfo.getDownloadUrl());
                 task.setThreadNum(threadNum);
                 //

@@ -232,7 +232,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 viewHolder.getDownloadParentRl().setVisibility(View.VISIBLE);
                 //
                 //下载
-                if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
+                if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash()) || AudioInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
 
                     viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
                     viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);

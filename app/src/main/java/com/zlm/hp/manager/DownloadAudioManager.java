@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
+import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.download.DownloadTask;
@@ -273,11 +274,11 @@ public class DownloadAudioManager {
         downloadInfo.setDownloadedSize(0);
         //添加歌曲路径
         String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
-        final String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO) + File.separator + fileName + "." + audioInfo.getFileExt();
+        final String filePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO, (fileName + "." + audioInfo.getFileExt()));
         audioInfo.setFilePath(filePath);
         audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
         downloadInfo.setAudioInfo(audioInfo);
-        if (audioInfo.getType() == AudioInfo.LOCAL) {
+        if (audioInfo.getType() == AudioInfo.LOCAL || AudioInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
 
             ToastUtil.showTextToast(mContext, "本地歌曲，不用下载!");
 
@@ -332,7 +333,7 @@ public class DownloadAudioManager {
                 task.setTaskFileSize(audioInfo.getFileSize());
                 task.setTaskName(audioInfo.getSongName());
                 task.setTaskPath(filePath);
-                task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP) + File.separator + audioInfo.getHash() + ".temp");
+                task.setTaskTempPath(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP, audioInfo.getHash() + ".temp"));
                 task.setTaskUrl(audioInfo.getDownloadUrl());
                 task.setThreadNum(threadNum);
                 //
