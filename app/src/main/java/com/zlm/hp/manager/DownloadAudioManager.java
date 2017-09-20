@@ -278,7 +278,7 @@ public class DownloadAudioManager {
         audioInfo.setFilePath(filePath);
         audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
         downloadInfo.setAudioInfo(audioInfo);
-        if (audioInfo.getType() == AudioInfo.LOCAL || AudioInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
+        if (audioInfo.getType() == AudioInfo.LOCAL || AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
 
             ToastUtil.showTextToast(mContext, "本地歌曲，不用下载!");
 

@@ -454,7 +454,7 @@ public class LrcActivity extends BaseActivity {
             if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
                 //下载
-                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())) {
+                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(getApplicationContext()).isNetAudioExists(audioInfo.getHash())) {
 
                     mDownloadedImgBtn.setVisibility(View.VISIBLE);
                     mDownloadImgBtn.setVisibility(View.INVISIBLE);

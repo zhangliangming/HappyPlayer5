@@ -175,7 +175,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
             //下载
-            if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
+            if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
 
                 viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
                 viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
