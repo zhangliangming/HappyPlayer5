@@ -110,7 +110,8 @@ public class KscLyricsFileWriter extends LyricsFileWriter {
 		String temp = "";
 		for (int i = 0; i < lrcComTxt.length(); i++) {
 			char c = lrcComTxt.charAt(i);
-			if (CharUtils.isChinese(c)) {
+			if (CharUtils.isChinese(c) || CharUtils.isHangulSyllables(c)
+					|| CharUtils.isHiragana(c)) {
 
 				if (!temp.equals("")) {
 					lrcStack.push(temp);
