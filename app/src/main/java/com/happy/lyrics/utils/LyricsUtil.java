@@ -196,8 +196,28 @@ public class LyricsUtil {
             //构造新的音译行歌词
             LyricsLineInfo newLyricsLineInfo = new LyricsLineInfo();
             newLyricsLineInfo.copy(newLyricsLineInfo, defLyricsLineInfo);
-            newLyricsLineInfo.setLyricsWords(origLyricsLineInfo.getLyricsWords());
-            newLyricsLineInfo.setLineLyrics(origLyricsLineInfo.getLineLyrics());
+            //
+            String[] defLyricsWords = defLyricsLineInfo.getLyricsWords();
+            String[] origLyricsWords = origLyricsLineInfo.getLyricsWords();
+            String[] newLyricsWords = new String[defLyricsWords.length];
+            String newLineLyrics = "";
+            for (int j = 0; j < defLyricsWords.length; j++) {
+                if (defLyricsWords[j].lastIndexOf(" ") != -1) {
+                    newLyricsWords[j] = origLyricsWords[j].trim() + " ";
+                } else {
+                    String origLyricsWordsString = origLyricsWords[j].trim();
+                    boolean isWord = origLyricsWordsString.matches("[a-zA-Z]+");
+                    if (isWord) {
+                        newLyricsWords[j] = origLyricsWords[j].trim() + " ";
+                    } else {
+                        newLyricsWords[j] = origLyricsWords[j].trim();
+                    }
+                }
+                newLineLyrics += newLyricsWords[j];
+            }
+
+            newLyricsLineInfo.setLyricsWords(newLyricsWords);
+            newLyricsLineInfo.setLineLyrics(newLineLyrics);
 
             newLyricsLineInfos.add(newLyricsLineInfo);
         }
