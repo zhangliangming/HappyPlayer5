@@ -52,11 +52,6 @@ public class FloatLyricsView extends View {
     private int mFontSize = 0;
 
     /**
-     * 字体的高度进行微调
-     */
-    private int mAdjustLrcHeightNum = 10;
-
-    /**
      * 歌词解析
      */
     private LyricsUtil mLyricsUtil;
@@ -188,8 +183,8 @@ public class FloatLyricsView extends View {
         canvas.drawText(mDefText, leftX, heightY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(leftX, heightY - textHeight - mAdjustLrcHeightNum, leftX + textWidth / 2,
-                heightY + textHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(leftX, heightY - getClipTextHeight(mPaint), leftX + textWidth / 2,
+                heightY + getRealTextHeight(mPaint));
 
         canvas.drawText(mDefText, leftX, heightY, mPaintHL);
         canvas.restore();
@@ -279,8 +274,8 @@ public class FloatLyricsView extends View {
 
         // 画当前歌词
         canvas.drawText(curLyrics, textX, textY, mPaint);
-        canvas.clipRect(textX, textY - curLrcTextHeight - mAdjustLrcHeightNum, textX
-                + mLineLyricsHLWidth, textY + curLrcTextHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(textX, textY - getClipTextHeight(mPaint), textX
+                + mLineLyricsHLWidth, textY + getRealTextHeight(mPaint));
         canvas.drawText(curLyrics, textX, textY, mPaintHL);
 
         canvas.restore();
@@ -343,7 +338,7 @@ public class FloatLyricsView extends View {
     }
 
     /**
-     * 获取行歌词高度
+     * 获取行歌词高度。用于y轴位置计算
      *
      * @param paint
      * @return
@@ -358,6 +353,30 @@ public class FloatLyricsView extends View {
     }
 
     /**
+     * 获取真实的歌词高度
+     *
+     * @param paint
+     * @return
+     */
+    private int getRealTextHeight(Paint paint) {
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        return (int) (-fm.leading - fm.ascent + fm.descent);
+    }
+
+    /**
+     * 获取切割的高度.用于y轴位置计算
+     *
+     * @param paint
+     * @return
+     */
+    private int getClipTextHeight(Paint paint) {
+//        Paint.FontMetrics fm = paint.getFontMetrics();
+//        return (int) (-fm.leading - fm.ascent);
+        return getRealTextHeight(paint);
+    }
+
+
+    /**
      * 获取文本宽度
      *
      * @param paint
@@ -370,10 +389,6 @@ public class FloatLyricsView extends View {
     }
 
     ////////////////////
-
-    public LyricsUtil getmLyricsUtil() {
-        return mLyricsUtil;
-    }
 
     public TreeMap<Integer, LyricsLineInfo> getLyricsLineTreeMap() {
         return mLyricsLineTreeMap;

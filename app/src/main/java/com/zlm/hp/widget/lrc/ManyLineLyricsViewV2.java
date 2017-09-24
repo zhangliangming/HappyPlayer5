@@ -161,11 +161,6 @@ public class ManyLineLyricsViewV2 extends View {
     //渐变的高度
     private int mShadeHeight = 0;
 
-    /**
-     * 字体的高度进行微调
-     */
-    private int mAdjustLrcHeightNum = 10;
-
     /////////////////////////////////////////////////////
 
     /**
@@ -521,8 +516,8 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(mDefText, textX, textY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(textX, textY - textHeight - mAdjustLrcHeightNum, textX + textWidth * 0.5f,
-                textY + textHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(textX, textY - getClipTextHeight(mPaint), textX + textWidth * 0.5f,
+                textY + getRealTextHeight(mPaint));
 
         canvas.drawText(mDefText, textX, textY, mPaintHL);
         canvas.restore();
@@ -550,8 +545,8 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(mDefText, textX, textY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(textX, textY - textHeight - mAdjustLrcHeightNum, textX + textWidth * 0.5f,
-                textY + textHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(textX, textY - getClipTextHeight(mPaint), textX + textWidth * 0.5f,
+                textY + getRealTextHeight(mPaint));
 
         canvas.drawText(mDefText, textX, textY, mPaintHL);
         canvas.restore();
@@ -696,8 +691,8 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, mCentreY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, mCentreY - curLyricsHeight - mAdjustLrcHeightNum, curTextX + mLineLyricsHLWidth,
-                mCentreY + curLyricsHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(curTextX, mCentreY - getClipTextHeight(mPaint), curTextX + mLineLyricsHLWidth,
+                mCentreY + getRealTextHeight(mPaint));
 
         // 画当前歌词
         canvas.drawText(curLyrics, curTextX, mCentreY, mPaintHL);
@@ -1366,8 +1361,8 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mExtraLrcPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, centreLastBottomY - curLyricsHeight - mAdjustLrcHeightNum, curTextX + mExtraLyricsHLWidth,
-                centreLastBottomY + curLyricsHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mExtraLrcPaint), curTextX + mExtraLyricsHLWidth,
+                centreLastBottomY + getRealTextHeight(mExtraLrcPaint));
 
         // 画当前歌词
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mExtraLrcPaintHL);
@@ -1425,8 +1420,8 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, centreLastBottomY - curLyricsHeight - mAdjustLrcHeightNum, curTextX + mLineLyricsHLWidth,
-                centreLastBottomY + curLyricsHeight + mAdjustLrcHeightNum);
+        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mPaint), curTextX + mLineLyricsHLWidth,
+                centreLastBottomY + getRealTextHeight(mPaint));
 
         // 画当前歌词
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mPaintHL);
@@ -1858,7 +1853,7 @@ public class ManyLineLyricsViewV2 extends View {
     }
 
     /**
-     * 获取每行高度
+     * 获取每行高度。用于y轴位置计算
      *
      * @param paint
      * @return
@@ -1868,7 +1863,7 @@ public class ManyLineLyricsViewV2 extends View {
     }
 
     /**
-     * 获取额外歌词行高度
+     * 获取额外歌词行高度。用于y轴位置计算
      *
      * @param paint
      * @return
@@ -1878,7 +1873,7 @@ public class ManyLineLyricsViewV2 extends View {
     }
 
     /**
-     * 获取行歌词高度
+     * 获取行歌词高度。用于y轴位置计算
      *
      * @param paint
      * @return
@@ -1888,10 +1883,33 @@ public class ManyLineLyricsViewV2 extends View {
 //        paint.getTextBounds(text, 0, text.length(), rect);
 //        return rect.height();
 
-
         Paint.FontMetrics fm = paint.getFontMetrics();
         return (int) -(fm.ascent + fm.descent);
     }
+
+    /**
+     * 获取真实的歌词高度
+     *
+     * @param paint
+     * @return
+     */
+    private int getRealTextHeight(Paint paint) {
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        return (int) (-fm.leading - fm.ascent + fm.descent);
+    }
+
+    /**
+     * 获取切割的高度.用于y轴位置计算
+     *
+     * @param paint
+     * @return
+     */
+    private int getClipTextHeight(Paint paint) {
+//        Paint.FontMetrics fm = paint.getFontMetrics();
+//        return (int) (-fm.leading - fm.ascent);
+        return getRealTextHeight(paint);
+    }
+
 
     /**
      * 获取文本宽度
@@ -1904,6 +1922,7 @@ public class ManyLineLyricsViewV2 extends View {
         return paint
                 .measureText(text);
     }
+
 
     ////////////////////
 
