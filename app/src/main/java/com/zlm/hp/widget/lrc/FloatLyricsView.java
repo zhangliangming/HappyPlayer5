@@ -202,106 +202,88 @@ public class FloatLyricsView extends View {
      * @param canvas
      */
     private void drawLrcText(Canvas canvas) {
+        // 先设置当前歌词，之后再根据索引判断是否放在左边还是右边
+        LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap.get(mLyricsLineNum);
+        // 当行歌词
+        String curLyrics = lyricsLineInfo.getLineLyrics();
+        float curLrcTextWidth = getTextWidth(mPaint, curLyrics);
+        int curLrcTextHeight = getTextHeight(mPaint);
+        if (mLyricsWordIndex != -1) {
+            String lyricsWords[] = lyricsLineInfo.getLyricsWords();
+            int wordsDisInterval[] = lyricsLineInfo
+                    .getWordsDisInterval();
+            // 当前歌词之前的歌词
+            String lyricsBeforeWord = "";
+            for (int i = 0; i < mLyricsWordIndex; i++) {
+                lyricsBeforeWord += lyricsWords[i];
+            }
+            // 当前歌词字
+            String lrcNowWord = lyricsWords[mLyricsWordIndex].trim();// 去掉空格
+            // 当前歌词之前的歌词长度
+            float lyricsBeforeWordWidth = mPaint
+                    .measureText(lyricsBeforeWord);
 
-        if (mLyricsLineNum == -1) {
-            String lyricsLeft = mLyricsLineTreeMap.get(0).getLineLyrics();
-            canvas.drawText(lyricsLeft, mPaddingLeftOrRight, mSpaceLineHeight + getTextHeight(mPaint),
-                    mPaint);
-            if (mLyricsLineNum + 2 < mLyricsLineTreeMap.size()) {
-                String lyricsRight = mLyricsLineTreeMap.get(mLyricsLineNum + 2)
-                        .getLineLyrics();
+            // 当前歌词长度
+            float lyricsNowWordWidth = mPaint.measureText(lrcNowWord);
 
-                float lyricsRightWidth = mPaint.measureText(lyricsRight);
-                float textRightX = getWidth() - lyricsRightWidth - mPaddingLeftOrRight;
+            float len = lyricsNowWordWidth
+                    / wordsDisInterval[mLyricsWordIndex]
+                    * mLyricsWordHLTime;
+            mLineLyricsHLWidth = lyricsBeforeWordWidth + len;
+        } else {
+            // 整行歌词
+            mLineLyricsHLWidth = curLrcTextWidth;
+        }
+        //
+        // 当前歌词行的x坐标
+        float textX = 0;
 
+        // 当前歌词行的y坐标
+        float textY = 0;
+        if (mLyricsLineNum % 2 == 0) {
 
-                canvas.drawText(lyricsRight, textRightX,
+            textX = mPaddingLeftOrRight;
+            textY = mSpaceLineHeight + getTextHeight(mPaint);
+
+            // 画下一句的歌词
+            if (mLyricsLineNum + 1 < mLyricsLineTreeMap.size()) {
+                String lrcRightText = mLyricsLineTreeMap.get(
+                        mLyricsLineNum + 1).getLineLyrics();
+                float lrcRightTextWidth = mPaint
+                        .measureText(lrcRightText);
+                float textRightX = getWidth() - lrcRightTextWidth - mPaddingLeftOrRight;
+                canvas.drawText(lrcRightText, textRightX,
                         (mSpaceLineHeight + getTextHeight(mPaint)) * 2 + mSpaceLineHeight, mPaint);
             }
         } else {
-            // 先设置当前歌词，之后再根据索引判断是否放在左边还是右边
-            LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap.get(mLyricsLineNum);
-            // 当行歌词
-            String curLyrics = lyricsLineInfo.getLineLyrics();
-            float curLrcTextWidth = getTextWidth(mPaint, curLyrics);
-            int curLrcTextHeight = getTextHeight(mPaint);
-            if (mLyricsWordIndex != -1) {
-                String lyricsWords[] = lyricsLineInfo.getLyricsWords();
-                int wordsDisInterval[] = lyricsLineInfo
-                        .getWordsDisInterval();
-                // 当前歌词之前的歌词
-                String lyricsBeforeWord = "";
-                for (int i = 0; i < mLyricsWordIndex; i++) {
-                    lyricsBeforeWord += lyricsWords[i];
-                }
-                // 当前歌词字
-                String lrcNowWord = lyricsWords[mLyricsWordIndex].trim();// 去掉空格
-                // 当前歌词之前的歌词长度
-                float lyricsBeforeWordWidth = mPaint
-                        .measureText(lyricsBeforeWord);
 
-                // 当前歌词长度
-                float lyricsNowWordWidth = mPaint.measureText(lrcNowWord);
+            textX = getWidth() - curLrcTextWidth - mPaddingLeftOrRight;
+            textY = (mSpaceLineHeight + getTextHeight(mPaint)) * 2 + mSpaceLineHeight;
 
-                float len = lyricsNowWordWidth
-                        / wordsDisInterval[mLyricsWordIndex]
-                        * mLyricsWordHLTime;
-                mLineLyricsHLWidth = lyricsBeforeWordWidth + len;
+            // 画下一句的歌词
+            if (mLyricsLineNum + 1 < mLyricsLineTreeMap.size()) {
+                String lrcLeftText = mLyricsLineTreeMap.get(
+                        mLyricsLineNum + 1).getLineLyrics();
+                canvas.drawText(lrcLeftText, mPaddingLeftOrRight,
+                        mSpaceLineHeight + getTextHeight(mPaint), mPaint);
             } else {
-                // 整行歌词
-                mLineLyricsHLWidth = curLrcTextWidth;
+                //因为当前是最后一句了，这里画上一句
+                String lrcLeftText = mLyricsLineTreeMap.get(
+                        mLyricsLineNum - 1).getLineLyrics();
+                canvas.drawText(lrcLeftText, mPaddingLeftOrRight,
+                        mSpaceLineHeight + getTextHeight(mPaintHL), mPaintHL);
             }
-            //
-            // 当前歌词行的x坐标
-            float textX = 0;
-
-            // 当前歌词行的y坐标
-            float textY = 0;
-            if (mLyricsLineNum % 2 == 0) {
-
-                textX = mPaddingLeftOrRight;
-                textY = mSpaceLineHeight + getTextHeight(mPaint);
-
-                // 画下一句的歌词
-                if (mLyricsLineNum + 1 < mLyricsLineTreeMap.size()) {
-                    String lrcRightText = mLyricsLineTreeMap.get(
-                            mLyricsLineNum + 1).getLineLyrics();
-                    float lrcRightTextWidth = mPaint
-                            .measureText(lrcRightText);
-                    float textRightX = getWidth() - lrcRightTextWidth - mPaddingLeftOrRight;
-                    canvas.drawText(lrcRightText, textRightX,
-                            (mSpaceLineHeight + getTextHeight(mPaint)) * 2 + mSpaceLineHeight, mPaint);
-                }
-            } else {
-
-                textX = getWidth() - curLrcTextWidth - mPaddingLeftOrRight;
-                textY = (mSpaceLineHeight + getTextHeight(mPaint)) * 2 + mSpaceLineHeight;
-
-                // 画下一句的歌词
-                if (mLyricsLineNum + 1 < mLyricsLineTreeMap.size()) {
-                    String lrcLeftText = mLyricsLineTreeMap.get(
-                            mLyricsLineNum + 1).getLineLyrics();
-                    canvas.drawText(lrcLeftText, mPaddingLeftOrRight,
-                            mSpaceLineHeight + getTextHeight(mPaint), mPaint);
-                } else {
-                    //因为当前是最后一句了，这里画上一句
-                    String lrcLeftText = mLyricsLineTreeMap.get(
-                            mLyricsLineNum - 1).getLineLyrics();
-                    canvas.drawText(lrcLeftText, mPaddingLeftOrRight,
-                            mSpaceLineHeight + getTextHeight(mPaintHL), mPaintHL);
-                }
-            }
-            // save和restore是为了剪切操作不影响画布的其它元素
-            canvas.save();
-
-            // 画当前歌词
-            canvas.drawText(curLyrics, textX, textY, mPaint);
-            canvas.clipRect(textX, textY - curLrcTextHeight - mAdjustLrcHeightNum, textX
-                    + mLineLyricsHLWidth, textY + curLrcTextHeight + mAdjustLrcHeightNum);
-            canvas.drawText(curLyrics, textX, textY, mPaintHL);
-
-            canvas.restore();
         }
+        // save和restore是为了剪切操作不影响画布的其它元素
+        canvas.save();
+
+        // 画当前歌词
+        canvas.drawText(curLyrics, textX, textY, mPaint);
+        canvas.clipRect(textX, textY - curLrcTextHeight - mAdjustLrcHeightNum, textX
+                + mLineLyricsHLWidth, textY + curLrcTextHeight + mAdjustLrcHeightNum);
+        canvas.drawText(curLyrics, textX, textY, mPaintHL);
+
+        canvas.restore();
     }
 
 
