@@ -120,16 +120,16 @@ public class LrcActivity extends BaseActivity {
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
     //翻译歌词
-    private ImageView hideTranslateImg;
-    private ImageView showTranslateImg;
+    private ImageView mHideTranslateImg;
+    private ImageView mShowTranslateImg;
     //音译歌词
-    private ImageView hideTransliterationImg;
-    private ImageView showTransliterationImg;
+    private ImageView mHideTransliterationImg;
+    private ImageView mShowTransliterationImg;
 
     //翻译歌词/音译歌词
-    private ImageView showTTToTranslateImg;
-    private ImageView showTTToTransliterationImg;
-    private ImageView hideTTImg;
+    private ImageView mShowTTToTranslateImg;
+    private ImageView mShowTTToTransliterationImg;
+    private ImageView mHideTTImg;
 
     private final int HASTRANSLATELRC = 0;
     private final int HASTRANSLITERATIONLRC = 1;
@@ -144,16 +144,16 @@ public class LrcActivity extends BaseActivity {
                 case NOEXTRALRC:
 
                     //翻译歌词
-                    hideTranslateImg.setVisibility(View.INVISIBLE);
-                    showTranslateImg.setVisibility(View.INVISIBLE);
+                    mHideTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTranslateImg.setVisibility(View.INVISIBLE);
                     //音译歌词
-                    hideTransliterationImg.setVisibility(View.INVISIBLE);
-                    showTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                    mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
                     //翻译歌词/音译歌词
-                    showTTToTranslateImg.setVisibility(View.INVISIBLE);
-                    showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                    hideTTImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.INVISIBLE);
 
 
                     break;
@@ -161,46 +161,46 @@ public class LrcActivity extends BaseActivity {
 
 
                     //翻译歌词
-                    hideTranslateImg.setVisibility(View.INVISIBLE);
-                    showTranslateImg.setVisibility(View.INVISIBLE);
+                    mHideTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTranslateImg.setVisibility(View.INVISIBLE);
                     //音译歌词
-                    hideTransliterationImg.setVisibility(View.INVISIBLE);
-                    showTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                    mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
                     //翻译歌词/音译歌词
-                    showTTToTranslateImg.setVisibility(View.VISIBLE);
-                    showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                    hideTTImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTranslateImg.setVisibility(View.VISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.INVISIBLE);
 
                     break;
                 case HASTRANSLITERATIONLRC:
 
                     //翻译歌词
-                    hideTranslateImg.setVisibility(View.INVISIBLE);
-                    showTranslateImg.setVisibility(View.INVISIBLE);
+                    mHideTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTranslateImg.setVisibility(View.INVISIBLE);
                     //音译歌词
-                    hideTransliterationImg.setVisibility(View.INVISIBLE);
-                    showTransliterationImg.setVisibility(View.VISIBLE);
+                    mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                    mShowTransliterationImg.setVisibility(View.VISIBLE);
 
                     //翻译歌词/音译歌词
-                    showTTToTranslateImg.setVisibility(View.INVISIBLE);
-                    showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                    hideTTImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.INVISIBLE);
 
                     break;
                 case HASTRANSLATELRC:
 
                     //翻译歌词
-                    hideTranslateImg.setVisibility(View.INVISIBLE);
-                    showTranslateImg.setVisibility(View.VISIBLE);
+                    mHideTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTranslateImg.setVisibility(View.VISIBLE);
                     //音译歌词
-                    hideTransliterationImg.setVisibility(View.INVISIBLE);
-                    showTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                    mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
                     //翻译歌词/音译歌词
-                    showTTToTranslateImg.setVisibility(View.INVISIBLE);
-                    showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                    hideTTImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.INVISIBLE);
 
 
                     break;
@@ -454,7 +454,7 @@ public class LrcActivity extends BaseActivity {
             if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
                 //下载
-                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(getApplicationContext()).isNetAudioExists(audioInfo.getHash())) {
+                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash()) || AudioInfoDB.getAudioInfoDB(getApplicationContext()).isNetAudioExists(audioInfo.getHash())) {
 
                     mDownloadedImgBtn.setVisibility(View.VISIBLE);
                     mDownloadImgBtn.setVisibility(View.INVISIBLE);
@@ -634,12 +634,12 @@ public class LrcActivity extends BaseActivity {
         //
         mManyLineLyricsView = findViewById(R.id.manyLineLyricsView);
         //翻译歌词
-        hideTranslateImg = findViewById(R.id.hideTranslateImg);
-        hideTranslateImg.setOnClickListener(new View.OnClickListener() {
+        mHideTranslateImg = findViewById(R.id.hideTranslateImg);
+        mHideTranslateImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideTranslateImg.setVisibility(View.INVISIBLE);
-                showTranslateImg.setVisibility(View.VISIBLE);
+                mHideTranslateImg.setVisibility(View.INVISIBLE);
+                mShowTranslateImg.setVisibility(View.VISIBLE);
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 } else {
@@ -650,12 +650,12 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-        showTranslateImg = findViewById(R.id.showTranslateImg);
-        showTranslateImg.setOnClickListener(new View.OnClickListener() {
+        mShowTranslateImg = findViewById(R.id.showTranslateImg);
+        mShowTranslateImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideTranslateImg.setVisibility(View.VISIBLE);
-                showTranslateImg.setVisibility(View.INVISIBLE);
+                mHideTranslateImg.setVisibility(View.VISIBLE);
+                mShowTranslateImg.setVisibility(View.INVISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -668,12 +668,12 @@ public class LrcActivity extends BaseActivity {
             }
         });
         //音译歌词
-        hideTransliterationImg = findViewById(R.id.hideTransliterationImg);
-        hideTransliterationImg.setOnClickListener(new View.OnClickListener() {
+        mHideTransliterationImg = findViewById(R.id.hideTransliterationImg);
+        mHideTransliterationImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideTransliterationImg.setVisibility(View.INVISIBLE);
-                showTransliterationImg.setVisibility(View.VISIBLE);
+                mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                mShowTransliterationImg.setVisibility(View.VISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -684,12 +684,12 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-        showTransliterationImg = findViewById(R.id.showTransliterationImg);
-        showTransliterationImg.setOnClickListener(new View.OnClickListener() {
+        mShowTransliterationImg = findViewById(R.id.showTransliterationImg);
+        mShowTransliterationImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                hideTransliterationImg.setVisibility(View.VISIBLE);
-                showTransliterationImg.setVisibility(View.INVISIBLE);
+                mHideTransliterationImg.setVisibility(View.VISIBLE);
+                mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -702,13 +702,13 @@ public class LrcActivity extends BaseActivity {
         });
 
         //翻译歌词/音译歌词
-        showTTToTranslateImg = findViewById(R.id.showTTToTranslateImg);
-        showTTToTranslateImg.setOnClickListener(new View.OnClickListener() {
+        mShowTTToTranslateImg = findViewById(R.id.showTTToTranslateImg);
+        mShowTTToTranslateImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTTToTranslateImg.setVisibility(View.INVISIBLE);
-                showTTToTransliterationImg.setVisibility(View.VISIBLE);
-                hideTTImg.setVisibility(View.INVISIBLE);
+                mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
+                mHideTTImg.setVisibility(View.INVISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -718,13 +718,13 @@ public class LrcActivity extends BaseActivity {
                 mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
-        showTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
-        showTTToTransliterationImg.setOnClickListener(new View.OnClickListener() {
+        mShowTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
+        mShowTTToTransliterationImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTTToTranslateImg.setVisibility(View.INVISIBLE);
-                showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                hideTTImg.setVisibility(View.VISIBLE);
+                mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                mHideTTImg.setVisibility(View.VISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -734,13 +734,13 @@ public class LrcActivity extends BaseActivity {
                 mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
-        hideTTImg = findViewById(R.id.hideTTImg);
-        hideTTImg.setOnClickListener(new View.OnClickListener() {
+        mHideTTImg = findViewById(R.id.hideTTImg);
+        mHideTTImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTTToTranslateImg.setVisibility(View.VISIBLE);
-                showTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                hideTTImg.setVisibility(View.INVISIBLE);
+                mShowTTToTranslateImg.setVisibility(View.VISIBLE);
+                mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                mHideTTImg.setVisibility(View.INVISIBLE);
 
                 if (mHPApplication.getCurAudioMessage() != null) {
                     mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
