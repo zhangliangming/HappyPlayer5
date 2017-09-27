@@ -167,10 +167,17 @@ public class LrcActivity extends BaseActivity {
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                    //翻译歌词/音译歌词
-                    mShowTTToTranslateImg.setVisibility(View.VISIBLE);
-                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                    mHideTTImg.setVisibility(View.INVISIBLE);
+                    if(mManyLineLyricsView.isManyLineLrc()){
+                        //翻译歌词/音译歌词
+                        mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                        mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
+                        mHideTTImg.setVisibility(View.INVISIBLE);
+                    }else{
+                        //翻译歌词/音译歌词
+                        mShowTTToTranslateImg.setVisibility(View.VISIBLE);
+                        mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                        mHideTTImg.setVisibility(View.INVISIBLE);
+                    }
 
                     break;
                 case HASTRANSLITERATIONLRC:
@@ -178,9 +185,17 @@ public class LrcActivity extends BaseActivity {
                     //翻译歌词
                     mHideTranslateImg.setVisibility(View.INVISIBLE);
                     mShowTranslateImg.setVisibility(View.INVISIBLE);
-                    //音译歌词
-                    mHideTransliterationImg.setVisibility(View.INVISIBLE);
-                    mShowTransliterationImg.setVisibility(View.VISIBLE);
+
+                    if(mManyLineLyricsView.isManyLineLrc()){
+                        //音译歌词
+                        mHideTransliterationImg.setVisibility(View.VISIBLE);
+                        mShowTransliterationImg.setVisibility(View.INVISIBLE);
+                    }else{
+                        //音译歌词
+                        mHideTransliterationImg.setVisibility(View.INVISIBLE);
+                        mShowTransliterationImg.setVisibility(View.VISIBLE);
+                    }
+
 
                     //翻译歌词/音译歌词
                     mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
@@ -190,9 +205,17 @@ public class LrcActivity extends BaseActivity {
                     break;
                 case HASTRANSLATELRC:
 
-                    //翻译歌词
-                    mHideTranslateImg.setVisibility(View.INVISIBLE);
-                    mShowTranslateImg.setVisibility(View.VISIBLE);
+                    if(mManyLineLyricsView.isManyLineLrc()){
+                        //翻译歌词
+                        mHideTranslateImg.setVisibility(View.VISIBLE);
+                        mShowTranslateImg.setVisibility(View.INVISIBLE);
+                    }else{
+                        //翻译歌词
+                        mHideTranslateImg.setVisibility(View.INVISIBLE);
+                        mShowTranslateImg.setVisibility(View.VISIBLE);
+                    }
+
+
                     //音译歌词
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
@@ -367,7 +390,7 @@ public class LrcActivity extends BaseActivity {
             mLrcSeekBar.setMax(0);
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0);
+            mManyLineLyricsView.setLyricsUtil(null, 0,0);
             //歌手写真
             mSingerImageView.setVisibility(View.INVISIBLE);
             mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
@@ -424,7 +447,7 @@ public class LrcActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0);
+            mManyLineLyricsView.setLyricsUtil(null, 0,0);
 
             //设置弹出窗口播放列表
             if (isPLPopViewShow) {
@@ -525,7 +548,7 @@ public class LrcActivity extends BaseActivity {
                 LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
                 if (lyricsUtil != null) {
                     lyricsUtil.setHash(hash);
-                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2);
+                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2,(int) curAudioMessage.getPlayProgress());
                     mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
                 }
             }

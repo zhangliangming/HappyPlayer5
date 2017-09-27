@@ -188,6 +188,7 @@ public class LyricsUtil {
      * @return
      */
     private List<LyricsLineInfo> getTransliterationLrc(TreeMap<Integer, LyricsLineInfo> mDefLyricsLineTreeMap, List<LyricsLineInfo> transliterationLrcLineInfos) {
+     if(mDefLyricsLineTreeMap == null) return null;
         List<LyricsLineInfo> newLyricsLineInfos = new ArrayList<LyricsLineInfo>();
         for (int i = 0; i < mDefLyricsLineTreeMap.size(); i++) {
             LyricsLineInfo origLyricsLineInfo = transliterationLrcLineInfos.get(i);
@@ -456,6 +457,7 @@ public class LyricsUtil {
      * @return
      */
     public synchronized TreeMap<Integer, LyricsLineInfo> getSplitLyrics(int textMaxWidth, Paint paint) {
+        if (mDefLyricsLineTreeMap == null) return null;
         // long startTime = System.currentTimeMillis();
         TreeMap<Integer, LyricsLineInfo> lyricsLineTreeMap = new TreeMap<Integer, LyricsLineInfo>();
         for (int i = 0; i < mDefLyricsLineTreeMap.size(); i++) {
@@ -658,6 +660,7 @@ public class LyricsUtil {
      * @return
      */
     public synchronized TreeMap<Integer, LyricsLineInfo> getReconstructLyrics(int textMaxWidth, Paint paint) {
+        if (mDefLyricsLineTreeMap == null) return null;
         // 这里面key为该行歌词的开始时间，方便后面排序
         SortedMap<Integer, LyricsLineInfo> lyricsLineInfosTemp = new TreeMap<Integer, LyricsLineInfo>();
         for (int i = 0; i < mDefLyricsLineTreeMap.size(); i++) {

@@ -47,8 +47,14 @@ public class ResourceFileUtil {
         String filePath = baseFilePath + File.separator + tempFilePath + File.separator + fileName;
 
         File file = new File(filePath);
-        if (!file.getParentFile().exists()) {
-            file.getParentFile().mkdirs();
+        if(!fileName.equals("")){
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+        }else{
+            if(!file.exists()){
+                file.mkdirs();
+            }
         }
 
         return filePath;

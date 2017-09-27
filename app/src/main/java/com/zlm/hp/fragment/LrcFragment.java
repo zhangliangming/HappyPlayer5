@@ -198,7 +198,7 @@ public class LrcFragment extends BaseFragment {
                 LyricsUtil lyricsUtil = new LyricsUtil();
                 lyricsUtil.setHash(mHash);
                 lyricsUtil.loadLrc(mDownloadLyricsResult.getContent(), null, mLrcFilePath);
-                mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 4 * 3);
+                mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 4 * 3,mPlayProgress);
                 mManyLineLyricsView.updateView(mPlayProgress);
 
             }

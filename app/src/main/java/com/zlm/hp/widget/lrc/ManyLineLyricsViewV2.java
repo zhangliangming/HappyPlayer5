@@ -37,12 +37,14 @@ import java.util.TreeMap;
  */
 
 public class ManyLineLyricsViewV2 extends View {
+    public static final int SHOWTRANSLATELRC = 0;
+    public static final int SHOWTRANSLITERATIONLRC = 1;
+    public static final int NOSHOWEXTRALRC = 2;
     private Context mContext;
     /**
      * 默认提示文本
      */
     private String mDefText;
-
     /**
      * 默认歌词画笔
      */
@@ -59,24 +61,20 @@ public class ManyLineLyricsViewV2 extends View {
      * 画虚线
      */
     private Paint mPaintPathEffect;
-
     /**
      * 绘画播放按钮
      */
     private Paint mPaintPlay;
     private Rect mPlayRect;
     private int mRectSize = 60;
-
     /**
      *
      */
     private LoggerUtil logger;
-
     /**
      * 空行高度
      */
     private int mSpaceLineHeight = 40;
-
     /**
      * 歌词字体大小
      */
@@ -90,12 +88,10 @@ public class ManyLineLyricsViewV2 extends View {
      * 歌词的最大宽度
      */
     private int mTextMaxWidth = 0;
-
     /**
      * 歌词解析
      */
     private LyricsUtil mLyricsUtil;
-
     /**
      * 歌词列表
      */
@@ -113,11 +109,12 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private int mLyricsLineNum = 0;
 
+
+    ///////////////////////////////////////
     /**
      * 当前歌词的第几个字
      */
     private int mLyricsWordIndex = -1;
-
     /**
      * 当前歌词第几个字 已经播放的长度
      */
@@ -126,24 +123,18 @@ public class ManyLineLyricsViewV2 extends View {
      * 当前歌词第几个字 已经播放的时间
      */
     private float mLyricsWordHLTime = 0;
-
-
-    ///////////////////////////////////////
     /**
      * 判断view是点击还是移动的距离
      */
     private int mTouchSlop;
-
     /**
      *
      */
     private Scroller mScroller;
-
     /**
      * Y轴移动的时间
      */
     private int mDuration = 200;
-
     /**
      * 歌词在Y轴上的偏移量
      */
@@ -153,6 +144,7 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private float mCentreY = 0;
 
+    /////////////////////////////////////////////////////
     /**
      * 颜色渐变梯度
      */
@@ -160,16 +152,12 @@ public class ManyLineLyricsViewV2 extends View {
     private int mMinAlpha = 50;
     //渐变的高度
     private int mShadeHeight = 0;
-
-    /////////////////////////////////////////////////////
-
     /**
      * 记录手势
      */
     private VelocityTracker mVelocityTracker;
     private int mMaximumVelocity;
     private int mMinimumVelocity;
-
     //用于判断拦截
     private int mInterceptX = 0;
     private int mInterceptY = 0;
@@ -181,7 +169,6 @@ public class ManyLineLyricsViewV2 extends View {
      * 是否直接拦截
      */
     private boolean mTouchIntercept = false;
-
     /**
      * 正在拖动
      */
@@ -198,7 +185,6 @@ public class ManyLineLyricsViewV2 extends View {
      * 是否是快速滑动
      */
     private boolean isFlingScroll = false;
-
     /**
      * 还原歌词视图
      */
@@ -207,7 +193,40 @@ public class ManyLineLyricsViewV2 extends View {
      *
      */
     private int mResetDuration = 3000;
+    /**
+     * 歌词快进事件
+     */
+    private OnLrcClickListener mOnLrcClickListener;
+    /**
+     * 额外歌词监听事件
+     */
+    private ExtraLyricsListener mExtraLyricsListener;
 
+    //////////////////////////////////////翻译和音译歌词变量//////////////////////////////////////////////
+    /**
+     * 判断歌词集合是否在重构
+     */
+    private boolean isReconstruct = false;
+    /**
+     * 是否是多行歌词
+     */
+    private boolean isManyLineLrc = true;
+    /**
+     * 额外歌词状态
+     */
+    private int mExtraLrcStatus = NOSHOWEXTRALRC;
+    /**
+     * 分割歌词的行索引
+     */
+    private int mSplitLyricsLineNum = 0;
+    /**
+     * 额外歌词空行高度
+     */
+    private int mExtraLrcSpaceLineHeight = 20;
+    /**
+     * 额外歌词画笔
+     */
+    private Paint mExtraLrcPaint;
     /**
      * Handler处理滑动指示器隐藏和歌词滚动到当前播放的位置
      */
@@ -232,49 +251,6 @@ public class ManyLineLyricsViewV2 extends View {
             }
         }
     };
-
-    /**
-     * 歌词快进事件
-     */
-    private OnLrcClickListener mOnLrcClickListener;
-    /**
-     * 额外歌词监听事件
-     */
-    private ExtraLyricsListener mExtraLyricsListener;
-
-    /**
-     * 判断歌词集合是否在重构
-     */
-    private boolean isReconstruct = false;
-
-    /**
-     * 是否是多行歌词
-     */
-    private boolean isManyLineLrc = true;
-
-    //////////////////////////////////////翻译和音译歌词变量//////////////////////////////////////////////
-
-    public static final int SHOWTRANSLATELRC = 0;
-    public static final int SHOWTRANSLITERATIONLRC = 1;
-    public static final int NOSHOWEXTRALRC = 2;
-    /**
-     * 额外歌词状态
-     */
-    private int mExtraLrcStatus = NOSHOWEXTRALRC;
-    /**
-     * 分割歌词的行索引
-     */
-    private int mSplitLyricsLineNum = 0;
-
-    /**
-     * 额外歌词空行高度
-     */
-    private int mExtraLrcSpaceLineHeight = 20;
-    /**
-     * 额外歌词画笔
-     */
-    private Paint mExtraLrcPaint;
-
     /**
      * 额外歌词高亮画笔
      */
@@ -1760,7 +1736,7 @@ public class ManyLineLyricsViewV2 extends View {
      * @param mLyricsUtil
      * @param textMaxWidth 歌词最大宽度
      */
-    public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth) {
+    public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth, int curPlayingTime) {
         this.mLyricsUtil = mLyricsUtil;
         this.mTextMaxWidth = textMaxWidth;
         if (mLyricsUtil != null && textMaxWidth != 0) {
@@ -1777,43 +1753,50 @@ public class ManyLineLyricsViewV2 extends View {
         } else {
             mLyricsLineTreeMap = null;
         }
-        //额外歌词类型回调
-        extraLrcTypeCallBack();
         resetData();
+        //额外歌词类型回调
+        extraLrcTypeCallBack(curPlayingTime);
         invalidateView();
     }
 
     /**
      * 额外歌词类型回调
      */
-    private void extraLrcTypeCallBack() {
-        if (mLyricsUtil != null && mExtraLyricsListener != null) {
+    private void extraLrcTypeCallBack(int curPlayingTime) {
+        if (mLyricsUtil != null && mExtraLyricsListener != null && mLyricsLineTreeMap != null) {
             int extraLrcType = mLyricsUtil.getExtraLrcType();
             if (extraLrcType == LyricsUtil.TRANSLATE_AND_TRANSLITERATION_LRC) {
                 //有翻译歌词和音译歌词
                 if (mExtraLyricsListener != null) {
                     mExtraLyricsListener.hasTranslateAndTransliterationLrcCallback();
                 }
+                mExtraLrcStatus = SHOWTRANSLATELRC;
             } else if (extraLrcType == LyricsUtil.TRANSLATE_LRC) {
                 //有翻译歌词
                 if (mExtraLyricsListener != null) {
                     mExtraLyricsListener.hasTranslateLrcCallback();
                 }
+                mExtraLrcStatus = SHOWTRANSLATELRC;
             } else if (extraLrcType == LyricsUtil.TRANSLITERATION_LRC) {
                 //音译歌词
                 if (mExtraLyricsListener != null) {
                     mExtraLyricsListener.hasTransliterationLrcCallback();
                 }
+                mExtraLrcStatus = SHOWTRANSLITERATIONLRC;
             } else {
                 //无翻译歌词和音译歌词
                 mExtraLyricsListener.noExtraLrcCallback();
+                mExtraLrcStatus = NOSHOWEXTRALRC;
             }
+
         } else {
             if (mExtraLyricsListener != null) {
                 mExtraLyricsListener.noExtraLrcCallback();
             }
+            mExtraLrcStatus = NOSHOWEXTRALRC;
         }
-        mExtraLrcStatus = NOSHOWEXTRALRC;
+        if (isManyLineLrc)
+            setExtraLrcStatus(mExtraLrcStatus, curPlayingTime);
     }
 
     /**
@@ -1926,46 +1909,8 @@ public class ManyLineLyricsViewV2 extends View {
 
     ////////////////////
 
-    /**
-     * 歌词事件
-     */
-    public interface OnLrcClickListener {
-        /**
-         * 歌词快进播放
-         *
-         * @param progress
-         */
-        void onLrcPlayClicked(int progress, boolean isLrcSeekTo);
-    }
-
     public void setOnLrcClickListener(OnLrcClickListener mOnLrcClickListener) {
         this.mOnLrcClickListener = mOnLrcClickListener;
-    }
-
-    /**
-     * 额外歌词事件
-     */
-    public interface ExtraLyricsListener {
-
-        /**
-         * 有翻译歌词回调
-         */
-        void hasTranslateLrcCallback();
-
-        /**
-         * 有音译歌词回调
-         */
-        void hasTransliterationLrcCallback();
-
-        /**
-         * 有翻译歌词和音译歌词回调
-         */
-        void hasTranslateAndTransliterationLrcCallback();
-
-        /**
-         * 无翻译和音译歌词回调
-         */
-        void noExtraLrcCallback();
     }
 
     public void setExtraLyricsListener(ExtraLyricsListener mExtraLyricsListener) {
@@ -1976,7 +1921,7 @@ public class ManyLineLyricsViewV2 extends View {
      * 更新歌词
      */
     public void updateView(int playProgress) {
-        if (mLyricsUtil == null || isReconstruct) return;
+        if (mLyricsUtil == null || isReconstruct || mLyricsLineTreeMap == null) return;
         //
 
         int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, playProgress);
@@ -2038,7 +1983,6 @@ public class ManyLineLyricsViewV2 extends View {
         //重绘
         invalidateView();
     }
-
 
     /**
      * 设置歌词字体大小,有歌词时使用
@@ -2106,7 +2050,7 @@ public class ManyLineLyricsViewV2 extends View {
     public synchronized void setManyLineLrc(boolean manyLineLrc, int curPlayingTime) {
         initLrcMap(manyLineLrc, curPlayingTime);
         //额外歌词类型回调
-        extraLrcTypeCallBack();
+        extraLrcTypeCallBack(curPlayingTime);
     }
 
     /**
@@ -2159,6 +2103,9 @@ public class ManyLineLyricsViewV2 extends View {
      */
     public void setExtraLrcStatus(int mExtraLrcStatus, int curPlayingTime) {
         this.mExtraLrcStatus = mExtraLrcStatus;
+        if (mLyricsUtil == null || mLyricsLineTreeMap == null) {
+            return;
+        }
         if (mExtraLrcStatus != NOSHOWEXTRALRC && !isManyLineLrc) {
             initLrcMap(true, curPlayingTime);
         } else {
@@ -2177,6 +2124,44 @@ public class ManyLineLyricsViewV2 extends View {
             isReconstruct = false;
             updateView(curPlayingTime);
         }
+    }
+
+    /**
+     * 歌词事件
+     */
+    public interface OnLrcClickListener {
+        /**
+         * 歌词快进播放
+         *
+         * @param progress
+         */
+        void onLrcPlayClicked(int progress, boolean isLrcSeekTo);
+    }
+
+    /**
+     * 额外歌词事件
+     */
+    public interface ExtraLyricsListener {
+
+        /**
+         * 有翻译歌词回调
+         */
+        void hasTranslateLrcCallback();
+
+        /**
+         * 有音译歌词回调
+         */
+        void hasTransliterationLrcCallback();
+
+        /**
+         * 有翻译歌词和音译歌词回调
+         */
+        void hasTranslateAndTransliterationLrcCallback();
+
+        /**
+         * 无翻译和音译歌词回调
+         */
+        void noExtraLrcCallback();
     }
 }
 

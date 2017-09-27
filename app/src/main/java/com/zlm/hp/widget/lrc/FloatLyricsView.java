@@ -312,7 +312,7 @@ public class FloatLyricsView extends View {
      * 更新歌词
      */
     public void updateView(int playProgress) {
-        if (mLyricsUtil == null) return;
+        if (mLyricsUtil == null || mLyricsLineTreeMap == null) return;
 
         int newLyricsLineNum = mLyricsUtil.getLineNumber(mLyricsLineTreeMap, playProgress);
         if (newLyricsLineNum != mLyricsLineNum) {
