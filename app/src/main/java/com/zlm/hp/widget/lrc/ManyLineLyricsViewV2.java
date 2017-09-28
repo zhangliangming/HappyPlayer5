@@ -116,10 +116,6 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private int mLyricsWordIndex = -1;
     /**
-     * 当前歌词第几个字 已经播放的长度
-     */
-    private float mLineLyricsHLWidth = 0;
-    /**
      * 当前歌词第几个字 已经播放的时间
      */
     private float mLyricsWordHLTime = 0;
@@ -242,7 +238,7 @@ public class ManyLineLyricsViewV2 extends View {
                     } else {
                         //
                         isTouchMove = false;
-                        int deltaY = (int) getCurLineScollHeight(mLyricsLineNum) - mScroller.getFinalY();
+                        int deltaY = (int) getLineScollHeight(mLyricsLineNum) - mScroller.getFinalY();
                         mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
                         invalidateView();
                     }
@@ -265,10 +261,6 @@ public class ManyLineLyricsViewV2 extends View {
      * 当前音译歌词的第几个字
      */
     private int mExtraLyricsWordIndex = -1;
-    /**
-     * 当前音译歌词第几个字 已经播放的长度
-     */
-    private float mExtraLyricsHLWidth = 0;
 
     public ManyLineLyricsViewV2(Context context) {
         super(context);
@@ -611,6 +603,8 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private void drawTwoDGLineLrc(Canvas canvas) {
 
+        float lineLyricsHLWidth = 0;
+
         LyricsLineInfo lyricsLineInfo = mLyricsLineTreeMap
                 .get(mLyricsLineNum);
         // 整行歌词
@@ -627,7 +621,7 @@ public class ManyLineLyricsViewV2 extends View {
         // 歌词
         if (mLyricsWordIndex == -1) {
             //设置等于当行歌词的大小，防止跳转下一行歌词后，该行歌词不为高亮状态
-            mLineLyricsHLWidth = curLyricsWidth;
+            lineLyricsHLWidth = curLyricsWidth;
         } else {
             String lyricsWords[] = lyricsLineInfo.getLyricsWords();
             int wordsDisInterval[] = lyricsLineInfo
@@ -649,7 +643,7 @@ public class ManyLineLyricsViewV2 extends View {
             float len = lyricsNowWordWidth
                     / wordsDisInterval[mLyricsWordIndex]
                     * mLyricsWordHLTime;
-            mLineLyricsHLWidth = lyricsBeforeWordWidth + len;
+            lineLyricsHLWidth = lyricsBeforeWordWidth + len;
         }
         float curTextX = (getWidth() - curLyricsWidth) * 0.5f;
 
@@ -667,7 +661,7 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, mCentreY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, mCentreY - getClipTextHeight(mPaint), curTextX + mLineLyricsHLWidth,
+        canvas.clipRect(curTextX, mCentreY - getClipTextHeight(mPaint), curTextX + lineLyricsHLWidth,
                 mCentreY + getRealTextHeight(mPaint));
 
         // 画当前歌词
@@ -681,7 +675,7 @@ public class ManyLineLyricsViewV2 extends View {
      * @param canvas
      */
     private void drawManyLineLrcText(Canvas canvas) {
-        mCentreY = (getHeight() + getTextHeight(mPaintHL)) * 0.5f + getCurLineScollHeight(mLyricsLineNum) - mOffsetY;
+        mCentreY = (getHeight() + getTextHeight(mPaintHL)) * 0.5f + getLineScollHeight(mLyricsLineNum) - mOffsetY;
 
         //获取要透明度要渐变的高度大小
         if (mShadeHeight == 0) {
@@ -1294,6 +1288,7 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private void drawDGCurTransliterationLineLrc(Canvas canvas, LyricsLineInfo transliterationLrcLineInfo, float centreLastBottomY, int curLyricsWordIndex) {
 
+        float extraLyricsHLWidth = 0;
         // 整行歌词
         String curLyrics = transliterationLrcLineInfo.getLineLyrics();
         int curLyricsHeight = getTextHeight(mExtraLrcPaintHL);
@@ -1302,7 +1297,7 @@ public class ManyLineLyricsViewV2 extends View {
         // 歌词
         if (curLyricsWordIndex == -1) {
             //设置等于当行歌词的大小，防止跳转下一行歌词后，该行歌词不为高亮状态
-            mExtraLyricsHLWidth = curLyricsWidth;
+            extraLyricsHLWidth = curLyricsWidth;
         } else {
             String lyricsWords[] = transliterationLrcLineInfo.getLyricsWords();
             int wordsDisInterval[] = transliterationLrcLineInfo
@@ -1325,7 +1320,7 @@ public class ManyLineLyricsViewV2 extends View {
                     / wordsDisInterval[curLyricsWordIndex]
                     * mLyricsWordHLTime;
 
-            mExtraLyricsHLWidth = lyricsBeforeWordWidth + len;
+            extraLyricsHLWidth = lyricsBeforeWordWidth + len;
         }
         float curTextX = (getWidth() - curLyricsWidth) * 0.5f;
 
@@ -1337,7 +1332,7 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mExtraLrcPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mExtraLrcPaint), curTextX + mExtraLyricsHLWidth,
+        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mExtraLrcPaint), curTextX + extraLyricsHLWidth,
                 centreLastBottomY + getRealTextHeight(mExtraLrcPaint));
 
         // 画当前歌词
@@ -1354,6 +1349,7 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private void drawDGCurLineLrc(Canvas canvas, LyricsLineInfo lyricsLineInfo, float centreLastBottomY, int curLyricsWordIndex) {
 
+        float lineLyricsHLWidth = 0;
         // 整行歌词
         String curLyrics = lyricsLineInfo.getLineLyrics();
         int curLyricsHeight = getTextHeight(mPaintHL);
@@ -1362,7 +1358,7 @@ public class ManyLineLyricsViewV2 extends View {
         // 歌词
         if (curLyricsWordIndex == -1) {
             //设置等于当行歌词的大小，防止跳转下一行歌词后，该行歌词不为高亮状态
-            mLineLyricsHLWidth = curLyricsWidth;
+            lineLyricsHLWidth = curLyricsWidth;
         } else {
             String lyricsWords[] = lyricsLineInfo.getLyricsWords();
             int wordsDisInterval[] = lyricsLineInfo
@@ -1384,7 +1380,7 @@ public class ManyLineLyricsViewV2 extends View {
             float len = lyricsNowWordWidth
                     / wordsDisInterval[curLyricsWordIndex]
                     * mLyricsWordHLTime;
-            mLineLyricsHLWidth = lyricsBeforeWordWidth + len;
+            lineLyricsHLWidth = lyricsBeforeWordWidth + len;
         }
         float curTextX = (getWidth() - curLyricsWidth) * 0.5f;
 
@@ -1396,7 +1392,7 @@ public class ManyLineLyricsViewV2 extends View {
         canvas.drawText(curLyrics, curTextX, centreLastBottomY, mPaint);
 
         // 设置过渡的颜色和进度
-        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mPaint), curTextX + mLineLyricsHLWidth,
+        canvas.clipRect(curTextX, centreLastBottomY - getClipTextHeight(mPaint), curTextX + lineLyricsHLWidth,
                 centreLastBottomY + getRealTextHeight(mPaint));
 
         // 画当前歌词
@@ -1478,7 +1474,7 @@ public class ManyLineLyricsViewV2 extends View {
                         int maxX = 0;
 
                         //
-                        int lrcSumHeight = (int) getCurLineScollHeight(mLyricsLineTreeMap.size());
+                        int lrcSumHeight = (int) getLineScollHeight(mLyricsLineTreeMap.size());
                         int minY = -getHeight() / 4;
                         int maxY = lrcSumHeight + getHeight() / 4;
                         mScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
@@ -1546,7 +1542,7 @@ public class ManyLineLyricsViewV2 extends View {
      * @return
      */
     private float getBottomOverScrollHeight() {
-        return getCurLineScollHeight(mLyricsLineTreeMap.size());
+        return getLineScollHeight(mLyricsLineTreeMap.size());
     }
 
     /**
@@ -1571,7 +1567,7 @@ public class ManyLineLyricsViewV2 extends View {
             invalidateView();
         } else if (mOffsetY > getBottomOverScrollHeight()) {
 
-            int deltaY = (int) getCurLineScollHeight(mLyricsLineTreeMap.size() - 1) - mScroller.getFinalY();
+            int deltaY = (int) getLineScollHeight(mLyricsLineTreeMap.size() - 1) - mScroller.getFinalY();
             mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
             invalidateView();
 
@@ -1579,12 +1575,12 @@ public class ManyLineLyricsViewV2 extends View {
     }
 
     /**
-     * 获取当前行所需的滑动高度
+     * 获取滑动到该行所需的高度
      *
      * @param lyricsLineNum
      * @return
      */
-    private float getCurLineScollHeight(int lyricsLineNum) {
+    private float getLineScollHeight(int lyricsLineNum) {
         int scrollHeight = 0;
 
         for (int i = 0; i < lyricsLineNum; i++) {
@@ -1809,7 +1805,6 @@ public class ManyLineLyricsViewV2 extends View {
         mLyricsLineNum = 0;
         mLyricsWordIndex = -1;
         mLyricsWordHLTime = 0;
-        mLineLyricsHLWidth = 0;
 
         mScroller.setFinalY(0);
         mOffsetY = 0;
@@ -1818,7 +1813,6 @@ public class ManyLineLyricsViewV2 extends View {
         mExtraLyricsLineNum = 0;
         mExtraLyricsWordIndex = -1;
         mExtraLrcStatus = NOSHOWEXTRALRC;
-        mExtraLyricsHLWidth = 0;
 
     }
 
@@ -1882,7 +1876,7 @@ public class ManyLineLyricsViewV2 extends View {
     }
 
     /**
-     * 获取切割的高度.用于y轴位置计算
+     * 获取切割的高度
      *
      * @param paint
      * @return
@@ -1930,7 +1924,7 @@ public class ManyLineLyricsViewV2 extends View {
             if (!isTouchMove && isManyLineLrc) {
                 //
 
-                int deltaY = (int) getCurLineScollHeight(newLyricsLineNum) - mScroller.getFinalY();
+                int deltaY = (int) getLineScollHeight(newLyricsLineNum) - mScroller.getFinalY();
                 mScroller.startScroll(0, mScroller.getFinalY(), 0, deltaY, mDuration);
 
             }
@@ -2015,7 +2009,7 @@ public class ManyLineLyricsViewV2 extends View {
         }
         //多行歌词
         if (isManyLineLrc && mLyricsLineNum != -1) {
-            mOffsetY = getCurLineScollHeight(mLyricsLineNum);
+            mOffsetY = getLineScollHeight(mLyricsLineNum);
             mScroller.setFinalY((int) mOffsetY);
         }
         isReconstruct = false;
@@ -2082,7 +2076,7 @@ public class ManyLineLyricsViewV2 extends View {
             }
             //多行歌词
             if (isManyLineLrc && mLyricsLineNum != -1) {
-                mOffsetY = getCurLineScollHeight(mLyricsLineNum);
+                mOffsetY = getLineScollHeight(mLyricsLineNum);
                 mScroller.setFinalY((int) mOffsetY);
             }
 
@@ -2118,7 +2112,7 @@ public class ManyLineLyricsViewV2 extends View {
             }
             //多行歌词
             if (isManyLineLrc && mLyricsLineNum != -1) {
-                mOffsetY = getCurLineScollHeight(mLyricsLineNum);
+                mOffsetY = getLineScollHeight(mLyricsLineNum);
                 mScroller.setFinalY((int) mOffsetY);
             }
             isReconstruct = false;
