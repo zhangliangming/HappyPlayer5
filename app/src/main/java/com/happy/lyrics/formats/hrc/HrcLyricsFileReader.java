@@ -140,16 +140,6 @@ public class HrcLyricsFileReader extends LyricsFileReader {
             lyricsIfno.setLyricsLineInfoTreeMap(lyricsLineInfos);
         }
 
-        // 检验
-        for (int i = 0; i < lyricsIfno.getLyricsLineInfoTreeMap().size(); i++) {
-            LyricsLineInfo lyricsLineInfo = lyricsIfno
-                    .getLyricsLineInfoTreeMap().get(i);
-            if (lyricsLineInfo.getLyricsWords().length != lyricsLineInfo
-                    .getWordsDisInterval().length) {
-                System.out.println(i);
-            }
-        }
-
         return lyricsIfno;
     }
 
