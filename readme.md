@@ -1,4 +1,5 @@
 # 更新日志 #
+- 2017-11-12：更新gradle环境为gradle-4.1-all，as为3.0正式版
 - 2017-11-12：添加最近看到别人总结的酷狗api的项目地址，有兴趣的小伙伴可以直接到该项目查看酷狗的相关api哦，感觉api还是比较全面的：https://github.com/ecitlm/Kugou-api
 - 2017-09-20：因为读取歌词的时候，将歌词格式编码都设置为utf-8,所以解析之前的歌词时，会造成乱码问题，到时有乱码，只要将utf-8编码修改一下即可。
 - 2017-09-19
@@ -20,8 +21,8 @@
 乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词，界面高仿酷狗。
 
 # 开发环境 #
-- android studio 3.0
-- gradle-4.1-milestone-1-all
+- android studio 3.0（正式版）
+- gradle-4.1-all
 - 小米2s手机
 - android 5.0系统
 
@@ -42,10 +43,6 @@
 - 多行歌词平滑移动，快速流畅滑动。具体使用Scroller来实现。注：Scroller只做动画，不要用来移动view
 - 窗口右滑关闭
 - 歌曲边缓存边播放
-
-# 部分动态图 #
-
-![](http://upload-images.jianshu.io/upload_images/4111431-d8538149d0f6e24f.gif?imageMogr2/auto-orient/strip)
 
 # 效果图 #
 - 主界面
