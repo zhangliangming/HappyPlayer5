@@ -71,7 +71,22 @@ public abstract class LyricsFileWriter {
      * @throws Exception
      */
     public boolean saveLyricsFile(byte[] lyricsContent, String lyricsFilePath) throws Exception {
-        return saveLyricsFile(new String(lyricsContent, getDefaultCharset()), lyricsFilePath);
+        try {
+            File lyricsFile = new File(lyricsFilePath);
+            if (lyricsFile != null) {
+                //
+                if (lyricsFile.getParentFile().isDirectory() && !lyricsFile.getParentFile().exists()) {
+                    lyricsFile.getParentFile().mkdirs();
+                }
+                FileOutputStream os = new FileOutputStream(lyricsFile);
+                os.write(lyricsContent);
+                os.close();
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
