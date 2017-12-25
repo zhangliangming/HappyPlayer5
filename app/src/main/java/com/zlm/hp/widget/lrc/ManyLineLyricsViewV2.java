@@ -19,11 +19,11 @@ import android.view.ViewConfiguration;
 import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
-import com.happy.lyrics.model.LyricsLineInfo;
-import com.happy.lyrics.model.TranslateLrcLineInfo;
-import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.lyrics.model.LyricsLineInfo;
+import com.zlm.hp.lyrics.model.TranslateLrcLineInfo;
+import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.MediaUtil;
 

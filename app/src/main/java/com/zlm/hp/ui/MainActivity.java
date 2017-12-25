@@ -22,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -37,6 +36,7 @@ import com.zlm.hp.fragment.TabRecommendFragment;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
+import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.manager.OnLineAudioManager;

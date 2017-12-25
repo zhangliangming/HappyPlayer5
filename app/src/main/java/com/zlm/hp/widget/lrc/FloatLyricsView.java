@@ -9,10 +9,10 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.happy.lyrics.model.LyricsLineInfo;
-import com.happy.lyrics.utils.LyricsUtil;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.lyrics.model.LyricsLineInfo;
+import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.ui.R;
 
 import java.util.TreeMap;

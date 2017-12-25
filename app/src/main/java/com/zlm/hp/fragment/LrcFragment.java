@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.happy.lyrics.utils.LyricsUtil;
+
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
+import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
