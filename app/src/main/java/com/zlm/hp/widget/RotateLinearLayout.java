@@ -10,7 +10,7 @@ import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.WindowManager;
-import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.FrameLayout;
 
 import com.nineoldandroids.animation.Animator;
@@ -439,7 +439,13 @@ public class RotateLinearLayout extends FrameLayout {
 
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
-                    RotateLinearLayout.this.setRotation(number.floatValue());
+
+                    //设置旋转中心，中心位置在view视图下方
+                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
+                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+
+
                     //绘画遮罩层
                     drawMask();
 
@@ -447,7 +453,6 @@ public class RotateLinearLayout extends FrameLayout {
 
             }
         });
-        mAnimator.setDuration(800);
 
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -457,8 +462,7 @@ public class RotateLinearLayout extends FrameLayout {
             }
         });
 
-
-        mAnimator.setInterpolator(sInterpolator);
+        mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.start();
         mAnimatorIsCancel = false;
     }
@@ -487,7 +491,11 @@ public class RotateLinearLayout extends FrameLayout {
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
-                    RotateLinearLayout.this.setRotation(number.floatValue());
+
+                    //设置旋转中心，中心位置在view视图下方
+                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
+                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
 
                     //绘画遮罩层
                     drawMask();
@@ -495,19 +503,11 @@ public class RotateLinearLayout extends FrameLayout {
 
             }
         });
-        mAnimator.setDuration(800);
-        mAnimator.setInterpolator(sInterpolator);
+        mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.start();
         mAnimatorIsCancel = false;
     }
 
-    private Interpolator sInterpolator = new Interpolator() {
-        @Override
-        public float getInterpolation(float t) {
-            t -= 1.0f;
-            return t * t * t * t * t + 1.0f;
-        }
-    };
 
     /**
      *
@@ -536,7 +536,11 @@ public class RotateLinearLayout extends FrameLayout {
 
                     if (!isTouchMove && !mAnimatorIsCancel) {
                         Number number = (Number) valueAnimator.getAnimatedValue();
-                        RotateLinearLayout.this.setRotation(number.floatValue());
+
+                        //设置旋转中心，中心位置在view视图下方
+                        ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
+                        ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
+                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
 
                         //绘画遮罩层
                         drawMask();
@@ -544,7 +548,6 @@ public class RotateLinearLayout extends FrameLayout {
 
                 }
             });
-            mAnimator.setDuration(800);
 
             mAnimator.addListener(new AnimatorListenerAdapter() {
                 @Override
@@ -557,7 +560,7 @@ public class RotateLinearLayout extends FrameLayout {
             });
 
 
-            mAnimator.setInterpolator(sInterpolator);
+            mAnimator.setInterpolator(new LinearInterpolator());
             mAnimator.start();
             mAnimatorIsCancel = false;
         }
@@ -588,7 +591,11 @@ public class RotateLinearLayout extends FrameLayout {
 
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
-                    RotateLinearLayout.this.setRotation(number.floatValue());
+
+                    //设置旋转中心，中心位置在view视图下方
+                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
+                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
 
                     //绘画遮罩层
                     drawMask();
@@ -596,7 +603,6 @@ public class RotateLinearLayout extends FrameLayout {
 
             }
         });
-        mAnimator.setDuration(800);
 
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -609,7 +615,7 @@ public class RotateLinearLayout extends FrameLayout {
         });
 
 
-        mAnimator.setInterpolator(sInterpolator);
+        mAnimator.setInterpolator(new LinearInterpolator());
         mAnimator.start();
         mAnimatorIsCancel = false;
     }
