@@ -10,10 +10,12 @@ import android.os.Handler;
 
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.libs.crash.CrashHandler;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.PreferencesUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.permissions.StoragePermissionUtil;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.io.IOException;
@@ -79,6 +81,10 @@ public class SplashActivity extends BaseActivity {
             //设置延迟时间
             mDelayTime *= 3;
         }
+
+        //注册捕捉全局异常
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(mHPApplication);
         //初始化配置数据
         initPreferencesData();
         loadSplashMusic();
@@ -126,11 +132,23 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
+
         if (!isRestoreInstance) {
             //
             doSomeThing();
         }
 
+    }
+
+    //用户处理权限反馈，在这里判断用户是否授予相应的权限
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        mStoragePermissionUtil.onRequestPermissionsResult(requestCode, permissions, grantResults, new StoragePermissionUtil.RequestPermissionsResult() {
+            @Override
+            public void acceptedCallback() {
+                doSomeThing();
+            }
+        });
     }
 
     @Override

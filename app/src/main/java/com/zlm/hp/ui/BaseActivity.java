@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.permissions.StoragePermissionUtil;
 
 /**
  * @Description: 所有activity都要继承该类并实现里面的方法
@@ -36,6 +37,8 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 默认颜色
      */
     private int mStatusColor = -1;
+
+    public StoragePermissionUtil mStoragePermissionUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,11 +71,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
 
         }
-
-        logger = LoggerUtil.getZhangLogger(getApplicationContext());
         mHPApplication = (HPApplication) getApplication();
+        mStoragePermissionUtil = new StoragePermissionUtil(mHPApplication, this);
         setContentView(layout);
         initViews(savedInstanceState);
+
+        //1.先判断文件权限是否已经分配，如果没有分配，则直接退出应用
+        //2.如果已经分配，则执行下面操作
+        if (!mStoragePermissionUtil.verifyStoragePermissions(this)) {
+            return;
+        }
+
+        logger = LoggerUtil.getZhangLogger(getApplicationContext());
         loadData(false);
     }
 
@@ -81,6 +91,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
 
         loadData(true);
+    }
+
+    //用户处理权限反馈，在这里判断用户是否授予相应的权限
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        mStoragePermissionUtil.onRequestPermissionsResult(requestCode, permissions, grantResults,null);
     }
 
     /**
