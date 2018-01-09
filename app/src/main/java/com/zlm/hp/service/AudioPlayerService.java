@@ -2,6 +2,8 @@ package com.zlm.hp.service;
 
 import android.annotation.SuppressLint;
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
@@ -85,6 +87,7 @@ public class AudioPlayerService extends Service {
 
     ///////////////////////////////通知栏//////////////////////////////
     private int mNotificationPlayBarId = 19900420;
+    private NotificationManager mNotificationManager;
     /**
      * 状态栏播放器视图
      */
@@ -160,10 +163,43 @@ public class AudioPlayerService extends Service {
      */
     private void initNotificationView() {
 
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
         int icon = R.mipmap.singer_def;
-        CharSequence tickerText = "乐乐音乐，传播好的音乐";
-        long when = System.currentTimeMillis();
-        mPlayBarNotification = new Notification(icon, tickerText, when);
+        String tickerText = "乐乐音乐";
+
+        //判断系统版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // 通知渠道的id
+            String CHANNEL_ID = "hp_channel";
+            String CHANNEL_NAME = "hp";
+
+            if (mNotificationManager.getNotificationChannel(CHANNEL_ID) == null) {
+
+                int importance = NotificationManager.IMPORTANCE_LOW;
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
+                mChannel.enableLights(true);
+                mNotificationManager.createNotificationChannel(mChannel);
+            }
+
+            // Create a notification and set the notification channel.
+            mPlayBarNotification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle(tickerText)
+                    .setContentText("开心每一天")
+                    .setSmallIcon(icon)
+                    .setChannelId(CHANNEL_ID)
+                    .build();
+        } else {
+            // Create a notification and set the notification channel.
+            mPlayBarNotification = new Notification.Builder(getApplicationContext())
+                    .setContentTitle(tickerText)
+                    .setContentText("开心每一天")
+                    .setSmallIcon(icon)
+                    .build();
+        }
+
+
         // FLAG_AUTO_CANCEL 该通知能被状态栏的清除按钮给清除掉
         // FLAG_NO_CLEAR 该通知不能被状态栏的清除按钮给清除掉
         // FLAG_ONGOING_EVENT 通知放置在正在运行
@@ -378,7 +414,8 @@ public class AudioPlayerService extends Service {
         }
 
         mPlayBarNotification.contentView = mNotifyPlayBarRemoteViews;
-        startForeground(mNotificationPlayBarId, mPlayBarNotification);
+
+        mNotificationManager.notify(mNotificationPlayBarId, mPlayBarNotification);
 
     }
 
