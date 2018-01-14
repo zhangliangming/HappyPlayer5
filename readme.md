@@ -1,4 +1,5 @@
 # 更新日志 #
+- 2018-01-14：修复RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁。注：只在模拟器上面测试通过，真机没试过。
 - 2018-01-09：修复Android O系统时，通知栏报failed to post notification on channel....的问题
 - 2018-01-08：启动时，添加文件的读写权限判断。简单修复android6.0以上版本的权限问题。
 - 2017-12-25：优化歌词解析和生成类，修复部分歌词解析乱码的问题。

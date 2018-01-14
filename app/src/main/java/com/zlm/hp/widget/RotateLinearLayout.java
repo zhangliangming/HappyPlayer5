@@ -431,7 +431,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofFloat(this.getRotation(), -mClosedDegree);
+        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), -(int)mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -485,7 +485,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofFloat(this.getRotation(), 0f);
+        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), 0);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -528,7 +528,7 @@ public class RotateLinearLayout extends FrameLayout {
             }
 
             //使用开源动画库nineoldandroids来兼容api11之前的版本
-            mAnimator = ValueAnimator.ofFloat(0, mClosedDegree);
+            mAnimator = ValueAnimator.ofInt(0, (int)mClosedDegree);
 
             mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -583,7 +583,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofFloat(this.getRotation(), mClosedDegree);
+        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), (int)mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
