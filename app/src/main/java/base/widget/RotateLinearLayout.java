@@ -98,7 +98,6 @@ public class RotateLinearLayout extends FrameLayout {
     private boolean isVerticalScroll = false;
     private float mRotationCenterX;
     private float mRotationCenterY;
-    private float minRotation = 0.2f;//解决旋转角度在该值范围之内页面会闪烁
 
 
     public RotateLinearLayout(Context context) {
@@ -277,13 +276,8 @@ public class RotateLinearLayout extends FrameLayout {
                             float degree = curDegree - lastDegree;
 
 
-                            //logger.e("degree = " + degree);
-                            //设置旋转中心，中心位置在view视图下方
-                            if (Math.abs(degree) < minRotation) {
-                                setRotation(0);
-                            } else {
-                                setRotation(degree);
-                            }
+                            setRotation(degree);
+
 
                             //绘画遮罩层
                             drawMask();
@@ -434,7 +428,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int) this.getRotation(), -(int) mClosedDegree);
+        mAnimator = ValueAnimator.ofFloat(this.getRotation(), -mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -484,7 +478,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int) this.getRotation(), 0);
+        mAnimator = ValueAnimator.ofFloat(this.getRotation(), 0);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -527,7 +521,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt(0, (int) mClosedDegree);
+        mAnimator = ValueAnimator.ofFloat(0, mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -580,7 +574,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int) this.getRotation(), (int) mClosedDegree);
+        mAnimator = ValueAnimator.ofFloat(this.getRotation(), mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
