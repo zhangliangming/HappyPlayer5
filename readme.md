@@ -1,4 +1,9 @@
 # 更新日志 #
+- 2018-01-18：暂时简单修复RotateLinearLayout旋转角度在0.x时布局闪烁。
+- 2018-01-17：好高兴这个项目可以邀请到DyncKathline参与开发，期待DyncKathline可以将播放器更好地完善，也期待更多的爱好者参与开发。
+- 2018-01-16：RotateLinearLayout旋转角度在0.x时布局闪烁暂时找不到原因，暂无法解决。
+- 2018-01-16：修复通知栏图标问题
+- 2018-01-16：修复android7.0状态栏不能透明的问题
 - 2018-01-14：修复RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁。注：只在模拟器上面测试通过，真机没试过。
 - 2018-01-09：修复Android O系统时，通知栏报failed to post notification on channel....的问题
 - 2018-01-08：启动时，添加文件的读写权限判断。简单修复android6.0以上版本的权限问题。

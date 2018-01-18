@@ -54,7 +54,8 @@
                 android:layout_height="25dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/downloaded"
-                android:clickable="true" />
+                android:clickable="true"
+                android:visibility="invisible" />
 
 
         </RelativeLayout>

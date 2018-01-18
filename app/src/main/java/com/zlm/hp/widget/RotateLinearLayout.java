@@ -47,7 +47,6 @@ public class RotateLinearLayout extends FrameLayout {
      * 触摸最后一次的坐标
      */
     private float mLastX;
-    private float mLastY;
 
     /**
      * 日志
@@ -96,6 +95,13 @@ public class RotateLinearLayout extends FrameLayout {
      * 是否是竖直滑动
      */
     private boolean isVerticalScroll = false;
+
+    private float minRotation = 0.2f;//解决旋转角度在该值范围之内页面会闪烁
+
+    /**
+     * 判断是否关闭
+     */
+    private boolean isFinish = false;
 
 
     public RotateLinearLayout(Context context) {
@@ -225,7 +231,6 @@ public class RotateLinearLayout extends FrameLayout {
                 case MotionEvent.ACTION_DOWN:
                     //旋转后需要获取的是在屏幕上面的位置，不再是view里面的位置
                     mLastX = event.getRawX();
-                    mLastY = event.getRawY();
                     mInterceptX = event.getRawX();
                     mInterceptY = event.getRawY();
 
@@ -275,10 +280,11 @@ public class RotateLinearLayout extends FrameLayout {
 
 
                             //logger.e("degree = " + degree);
-                            //设置旋转中心，中心位置在view视图下方
-                            ViewHelper.setPivotX(this, getWidth() * 0.5f);
-                            ViewHelper.setPivotY(this, 1.5f * getHeight());
-                            ViewHelper.setRotation(this, degree);
+                            if (Math.abs(degree) < minRotation) {
+                                ViewHelper.setRotation(this, 0);
+                            } else {
+                                ViewHelper.setRotation(this, degree);
+                            }
 
 
                             //绘画遮罩层
@@ -293,7 +299,6 @@ public class RotateLinearLayout extends FrameLayout {
 
 
                         mLastX = curX;
-                        mLastY = curY;
                     } else {
                         if (mVerticalScrollView != null) {
                             mVerticalScrollView.onTouchEvent(event);
@@ -325,7 +330,6 @@ public class RotateLinearLayout extends FrameLayout {
                         mInterceptX = 0;
                         mInterceptY = 0;
                         mLastX = 0;
-                        mLastY = 0;
                         isTouchMove = false;
                         isLeftToRight = false;
 
@@ -344,7 +348,7 @@ public class RotateLinearLayout extends FrameLayout {
 
                     if (isTouchMove && Math.abs(xVelocity) > mMinimumVelocity * 1.5 && !isInIgnoreView(event) && Math.abs(deltaXX) > mTouchSlop) {
 
-                        //  logger.e("closeView = " + this.getRotation());
+                        //  logger.e("closeView = " + ViewHelper.getRotation(this));
 
 
                         if (isLeftToRight) {
@@ -354,12 +358,12 @@ public class RotateLinearLayout extends FrameLayout {
                         }
 
                     } else {
-                        if (this.getRotation() > mCloseDegree) {
+                        if (ViewHelper.getRotation(this) > mCloseDegree) {
                             closeView();
-                        } else if (this.getRotation() < -mCloseDegree) {
+                        } else if (ViewHelper.getRotation(this) < -mCloseDegree) {
                             closeConvertView();
                         } else {
-                            //  logger.e("resetView = " + this.getRotation());
+                            //  logger.e("resetView = " + ViewHelper.getRotation(this));
                             resetView();
                         }
                     }
@@ -368,7 +372,6 @@ public class RotateLinearLayout extends FrameLayout {
                     mInterceptX = 0;
                     mInterceptY = 0;
                     mLastX = 0;
-                    mLastY = 0;
                     isTouchMove = false;
                     isLeftToRight = false;
 
@@ -431,7 +434,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), -(int)mClosedDegree);
+        mAnimator = ValueAnimator.ofFloat(ViewHelper.getRotation(this), -mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -440,11 +443,11 @@ public class RotateLinearLayout extends FrameLayout {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
-                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
-                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
-
+                    if (Math.abs(number.floatValue()) < minRotation) {
+                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
+                    } else {
+                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                    }
 
                     //绘画遮罩层
                     drawMask();
@@ -485,17 +488,18 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), 0);
+        mAnimator = ValueAnimator.ofFloat(ViewHelper.getRotation(this), 0);
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
-                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
-                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                    if (Math.abs(number.floatValue()) < minRotation) {
+                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
+                    } else {
+                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                    }
 
                     //绘画遮罩层
                     drawMask();
@@ -514,7 +518,8 @@ public class RotateLinearLayout extends FrameLayout {
      */
     public void finish() {
         {
-
+            if (isFinish) return;
+            isFinish = true;
 
             if (mAnimator != null) {
 
@@ -528,7 +533,7 @@ public class RotateLinearLayout extends FrameLayout {
             }
 
             //使用开源动画库nineoldandroids来兼容api11之前的版本
-            mAnimator = ValueAnimator.ofInt(0, (int)mClosedDegree);
+            mAnimator = ValueAnimator.ofFloat(0, mClosedDegree);
 
             mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                 @Override
@@ -537,10 +542,11 @@ public class RotateLinearLayout extends FrameLayout {
                     if (!isTouchMove && !mAnimatorIsCancel) {
                         Number number = (Number) valueAnimator.getAnimatedValue();
 
-                        //设置旋转中心，中心位置在view视图下方
-                        ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
-                        ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
-                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                        if (Math.abs(number.floatValue()) < minRotation) {
+                            ViewHelper.setRotation(RotateLinearLayout.this, 0);
+                        } else {
+                            ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                        }
 
                         //绘画遮罩层
                         drawMask();
@@ -583,7 +589,7 @@ public class RotateLinearLayout extends FrameLayout {
         }
 
         //使用开源动画库nineoldandroids来兼容api11之前的版本
-        mAnimator = ValueAnimator.ofInt((int)this.getRotation(), (int)mClosedDegree);
+        mAnimator = ValueAnimator.ofFloat(ViewHelper.getRotation(this), mClosedDegree);
 
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
@@ -592,10 +598,11 @@ public class RotateLinearLayout extends FrameLayout {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    ViewHelper.setPivotX(RotateLinearLayout.this, getWidth() * 0.5f);
-                    ViewHelper.setPivotY(RotateLinearLayout.this, 1.5f * getHeight());
-                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                    if (Math.abs(number.floatValue()) < minRotation) {
+                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
+                    } else {
+                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+                    }
 
                     //绘画遮罩层
                     drawMask();
@@ -632,7 +639,7 @@ public class RotateLinearLayout extends FrameLayout {
      */
     private void drawMask() {
         if (mBackgroundView != null) {
-            float rotation = this.getRotation();
+            float rotation = ViewHelper.getRotation(this);
             float percent = Math.abs(rotation) * 1.0f / mCloseDegree;
             int alpha = 200 - (int) (200 * percent);
             mBackgroundView.setBackgroundColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
@@ -659,4 +666,5 @@ public class RotateLinearLayout extends FrameLayout {
     public void setIgnoreView(View mIgnoreView) {
         this.mIgnoreView = mIgnoreView;
     }
+
 }
