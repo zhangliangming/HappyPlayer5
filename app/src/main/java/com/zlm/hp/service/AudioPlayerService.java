@@ -165,7 +165,6 @@ public class AudioPlayerService extends Service {
 
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        int icon = R.mipmap.singer_def;
         String tickerText = "乐乐音乐";
 
         //判断系统版本
@@ -187,15 +186,14 @@ public class AudioPlayerService extends Service {
             mPlayBarNotification = new Notification.Builder(getApplicationContext())
                     .setContentTitle(tickerText)
                     .setContentText("开心每一天")
-                    .setSmallIcon(icon)
+                    .setSmallIcon(R.mipmap.notifi_icon)
                     .setChannelId(CHANNEL_ID)
                     .build();
         } else {
-            // Create a notification and set the notification channel.
             mPlayBarNotification = new Notification.Builder(getApplicationContext())
                     .setContentTitle(tickerText)
                     .setContentText("开心每一天")
-                    .setSmallIcon(icon)
+                    .setSmallIcon(R.mipmap.singer_def)
                     .build();
         }
 
@@ -448,8 +446,9 @@ public class AudioPlayerService extends Service {
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
         mNotificationReceiver.unregisterReceiver(getApplicationContext());
 
-        //
+        //关闭通知栏
         stopForeground(true);
+
         releasePlayer();
         logger.i("音频播放服务销毁");
         super.onDestroy();

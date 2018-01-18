@@ -10,7 +10,7 @@
         <!--导航栏上的标题颜色-->
         <item name="android:textColorPrimary">@android:color/black</item>
         <!-- 去掉水波纹效果-->
-        <item name="android:selectableItemBackgroundBorderless">@null</item>
+        <!--<item name="android:selectableItemBackgroundBorderless">@null</item>-->
 
         <!-- 透明-->
         <item name="android:windowBackground">@color/transparent</item>
