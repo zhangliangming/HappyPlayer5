@@ -3,7 +3,6 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
@@ -34,7 +33,6 @@ public class LyricsManager {
      *
      */
     private static Context mContext;
-    private static HPApplication mHPApplication;
 
     /**
      *
@@ -43,16 +41,15 @@ public class LyricsManager {
 
     private static LyricsManager _LyricsManager;
 
-    public LyricsManager(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public LyricsManager(Context context) {
         //
         logger = LoggerUtil.getZhangLogger(context);
         this.mContext = context;
     }
 
-    public static LyricsManager getLyricsManager(HPApplication hPApplication, Context context) {
+    public static LyricsManager getLyricsManager(Context context) {
         if (_LyricsManager == null) {
-            _LyricsManager = new LyricsManager(context, hPApplication);
+            _LyricsManager = new LyricsManager(context);
         }
         return _LyricsManager;
     }
@@ -113,7 +110,7 @@ public class LyricsManager {
 
                     //下载歌词
                     File saveLrcFile = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LYRICS, fileName + ".krc"));
-                    byte[] base64ByteArray = DownloadLyricsUtil.downloadLyric(mHPApplication, mContext, keyword, duration, hash);
+                    byte[] base64ByteArray = DownloadLyricsUtil.downloadLyric(mContext, keyword, duration, hash);
                     if (base64ByteArray != null && base64ByteArray.length > 1024) {
                         LyricsUtil lyricsUtil = new LyricsUtil();
                         lyricsUtil.loadLrc(base64ByteArray, saveLrcFile, saveLrcFile.getName());

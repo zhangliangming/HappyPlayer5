@@ -4,8 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.media.AudioManager;
 
-import com.zlm.hp.application.HPApplication;
-
 import base.utils.LoggerUtil;
 
 /**
@@ -20,17 +18,15 @@ public class PhoneReceiver {
     private LoggerUtil logger;
 
     private Context mContext;
-    private HPApplication mHPApplication;
     private AudioManager mAudioManager;
     private ComponentName mRemoteControlResponder;
     private MyPhoneReceiver mPhoneBroadcastReceiver;
 
 
-    public PhoneReceiver(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public PhoneReceiver(Context context) {
         this.mContext = context;
         logger = LoggerUtil.getZhangLogger(context);
-        mPhoneBroadcastReceiver = new MyPhoneReceiver();
+        mPhoneBroadcastReceiver = new MyPhoneReceiver(context);
 
         //
         mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);

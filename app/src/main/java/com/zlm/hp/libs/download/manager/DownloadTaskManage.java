@@ -2,7 +2,6 @@ package com.zlm.hp.libs.download.manager;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
@@ -22,7 +21,7 @@ import base.utils.LoggerUtil;
  */
 public class DownloadTaskManage {
 
-    private Context context;
+    private Context mContext;
 
     /**
      * 任务队列
@@ -243,13 +242,10 @@ public class DownloadTaskManage {
 
         }
     };
-    private HPApplication mHPApplication;
 
-
-    public DownloadTaskManage(HPApplication hpApplication, Context context, boolean isTheOneTaskThreadFristStart, IDownloadTaskEvent interfaceEvent) {
+    public DownloadTaskManage(Context context, boolean isTheOneTaskThreadFristStart, IDownloadTaskEvent interfaceEvent) {
         mainThread.start();
-        this.mHPApplication = hpApplication;
-        this.context = context;
+        this.mContext = context;
         this.interfaceEvent = interfaceEvent;
         this.isTheOneTaskThreadFristStart = isTheOneTaskThreadFristStart;
         logger = LoggerUtil.getZhangLogger(context);
@@ -265,9 +261,9 @@ public class DownloadTaskManage {
         new Thread() {
             @Override
             public void run() {
-                TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
+                TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mContext, task, taskEvent,
                         isTheOneTaskThreadFristStart);
-                taskThreadUtil.startTask(context);
+                taskThreadUtil.startTask(mContext);
                 task.setTaskThreadUtil(taskThreadUtil);
             }
         }.start();
@@ -287,7 +283,7 @@ public class DownloadTaskManage {
      */
     public synchronized void addMultiThreadSingleTask(DownloadTask task) throws Exception {
 
-        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
+        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mContext, task, taskEvent,
                 isTheOneTaskThreadFristStart);
         task.setTaskThreadUtil(taskThreadUtil);
 
@@ -327,7 +323,7 @@ public class DownloadTaskManage {
      * @throws Exception
      */
     public synchronized void addMultiThreadSingleTaskOrderByTime(DownloadTask task) throws Exception {
-        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
+        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mContext, task, taskEvent,
                 isTheOneTaskThreadFristStart);
         task.setTaskThreadUtil(taskThreadUtil);
 
@@ -376,7 +372,7 @@ public class DownloadTaskManage {
      * @date 2017年7月9日
      */
     public synchronized void addMultiThreadSingleTaskOrderByTId(DownloadTask task) throws Exception {
-        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mHPApplication, task, taskEvent,
+        TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mContext, task, taskEvent,
                 isTheOneTaskThreadFristStart);
         task.setTaskThreadUtil(taskThreadUtil);
 
@@ -418,7 +414,7 @@ public class DownloadTaskManage {
             if (task.getStatus() == DownloadTaskConstant.WAIT.getValue()) {
                 task.setStatus(DownloadTaskConstant.DOWNLOADING.getValue());
                 TaskThreadUtil taskThreadUtil = task.getTaskThreadUtil();
-                taskThreadUtil.startTask(context);
+                taskThreadUtil.startTask(mContext);
                 logger.e(task.getTaskName() + " 任务正在下载，任务id是：" + task.getTaskId());
             }
 

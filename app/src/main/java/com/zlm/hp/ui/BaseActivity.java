@@ -16,9 +16,6 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.zlm.hp.R;
-import com.zlm.hp.application.HPApplication;
-
-import java.lang.reflect.Field;
 
 import base.utils.ColorUtil;
 import base.utils.LoggerUtil;
@@ -35,11 +32,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public Handler mHandler = new Handler(Looper.getMainLooper());
     public BaseActivity mActivity;
     public Context mContext;
-
-    /**
-     *
-     */
-    public HPApplication mHPApplication;
 
     /**
      * 默认颜色
@@ -63,18 +55,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             window.setStatusBarColor(Color.TRANSPARENT);
             //设置底部的颜色
             // window.setNavigationBarColor(Color.TRANSPARENT);
-
-            //修复android7.0半透明问题
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                try {
-                    Field field = getWindow().getDecorView().getClass().getDeclaredField("mSemiTransparentStatusBarColor");  //获取特定的成员变量
-                    field.setAccessible(true);   //设置对此属性的可访问性
-                    field.setInt(getWindow().getDecorView(), Color.TRANSPARENT);  //修改属性值
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
             //
             if (isAddStatusBar()) {
                 View statusBarView = new View(getApplicationContext());
@@ -93,7 +73,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
-        mHPApplication = (HPApplication) getApplication();
         preLoad();
         setContentView(layout);
         mActivity = this;

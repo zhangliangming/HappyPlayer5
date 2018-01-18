@@ -30,6 +30,8 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
+import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.fragment.DownloadMusicFragment;
 import com.zlm.hp.fragment.LikeMusicFragment;
@@ -273,12 +275,14 @@ public class MainActivity extends BaseActivity {
         public void run() {
 
             //如果歌曲正在播放，实时更新页面数据，防止回收后启动时，页面还是旧数据的问题
-            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING || mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYNET) {
-                if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
-                    if (!mCurPlayIndexHash.equals(mHPApplication.getCurAudioInfo().getHash())) {
+            if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING ||
+                    PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYNET) {
+                if (HPApplication.getInstance().getCurAudioMessage() != null &&
+                        HPApplication.getInstance().getCurAudioInfo() != null) {
+                    if (!mCurPlayIndexHash.equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
 
                         Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-                        initIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                        initIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
                         initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         sendBroadcast(initIntent);
 
@@ -288,13 +292,13 @@ public class MainActivity extends BaseActivity {
 
             if (!isServiceRunning(AudioPlayerService.class.getName())) {
                 logger.e("监听音频服务初始回收");
-                if (!mHPApplication.isAppClose()) {
+                if (!HPApplication.getInstance().isAppClose()) {
 
                     //服务被强迫回收
                     Intent playerServiceIntent = new Intent(getApplicationContext(), AudioPlayerService.class);
-                    mHPApplication.startService(playerServiceIntent);
+                    HPApplication.getInstance().startService(playerServiceIntent);
 
-                    mHPApplication.setPlayServiceForceDestroy(true);
+                    HPApplication.getInstance().setPlayServiceForceDestroy(true);
 //                    Intent restartIntent = new Intent(AudioBroadcastReceiver.ACTION_MUSICRESTART);
 //                    restartIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
 //                    sendBroadcast(restartIntent);
@@ -370,7 +374,7 @@ public class MainActivity extends BaseActivity {
             new AsyncTaskUtil() {
                 @Override
                 protected Void doInBackground(String... strings) {
-                    AudioPlayerManager.getAudioPlayerManager(getApplicationContext(), mHPApplication).initSongInfoData();
+                    AudioPlayerManager.getAudioPlayerManager(mContext).initSongInfoData();
                     return super.doInBackground(strings);
                 }
             }.execute("");
@@ -435,7 +439,7 @@ public class MainActivity extends BaseActivity {
              * 但是这个广播只是针对有线耳机，或者无线耳机的手机断开连接的事件，监听不到有线耳机和蓝牙耳机的接入
              * ，但对于我的需求来说足够了，监听这个广播就没有延迟了，UI可以立即响应
              */
-            int playStatus = mHPApplication.getPlayStatus();
+            int playStatus = PreferencesConstants.getPlayStatus(mContext);
             if (playStatus == AudioPlayerManager.PLAYING) {
 
                 Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -462,15 +466,15 @@ public class MainActivity extends BaseActivity {
         String action = intent.getAction();
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
+            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
-                double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
+                double pre = downloadedSize * 1.0 / HPApplication.getInstance().getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
                 mLrcSeekBar.setSecondaryProgress(downloadProgress);
             }
         } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
+            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
                 ToastUtil.showTextToast(getApplicationContext(), downloadMessage.getErrorMsg());
             }
         }
@@ -518,8 +522,8 @@ public class MainActivity extends BaseActivity {
 
 
             //初始化
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
 
             mCurPlayIndexHash = audioInfo.getHash();
 
@@ -534,7 +538,7 @@ public class MainActivity extends BaseActivity {
             mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
             mLrcSeekBar.setSecondaryProgress(0);
             //加载歌手图片
-            ImageUtil.loadSingerImage(mHPApplication, getApplicationContext(), mSingerImg, audioInfo.getSingerName());
+            ImageUtil.loadSingerImage(mContext, mSingerImg, audioInfo.getSingerName());
 
             //加载歌词
             String keyWords = "";
@@ -543,7 +547,7 @@ public class MainActivity extends BaseActivity {
             } else {
                 keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
             }
-            LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
+            LyricsManager.getLyricsManager(mContext).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
             mFloatLyricsView.setLyricsUtil(null);
@@ -558,7 +562,7 @@ public class MainActivity extends BaseActivity {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
             //播放
 
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
 
             mPauseImageView.setVisibility(View.VISIBLE);
             mPlayImageView.setVisibility(View.INVISIBLE);
@@ -583,10 +587,10 @@ public class MainActivity extends BaseActivity {
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
             //播放中
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
                 mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
                     if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
@@ -611,14 +615,15 @@ public class MainActivity extends BaseActivity {
 
 //        }
         else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
-            if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
+            if (HPApplication.getInstance().getCurAudioMessage() != null &&
+                    HPApplication.getInstance().getCurAudioInfo() != null) {
                 //歌词加载完成
-                AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
+                AudioMessage curAudioMessage = HPApplication.getInstance().getCurAudioMessage();
                 AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
                 String hash = audioMessage.getHash();
-                if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
+                if (hash.equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
                     //
-                    LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
+                    LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mContext).getLyricsUtil(hash);
                     if (lyricsUtil != null) {
                         if (lyricsUtil.getHash() != null && lyricsUtil.getHash().equals(hash) && mFloatLyricsView.getLyricsUtil() != null) {
                             //已加载歌词，不用重新加载
@@ -631,11 +636,13 @@ public class MainActivity extends BaseActivity {
                 }
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCSEEKTO)) {
-            if (mHPApplication.getCurAudioMessage() != null) {
-                mLrcSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                if (mHPApplication.getCurAudioInfo() != null) {
-                    if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
-                        mFloatLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+            if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                mLrcSeekBar.setProgress((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
+                if (HPApplication.getInstance().getCurAudioInfo() != null) {
+                    if (mFloatLyricsView.getLyricsUtil() != null &&
+                            mFloatLyricsView.getLyricsUtil().getHash().
+                                    equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
+                        mFloatLyricsView.updateView((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
                     }
                 }
             }
@@ -658,7 +665,7 @@ public class MainActivity extends BaseActivity {
 //            //关闭锁屏歌词
 //            mLockLrcReceiver.unregisterReceiver(getApplicationContext());
 //        }
-        boolean showLockScreen = mHPApplication.isShowLockScreen();
+        boolean showLockScreen = PreferencesConstants.isShowLockScreen(mContext);
         if (showLockScreen && action.equals(Intent.ACTION_SCREEN_OFF)) {
             Intent lockscreen = new Intent(this, LockScreenActivity.class);
             //在Service中启动一个Activity, 需要加上Intent.FLAG_ACTIVITY_NEW_TASK
@@ -672,43 +679,43 @@ public class MainActivity extends BaseActivity {
      */
     private void initService() {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        mHPApplication.startService(playerServiceIntent);
+        startService(playerServiceIntent);
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
+        mAudioBroadcastReceiver.registerReceiver(mContext);
 
         //在线音乐广播
-        mOnLineAudioReceiver = new OnLineAudioReceiver(getApplicationContext(), mHPApplication);
+        mOnLineAudioReceiver = new OnLineAudioReceiver(mContext);
         mOnLineAudioReceiver.setOnlineAudioReceiverListener(mOnlineAudioReceiverListener);
-        mOnLineAudioReceiver.registerReceiver(getApplicationContext());
+        mOnLineAudioReceiver.registerReceiver(mContext);
 
         //系统广播
-        mSystemReceiver = new SystemReceiver(getApplicationContext(), mHPApplication);
+        mSystemReceiver = new SystemReceiver(mContext);
         mSystemReceiver.setSystemReceiverListener(mSystemReceiverListener);
-        mSystemReceiver.registerReceiver(getApplicationContext());
+        mSystemReceiver.registerReceiver(mContext);
 
         //耳机广播
-        mPhoneReceiver = new PhoneReceiver(getApplicationContext(), mHPApplication);
-        if (mHPApplication.isWire()) {
-            mPhoneReceiver.registerReceiver(getApplicationContext());
+        mPhoneReceiver = new PhoneReceiver(mContext);
+        if (PreferencesConstants.isWire(mContext)) {
+            mPhoneReceiver.registerReceiver(mContext);
         }
 
         //电话监听
-        mMobliePhoneReceiver = new MobliePhoneReceiver(getApplicationContext(), mHPApplication);
-        mMobliePhoneReceiver.registerReceiver(getApplicationContext());
+        mMobliePhoneReceiver = new MobliePhoneReceiver(mContext);
+        mMobliePhoneReceiver.registerReceiver(mContext);
 
         //mFragment广播
-        mFragmentReceiver = new FragmentReceiver(getApplicationContext(), mHPApplication);
+        mFragmentReceiver = new FragmentReceiver(mContext);
         mFragmentReceiver.setFragmentReceiverListener(mFragmentReceiverListener);
-        mFragmentReceiver.registerReceiver(getApplicationContext());
+        mFragmentReceiver.registerReceiver(mContext);
 
         //注册锁屏歌词广播
-        mLockLrcReceiver = new LockLrcReceiver(getApplicationContext(), mHPApplication);
+        mLockLrcReceiver = new LockLrcReceiver(mContext);
         mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
-        if (mHPApplication.isLockScreen()) {
-            mLockLrcReceiver.registerReceiver(getApplicationContext());
+        if (PreferencesConstants.isLockScreen(mContext)) {
+            mLockLrcReceiver.registerReceiver(mContext);
         }
 
         //
@@ -902,7 +909,7 @@ public class MainActivity extends BaseActivity {
                 initPlayModeView(0, modeAllTv, modeRandomTv, modeSingleTv, true);
             }
         });
-        initPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //删除播放列表按钮
         mDeleteTv = findViewById(R.id.delete);
@@ -943,7 +950,7 @@ public class MainActivity extends BaseActivity {
             modeSingleImg.setVisibility(View.VISIBLE);
         }
         //
-        mHPApplication.setPlayModel(playMode);
+        PreferencesConstants.setPlayModel(mContext, playMode);
     }
 
 
@@ -982,14 +989,14 @@ public class MainActivity extends BaseActivity {
      */
     private void showPopView() {
 
-        initPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
         //加载当前播放列表数据
-        List<AudioInfo> curAudioInfos = mHPApplication.getCurAudioInfos();
+        List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
         if (curAudioInfos == null) {
             curAudioInfos = new ArrayList<AudioInfo>();
         }
         mCurPLSizeTv.setText(curAudioInfos.size() + "");
-        mPopPlayListAdapter = new MainPopPlayListAdapter(mHPApplication, getApplicationContext(), curAudioInfos);
+        mPopPlayListAdapter = new MainPopPlayListAdapter(mContext, curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
 
 
@@ -1008,7 +1015,7 @@ public class MainActivity extends BaseActivity {
                 mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 120));
 
                 //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
+                int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
                 if (position >= 0)
                     mCurRecyclerView.move(position,
                             LinearLayoutRecyclerView.smoothScroll);
@@ -1057,7 +1064,7 @@ public class MainActivity extends BaseActivity {
         mBarCloseFlagView = barContentView.findViewById(R.id.bar_dragflagClosed);
         mBarOpenFlagView = barContentView.findViewById(R.id.bar_dragflagOpen);
         //
-        if (mHPApplication.isBarMenuShow()) {
+        if (PreferencesConstants.isBarMenuShow(mContext)) {
             mSwipeoutLayout.initViewAndShowMenuView(barContentView, barMenuView, mSingerImg);
         } else {
             mSwipeoutLayout.initViewAndShowContentView(barContentView, barMenuView, mSingerImg);
@@ -1089,7 +1096,7 @@ public class MainActivity extends BaseActivity {
                 }
 
                 //
-                mHPApplication.setBarMenuShow(false);
+                PreferencesConstants.setBarMenuShow(mContext, false);
             }
 
 
@@ -1104,7 +1111,7 @@ public class MainActivity extends BaseActivity {
                 }
 
                 //
-                mHPApplication.setBarMenuShow(true);
+                PreferencesConstants.setBarMenuShow(mContext, true);
             }
         });
         mSwipeoutLayout.setPlayerBarOnClickListener(new SwipeoutLayout.PlayerBarOnClickListener() {
@@ -1140,13 +1147,13 @@ public class MainActivity extends BaseActivity {
         mPlayImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus == AudioPlayerManager.PAUSE) {
 
-                    AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                    AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                     if (audioInfo != null) {
 
-                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                         Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
                         resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
                         resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -1155,9 +1162,9 @@ public class MainActivity extends BaseActivity {
                     }
 
                 } else {
-                    if (mHPApplication.getCurAudioMessage() != null) {
-                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
-                        AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                    if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
+                        AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                         if (audioInfo != null) {
                             audioMessage.setAudioInfo(audioInfo);
                             Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
@@ -1174,7 +1181,7 @@ public class MainActivity extends BaseActivity {
         mPauseImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus == AudioPlayerManager.PLAYING) {
 
                     Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -1213,7 +1220,9 @@ public class MainActivity extends BaseActivity {
             public String getLrcText() {
 
                 //获取行歌词
-                if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioMessage().getAudioInfo().getHash())) {
+                if (mFloatLyricsView.getLyricsUtil() != null &&
+                        mFloatLyricsView.getLyricsUtil().getHash().
+                                equals(HPApplication.getInstance().getCurAudioMessage().getAudioInfo().getHash())) {
                     return mFloatLyricsView.getLyricsUtil().getLineLrc(mFloatLyricsView.getLyricsLineTreeMap(), mLrcSeekBar.getProgress());
                 }
 
@@ -1223,11 +1232,11 @@ public class MainActivity extends BaseActivity {
             @Override
             public void dragFinish() {
                 //
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus == AudioPlayerManager.PLAYING) {
                     //正在播放
-                    if (mHPApplication.getCurAudioMessage() != null) {
-                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                    if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                         // AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                         //if (audioInfo != null) {
                         //  audioMessage.setAudioInfo(audioInfo);
@@ -1241,8 +1250,8 @@ public class MainActivity extends BaseActivity {
                     }
                 } else {
 
-                    if (mHPApplication.getCurAudioMessage() != null)
-                        mHPApplication.getCurAudioMessage().setPlayProgress(mLrcSeekBar.getProgress());
+                    if (HPApplication.getInstance().getCurAudioMessage() != null)
+                        HPApplication.getInstance().getCurAudioMessage().setPlayProgress(mLrcSeekBar.getProgress());
 
                     //歌词快进
                     Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);
@@ -1334,7 +1343,7 @@ public class MainActivity extends BaseActivity {
         //
         mCheckServiceHandler.removeCallbacks(mCheckServiceRunnable);
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        mHPApplication.stopService(playerServiceIntent);
+        stopService(playerServiceIntent);
 
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
@@ -1343,7 +1352,7 @@ public class MainActivity extends BaseActivity {
         //系统广播
         mSystemReceiver.unregisterReceiver(getApplicationContext());
 
-        if (mHPApplication.isWire())
+        if (PreferencesConstants.isWire(mContext))
             //耳机广播
             mPhoneReceiver.unregisterReceiver(getApplicationContext());
 
@@ -1377,12 +1386,12 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         if (!isServiceRunning(AudioPlayerService.class.getName())) {
 
-            if (!mHPApplication.isAppClose()) {
+            if (!HPApplication.getInstance().isAppClose()) {
 
                 //服务被强迫回收
                 Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-                mHPApplication.startService(playerServiceIntent);
-                mHPApplication.setPlayServiceForceDestroy(true);
+                startService(playerServiceIntent);
+                HPApplication.getInstance().setPlayServiceForceDestroy(true);
 
                 logger.e("resume时，重新启动音频播放服务广播");
             }

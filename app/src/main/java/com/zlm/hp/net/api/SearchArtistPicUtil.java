@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SearchArtistPicResult;
 
@@ -27,7 +27,6 @@ public class SearchArtistPicUtil {
     /**
      * 搜索歌手写真图片
      *
-     * @param hPApplication
      * @param context
      * @param singerName
      * @param width
@@ -36,14 +35,14 @@ public class SearchArtistPicUtil {
      * @return
      * @throws Exception
      */
-    public static List<SearchArtistPicResult> searchArtistPic(HPApplication hPApplication, Context context, String singerName, String width,
+    public static List<SearchArtistPicResult> searchArtistPic(Context context, String singerName, String width,
                                                               String height, String type) {
 
         if (!NetUtil.isNetworkAvailable(context)) {
             return null;
         }
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }

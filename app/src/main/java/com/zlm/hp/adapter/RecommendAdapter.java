@@ -44,10 +44,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private ArrayList<RankListResult> mDatas;
     private int state = NODATA;
 
-    private HPApplication mHpApplication;
-
-    public RecommendAdapter(HPApplication hpApplication, Context context, ArrayList<RankListResult> datas) {
-        this.mHpApplication = hpApplication;
+    public RecommendAdapter(Context context, ArrayList<RankListResult> datas) {
         this.mContext = context;
         this.mDatas = datas;
     }
@@ -109,7 +106,7 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             @Override
             public void onClick(View view) {
                 //
-                mHpApplication.setRankListResult(rankListResult);
+                HPApplication.getInstance().setRankListResult(rankListResult);
 
                 //打开
                 Intent openIntent = new Intent(FragmentReceiver.ACTION_OPENRANKSONGFRAGMENT);

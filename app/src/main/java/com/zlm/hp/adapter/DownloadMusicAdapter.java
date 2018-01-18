@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -60,7 +61,6 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private Context mContext;
     private ArrayList<Category> mDatas;
-    private HPApplication mHPApplication;
 
 
     /**
@@ -69,8 +69,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int playIndexPosition = -1;
     private String playIndexHash = "-1";
 
-    public DownloadMusicAdapter(HPApplication hPApplication, Context context, ArrayList<Category> datas) {
-        this.mHPApplication = hPApplication;
+    public DownloadMusicAdapter(Context context, ArrayList<Category> datas) {
         this.mContext = context;
         this.mDatas = datas;
 
@@ -177,7 +176,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         viewHolder.getTitleTv().setText(audioInfo.getSingerName() + " - " + audioInfo.getSongName());
 
-        int status = DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).taskIsDLStatus(downloadInfo.getDHash());
+        int status = DownloadAudioManager.getDownloadAudioManager(mContext).taskIsDLStatus(downloadInfo.getDHash());
         if (status == DownloadTaskConstant.WAIT.getValue()) {
             viewHolder.getDownloadingImg().setVisibility(View.VISIBLE);
             viewHolder.getDownloadPauseImg().setVisibility(View.INVISIBLE);
@@ -207,17 +206,17 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.getListItemRelativeLayout().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int status = DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).taskIsDLStatus(downloadInfo.getDHash());
+                int status = DownloadAudioManager.getDownloadAudioManager(mContext).taskIsDLStatus(downloadInfo.getDHash());
                 if (status == DownloadTaskConstant.INT.getValue()) {
 
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(downloadInfo.getAudioInfo());
+                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(downloadInfo.getAudioInfo());
 
                 } else if (status == DownloadTaskConstant.WAIT.getValue()) {
 
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).cancelTask(downloadInfo.getDHash());
+                    DownloadAudioManager.getDownloadAudioManager(mContext).cancelTask(downloadInfo.getDHash());
 
                 } else if (status == DownloadTaskConstant.DOWNLOADING.getValue()) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).pauseTask(downloadInfo.getDHash());
+                    DownloadAudioManager.getDownloadAudioManager(mContext).pauseTask(downloadInfo.getDHash());
                 }
             }
         });
@@ -226,8 +225,8 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
         viewHolder.getDeleteTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).taskIsExists(downloadInfo.getDHash())) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).cancelTask(downloadInfo.getDHash());
+                if (DownloadAudioManager.getDownloadAudioManager(mContext).taskIsExists(downloadInfo.getDHash())) {
+                    DownloadAudioManager.getDownloadAudioManager(mContext).cancelTask(downloadInfo.getDHash());
                 } else {
 
                     //更新
@@ -351,9 +350,9 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             viewHolder.getMenuLinearLayout().setVisibility(View.GONE);
         }
 
-        if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
+        if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
             playIndexPosition = position;
-            playIndexHash = mHPApplication.getPlayIndexHashID();
+            playIndexHash = PreferencesConstants.getPlayIndexHashID(mContext);
             //
             viewHolder.getStatusView().setVisibility(View.VISIBLE);
         } else {
@@ -366,7 +365,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
 
                 if (playIndexPosition == position) {
-                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+                    if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
                         // 当前正在播放，发送暂停
 
                         Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -374,11 +373,11 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                         mContext.sendBroadcast(pauseIntent);
 
                         return;
-                    } else if (mHPApplication.getPlayStatus() == AudioPlayerManager.PAUSE) {
+                    } else if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PAUSE) {
                         //当前正在暂停，发送唤醒播放
 
                         Intent remuseIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
-                        remuseIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                        remuseIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
                         remuseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(remuseIntent);
 
@@ -402,13 +401,13 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                     DownloadInfo downloadInfo1 = (DownloadInfo) data.get(i);
                     curData.add(downloadInfo1.getAudioInfo());
                 }
-                mHPApplication.setCurAudioInfos(curData);
+                HPApplication.getInstance().setCurAudioInfos(curData);
 
 
                 //
                 playIndexPosition = position;
                 playIndexHash = audioInfo.getHash();
-                mHPApplication.setPlayIndexHashID(playIndexHash);
+                PreferencesConstants.setPlayIndexHashID(mContext, playIndexHash);
 
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
                 AudioMessage audioMessage = new AudioMessage();

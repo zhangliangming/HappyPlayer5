@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.zlm.hp.R;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.LyricsManager;
@@ -221,7 +222,7 @@ public class LrcFragment extends BaseFragment {
 
         //歌词视图
         mManyLineLyricsView = mainView.findViewById(R.id.lrcview);
-        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
+        mManyLineLyricsView.setLrcFontSize(PreferencesConstants.getLrcFontSize(mContext));
         mManyLineLyricsView.setDefLrcColor(ColorUtil.parserColor("#888888"));
         mManyLineLyricsView.setLrcColor(ColorUtil.parserColor("#0288d1"));
         mManyLineLyricsView.setTouchInterceptTrue();
@@ -361,7 +362,7 @@ public class LrcFragment extends BaseFragment {
             public void onClick(View view) {
                 if (mManyLineLyricsView != null && mManyLineLyricsView.getLyricsUtil() != null) {
                     mManyLineLyricsView.getLyricsUtil().setLrcFilePath(mLrcFilePath);
-                    LyricsManager.getLyricsManager(mHPApplication, mActivity.getApplicationContext()).setUseLrcUtil(mHash, mManyLineLyricsView.getLyricsUtil());
+                    LyricsManager.getLyricsManager(mActivity).setUseLrcUtil(mHash, mManyLineLyricsView.getLyricsUtil());
 
                     //发送使用歌词广播
                     Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCUSE);

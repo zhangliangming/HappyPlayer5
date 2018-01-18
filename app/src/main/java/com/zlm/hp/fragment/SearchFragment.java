@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
 import com.zlm.hp.adapter.SearchResultAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.api.SearchResultHttpUtil;
 import com.zlm.hp.net.model.HttpResult;
@@ -220,7 +221,7 @@ public class SearchFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity.getApplicationContext()));
         //
         mDatas = new ArrayList<AudioInfo>();
-        mAdapter = new SearchResultAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new SearchResultAdapter(mActivity, mDatas);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setSearchResultListener(new SearchResultAdapter.SearchResultListener()
 
@@ -247,9 +248,9 @@ public class SearchFragment extends BaseFragment {
 
 
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+        mAudioBroadcastReceiver.registerReceiver(mActivity);
     }
 
     @Override
@@ -280,7 +281,7 @@ public class SearchFragment extends BaseFragment {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
             //AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo(); //audioMessage.getAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo(); //audioMessage.getAudioInfo();
             mAdapter.reshViewHolder(audioInfo);
         }
 
@@ -330,7 +331,7 @@ public class SearchFragment extends BaseFragment {
             @Override
             public HttpResult doInBackground() {
 
-                return SearchResultHttpUtil.search(mHPApplication, mActivity.getApplicationContext(), mSearchEditText.getText().toString(), mPage + "", mPageSize + "");
+                return SearchResultHttpUtil.search(mActivity, mSearchEditText.getText().toString(), mPage + "", mPageSize + "");
 
             }
 

@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioMessage;
 
@@ -29,7 +30,6 @@ public class AudioBroadcastReceiver {
      */
     private boolean isRegisterSuccess = false;
     private Context mContext;
-    private HPApplication mHPApplication;
     /**
      * 注册成功广播
      */
@@ -108,8 +108,7 @@ public class AudioBroadcastReceiver {
     private IntentFilter mAudioIntentFilter;
     private AudioReceiverListener mAudioReceiverListener;
 
-    public AudioBroadcastReceiver(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public AudioBroadcastReceiver(Context context) {
         this.mContext = context;
         logger = LoggerUtil.getZhangLogger(context);
         mAudioIntentFilter = new IntentFilter();
@@ -168,14 +167,14 @@ public class AudioBroadcastReceiver {
 
                     //
                     //服务被强迫回收
-                    if (mHPApplication.isPlayServiceForceDestroy()) {
-                        mHPApplication.setPlayServiceForceDestroy(false);
-                        int playStatus = mHPApplication.getPlayStatus();
+                    if (HPApplication.getInstance().isPlayServiceForceDestroy()) {
+                        HPApplication.getInstance().setPlayServiceForceDestroy(false);
+                        int playStatus = PreferencesConstants.getPlayStatus(mContext);
                         if (playStatus == AudioPlayerManager.PLAYING) {
 
                             //
                             logger.e("发送重启后重新播放音频广播");
-                            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                             if (audioMessage != null) {
                                 Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
                                 resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
@@ -184,7 +183,7 @@ public class AudioBroadcastReceiver {
                             }
                         } else {
                             //服务回收了，修改当前的播放状态
-                            mHPApplication.setPlayStatus(AudioPlayerManager.STOP);
+                            PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.STOP);
                         }
                     }
 

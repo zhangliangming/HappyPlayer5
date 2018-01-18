@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.zlm.hp.R;
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.entity.SearchArtistPicResult;
@@ -40,16 +39,13 @@ public class SearchSingerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context mContext;
     private List<SearchArtistPicResult> mDatas;
     private int state = NOMOREDATA;
-
-    private HPApplication mHPApplication;
     private AudioInfo mAudioInfo;
 
     private SearchSingerActivity.SearchSingerListener mSearchSingerListener;
     private Map<String, String> mSelectDatas;
 
-    public SearchSingerAdapter(HPApplication hPApplication, Context context, List<SearchArtistPicResult> datas, AudioInfo audioInfo, Map<String, String> selectDatas, SearchSingerActivity.SearchSingerListener searchSingerListener) {
+    public SearchSingerAdapter( Context context, List<SearchArtistPicResult> datas, AudioInfo audioInfo, Map<String, String> selectDatas, SearchSingerActivity.SearchSingerListener searchSingerListener) {
         this.mAudioInfo = audioInfo;
-        this.mHPApplication = hPApplication;
         this.mContext = context;
         this.mDatas = datas;
         this.mSearchSingerListener = searchSingerListener;

@@ -69,7 +69,7 @@ public class TabRecommendFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<RankListResult>();
-        mAdapter = new RecommendAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new RecommendAdapter(mActivity, mDatas);
         mRecyclerView.setAdapter(mAdapter);
         //
         showLoadingView();
@@ -112,7 +112,7 @@ public class TabRecommendFragment extends BaseFragment {
         mAsyncTaskHttpUtil.setAsyncTaskListener(new AsyncTaskHttpUtil.AsyncTaskListener() {
             @Override
             public HttpResult doInBackground() {
-                return RankListHttpUtil.rankList(mHPApplication, mActivity.getApplicationContext());
+                return RankListHttpUtil.rankList(mActivity);
             }
 
             @Override

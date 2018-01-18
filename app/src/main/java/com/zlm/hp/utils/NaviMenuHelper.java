@@ -47,8 +47,8 @@ public class NaviMenuHelper {
     }
 
     private static void nightMode(final BaseActivity activity) {
-        boolean nightMode = (boolean) PreferencesUtil.getValue(activity, PreferencesConstants.nightMode_KEY, false);
-        PreferencesUtil.saveValue(activity, PreferencesConstants.nightMode_KEY, !nightMode);
+        boolean nightMode = PreferencesUtil.getBooleanValue(activity, PreferencesConstants.nightMode_KEY, false);
+        PreferencesUtil.putBooleanVaule(activity, PreferencesConstants.nightMode_KEY, !nightMode);
         activity.recreate();
     }
 

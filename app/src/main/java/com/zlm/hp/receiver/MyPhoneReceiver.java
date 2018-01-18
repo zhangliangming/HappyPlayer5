@@ -10,6 +10,7 @@ import android.os.Message;
 import android.view.KeyEvent;
 
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
@@ -30,16 +31,14 @@ public class MyPhoneReceiver extends BroadcastReceiver {
      */
     private LoggerUtil logger;
     private Context mContext;
-    private HPApplication mHPApplication;
     private Timer timer;
     private static MTask myTimer;
     /**单击次数**/
     private static int clickCount;
 
     //需要写一个默认构造方法，要不Manifest 会报错
-    public MyPhoneReceiver() {
-        this.mHPApplication = HPApplication.getInstance();
-        this.mContext = mHPApplication.getApplicationContext();
+    public MyPhoneReceiver(Context context) {
+        this.mContext = context;
         logger = LoggerUtil.getZhangLogger(mContext);
         timer = new Timer(true);
     }
@@ -143,20 +142,21 @@ public class MyPhoneReceiver extends BroadcastReceiver {
      * @param seekProgress
      */
     private void seekToMusic(int seekProgress) {
-        if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
-            int progress = (int) (mHPApplication.getCurAudioMessage().getPlayProgress() + seekProgress);
+        if (HPApplication.getInstance().getCurAudioMessage() != null &&
+                HPApplication.getInstance().getCurAudioInfo() != null) {
+            int progress = (int) (HPApplication.getInstance().getCurAudioMessage().getPlayProgress() + seekProgress);
             //判断歌词快进时，是否超过歌曲的总时间
-            if (mHPApplication.getCurAudioInfo().getDuration() < progress) {
-                progress = (int) mHPApplication.getCurAudioInfo().getDuration();
-            } else if (mHPApplication.getCurAudioInfo().getDuration() < 0) {
+            if (HPApplication.getInstance().getCurAudioInfo().getDuration() < progress) {
+                progress = (int) HPApplication.getInstance().getCurAudioInfo().getDuration();
+            } else if (HPApplication.getInstance().getCurAudioInfo().getDuration() < 0) {
                 progress = 0;
             }
             //
-            int playStatus = mHPApplication.getPlayStatus();
+            int playStatus = PreferencesConstants.getPlayStatus(mContext);
             if (playStatus == AudioPlayerManager.PLAYING) {
                 //正在播放
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                    AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                     // AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                     //if (audioInfo != null) {
                     //  audioMessage.setAudioInfo(audioInfo);
@@ -170,8 +170,8 @@ public class MyPhoneReceiver extends BroadcastReceiver {
                 }
             } else {
 
-                if (mHPApplication.getCurAudioMessage() != null)
-                    mHPApplication.getCurAudioMessage().setPlayProgress(progress);
+                if (HPApplication.getInstance().getCurAudioMessage() != null)
+                    HPApplication.getInstance().getCurAudioMessage().setPlayProgress(progress);
 
                 //歌词快进
                 Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);
@@ -212,13 +212,13 @@ public class MyPhoneReceiver extends BroadcastReceiver {
     private void playOrPause() {
         logger.e("播放或者暂存");
 
-        int playStatus = mHPApplication.getPlayStatus();
+        int playStatus = PreferencesConstants.getPlayStatus(mContext);
         if (playStatus == AudioPlayerManager.PAUSE) {
 
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
             if (audioInfo != null) {
 
-                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                 Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
                 resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
                 resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -233,9 +233,9 @@ public class MyPhoneReceiver extends BroadcastReceiver {
             mContext.sendBroadcast(resumeIntent);
 
         } else {
-            if (mHPApplication.getCurAudioMessage() != null) {
-                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                 if (audioInfo != null) {
                     audioMessage.setAudioInfo(audioInfo);
                     Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);

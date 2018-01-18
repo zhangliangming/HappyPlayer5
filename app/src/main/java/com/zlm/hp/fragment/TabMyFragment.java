@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.R;
+import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.model.AudioInfo;
@@ -267,7 +269,7 @@ public class TabMyFragment extends BaseFragment {
 
         //wifi设置按钮
         mWifiSetupBGButton = mainView.findViewById(R.id.wifibg);
-        if (mHPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(mContext)) {
             mWifiSetupBGButton.setSelect(true);
         }
         mWifiSetupBGButton.setOnClickListener(new View.OnClickListener() {
@@ -275,14 +277,14 @@ public class TabMyFragment extends BaseFragment {
             public void onClick(View view) {
                 //
                 boolean selected = mWifiSetupBGButton.isSelect();
-                mHPApplication.setWifi(!selected);
-                mWifiSetupBGButton.setSelect(mHPApplication.isWifi());
+                PreferencesConstants.setWifi(mContext, !selected);
+                mWifiSetupBGButton.setSelect(PreferencesConstants.isWifi(mContext));
             }
         });
 
         //桌面歌词设置按钮
         mDesktopBGButton = mainView.findViewById(R.id.desktopbg);
-        if (mHPApplication.isDesktop()) {
+        if (PreferencesConstants.isDesktop(mContext)) {
             mDesktopBGButton.setSelect(true);
         }
         mDesktopBGButton.setOnClickListener(new View.OnClickListener() {
@@ -290,14 +292,14 @@ public class TabMyFragment extends BaseFragment {
             public void onClick(View view) {
                 //
                 boolean selected = mDesktopBGButton.isSelect();
-                mHPApplication.setDesktop(!selected);
-                mDesktopBGButton.setSelect(mHPApplication.isDesktop());
+                PreferencesConstants.setDesktop(mContext, !selected);
+                mDesktopBGButton.setSelect(PreferencesConstants.isDesktop(mContext));
             }
         });
 
         //锁屏歌词设置按钮
         mLockScreenBGButton = mainView.findViewById(R.id.lockScreenbg);
-        if (mHPApplication.isLockScreen()) {
+        if (PreferencesConstants.isLockScreen(mContext)) {
             mLockScreenBGButton.setSelect(true);
         }
         mLockScreenBGButton.setOnClickListener(new View.OnClickListener() {
@@ -305,9 +307,9 @@ public class TabMyFragment extends BaseFragment {
             public void onClick(View view) {
                 //
                 boolean selected = mLockScreenBGButton.isSelect();
-                mHPApplication.setLockScreen(!selected);
-                mLockScreenBGButton.setSelect(mHPApplication.isLockScreen());
-                if (mHPApplication.isLockScreen()) {
+                PreferencesConstants.setLockScreen(mContext, !selected);
+                mLockScreenBGButton.setSelect(PreferencesConstants.isLockScreen(mContext));
+                if (PreferencesConstants.isLockScreen(mContext)) {
                     Intent openIntent = new Intent(SystemReceiver.ACTION_OPENLRCMESSAGE);
                     openIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     mActivity.sendBroadcast(openIntent);
@@ -321,30 +323,31 @@ public class TabMyFragment extends BaseFragment {
 
         //问候语按钮
         mSayHelloSetupBGButton = mainView.findViewById(R.id.sayhello);
-        if (mHPApplication.isSayHello()) {
+        if (PreferencesConstants.isSayHello(mContext)) {
             mSayHelloSetupBGButton.setSelect(true);
         }
         mSayHelloSetupBGButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean selected = mSayHelloSetupBGButton.isSelect();
-                mHPApplication.setSayHello(!selected);
-                mSayHelloSetupBGButton.setSelect(mHPApplication.isSayHello());
+
+                PreferencesConstants.setSayHello(mContext, !selected);
+                mSayHelloSetupBGButton.setSelect(PreferencesConstants.isSayHello(mContext));
             }
         });
 
         //线控
         mWireSetupBGButton = mainView.findViewById(R.id.wire);
-        if (mHPApplication.isWire()) {
+        if (PreferencesConstants.isWire(mContext)) {
             mWireSetupBGButton.setSelect(true);
         }
         mWireSetupBGButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean selected = mWireSetupBGButton.isSelect();
-                mHPApplication.setWire(!selected);
-                mWireSetupBGButton.setSelect(mHPApplication.isWire());
-                if (mHPApplication.isWire()) {
+                PreferencesConstants.setWire(mContext, !selected);
+                mWireSetupBGButton.setSelect(PreferencesConstants.isWire(mContext));
+                if (PreferencesConstants.isWire(mContext)) {
                     Intent openIntent = new Intent(SystemReceiver.ACTION_OPENWIREMESSAGE);
                     openIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     mActivity.sendBroadcast(openIntent);
@@ -374,7 +377,7 @@ public class TabMyFragment extends BaseFragment {
             @Override
             public void twoButtonClick() {
 
-                mHPApplication.setAppClose(true);
+                HPApplication.getInstance().setAppClose(true);
                 android.os.Process.killProcess(android.os.Process.myPid());
                 System.exit(0);
             }
@@ -383,15 +386,15 @@ public class TabMyFragment extends BaseFragment {
         showContentView();
 
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+        mAudioBroadcastReceiver.registerReceiver(mActivity);
 
         //注册锁屏歌词广播
-        mLockLrcReceiver = new LockLrcReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mLockLrcReceiver = new LockLrcReceiver(mActivity);
         mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
-        if (mHPApplication.isLockScreen()) {
-            mLockLrcReceiver.registerReceiver(mActivity.getApplicationContext());
+        if (PreferencesConstants.isLockScreen(mContext)) {
+            mLockLrcReceiver.registerReceiver(mActivity);
         }
     }
 
@@ -507,7 +510,7 @@ public class TabMyFragment extends BaseFragment {
             loadLikeCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
             //将正在播放的歌曲加入最近播放列表中
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
             if (audioInfo != null) {
                 if (AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), true)) {
                     AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo.getHash(), audioInfo.getType(), true);
@@ -541,10 +544,10 @@ public class TabMyFragment extends BaseFragment {
         String action = intent.getAction();
         if (action.equals(LockLrcReceiver.ACTION_SHOWLRCMESSAGE)) {
             //显示锁屏歌词
-            mHPApplication.setShowLockScreen(true);
+            PreferencesConstants.setShowLockScreen(mContext, true);
         } else if (action.equals(LockLrcReceiver.ACTION_HIDELRCMESSAGE)) {
             //隐藏锁屏歌词
-            mHPApplication.setShowLockScreen(false);
+            PreferencesConstants.setShowLockScreen(mContext, false);
         }
 
     }

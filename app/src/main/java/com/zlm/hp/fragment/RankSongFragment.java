@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.api.RankSongHttpUtil;
 import com.zlm.hp.net.entity.RankListResult;
@@ -97,7 +98,7 @@ public class RankSongFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         if (mRankListResult == null)
-            mRankListResult = mHPApplication.getRankListResult();
+            mRankListResult = HPApplication.getInstance().getRankListResult();
     }
 
     /**
@@ -115,7 +116,7 @@ public class RankSongFragment extends BaseFragment {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
             // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();//audioMessage.getAudioInfo();
             mAdapter.reshViewHolder(audioInfo);
         }
     }
@@ -136,7 +137,7 @@ public class RankSongFragment extends BaseFragment {
         //
         TextView titleView = mainView.findViewById(R.id.title);
         if (mRankListResult == null)
-            mRankListResult = mHPApplication.getRankListResult();
+            mRankListResult = HPApplication.getInstance().getRankListResult();
         titleView.setText(mRankListResult.getRankName());
         //
         RelativeLayout backRelativeLayout = mainView.findViewById(R.id.backImg);
@@ -158,7 +159,7 @@ public class RankSongFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<AudioInfo>();
-        mAdapter = new RankSongAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new RankSongAdapter(mActivity, mDatas);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setRankSongListener(new RankSongAdapter.RankSongListener() {
             @Override
@@ -182,7 +183,7 @@ public class RankSongFragment extends BaseFragment {
 
         //
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
 
@@ -224,7 +225,7 @@ public class RankSongFragment extends BaseFragment {
             @Override
             public HttpResult doInBackground() {
 
-                return RankSongHttpUtil.rankSong(mHPApplication, mActivity.getApplicationContext(), mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
+                return RankSongHttpUtil.rankSong(mActivity, mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
 
             }
 

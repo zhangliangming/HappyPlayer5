@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SongInfoResult;
@@ -36,7 +36,7 @@ public class RankSongHttpUtil {
      * @author zhangliangming
      * @date 2017年7月2日
      */
-    public static HttpResult rankSong(HPApplication hPApplication, Context context, String rankid, String ranktype, String page,
+    public static HttpResult rankSong(Context context, String rankid, String ranktype, String page,
                                       String pagesize) {
 
         HttpResult httpResult = new HttpResult();
@@ -49,7 +49,7 @@ public class RankSongHttpUtil {
         }
 
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 httpResult.setStatus(HttpResult.STATUS_NOWIFI);
                 httpResult.setErrorMsg("当前网络不是wifi");

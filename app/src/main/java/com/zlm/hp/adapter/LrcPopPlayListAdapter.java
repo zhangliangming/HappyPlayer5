@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -53,11 +54,9 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      */
     private int playIndexPosition = -1;
     private String playIndexHash = "-1";
-    private HPApplication mHPApplication;
 
 
-    public LrcPopPlayListAdapter(HPApplication hPApplication, Context context, List<AudioInfo> datas) {
-        this.mHPApplication = hPApplication;
+    public LrcPopPlayListAdapter(Context context, List<AudioInfo> datas) {
         this.mContext = context;
         this.mDatas = datas;
     }
@@ -131,9 +130,9 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         });
 
-        if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
+        if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
             playIndexPosition = position;
-            playIndexHash = mHPApplication.getPlayIndexHashID();
+            playIndexHash = PreferencesConstants.getPlayIndexHashID(mContext);
             //
             viewHolder.getSongIndexTv().setVisibility(View.INVISIBLE);
             viewHolder.getSingPicImg().setVisibility(View.VISIBLE);
@@ -142,7 +141,7 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
 
             //加载歌手图片
-            ImageUtil.loadSingerImage(mHPApplication, mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
+            ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
 
 
         } else {
@@ -168,7 +167,7 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
                 if (playIndexPosition == position) {
-                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+                    if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
                         // 当前正在播放，发送暂停
 
                         Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -176,11 +175,11 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                         mContext.sendBroadcast(pauseIntent);
 
                         return;
-                    } else if (mHPApplication.getPlayStatus() == AudioPlayerManager.PAUSE) {
+                    } else if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PAUSE) {
                         //当前正在暂停，发送唤醒播放
 
                         Intent remuseIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
-                        remuseIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                        remuseIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
                         remuseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(remuseIntent);
 
@@ -195,7 +194,7 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
                 viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
                 //加载歌手图片
-                ImageUtil.loadSingerImage(mHPApplication, mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
+                ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
 
 
                 //
@@ -206,7 +205,7 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 //
                 playIndexPosition = position;
                 playIndexHash = audioInfo.getHash();
-                mHPApplication.setPlayIndexHashID(playIndexHash);
+                PreferencesConstants.setPlayIndexHashID(mContext, playIndexHash);
 
                 //发送播放广播
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);

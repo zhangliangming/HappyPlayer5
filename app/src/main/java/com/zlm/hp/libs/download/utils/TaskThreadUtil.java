@@ -2,7 +2,6 @@ package com.zlm.hp.libs.download.utils;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskThreadEven;
@@ -54,7 +53,6 @@ public class TaskThreadUtil {
      * 是否是第一个线程任务先执行
      */
     private boolean isTheOneTaskThreadFristStart;
-    private HPApplication mHPApplication;
 
     /**
      * 是否已完成
@@ -86,13 +84,12 @@ public class TaskThreadUtil {
      */
     private LoggerUtil logger;
 
-    public TaskThreadUtil(HPApplication hpApplication, DownloadTask task, IDownloadTaskEvent taskEvent,
+    public TaskThreadUtil(Context context, DownloadTask task, IDownloadTaskEvent taskEvent,
                           boolean isTheOneTaskThreadFristStart) {
-        this.mHPApplication = hpApplication;
         this.task = task;
         this.taskEvent = taskEvent;
         this.isTheOneTaskThreadFristStart = isTheOneTaskThreadFristStart;
-        logger = LoggerUtil.getZhangLogger(hpApplication.getApplicationContext());
+        logger = LoggerUtil.getZhangLogger(context);
     }
 
     /**
@@ -256,7 +253,7 @@ public class TaskThreadUtil {
                 }
 
                 //
-                TaskThread taskThread = new TaskThread(mHPApplication, context, threadId, startPos,
+                TaskThread taskThread = new TaskThread(context, threadId, startPos,
                         endPos, task, taskThreadEven);
                 taskThreads.add(taskThread);
 

@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.net.model.HttpResult;
@@ -33,7 +33,7 @@ public class RankListHttpUtil {
      * @param context
      * @return
      */
-    public static HttpResult rankList(HPApplication hPApplication, Context context) {
+    public static HttpResult rankList(Context context) {
 
         HttpResult httpResult = new HttpResult();
 
@@ -45,7 +45,7 @@ public class RankListHttpUtil {
         }
 
         //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 httpResult.setStatus(HttpResult.STATUS_NOWIFI);
                 httpResult.setErrorMsg("当前网络不是wifi");

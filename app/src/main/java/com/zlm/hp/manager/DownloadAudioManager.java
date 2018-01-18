@@ -3,7 +3,6 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
@@ -52,7 +51,6 @@ public class DownloadAudioManager {
      * 下载事件监听
      */
     private IDownloadTaskEvent mIDownloadTaskEvent;
-    private HPApplication mHPApplication;
 
     /**
      *
@@ -64,9 +62,8 @@ public class DownloadAudioManager {
      */
     public static final int threadNum = 5;
 
-    public DownloadAudioManager(HPApplication hpApplication, Context context) {
+    public DownloadAudioManager(Context context) {
         logger = LoggerUtil.getZhangLogger(context);
-        this.mHPApplication = hpApplication;
         this.mContext = context;
 
         //
@@ -249,13 +246,13 @@ public class DownloadAudioManager {
 
             }
         };
-        mDownloadTaskManage = new DownloadTaskManage(mHPApplication, context, false, mIDownloadTaskEvent);
+        mDownloadTaskManage = new DownloadTaskManage(context, false, mIDownloadTaskEvent);
     }
 
-    public static DownloadAudioManager getDownloadAudioManager(HPApplication hpApplication, Context context) {
+    public static DownloadAudioManager getDownloadAudioManager(Context context) {
         if (_DownloadAudioManager == null) {
-            _DownloadAudioManager = new DownloadAudioManager(hpApplication, context);
-            _DownloadAudioManager = new DownloadAudioManager(hpApplication, context);
+            _DownloadAudioManager = new DownloadAudioManager(context);
+            _DownloadAudioManager = new DownloadAudioManager(context);
         }
         return _DownloadAudioManager;
     }

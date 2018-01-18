@@ -3,7 +3,7 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.download.DownloadTask;
@@ -50,7 +50,6 @@ public class OnLineAudioManager {
      * 下载事件监听
      */
     private IDownloadTaskEvent mIDownloadTaskEvent;
-    private HPApplication mHPApplication;
 
     /**
      *
@@ -62,9 +61,8 @@ public class OnLineAudioManager {
      */
     public static final int threadNum = 1;
 
-    public OnLineAudioManager(HPApplication hpApplication, Context context) {
+    public OnLineAudioManager(Context context) {
         logger = LoggerUtil.getZhangLogger(context);
-        this.mHPApplication = hpApplication;
         this.mContext = context;
 
         mIDownloadTaskEvent = new IDownloadTaskEvent() {
@@ -139,7 +137,9 @@ public class OnLineAudioManager {
                 logger.e("在线播放任务名称：" + task.getTaskName() + " 在线缓存播放错误");
 
                 //如果当前歌曲播放时出现错误，则直接跳转下一首
-                if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYNET || (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mHPApplication.getPlayIndexHashID().equals(task.getTaskId()))) {
+                if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYNET ||
+                        (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING &&
+                                PreferencesConstants.getPlayIndexHashID(mContext).equals(task.getTaskId()))) {
                     //
                     Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
                     pauseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -187,12 +187,12 @@ public class OnLineAudioManager {
             }
         };
 
-        mDownloadTaskManage = new DownloadTaskManage(mHPApplication, context, true, mIDownloadTaskEvent);
+        mDownloadTaskManage = new DownloadTaskManage(context, true, mIDownloadTaskEvent);
     }
 
-    public static OnLineAudioManager getOnLineAudioManager(HPApplication hpApplication, Context context) {
+    public static OnLineAudioManager getOnLineAudioManager(Context context) {
         if (_OnLineAudioManager == null) {
-            _OnLineAudioManager = new OnLineAudioManager(hpApplication, context);
+            _OnLineAudioManager = new OnLineAudioManager(context);
         }
         return _OnLineAudioManager;
     }

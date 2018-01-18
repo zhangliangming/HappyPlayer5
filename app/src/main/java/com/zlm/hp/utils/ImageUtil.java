@@ -20,7 +20,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.zlm.hp.R;
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.model.SongSingerInfo;
@@ -76,7 +75,7 @@ public class ImageUtil {
      * @param imageView
      * @param singerName
      */
-    public static void loadSingerImage(final HPApplication hPApplication, final Context context, final CircleImageView imageView, final String singerName) {
+    public static void loadSingerImage(final Context context, final CircleImageView imageView, final String singerName) {
         //多个歌手，则取第一个歌手头像
         String regex = "、";
         String searchSingerName = singerName;
@@ -118,7 +117,7 @@ public class ImageUtil {
                 //从网络上面获取
                 if (bitmap == null) {
 
-                    SearchSingerImgResult searchSingerImgResult = SearchSingerImgHttpUtil.searchSingerImg(hPApplication, context, finalSearchSingerName);
+                    SearchSingerImgResult searchSingerImgResult = SearchSingerImgHttpUtil.searchSingerImg(context, finalSearchSingerName);
                     if (searchSingerImgResult == null) {
                         return null;
                     }
@@ -226,13 +225,12 @@ public class ImageUtil {
     /**
      * 获取通知栏图标
      *
-     * @param hPApplication
      * @param context
      * @param singerName
      * @return
      */
 
-    public static Bitmap getNotifiIcon(HPApplication hPApplication, Context context, String singerName) {
+    public static Bitmap getNotifiIcon(Context context, String singerName) {
         //多个歌手，则取第一个歌手头像
         String regex = "、";
         String searchSingerName = singerName;
@@ -290,11 +288,10 @@ public class ImageUtil {
     /**
      * 加载歌手写真
      *
-     * @param hPApplication
      * @param context
      * @param hash
      */
-    public static void loadSingerImg(final HPApplication hPApplication, final Context context, final String hash, final String singerName) {
+    public static void loadSingerImg(final Context context, final String hash, final String singerName) {
         new AsyncTaskUtil() {
             @Override
             protected void onPostExecute(Void aVoid) {
@@ -333,7 +330,7 @@ public class ImageUtil {
                         if (SongSingerDB.getSongSingerDB(context).getAllImgUrlCount(searchSingerName) > 0) {
                             continue;
                         }
-                        List<SearchArtistPicResult> datas = SearchArtistPicUtil.searchArtistPic(hPApplication, context, searchSingerName, screensWidth + "", screensHeight + "", "app");
+                        List<SearchArtistPicResult> datas = SearchArtistPicUtil.searchArtistPic(context, searchSingerName, screensWidth + "", screensHeight + "", "app");
                         if (datas != null && datas.size() > 0)
                             for (int j = 0; j < datas.size(); j++) {
                                 if (j > 3) {

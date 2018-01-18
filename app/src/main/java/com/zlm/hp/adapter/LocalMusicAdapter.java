@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
@@ -58,7 +59,6 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     private int playIndexPosition = -1;
     private String playIndexHash = "-1";
-    private HPApplication mHPApplication;
 
 
     /////////////////////////////////////////
@@ -67,8 +67,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
      */
     private int mMenuOpenIndex = -1;
 
-    public LocalMusicAdapter(HPApplication hPApplication, Context context, ArrayList<Category> datas) {
-        this.mHPApplication = hPApplication;
+    public LocalMusicAdapter(Context context, ArrayList<Category> datas) {
         this.mContext = context;
         this.mDatas = datas;
 
@@ -208,9 +207,9 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         } else {
             viewHolder.getMenuLinearLayout().setVisibility(View.GONE);
         }
-        if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
+        if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
             playIndexPosition = position;
-            playIndexHash = mHPApplication.getPlayIndexHashID();
+            playIndexHash = PreferencesConstants.getPlayIndexHashID(mContext);
             //
             viewHolder.getStatusView().setVisibility(View.VISIBLE);
         } else {
@@ -223,7 +222,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
 
                 if (playIndexPosition == position) {
-                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+                    if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
                         // 当前正在播放，发送暂停
 
                         Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -231,11 +230,11 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         mContext.sendBroadcast(pauseIntent);
 
                         return;
-                    } else if (mHPApplication.getPlayStatus() == AudioPlayerManager.PAUSE) {
+                    } else if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PAUSE) {
                         //当前正在暂停，发送唤醒播放
 
                         Intent remuseIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
-                        remuseIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                        remuseIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
                         remuseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(remuseIntent);
 
@@ -253,13 +252,13 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
                 //设置当前播放列表
                 List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(mContext).getAllLocalAudio();
-                mHPApplication.setCurAudioInfos(data);
+                HPApplication.getInstance().setCurAudioInfos(data);
 
 
                 //
                 playIndexPosition = position;
                 playIndexHash = audioInfo.getHash();
-                mHPApplication.setPlayIndexHashID(playIndexHash);
+                PreferencesConstants.setPlayIndexHashID(mContext, playIndexHash);
 
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
                 AudioMessage audioMessage = new AudioMessage();

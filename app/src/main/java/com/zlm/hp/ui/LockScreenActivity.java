@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.LrcPopPlayListAdapter;
 import com.zlm.hp.adapter.LrcPopSingerListAdapter;
+import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -344,15 +346,15 @@ public class LockScreenActivity extends BaseActivity {
         String action = intent.getAction();
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
+            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
-                double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
+                double pre = downloadedSize * 1.0 / HPApplication.getInstance().getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
                 mLrcSeekBar.setSecondaryProgress(downloadProgress);
             }
         } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
+            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
                 ToastUtil.showTextToast(getApplicationContext(), downloadMessage.getErrorMsg());
             }
         }
@@ -388,7 +390,7 @@ public class LockScreenActivity extends BaseActivity {
             mManyLineLyricsView.setLyricsUtil(null, 0,0);
             //歌手写真
             mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+            mSingerImageView.setSongSingerInfos(mContext, null);
 
             //重置弹出窗口播放列表
             if (isPLPopViewShow) {
@@ -408,13 +410,13 @@ public class LockScreenActivity extends BaseActivity {
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
 
             mSongNameTextView.setText(audioInfo.getSongName());
             mSingerNameTextView.setText(audioInfo.getSingerName());
 
-            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+            if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
                 mPauseBtn.setVisibility(View.VISIBLE);
                 mPlayBtn.setVisibility(View.GONE);
             } else {
@@ -439,7 +441,7 @@ public class LockScreenActivity extends BaseActivity {
             } else {
                 keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
             }
-            LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
+            LyricsManager.getLyricsManager(mContext).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
             mManyLineLyricsView.setLyricsUtil(null, 0,0);
@@ -452,9 +454,9 @@ public class LockScreenActivity extends BaseActivity {
             }
 
             mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+            mSingerImageView.setSongSingerInfos(mContext, null);
             //加载歌手写真
-            ImageUtil.loadSingerImg(mHPApplication, getApplicationContext(), audioInfo.getHash(), audioInfo.getSingerName());
+            ImageUtil.loadSingerImg(mContext, audioInfo.getHash(), audioInfo.getSingerName());
 
 
             //设置喜欢
@@ -489,7 +491,7 @@ public class LockScreenActivity extends BaseActivity {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
             //播放
 
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
 
             mPauseBtn.setVisibility(View.VISIBLE);
             mPlayBtn.setVisibility(View.INVISIBLE);
@@ -511,11 +513,11 @@ public class LockScreenActivity extends BaseActivity {
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
             //播放中
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
                 mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
                 mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
                     if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
@@ -535,12 +537,12 @@ public class LockScreenActivity extends BaseActivity {
 //        }
         else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
             //歌词加载完成
-            AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
+            AudioMessage curAudioMessage = HPApplication.getInstance().getCurAudioMessage();
             AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             String hash = audioMessage.getHash();
-            if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
+            if (hash.equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
                 //
-                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
+                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mContext).getLyricsUtil(hash);
                 if (lyricsUtil != null) {
                     lyricsUtil.setHash(hash);
                     mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2,(int) curAudioMessage.getPlayProgress());
@@ -550,34 +552,35 @@ public class LockScreenActivity extends BaseActivity {
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCSEEKTO)) {
             //歌词快进
-            if (mHPApplication.getCurAudioMessage() != null) {
-                mSongProgressTv.setText(MediaUtil.parseTimeToString((int) mHPApplication.getCurAudioMessage().getPlayProgress()));
-                mLrcSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                if (mHPApplication.getCurAudioInfo() != null) {
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
-                        mManyLineLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+            if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                mSongProgressTv.setText(MediaUtil.parseTimeToString((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress()));
+                mLrcSeekBar.setProgress((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
+                if (HPApplication.getInstance().getCurAudioInfo() != null) {
+                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash()
+                            .equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
+                        mManyLineLyricsView.updateView((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
                     }
                 }
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_RELOADSINGERIMG)) {
             //重新加载歌手写真
-            if (mHPApplication.getCurAudioInfo() != null) {
+            if (HPApplication.getInstance().getCurAudioInfo() != null) {
                 String hash = intent.getStringExtra("hash");
-                if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
+                if (HPApplication.getInstance().getCurAudioInfo().getHash().equals(hash)) {
                     String singerName = intent.getStringExtra("singerName");
                     mSingerImageView.setVisibility(View.INVISIBLE);
-                    mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+                    mSingerImageView.setSongSingerInfos(mContext, null);
                     //加载歌手写真
-                    ImageUtil.loadSingerImg(mHPApplication, getApplicationContext(), hash, singerName);
+                    ImageUtil.loadSingerImg(mContext, hash, singerName);
 
                 }
             }
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SINGERIMGLOADED)) {
             //歌手写真加载完成
-            if (mHPApplication.getCurAudioInfo() != null) {
+            if (HPApplication.getInstance().getCurAudioInfo() != null) {
                 String hash = intent.getStringExtra("hash");
-                if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
+                if (HPApplication.getInstance().getCurAudioInfo().getHash().equals(hash)) {
                     mSingerImageView.setVisibility(View.VISIBLE);
 
                     String singerName = intent.getStringExtra("singerName");
@@ -596,7 +599,7 @@ public class LockScreenActivity extends BaseActivity {
 
                     //设置数据
                     List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, false);
-                    mSingerImageView.setSongSingerInfos(getApplicationContext(), list);
+                    mSingerImageView.setSongSingerInfos(mContext, list);
                 }
             }
         }
@@ -647,13 +650,7 @@ public class LockScreenActivity extends BaseActivity {
             public void onClick(View view) {
                 mHideTranslateImg.setVisibility(View.INVISIBLE);
                 mShowTranslateImg.setVisibility(View.VISIBLE);
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
-                }
-
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setExtraLrc();
 
             }
         });
@@ -664,13 +661,7 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTranslateImg.setVisibility(View.VISIBLE);
                 mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
-                }
-
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setTranslateLrc();
 
             }
         });
@@ -682,12 +673,7 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.INVISIBLE);
                 mShowTransliterationImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
-                }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setExtraLrc();
 
             }
         });
@@ -698,13 +684,7 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.VISIBLE);
                 mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
-                }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setTransliterationLrc();
             }
         });
 
@@ -717,12 +697,7 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
-                }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setTranslateLrc();
             }
         });
         mShowTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
@@ -733,12 +708,7 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
-                }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setTransliterationLrc();
             }
         });
         mHideTTImg = findViewById(R.id.hideTTImg);
@@ -749,12 +719,7 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
-                }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                setExtraLrc();
             }
         });
 
@@ -791,10 +756,10 @@ public class LockScreenActivity extends BaseActivity {
         });
 
         //设置字体大小和歌词颜色
-        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
-        int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
+        mManyLineLyricsView.setLrcFontSize(PreferencesConstants.getLrcFontSize(mContext));
+        int lrcColor = ColorUtil.parserColor(PreferencesConstants.getLrcColorStr()[PreferencesConstants.getLrcColorIndex(mContext)]);
         mManyLineLyricsView.setLrcColor(lrcColor);
-        mManyLineLyricsView.setManyLineLrc(mHPApplication.isManyLineLrc(), 0);
+        mManyLineLyricsView.setManyLineLrc(PreferencesConstants.isManyLineLrc(mContext), 0);
         //歌手写真
         mSingerImageView = findViewById(R.id.singerimg);
         mSingerImageView.setVisibility(View.INVISIBLE);
@@ -822,9 +787,9 @@ public class LockScreenActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                 if (audioInfo != null) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, getApplicationContext()).addTask(audioInfo);
+                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
                     mDownloadedImgBtn.setVisibility(View.VISIBLE);
                     mDownloadImgBtn.setVisibility(View.INVISIBLE);
                 }
@@ -836,9 +801,9 @@ public class LockScreenActivity extends BaseActivity {
         mDownloadedImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                 if (audioInfo != null) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, getApplicationContext()).addTask(audioInfo);
+                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
 
                 }
             }
@@ -851,7 +816,7 @@ public class LockScreenActivity extends BaseActivity {
         mLikeImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mHPApplication.getCurAudioInfo() != null) {
+                if (HPApplication.getInstance().getCurAudioInfo() != null) {
                     ToastUtil.showTextToast(getApplicationContext(), "取消成功");
 
                     mUnLikeImgBtn.setVisibility(View.VISIBLE);
@@ -859,7 +824,7 @@ public class LockScreenActivity extends BaseActivity {
 
                     //删除喜欢歌曲
                     Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                    delIntent.putExtra(AudioInfo.KEY, mHPApplication.getCurAudioInfo());
+                    delIntent.putExtra(AudioInfo.KEY, HPApplication.getInstance().getCurAudioInfo());
                     delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     sendBroadcast(delIntent);
                 }
@@ -872,7 +837,7 @@ public class LockScreenActivity extends BaseActivity {
         mUnLikeImgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mHPApplication.getCurAudioInfo() != null) {
+                if (HPApplication.getInstance().getCurAudioInfo() != null) {
                     ToastUtil.showTextToast(getApplicationContext(), "已添加收藏");
 
                     mUnLikeImgBtn.setVisibility(View.GONE);
@@ -880,7 +845,7 @@ public class LockScreenActivity extends BaseActivity {
 
                     //添加喜欢歌曲
                     Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);
-                    addIntent.putExtra(AudioInfo.KEY, mHPApplication.getCurAudioInfo());
+                    addIntent.putExtra(AudioInfo.KEY, HPApplication.getInstance().getCurAudioInfo());
                     addIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     sendBroadcast(addIntent);
                 }
@@ -894,6 +859,40 @@ public class LockScreenActivity extends BaseActivity {
         initSPLPopView();
         initSIPopView();
 
+    }
+
+    private void setTranslateLrc() {
+        if (HPApplication.getInstance().getCurAudioMessage() != null) {
+            mManyLineLyricsView.setExtraLrcStatus(
+                    ManyLineLyricsViewV2.SHOWTRANSLATELRC,
+                    (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
+        } else {
+            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+        }
+
+        PreferencesConstants.setManyLineLrc(mContext, mManyLineLyricsView.isManyLineLrc());
+    }
+
+    private void setTransliterationLrc() {
+        if (HPApplication.getInstance().getCurAudioMessage() != null) {
+            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
+
+        } else {
+            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+        }
+        PreferencesConstants.setManyLineLrc(mContext, mManyLineLyricsView.isManyLineLrc());
+    }
+
+    private void setExtraLrc() {
+        if (HPApplication.getInstance().getCurAudioMessage() != null) {
+            mManyLineLyricsView.setExtraLrcStatus(
+                    ManyLineLyricsViewV2.NOSHOWEXTRALRC,
+                    (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
+        } else {
+            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+        }
+
+        PreferencesConstants.setManyLineLrc(mContext, mManyLineLyricsView.isManyLineLrc());
     }
 
 
@@ -1012,7 +1011,7 @@ public class LockScreenActivity extends BaseActivity {
     private void showSPLPopView(String[] singerNameArray) {
 
         //
-        mLrcPopSingerListAdapter = new LrcPopSingerListAdapter(mHPApplication, getApplicationContext(), singerNameArray, mLrcActivityListener);
+        mLrcPopSingerListAdapter = new LrcPopSingerListAdapter(mContext, singerNameArray, mLrcActivityListener);
         mSingerNameRecyclerView.setAdapter(mLrcPopSingerListAdapter);
 
         mSPlPopLinearLayout.setVisibility(View.VISIBLE);
@@ -1102,7 +1101,7 @@ public class LockScreenActivity extends BaseActivity {
                 initPlayModeView(0, modeAllImg, modeRandomImg, modeSingleImg, false);
             }
         });
-        initPLPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPLPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //删除播放列表
         mDeleteTv = findViewById(R.id.delete);
@@ -1149,15 +1148,15 @@ public class LockScreenActivity extends BaseActivity {
      * 显示播放列表弹出窗口
      */
     private void showPlPopView() {
-        initPLPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPLPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //加载当前播放列表数据
-        List<AudioInfo> curAudioInfos = mHPApplication.getCurAudioInfos();
+        List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
         if (curAudioInfos == null) {
             curAudioInfos = new ArrayList<AudioInfo>();
         }
         mCurPLSizeTv.setText(curAudioInfos.size() + "");
-        mPopPlayListAdapter = new LrcPopPlayListAdapter(mHPApplication, getApplicationContext(), curAudioInfos);
+        mPopPlayListAdapter = new LrcPopPlayListAdapter(mContext, curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
 
              /*
@@ -1188,7 +1187,7 @@ public class LockScreenActivity extends BaseActivity {
             public void onAnimationEnd(Animation animation) {
 
                 //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
+                int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
                 if (position >= 0)
                     mCurRecyclerView.move(position,
                             LinearLayoutRecyclerView.smoothScroll);
@@ -1332,14 +1331,14 @@ public class LockScreenActivity extends BaseActivity {
         searchSingerImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mHPApplication.getCurAudioInfo() == null) {
+                if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
                     ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
 
                 } else {
                     hidePopView();
                     //歌手名称
-                    String singerName = mHPApplication.getCurAudioInfo().getSingerName();
+                    String singerName = HPApplication.getInstance().getCurAudioInfo().getSingerName();
                     if (singerName.contains("、")) {
 
                         String regex = "\\s*、\\s*";
@@ -1362,7 +1361,7 @@ public class LockScreenActivity extends BaseActivity {
         searchLrcImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mHPApplication.getCurAudioInfo() == null) {
+                if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
                     ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
 
@@ -1383,13 +1382,13 @@ public class LockScreenActivity extends BaseActivity {
         songInfoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mHPApplication.getCurAudioInfo() == null) {
+                if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
                     ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
 
                 } else {
                     hidePopView();
-                    showSPIPopView(mHPApplication.getCurAudioInfo());
+                    showSPIPopView(HPApplication.getInstance().getCurAudioInfo());
                 }
             }
         });
@@ -1457,8 +1456,8 @@ public class LockScreenActivity extends BaseActivity {
 
         //字体大小
         final LrcSeekBar lrcSizeLrcSeekBar = findViewById(R.id.fontSizeseekbar);
-        lrcSizeLrcSeekBar.setMax(mHPApplication.getMaxLrcFontSize() - mHPApplication.getMinLrcFontSize());
-        lrcSizeLrcSeekBar.setProgress((mHPApplication.getLrcFontSize() - mHPApplication.getMinLrcFontSize()));
+        lrcSizeLrcSeekBar.setMax(PreferencesConstants.getMaxLrcFontSize() - PreferencesConstants.getMinLrcFontSize());
+        lrcSizeLrcSeekBar.setProgress((PreferencesConstants.getLrcFontSize(mContext) - PreferencesConstants.getMinLrcFontSize()));
         lrcSizeLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor(Color.WHITE, 50));
         lrcSizeLrcSeekBar.setProgressColor(Color.WHITE);
         lrcSizeLrcSeekBar.setThumbColor(Color.WHITE);
@@ -1468,12 +1467,12 @@ public class LockScreenActivity extends BaseActivity {
                 //logger.e("progress=" + lrcSizeLrcSeekBar.getProgress());
                 if (mManyLineLyricsView.getLyricsUtil() != null) {
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-                        if (mHPApplication.getCurAudioMessage() != null) {
-                            mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize(), (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                        if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                            mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + PreferencesConstants.getMinLrcFontSize(), (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
                         }
                     }
                 } else {
-                    mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize());
+                    mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + PreferencesConstants.getMinLrcFontSize());
                 }
             }
 
@@ -1489,7 +1488,7 @@ public class LockScreenActivity extends BaseActivity {
 
             @Override
             public void dragFinish() {
-                mHPApplication.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize());
+                PreferencesConstants.setLrcFontSize(mContext, lrcSizeLrcSeekBar.getProgress() + PreferencesConstants.getMinLrcFontSize());
             }
         });
 
@@ -1524,7 +1523,7 @@ public class LockScreenActivity extends BaseActivity {
         });
 
         //歌词颜色面板
-        ImageView[] colorPanel = new ImageView[mHPApplication.getLrcColorStr().length];
+        ImageView[] colorPanel = new ImageView[PreferencesConstants.getLrcColorStr().length];
         final ImageView[] colorStatus = new ImageView[colorPanel.length];
 
         int i = 0;
@@ -1533,15 +1532,7 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 0) {
-                    mHPApplication.setLrcColorIndex(0);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[0].setVisibility(View.VISIBLE);
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-                }
+                setColorPanel(colorStatus, 0);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status1);
@@ -1552,17 +1543,7 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 1) {
-                    mHPApplication.setLrcColorIndex(1);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[1].setVisibility(View.VISIBLE);
-
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-
-                }
+                setColorPanel(colorStatus, 1);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status2);
@@ -1573,15 +1554,7 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 2) {
-                    mHPApplication.setLrcColorIndex(2);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[2].setVisibility(View.VISIBLE);
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-                }
+                setColorPanel(colorStatus, 2);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status3);
@@ -1592,15 +1565,7 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 3) {
-                    mHPApplication.setLrcColorIndex(3);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[3].setVisibility(View.VISIBLE);
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-                }
+                setColorPanel(colorStatus, 3);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status4);
@@ -1611,15 +1576,7 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 4) {
-                    mHPApplication.setLrcColorIndex(4);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[4].setVisibility(View.VISIBLE);
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-                }
+                setColorPanel(colorStatus, 4);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status5);
@@ -1630,22 +1587,27 @@ public class LockScreenActivity extends BaseActivity {
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int index = mHPApplication.getLrcColorIndex();
-                if (index != 5) {
-                    mHPApplication.setLrcColorIndex(5);
-                    colorStatus[index].setVisibility(View.GONE);
-                    colorStatus[5].setVisibility(View.VISIBLE);
-
-                    int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
-                }
+                setColorPanel(colorStatus, 5);
             }
         });
         colorStatus[i] = findViewById(R.id.color_status6);
 
         //
-        colorStatus[mHPApplication.getLrcColorIndex()].setVisibility(View.VISIBLE);
+        colorStatus[PreferencesConstants.getLrcColorIndex(mContext)].setVisibility(View.VISIBLE);
 
+    }
+
+    private void setColorPanel(ImageView[] colorStatus, int curColorPanel) {
+        int index = PreferencesConstants.getLrcColorIndex(mContext);
+        if (index != curColorPanel) {
+            PreferencesConstants.setLrcColorIndex(mContext, curColorPanel);
+            colorStatus[index].setVisibility(View.GONE);
+            colorStatus[curColorPanel].setVisibility(View.VISIBLE);
+
+            int lrcColor = ColorUtil.parserColor(
+                    PreferencesConstants.getLrcColorStr()[PreferencesConstants.getLrcColorIndex(mContext)]);
+            mManyLineLyricsView.setLrcColor(lrcColor);
+        }
     }
 
 
@@ -1684,7 +1646,7 @@ public class LockScreenActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
         //
-        AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
+        AudioInfo curAudioInfo = HPApplication.getInstance().getCurAudioInfo();
         if (curAudioInfo != null) {
             Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
             doAudioReceive(getApplicationContext(), initIntent);
@@ -1709,7 +1671,7 @@ public class LockScreenActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged() {
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus != AudioPlayerManager.PLAYING) {
                     mSongProgressTv.setText(MediaUtil.parseTimeToString((mLrcSeekBar.getProgress())));
                 }
@@ -1744,13 +1706,13 @@ public class LockScreenActivity extends BaseActivity {
         mPlayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus == AudioPlayerManager.PAUSE) {
 
-                    AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                    AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                     if (audioInfo != null) {
 
-                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                         Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
                         resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
                         resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -1759,9 +1721,9 @@ public class LockScreenActivity extends BaseActivity {
                     }
 
                 } else {
-                    if (mHPApplication.getCurAudioMessage() != null) {
-                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
-                        AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                    if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
+                        AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
                         if (audioInfo != null) {
                             audioMessage.setAudioInfo(audioInfo);
                             Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
@@ -1778,7 +1740,7 @@ public class LockScreenActivity extends BaseActivity {
         mPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = mHPApplication.getPlayStatus();
+                int playStatus = PreferencesConstants.getPlayStatus(mContext);
                 if (playStatus == AudioPlayerManager.PLAYING) {
 
                     Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -1840,7 +1802,7 @@ public class LockScreenActivity extends BaseActivity {
                 initPlayModeView(0, modeAllImg, modeRandomImg, modeSingleImg, true);
             }
         });
-        initPlayModeView(mHPApplication.getPlayModel(), modeAllImg, modeRandomImg, modeSingleImg, false);
+        initPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllImg, modeRandomImg, modeSingleImg, false);
 
         //
         RelativeLayout playListMenu = findViewById(R.id.playlistmenu);
@@ -1882,7 +1844,7 @@ public class LockScreenActivity extends BaseActivity {
             modeSingleImg.setVisibility(View.VISIBLE);
         }
         //
-        mHPApplication.setPlayModel(playMode);
+        PreferencesConstants.setPlayModel(mContext, playMode);
     }
 
     /**
@@ -1892,17 +1854,17 @@ public class LockScreenActivity extends BaseActivity {
      * @param isLrcSeekTo
      */
     private void seekToMusic(int progress, boolean isLrcSeekTo) {
-        mHPApplication.setLrcSeekTo(isLrcSeekTo);
+        HPApplication.getInstance().setLrcSeekTo(isLrcSeekTo);
         //判断歌词快进时，是否超过歌曲的总时间
-        if (mHPApplication.getCurAudioInfo().getDuration() < progress) {
-            progress = (int) mHPApplication.getCurAudioInfo().getDuration();
+        if (HPApplication.getInstance().getCurAudioInfo().getDuration() < progress) {
+            progress = (int) HPApplication.getInstance().getCurAudioInfo().getDuration();
         }
         //
-        int playStatus = mHPApplication.getPlayStatus();
+        int playStatus = PreferencesConstants.getPlayStatus(mContext);
         if (playStatus == AudioPlayerManager.PLAYING) {
             //正在播放
-            if (mHPApplication.getCurAudioMessage() != null) {
-                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (HPApplication.getInstance().getCurAudioMessage() != null) {
+                AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
                 // AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 //if (audioInfo != null) {
                 //  audioMessage.setAudioInfo(audioInfo);
@@ -1916,8 +1878,8 @@ public class LockScreenActivity extends BaseActivity {
             }
         } else {
 
-            if (mHPApplication.getCurAudioMessage() != null)
-                mHPApplication.getCurAudioMessage().setPlayProgress(progress);
+            if (HPApplication.getInstance().getCurAudioMessage() != null)
+                HPApplication.getInstance().getCurAudioMessage().setPlayProgress(progress);
 
             //歌词快进
             Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);
@@ -1934,12 +1896,12 @@ public class LockScreenActivity extends BaseActivity {
     private void initService() {
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
 
         //在线音乐广播
-        mOnLineAudioReceiver = new OnLineAudioReceiver(getApplicationContext(), mHPApplication);
+        mOnLineAudioReceiver = new OnLineAudioReceiver(mContext);
         mOnLineAudioReceiver.setOnlineAudioReceiverListener(mOnlineAudioReceiverListener);
         mOnLineAudioReceiver.registerReceiver(getApplicationContext());
     }

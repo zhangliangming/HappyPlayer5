@@ -17,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.zlm.hp.R;
-import com.zlm.hp.application.HPApplication;
 
 import base.utils.ColorUtil;
 import base.utils.LoggerUtil;
@@ -26,10 +25,7 @@ import base.utils.LoggerUtil;
  * Created by zhangliangming on 2017/7/23.
  */
 public abstract class BaseFragment extends StatedFragment {
-    /**
-     *
-     */
-    public HPApplication mHPApplication;
+
     public Activity mActivity;
     public Context mContext;
 
@@ -140,8 +136,6 @@ public abstract class BaseFragment extends StatedFragment {
         mLoadingContainer.addView(loadingView, vlp);
         mContentContainer.addView(contentView, vlp);
 
-        //
-        mHPApplication = (HPApplication) mActivity.getApplication();
         logger = LoggerUtil.getZhangLogger(mActivity.getApplicationContext());
         //初始化界面
         initView();

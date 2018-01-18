@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.DownloadMusicAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.Category;
@@ -134,7 +135,7 @@ public class DownloadMusicFragment extends BaseFragment {
             } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
                 //初始化
                 //AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
+                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();//audioMessage.getAudioInfo();
                 mAdapter.reshViewHolderView(audioInfo);
 
             }
@@ -184,18 +185,18 @@ public class DownloadMusicFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<Category>();
-        mAdapter = new DownloadMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
+        mAdapter = new DownloadMusicAdapter(mActivity, mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
 
         //注册下载广播
-        mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity);
         mDownloadAudioReceiver.setDownloadAudioReceiverListener(mDownloadAudioReceiverListener);
-        mDownloadAudioReceiver.registerReceiver(mActivity.getApplicationContext());
+        mDownloadAudioReceiver.registerReceiver(mActivity);
 
 
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
 

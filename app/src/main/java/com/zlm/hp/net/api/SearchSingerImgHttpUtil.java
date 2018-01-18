@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SearchSingerImgResult;
 
@@ -27,7 +27,7 @@ public class SearchSingerImgHttpUtil {
      * @param singerName
      * @return
      */
-    public static SearchSingerImgResult searchSingerImg(HPApplication hPApplication, Context context, String singerName) {
+    public static SearchSingerImgResult searchSingerImg(Context context, String singerName) {
 
         if (!NetUtil.isNetworkAvailable(context)) {
 
@@ -35,7 +35,7 @@ public class SearchSingerImgHttpUtil {
         }
 
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
 
 

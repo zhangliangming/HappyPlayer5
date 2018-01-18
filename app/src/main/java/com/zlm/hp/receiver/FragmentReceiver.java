@@ -7,8 +7,6 @@ import android.content.IntentFilter;
 import android.os.Handler;
 import android.os.Message;
 
-import com.zlm.hp.application.HPApplication;
-
 import java.util.Date;
 
 import base.utils.LoggerUtil;
@@ -28,7 +26,6 @@ public class FragmentReceiver {
      */
     private boolean isRegisterSuccess = false;
     private Context mContext;
-    private HPApplication mHPApplication;
     /**
      * 注册成功广播
      */
@@ -64,8 +61,7 @@ public class FragmentReceiver {
     private IntentFilter mFragmentIntentFilter;
     private FragmentReceiverListener mFragmentReceiverListener;
 
-    public FragmentReceiver(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public FragmentReceiver(Context context) {
         this.mContext = context;
         logger = LoggerUtil.getZhangLogger(context);
         mFragmentIntentFilter = new IntentFilter();

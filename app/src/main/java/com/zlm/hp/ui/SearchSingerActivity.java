@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.ArrayMap;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +23,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.SearchSingerAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.SongSingerInfo;
@@ -426,7 +426,7 @@ public class SearchSingerActivity extends BaseActivity {
      * 初始化数据
      */
     private void initData() {
-        AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
+        AudioInfo curAudioInfo = HPApplication.getInstance().getCurAudioInfo();
         if (curAudioInfo != null) {
             mCurSingerName = getIntent().getStringExtra("singerName");
             this.mAudioInfo = curAudioInfo;
@@ -468,7 +468,7 @@ public class SearchSingerActivity extends BaseActivity {
                 //
                 String singerName = mSearchEditText.getText().toString();
                 mSelectDatas = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrlBySingerName(mCurSingerName);
-                mDatas = SearchArtistPicUtil.searchArtistPic(mHPApplication, getApplicationContext(), singerName, mScreensWidth + "", mScreensHeight + "", "app");
+                mDatas = SearchArtistPicUtil.searchArtistPic(mContext, singerName, mScreensWidth + "", mScreensHeight + "", "app");
             }
 
             @Override
@@ -482,7 +482,7 @@ public class SearchSingerActivity extends BaseActivity {
                     mDatas = new ArrayList<SearchArtistPicResult>();
                 }
                 //
-                mAdapter = new SearchSingerAdapter(mHPApplication, getApplicationContext(), mDatas, mAudioInfo, mSelectDatas, mSearchSingerListener);
+                mAdapter = new SearchSingerAdapter(mContext, mDatas, mAudioInfo, mSelectDatas, mSearchSingerListener);
                 mRecyclerView.setAdapter(mAdapter);
                 mHandler.sendEmptyMessage(INITSELECTED);
 

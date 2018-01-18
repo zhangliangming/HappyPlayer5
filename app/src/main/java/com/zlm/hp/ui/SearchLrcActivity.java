@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.zlm.hp.PageTransformer.ZoomOutPageTransformer;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.TabFragmentAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.fragment.LrcFragment;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
@@ -331,17 +332,16 @@ public class SearchLrcActivity extends BaseActivity {
         //
         mLoadingContainer = findViewById(R.id.loading);
         mLoadImgView = findViewById(R.id.load_img);
-        rotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.anim_rotate);
+        rotateAnimation = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate);
         rotateAnimation.setInterpolator(new LinearInterpolator());// 匀速
         mLoadImgView.startAnimation(rotateAnimation);
         //
         mContentContainer = findViewById(R.id.content);
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
+        mAudioBroadcastReceiver.registerReceiver(mContext);
 
 
     }
@@ -386,7 +386,7 @@ public class SearchLrcActivity extends BaseActivity {
      * 初始化数据
      */
     private void initData() {
-        mCurAudioInfo = mHPApplication.getCurAudioInfo();
+        mCurAudioInfo = HPApplication.getInstance().getCurAudioInfo();
         if (mCurAudioInfo != null) {
             mSongNameEditText.setText(mCurAudioInfo.getSongName());
             mSingerNameEditText.setText(mCurAudioInfo.getSingerName());
@@ -463,12 +463,12 @@ public class SearchLrcActivity extends BaseActivity {
                 }
 
                 //获取歌曲列表
-                List<SearchLyricsResult> results = SearchLyricsUtil.searchLyrics(mHPApplication, getApplicationContext(), keyWords, mDuration, "");
+                List<SearchLyricsResult> results = SearchLyricsUtil.searchLyrics(mContext, keyWords, mDuration, "");
                 if (results != null && results.size() > 0)
                     for (int i = 0; i < results.size(); i++) {
                         SearchLyricsResult searchLyricsResult = results.get(i);
                         if (searchLyricsResult != null) {
-                            DownloadLyricsResult downloadLyricsResult = DownloadLyricsUtil.downloadLyrics(mHPApplication, getApplicationContext(), searchLyricsResult.getId(), searchLyricsResult.getAccesskey(), "krc");
+                            DownloadLyricsResult downloadLyricsResult = DownloadLyricsUtil.downloadLyrics(mContext, searchLyricsResult.getId(), searchLyricsResult.getAccesskey(), "krc");
                             if (downloadLyricsResult != null) {
                                 mDatas.add(downloadLyricsResult);
                             }
@@ -515,10 +515,10 @@ public class SearchLrcActivity extends BaseActivity {
     private void doAudioReceive(Context context, Intent intent) {
         String action = intent.getAction();
         if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
             if (audioInfo != null && audioInfo.getHash().equals(mHash)) {
                 //播放中
-                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+                AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
                 if (audioMessage != null) {
                     if (mLrcViews != null && mLrcViews.size() > 0) {
                         for (int i = 0; i < mLrcViews.size(); i++) {

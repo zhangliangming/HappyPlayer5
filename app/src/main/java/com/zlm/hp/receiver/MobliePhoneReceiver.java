@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
 
 import base.utils.LoggerUtil;
@@ -23,7 +23,6 @@ public class MobliePhoneReceiver {
     private LoggerUtil logger;
 
     private Context mContext;
-    private HPApplication mHPApplication;
 
     private MobliePhoneStateListener mMobliePhoneStateListener;
 
@@ -42,7 +41,7 @@ public class MobliePhoneReceiver {
 
 
                     //暂停
-                    int playStatus = mHPApplication.getPlayStatus();
+                    int playStatus = PreferencesConstants.getPlayStatus(mContext);
                     if (playStatus == AudioPlayerManager.PLAYING) {
 
                         Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -59,8 +58,7 @@ public class MobliePhoneReceiver {
         }
     }
 
-    public MobliePhoneReceiver(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public MobliePhoneReceiver(Context context) {
         this.mContext = context;
         logger = LoggerUtil.getZhangLogger(context);
 

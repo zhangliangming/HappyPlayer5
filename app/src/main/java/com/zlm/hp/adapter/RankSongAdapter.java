@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -71,7 +72,6 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     private int playIndexPosition = -1;
     private String playIndexHash = "-1";
-    private HPApplication mHPApplication;
 
     /////////////////////////////////////////
     /**
@@ -79,8 +79,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
      */
     private int mMenuOpenIndex = -1;
 
-    public RankSongAdapter(HPApplication hPApplication, Context context, ArrayList<AudioInfo> datas) {
-        this.mHPApplication = hPApplication;
+    public RankSongAdapter(Context context, ArrayList<AudioInfo> datas) {
         this.mContext = context;
         this.mDatas = datas;
     }
@@ -250,7 +249,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.getDownloadImg().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(audioInfo);
+                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
                     viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
                     viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
                 }
@@ -260,7 +259,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             viewHolder.getDownloadedImg().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    DownloadAudioManager.getDownloadAudioManager(mHPApplication, mContext).addTask(audioInfo);
+                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
                 }
             });
 
@@ -287,9 +286,9 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         viewHolder.getSongIndexTv().setText(((position + 1) < 10 ? "0" + (position + 1) : (position + 1) + ""));
         viewHolder.getSongIndexTv().setVisibility(View.VISIBLE);
 
-        if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
+        if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
             playIndexPosition = position;
-            playIndexHash = mHPApplication.getPlayIndexHashID();
+            playIndexHash = PreferencesConstants.getPlayIndexHashID(mContext);
             //
             viewHolder.getStatusView().setVisibility(View.VISIBLE);
         } else {
@@ -305,7 +304,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
 
                 if (playIndexPosition == position) {
-                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+                    if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
                         // 当前正在播放，发送暂停
 
                         Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -313,11 +312,11 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         mContext.sendBroadcast(pauseIntent);
 
                         return;
-                    } else if (mHPApplication.getPlayStatus() == AudioPlayerManager.PAUSE) {
+                    } else if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PAUSE) {
                         //当前正在暂停，发送唤醒播放
 
                         Intent remuseIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
-                        remuseIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                        remuseIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
                         remuseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(remuseIntent);
 
@@ -332,11 +331,11 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     notifyItemChanged(playIndexPosition);
                 }
                 //
-                mHPApplication.setCurAudioInfos(mDatas);
+                HPApplication.getInstance().setCurAudioInfos(mDatas);
                 //
                 playIndexPosition = position;
                 playIndexHash = audioInfo.getHash();
-                mHPApplication.setPlayIndexHashID(playIndexHash);
+                PreferencesConstants.setPlayIndexHashID(mContext, playIndexHash);
 
                 //发送播放广播
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);

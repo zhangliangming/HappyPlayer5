@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.RecentOrLikeMusicAdapter;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -97,16 +98,16 @@ public class RecentMusicFragment extends BaseFragment {
 
         //
         mDatas = new ArrayList<AudioInfo>();
-        mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas, true);
+        mAdapter = new RecentOrLikeMusicAdapter(mActivity, mDatas, true);
         mRecyclerView.setAdapter(mAdapter);
 
         showLoadingView();
 
         //
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+        mAudioBroadcastReceiver.registerReceiver(mActivity);
     }
 
     /**
@@ -124,7 +125,7 @@ public class RecentMusicFragment extends BaseFragment {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
             //初始化
             // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();//audioMessage.getAudioInfo();
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();//audioMessage.getAudioInfo();
             mAdapter.reshViewHolder(audioInfo, true);
         }
     }

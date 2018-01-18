@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zlm.hp.R;
-import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.ui.LrcActivity;
 import com.zlm.hp.ui.SearchSingerActivity;
 import com.zlm.hp.utils.ImageUtil;
@@ -24,12 +23,10 @@ public class LrcPopSingerListAdapter extends RecyclerView.Adapter<RecyclerView.V
 
     private Context mContext;
     private String[] mDatas;
-    private HPApplication mHPApplication;
     private LrcActivity.LrcActivityListener mLrcActivityListener;
 
-    public LrcPopSingerListAdapter(HPApplication hPApplication, Context context, String[] datas, LrcActivity.LrcActivityListener lrcActivityListener) {
+    public LrcPopSingerListAdapter(Context context, String[] datas, LrcActivity.LrcActivityListener lrcActivityListener) {
         this.mLrcActivityListener = lrcActivityListener;
-        this.mHPApplication = hPApplication;
         this.mContext = context;
         this.mDatas = datas;
     }
@@ -61,7 +58,7 @@ public class LrcPopSingerListAdapter extends RecyclerView.Adapter<RecyclerView.V
      */
     private void reshViewHolder(final int position, final LrcPopSingerListViewHolder viewHolder, final String singerName) {
         //加载歌手图片
-        ImageUtil.loadSingerImage(mHPApplication, mContext, viewHolder.getSingPicImg(), singerName);
+        ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), singerName);
 
         viewHolder.getSingerNameTv().setText(singerName);
         //item点击事件

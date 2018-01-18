@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SearchLyricsResult;
 
@@ -26,7 +26,6 @@ public class SearchLyricsUtil {
     /**
      * 搜索歌词
      *
-     * @param hPApplication
      * @param context
      * @param keyword       歌曲名（不为空）：singerName + " - " + songName
      * @param duration      歌曲总时长(毫秒)（不为空）
@@ -34,12 +33,12 @@ public class SearchLyricsUtil {
      * @return
      * @throws Exception
      */
-    public static List<SearchLyricsResult> searchLyrics(HPApplication hPApplication, Context context, String keyword, String duration, String hash) {
+    public static List<SearchLyricsResult> searchLyrics(Context context, String keyword, String duration, String hash) {
         if (!NetUtil.isNetworkAvailable(context)) {
             return null;
         }
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }

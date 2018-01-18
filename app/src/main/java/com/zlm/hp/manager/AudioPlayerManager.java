@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -22,7 +23,6 @@ public class AudioPlayerManager {
      *
      */
     private Context mContext;
-    private HPApplication mHPApplication;
     /**
      * 正在播放
      */
@@ -47,8 +47,7 @@ public class AudioPlayerManager {
 
     private static AudioPlayerManager _AudioPlayerManager;
 
-    public AudioPlayerManager(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+    public AudioPlayerManager(Context context) {
         //
         logger = LoggerUtil.getZhangLogger(context);
         this.mContext = context;
@@ -58,10 +57,10 @@ public class AudioPlayerManager {
      * @param context
      * @return
      */
-    public static AudioPlayerManager getAudioPlayerManager(Context context, HPApplication hPApplication) {
+    public static AudioPlayerManager getAudioPlayerManager(Context context) {
 
         if (_AudioPlayerManager == null) {
-            _AudioPlayerManager = new AudioPlayerManager(context, hPApplication);
+            _AudioPlayerManager = new AudioPlayerManager(context);
         }
         return _AudioPlayerManager;
     }
@@ -71,9 +70,9 @@ public class AudioPlayerManager {
      */
     public void initSongInfoData() {
         //从本地文件中获取上次的播放歌曲列表
-        List<AudioInfo> curAudioInfos = mHPApplication.getCurAudioInfos();
+        List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
         if (curAudioInfos != null && curAudioInfos.size() > 0) {
-            String playInfoHashID = mHPApplication.getPlayIndexHashID();
+            String playInfoHashID = PreferencesConstants.getPlayIndexHashID(mContext);
             //
             if (playInfoHashID == null || playInfoHashID.equals("")) {
 
@@ -98,8 +97,8 @@ public class AudioPlayerManager {
                     curAudioMessage.setAudioInfo(temp);
 
 
-                    mHPApplication.setCurAudioMessage(curAudioMessage);
-                    mHPApplication.setCurAudioInfo(temp);
+                    HPApplication.getInstance().setCurAudioMessage(curAudioMessage);
+                    HPApplication.getInstance().setCurAudioInfo(temp);
 
                     Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
                     initIntent.putExtra(AudioMessage.KEY, curAudioMessage);
@@ -126,11 +125,11 @@ public class AudioPlayerManager {
      */
     private void resetData() {
         //清空之前的播放数据
-        mHPApplication.setPlayStatus(STOP);
-        mHPApplication.setPlayIndexHashID("-1");
-        mHPApplication.setCurAudioInfos(null);
-        mHPApplication.setCurAudioInfo(null);
-        mHPApplication.setCurAudioMessage(null);
+        PreferencesConstants.setPlayStatus(mContext, STOP);
+        PreferencesConstants.setPlayIndexHashID(mContext, "-1");
+        HPApplication.getInstance().setCurAudioInfos(null);
+        HPApplication.getInstance().setCurAudioInfo(null);
+        HPApplication.getInstance().setCurAudioMessage(null);
     }
 
     /**
@@ -139,7 +138,9 @@ public class AudioPlayerManager {
      * @param playModel
      */
     public AudioInfo preMusic(int playModel) {
-        if (mHPApplication.getCurAudioInfo() == null || mHPApplication.getCurAudioMessage() == null || mHPApplication.getCurAudioInfos() == null) {
+        if (HPApplication.getInstance().getCurAudioInfo() == null ||
+                HPApplication.getInstance().getCurAudioMessage() == null ||
+                HPApplication.getInstance().getCurAudioInfos() == null) {
             return null;
         }
         //获取播放索引
@@ -158,17 +159,17 @@ public class AudioPlayerManager {
                 }
                 ;
 
-                if (mHPApplication.getCurAudioInfos().size() > 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
 
                 break;
             case 1:
                 // 随机播放
 
-                playIndex = new Random().nextInt(mHPApplication.getCurAudioInfos().size());
-                if (mHPApplication.getCurAudioInfos().size() > 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                playIndex = new Random().nextInt(HPApplication.getInstance().getCurAudioInfos().size());
+                if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
                 break;
             case 2:
@@ -178,18 +179,18 @@ public class AudioPlayerManager {
                     playIndex = 0;
                 }
                 ;
-                if (playIndex >= mHPApplication.getCurAudioInfos().size()) {
+                if (playIndex >= HPApplication.getInstance().getCurAudioInfos().size()) {
                     playIndex = 0;
                 }
 
-                if (mHPApplication.getCurAudioInfos().size() != 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                if (HPApplication.getInstance().getCurAudioInfos().size() != 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
 
                 break;
             case 3:
                 // 单曲播放
-                return mHPApplication.getCurAudioInfos().get(playIndex);
+                return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
 
         }
         return null;
@@ -203,7 +204,9 @@ public class AudioPlayerManager {
      * @return
      */
     public AudioInfo nextMusic(int playModel) {
-        if (mHPApplication.getCurAudioInfo() == null || mHPApplication.getCurAudioMessage() == null || mHPApplication.getCurAudioInfos() == null) {
+        if (HPApplication.getInstance().getCurAudioInfo() == null ||
+                HPApplication.getInstance().getCurAudioMessage() == null ||
+                HPApplication.getInstance().getCurAudioInfos() == null) {
             return null;
         }
         //获取播放索引
@@ -217,38 +220,38 @@ public class AudioPlayerManager {
             case 0:
                 // 顺序播放
                 playIndex++;
-                if (playIndex >= mHPApplication.getCurAudioInfos().size()) {
+                if (playIndex >= HPApplication.getInstance().getCurAudioInfos().size()) {
                     return null;
                 }
-                if (mHPApplication.getCurAudioInfos().size() > 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
 
                 break;
             case 1:
                 // 随机播放
 
-                playIndex = new Random().nextInt(mHPApplication.getCurAudioInfos().size());
-                if (mHPApplication.getCurAudioInfos().size() > 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                playIndex = new Random().nextInt(HPApplication.getInstance().getCurAudioInfos().size());
+                if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
                 break;
             case 2:
                 // 循环播放
 
                 playIndex++;
-                if (playIndex >= mHPApplication.getCurAudioInfos().size()) {
+                if (playIndex >= HPApplication.getInstance().getCurAudioInfos().size()) {
                     playIndex = 0;
                 }
 
-                if (mHPApplication.getCurAudioInfos().size() > 0) {
-                    return mHPApplication.getCurAudioInfos().get(playIndex);
+                if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
+                    return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
 
                 break;
             case 3:
                 // 单曲播放
-                return mHPApplication.getCurAudioInfos().get(playIndex);
+                return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
 
         }
         return null;
@@ -262,9 +265,9 @@ public class AudioPlayerManager {
     private int getCurPlayIndex() {
 
         int index = -1;
-        for (int i = 0; i < mHPApplication.getCurAudioInfos().size(); i++) {
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfos().get(i);
-            if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
+        for (int i = 0; i < HPApplication.getInstance().getCurAudioInfos().size(); i++) {
+            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfos().get(i);
+            if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
                 return i;
             }
         }

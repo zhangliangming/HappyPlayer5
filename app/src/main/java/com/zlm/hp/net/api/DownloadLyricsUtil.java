@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
 
@@ -50,12 +50,12 @@ public class DownloadLyricsUtil {
      * @author zhangliangming
      * @date 2017年7月1日
      */
-    public static DownloadLyricsResult downloadLyrics(HPApplication hPApplication, Context context, String id, String accesskey, String fmt) {
+    public static DownloadLyricsResult downloadLyrics(Context context, String id, String accesskey, String fmt) {
         if (!NetUtil.isNetworkAvailable(context)) {
             return null;
         }
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }
@@ -95,19 +95,18 @@ public class DownloadLyricsUtil {
     /**
      * 下载歌词
      *
-     * @param hPApplication
      * @param context
      * @param keyword  singerName + " - " + songName
      * @param duration
      * @param hash
      * @return
      */
-    public static byte[] downloadLyric(HPApplication hPApplication, Context context, String keyword, String duration, String hash) {
+    public static byte[] downloadLyric(Context context, String keyword, String duration, String hash) {
         if (!NetUtil.isNetworkAvailable(context)) {
             return null;
         }
 //
-        if (hPApplication.isWifi()) {
+        if (PreferencesConstants.isWifi(context)) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }

@@ -2,7 +2,7 @@ package com.zlm.hp.libs.download.thread;
 
 import android.content.Context;
 
-import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskThreadEven;
 
@@ -15,7 +15,6 @@ import java.net.URLConnection;
 
 import base.utils.LoggerUtil;
 import base.utils.NetUtil;
-
 
 /**
  * 任务线程
@@ -82,7 +81,6 @@ public class TaskThread extends Thread {
     private String taskThreadErrorMsg = "";
 
     private Context context;
-    private HPApplication mHPApplication;
     /**
      *
      */
@@ -110,9 +108,8 @@ public class TaskThread extends Thread {
     };
 
 
-    public TaskThread(HPApplication hpApplication, Context context, int threadId, int startPos, int endPos,
+    public TaskThread(Context context, int threadId, int startPos, int endPos,
                       DownloadTask task, IDownloadTaskThreadEven taskThreadEven) {
-        this.mHPApplication = hpApplication;
         this.context = context;
         this.threadId = threadId;
         this.startPos = startPos;
@@ -197,7 +194,7 @@ public class TaskThread extends Thread {
                         return;
                     }
 
-                    if (mHPApplication.isWifi() && !NetUtil.isWifi(context)) {
+                    if (PreferencesConstants.isWifi(context) && !NetUtil.isWifi(context)) {
                         // 不是wifi
                         if (taskThreadEven != null) {
                             taskThreadErrorMsg = "非wifi网络";
