@@ -1,5 +1,6 @@
 package com.zlm.hp.ui;
 
+import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -27,12 +29,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.DownloadThreadDB;
+import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.fragment.DownloadMusicFragment;
 import com.zlm.hp.fragment.LikeMusicFragment;
 import com.zlm.hp.fragment.LocalMusicFragment;
@@ -379,7 +384,34 @@ public class MainActivity extends BaseActivity {
                 }
             }.execute("");
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            AndPermission.with(mActivity)
+                    .requestCode(110)
+                    .permission(Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.READ_SMS)
+                    .callback(new PermissionListener() {
+                        @Override
+                        public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
 
+                        }
+
+                        @Override
+                        public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                            AlartTwoButtonDialog mExitAlartDialog = new AlartTwoButtonDialog(mActivity, new AlartTwoButtonDialog.TwoButtonDialogListener() {
+                                @Override
+                                public void oneButtonClick() {
+
+                                }
+
+                                @Override
+                                public void twoButtonClick() {
+
+                                }
+                            });
+                            mExitAlartDialog.showDialog("需要访问短信？", "取消", "确定");
+                        }
+                    }).start();
+        }
     }
 
     /**
