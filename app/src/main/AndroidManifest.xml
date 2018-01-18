@@ -31,6 +31,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:hardwareAccelerated="false"
         android:name="com.zlm.hp.application.HPApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -49,7 +50,6 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:hardwareAccelerated="true"
             android:theme="@style/noTransparentTheme" />
         <activity android:name=".LrcActivity" />
         <activity android:name=".AboutActivity" />

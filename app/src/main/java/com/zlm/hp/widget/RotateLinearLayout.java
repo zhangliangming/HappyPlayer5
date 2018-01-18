@@ -96,8 +96,6 @@ public class RotateLinearLayout extends FrameLayout {
      */
     private boolean isVerticalScroll = false;
 
-    private float minRotation = 0.2f;//解决旋转角度在该值范围之内页面会闪烁
-
     /**
      * 判断是否关闭
      */
@@ -280,11 +278,8 @@ public class RotateLinearLayout extends FrameLayout {
 
 
                             //logger.e("degree = " + degree);
-                            if (Math.abs(degree) < minRotation) {
-                                ViewHelper.setRotation(this, 0);
-                            } else {
-                                ViewHelper.setRotation(this, degree);
-                            }
+
+                            ViewHelper.setRotation(this, degree);
 
 
                             //绘画遮罩层
@@ -443,11 +438,9 @@ public class RotateLinearLayout extends FrameLayout {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    if (Math.abs(number.floatValue()) < minRotation) {
-                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
-                    } else {
-                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
-                    }
+
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+
 
                     //绘画遮罩层
                     drawMask();
@@ -495,11 +488,9 @@ public class RotateLinearLayout extends FrameLayout {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    if (Math.abs(number.floatValue()) < minRotation) {
-                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
-                    } else {
-                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
-                    }
+
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+
 
                     //绘画遮罩层
                     drawMask();
@@ -542,11 +533,9 @@ public class RotateLinearLayout extends FrameLayout {
                     if (!isTouchMove && !mAnimatorIsCancel) {
                         Number number = (Number) valueAnimator.getAnimatedValue();
 
-                        if (Math.abs(number.floatValue()) < minRotation) {
-                            ViewHelper.setRotation(RotateLinearLayout.this, 0);
-                        } else {
-                            ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
-                        }
+
+                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+
 
                         //绘画遮罩层
                         drawMask();
@@ -598,11 +587,9 @@ public class RotateLinearLayout extends FrameLayout {
                 if (!isTouchMove && !mAnimatorIsCancel) {
                     Number number = (Number) valueAnimator.getAnimatedValue();
 
-                    if (Math.abs(number.floatValue()) < minRotation) {
-                        ViewHelper.setRotation(RotateLinearLayout.this, 0);
-                    } else {
-                        ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
-                    }
+
+                    ViewHelper.setRotation(RotateLinearLayout.this, number.floatValue());
+
 
                     //绘画遮罩层
                     drawMask();
