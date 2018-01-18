@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <com.zlm.hp.widget.ListItemRelativeLayout
+    <base.widget.ListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/songitem_height"
@@ -27,7 +27,7 @@
             android:textSize="15dp" />
 
 
-        <com.zlm.hp.libs.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <base.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/singPic"
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -117,7 +117,7 @@
             android:background="@mipmap/akn"
             android:visibility="invisible" />
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/unlike"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
             android:visibility="invisible" />
 
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,11 +151,11 @@
             android:textColor="#888"
             android:textSize="25dp" />
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignLeft="@+id/content"
             android:layout_alignParentBottom="true" />
-    </com.zlm.hp.widget.ListItemRelativeLayout>
+    </base.widget.ListItemRelativeLayout>
 
 </LinearLayout>

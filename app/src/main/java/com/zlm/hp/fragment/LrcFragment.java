@@ -11,22 +11,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-
+import com.zlm.hp.R;
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.libs.utils.ColorUtil;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
-import com.zlm.hp.widget.ButtonRelativeLayout;
-import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
 
-import java.io.File;
+import base.utils.ColorUtil;
+import base.utils.ToastUtil;
+import base.widget.ButtonRelativeLayout;
+import base.widget.lrc.ManyLineLyricsViewV2;
 
 /**
  * 歌词视图
@@ -223,7 +221,7 @@ public class LrcFragment extends BaseFragment {
 
         //歌词视图
         mManyLineLyricsView = mainView.findViewById(R.id.lrcview);
-        mManyLineLyricsView.setLrcFontSize(30);
+        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
         mManyLineLyricsView.setDefLrcColor(ColorUtil.parserColor("#888888"));
         mManyLineLyricsView.setLrcColor(ColorUtil.parserColor("#0288d1"));
         mManyLineLyricsView.setTouchInterceptTrue();

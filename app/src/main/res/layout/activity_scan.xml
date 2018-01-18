@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fff"
-    android:orientation="vertical"
-    tools:context="com.zlm.hp.ui.ScanActivity">
+    android:orientation="vertical">
 
     <include layout="@layout/layout_scan_title"></include>
 
@@ -50,7 +49,7 @@
 
             </TextView>
 
-            <com.zlm.hp.widget.ButtonRelativeLayout
+            <base.widget.ButtonRelativeLayout
                 android:id="@+id/start_scan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -67,7 +66,7 @@
                     android:textColor="#fff" />
 
 
-            </com.zlm.hp.widget.ButtonRelativeLayout>
+            </base.widget.ButtonRelativeLayout>
 
 
         </RelativeLayout>
@@ -92,7 +91,7 @@
 
             </TextView>
 
-            <com.zlm.hp.widget.ButtonRelativeLayout
+            <base.widget.ButtonRelativeLayout
                 android:id="@+id/stop_scan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +109,7 @@
                     android:textColor="#fff" />
 
 
-            </com.zlm.hp.widget.ButtonRelativeLayout>
+            </base.widget.ButtonRelativeLayout>
 
 
         </RelativeLayout>
@@ -125,7 +124,7 @@
             android:visibility="invisible">
 
 
-            <com.zlm.hp.widget.ButtonRelativeLayout
+            <base.widget.ButtonRelativeLayout
                 android:id="@+id/finish_scan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -143,7 +142,7 @@
                     android:textColor="#fff" />
 
 
-            </com.zlm.hp.widget.ButtonRelativeLayout>
+            </base.widget.ButtonRelativeLayout>
 
 
         </RelativeLayout>

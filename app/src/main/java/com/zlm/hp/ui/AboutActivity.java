@@ -5,7 +5,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zlm.hp.widget.SwipeBackLayout;
+import com.zlm.hp.R;
+import com.zlm.hp.constants.PreferencesConstants;
+
+import base.widget.SwipeBackLayout;
 
 /**
  * @Description: 关于界面
@@ -39,6 +42,8 @@ public class AboutActivity extends BaseActivity {
                 overridePendingTransition(0, 0);
             }
         });
+        boolean shadowEnable = getIntent().getBooleanExtra(PreferencesConstants.shadowEnable_KEY, true);
+        mSwipeBackLayout.setShadowEnable(shadowEnable);
 
         TextView titleView = findViewById(R.id.title);
         titleView.setText("关于");

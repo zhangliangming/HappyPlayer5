@@ -7,7 +7,6 @@ import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskThreadEven;
 import com.zlm.hp.libs.download.thread.TaskThread;
-import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +18,8 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.LoggerUtil;
 
 
 /**

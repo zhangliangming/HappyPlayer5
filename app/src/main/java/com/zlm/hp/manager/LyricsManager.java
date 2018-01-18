@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
@@ -18,6 +17,8 @@ import com.zlm.hp.utils.ResourceFileUtil;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import base.utils.LoggerUtil;
 
 /**
  * 歌词管理器

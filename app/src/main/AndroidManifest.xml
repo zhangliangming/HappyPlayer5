@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zlm.hp.ui">
-
+    package="com.zlm.hp">
 
     <!-- 短信权限 -->
     <uses-permission android:name="android.permission.SEND_SMS" />
@@ -31,7 +30,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name="com.zlm.hp.application.HPApplication"
+        android:name=".application.HPApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -39,8 +38,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SplashActivity"
-            android:theme="@style/noTransparentTheme">
+            android:name=".ui.SplashActivity"
+            android:theme="@style/LaunchStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,26 +47,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:hardwareAccelerated="true"
             android:theme="@style/noTransparentTheme" />
-        <activity android:name=".LrcActivity" />
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".ScanActivity" />
+        <activity android:name=".ui.LrcActivity" />
+        <activity android:name=".ui.AboutActivity" />
+        <activity android:name=".ui.ScanActivity" />
 
         <service
-            android:name="com.zlm.hp.service.AudioPlayerService"
+            android:name=".service.AudioPlayerService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".SearchLrcActivity" />
-        <activity android:name=".SearchSingerActivity"></activity>
+        <activity android:name=".ui.SearchLrcActivity" />
+        <activity android:name=".ui.SearchSingerActivity" />
 
-        <receiver android:name="com.zlm.hp.receiver.MyPhoneReceiver">
+        <receiver android:name=".receiver.MyPhoneReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".ui.LockScreenActivity"
+            android:theme="@style/LockScreenBase"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:taskAffinity="bear.love.peach.ui.lockscreen"/>
     </application>
 
 </manifest>

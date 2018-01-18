@@ -55,12 +55,35 @@ public class PreferencesConstants {
     public static String isWire_KEY = "isWire_KEY";
 
     /**
+     * 是否桌面歌词key
+     */
+    public static String isDesktop_KEY = "isDesktop_KEY";
+
+    /**
+     * 是否锁屏歌词key
+     */
+    public static String isLockScreen_KEY = "isLockScreen_KEY";
+
+    /**
+     * 是否锁屏歌词key
+     */
+    public static String isShowLockScreen_KEY = "isShowLockScreen_KEY";
+
+    /**
      * 是否是多行歌词
      */
     public static String isManyLineLrc_KEY = "isManyLineLrc_KEY";
+    public static String musicId_KEY = "music_id";
+    public static String playMode_KEY = "play_mode";
+    public static String splashUrl_KEY = "splash_url";
+    public static String nightMode_KEY = "night_mode";
     ///////////////////////////////如下是临时变量key//////////////////////////////////////////
     /**
      * 播放状态key
      */
     public static String playStatus_KEY = "playStatus_KEY";
+    /**
+     * SwipeBackLayout阴影是否可用
+     */
+    public static String shadowEnable_KEY = "shadowEnable_KEY";
 }

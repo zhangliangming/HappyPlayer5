@@ -18,14 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.LrcPopPlayListAdapter;
 import com.zlm.hp.adapter.LrcPopSingerListAdapter;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.libs.utils.ColorUtil;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.model.LyricsTag;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
@@ -42,19 +41,22 @@ import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.MediaUtil;
-import com.zlm.hp.widget.ButtonRelativeLayout;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
-import com.zlm.hp.widget.IconfontTextView;
-import com.zlm.hp.widget.LinearLayoutRecyclerView;
-import com.zlm.hp.widget.LrcSeekBar;
-import com.zlm.hp.widget.PlayListBGRelativeLayout;
-import com.zlm.hp.widget.RotateLinearLayout;
-import com.zlm.hp.widget.SingerImageView;
-import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import base.utils.ColorUtil;
+import base.utils.ToastUtil;
+import base.widget.ButtonRelativeLayout;
+import base.widget.IconfontImageButtonTextView;
+import base.widget.IconfontTextView;
+import base.widget.LinearLayoutRecyclerView;
+import base.widget.LrcSeekBar;
+import base.widget.PlayListBGRelativeLayout;
+import base.widget.RotateLinearLayout;
+import base.widget.SingerImageView;
+import base.widget.lrc.ManyLineLyricsViewV2;
 
 /**
  * @Description: 歌词界面
@@ -393,7 +395,7 @@ public class LrcActivity extends BaseActivity {
             mManyLineLyricsView.setLyricsUtil(null, 0,0);
             //歌手写真
             mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
+            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
 
             //重置弹出窗口播放列表
             if (isPLPopViewShow) {
@@ -457,7 +459,7 @@ public class LrcActivity extends BaseActivity {
             }
 
             mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
+            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
             //加载歌手写真
             ImageUtil.loadSingerImg(mHPApplication, getApplicationContext(), audioInfo.getHash(), audioInfo.getSingerName());
 
@@ -571,7 +573,7 @@ public class LrcActivity extends BaseActivity {
                 if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
                     String singerName = intent.getStringExtra("singerName");
                     mSingerImageView.setVisibility(View.INVISIBLE);
-                    mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
+                    mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
                     //加载歌手写真
                     ImageUtil.loadSingerImg(mHPApplication, getApplicationContext(), hash, singerName);
 
@@ -601,7 +603,7 @@ public class LrcActivity extends BaseActivity {
 
                     //设置数据
                     List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, false);
-                    mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), list);
+                    mSingerImageView.setSongSingerInfos(getApplicationContext(), list);
                 }
             }
         }
@@ -614,6 +616,10 @@ public class LrcActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        mScreensWidth = display.getWidth();
+
         mRotateLinearLayout = findViewById(R.id.rotateLayout);
         //mRotateLinearLayout.setBackgroundView(findViewById(R.id.bg_layout));
         mRotateLinearLayout.setmRotateListener(new RotateLinearLayout.RotateListener() {
@@ -912,9 +918,6 @@ public class LrcActivity extends BaseActivity {
         initSPLPopView();
         initSIPopView();
 
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        mScreensWidth = display.getWidth();
     }
 
 

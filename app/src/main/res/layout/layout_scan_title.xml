@@ -2,13 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_height"
-    android:background="@color/defColor">
+    android:background="@color/colorPrimary">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/close_img"
             android:layout_width="@dimen/title_height"
             android:layout_height="@dimen/title_height"
@@ -16,7 +16,7 @@
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/close_img"
             android:textColor="#FFF"
-            android:textSize="@dimen/title_icon_size"></com.zlm.hp.widget.IconfontImageButtonTextView>
+            android:textSize="@dimen/title_icon_size"></base.widget.IconfontImageButtonTextView>
 
 
         <TextView

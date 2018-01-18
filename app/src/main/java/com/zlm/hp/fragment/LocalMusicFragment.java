@@ -10,19 +10,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.LocalMusicAdapter;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.Category;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.ui.ScanActivity;
 import com.zlm.hp.utils.AsyncTaskUtil;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.widget.IconfontImageButtonTextView;
 
 /**
  * 本地音乐

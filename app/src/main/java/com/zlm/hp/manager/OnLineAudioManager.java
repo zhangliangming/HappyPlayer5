@@ -10,7 +10,6 @@ import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.manager.DownloadTaskManage;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.DownloadThreadInfo;
@@ -24,6 +23,8 @@ import com.zlm.hp.utils.ResourceFileUtil;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+
+import base.utils.LoggerUtil;
 
 /**
  * 在线音频管理

@@ -7,11 +7,12 @@ import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.utils.TaskThreadUtil;
-import com.zlm.hp.libs.utils.DateUtil;
-import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.DateUtil;
+import base.utils.LoggerUtil;
 
 
 /**

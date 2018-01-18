@@ -3,7 +3,6 @@ package com.zlm.hp.net.api;
 import android.content.Context;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.NetUtil;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.net.model.HttpResult;
@@ -15,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import base.utils.NetUtil;
 
 /**
  * @Description: 排行列表请求

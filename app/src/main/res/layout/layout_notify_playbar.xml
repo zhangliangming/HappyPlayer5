@@ -30,7 +30,15 @@
             android:text="@string/def_text"
             android:textSize="15dp" />
 
-        <ImageButton
+        <ImageView
+            android:id="@+id/singClose"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:scaleType="center"
+            android:src="@mipmap/ic_close"/>
+
+        <ImageView
             android:id="@+id/showdeslrc"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -40,7 +48,7 @@
             android:layout_toRightOf="@+id/singPic"
             android:background="@drawable/nofify_showdeslrc" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/hidedeslrc"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -50,7 +58,7 @@
             android:layout_toRightOf="@+id/singPic"
             android:background="@drawable/nofify_hidedeslrc" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/deslrcUnlock"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -60,47 +68,43 @@
             android:layout_toRightOf="@+id/singPic"
             android:background="@drawable/nofify_deslrcunlock" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/prew"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:layout_centerInParent="true"
             android:layout_marginBottom="2dp"
-            android:background="@drawable/bar_buttombg"
-            android:src="@drawable/statusbar_btn_prev" />
+            android:src="@mipmap/ic_play_btn_prev" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/play"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignTop="@+id/prew"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/prew"
-            android:background="@drawable/bar_buttombg"
-            android:src="@drawable/statusbar_btn_play" />
+            android:src="@mipmap/ic_play_btn_play" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/pause"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignTop="@+id/prew"
             android:layout_marginBottom="2dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/prew"
-            android:background="@drawable/bar_buttombg"
-            android:src="@drawable/statusbar_btn_pause" />
+            android:src="@mipmap/ic_play_btn_pause" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/next"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_alignTop="@+id/prew"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@+id/play"
-            android:background="@drawable/bar_buttombg"
-            android:src="@drawable/statusbar_btn_next" />
+            android:src="@mipmap/ic_play_btn_next" />
     </RelativeLayout>
 
 </LinearLayout>

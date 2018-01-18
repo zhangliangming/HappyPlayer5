@@ -5,7 +5,7 @@
     android:background="#fff"
     android:orientation="vertical">
 
-    <com.zlm.hp.widget.ListItemRelativeLayout
+    <base.widget.ListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_height"
@@ -138,13 +138,13 @@
             android:layout_marginRight="15dp"
             android:background="@mipmap/c06" />
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignParentBottom="true"
             android:layout_toRightOf="@+id/item_icon" />
 
 
-    </com.zlm.hp.widget.ListItemRelativeLayout>
+    </base.widget.ListItemRelativeLayout>
 
 </LinearLayout>

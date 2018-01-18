@@ -16,7 +16,7 @@
             android:background="#ffffff">
 
 
-            <com.zlm.hp.widget.lrc.ManyLineLyricsViewV2
+            <base.widget.lrc.ManyLineLyricsViewV2
                 android:id="@+id/lrcview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -85,13 +85,13 @@
                 android:visibility="invisible" />
         </RelativeLayout>
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_above="@+id/uselrcbtn" />
 
-        <com.zlm.hp.widget.ButtonRelativeLayout
+        <base.widget.ButtonRelativeLayout
             android:id="@+id/uselrcbtn"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
@@ -110,6 +110,6 @@
                 android:textColor="#fff" />
 
 
-        </com.zlm.hp.widget.ButtonRelativeLayout>
+        </base.widget.ButtonRelativeLayout>
     </RelativeLayout>
 </LinearLayout>

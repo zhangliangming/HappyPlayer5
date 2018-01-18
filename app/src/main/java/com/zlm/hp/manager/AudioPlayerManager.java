@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 
 import java.util.List;
 import java.util.Random;
+
+import base.utils.LoggerUtil;
 
 /**
  * 音频播放处理类

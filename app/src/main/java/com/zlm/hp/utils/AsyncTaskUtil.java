@@ -2,8 +2,6 @@ package com.zlm.hp.utils;
 
 import android.os.AsyncTask;
 
-import com.zlm.hp.net.model.HttpResult;
-
 /**
  * Created by zhangliangming on 2017/8/1.
  */

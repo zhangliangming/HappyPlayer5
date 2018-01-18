@@ -12,9 +12,6 @@ import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.libs.download.manager.DownloadTaskManage;
-import com.zlm.hp.libs.utils.DateUtil;
-import com.zlm.hp.libs.utils.LoggerUtil;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.model.DownloadMessage;
@@ -26,9 +23,12 @@ import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
+
+import base.utils.DateUtil;
+import base.utils.LoggerUtil;
+import base.utils.ToastUtil;
 
 /**
  * 下载管理

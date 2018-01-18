@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    tools:context="com.zlm.hp.ui.SearchLrcActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +24,7 @@
             android:background="#fff"
             android:orientation="vertical">
 
-            <com.zlm.hp.widget.BaseEditTextBG
+            <base.widget.BaseEditTextBG
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_marginLeft="10dp"
@@ -56,7 +55,7 @@
                     android:singleLine="true"
                     android:textColor="#000" />
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/songclean_img"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
@@ -67,14 +66,14 @@
                     android:textColor="#888"
                     android:textSize="@dimen/title_icon_size"
                     android:visibility="invisible" />
-            </com.zlm.hp.widget.BaseEditTextBG>
+            </base.widget.BaseEditTextBG>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
                 android:layout_margin="10dp">
 
-                <com.zlm.hp.widget.BaseEditTextBG
+                <base.widget.BaseEditTextBG
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_toLeftOf="@+id/searchbtn">
@@ -103,7 +102,7 @@
                         android:singleLine="true"
                         android:textColor="#555555" />
 
-                    <com.zlm.hp.widget.IconfontTextView
+                    <base.widget.IconfontTextView
                         android:id="@+id/singclean_img"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
@@ -116,7 +115,7 @@
                         android:visibility="invisible" />
 
 
-                </com.zlm.hp.widget.BaseEditTextBG>
+                </base.widget.BaseEditTextBG>
 
                 <TextView
                     android:id="@+id/searchbtn"
@@ -178,7 +177,7 @@
                 android:layout_height="match_parent">
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/load_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

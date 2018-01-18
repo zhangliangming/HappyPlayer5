@@ -15,21 +15,22 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
 import com.zlm.hp.adapter.SearchResultAdapter;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.api.SearchResultHttpUtil;
 import com.zlm.hp.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AsyncTaskHttpUtil;
-import com.zlm.hp.widget.IconfontTextView;
-import com.zlm.hp.widget.SearchEditText;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import base.utils.ToastUtil;
+import base.widget.IconfontTextView;
+import base.widget.SearchEditText;
 
 /**
  * 搜索
@@ -134,7 +135,6 @@ public class SearchFragment extends BaseFragment {
         mCleanIconfontTextView.setVisibility(View.VISIBLE);
         //
         mSearchEditText = mainView.findViewById(R.id.search);
-        mSearchEditText.setText("初恋情人");
         mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -182,7 +182,6 @@ public class SearchFragment extends BaseFragment {
                 }
             }
         });
-        ;
 
         //取消
         TextView backTextView = mainView.findViewById(R.id.right_flag);
@@ -232,14 +231,14 @@ public class SearchFragment extends BaseFragment {
             }
         });
 
-        setRefreshListener(new RefreshListener() {
-            @Override
-            public void refresh() {
-                showLoadingView();
-
-                loadDataUtil(500, true);
-            }
-        });
+//        setRefreshListener(new RefreshListener() {
+//            @Override
+//            public void refresh() {
+//                showLoadingView();
+//
+//                loadDataUtil(500, true);
+//            }
+//        });
 
         //
 
@@ -262,10 +261,9 @@ public class SearchFragment extends BaseFragment {
             mAdapter.notifyDataSetChanged();
 
         }
-        mAdapter.setPlayIndexHash("-1");
-        mAdapter.setPlayIndexPosition(-1);
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
-
+//        mAdapter.setPlayIndexHash("-1");
+//        mAdapter.setPlayIndexPosition(-1);
+//        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
     }
 
     /**
@@ -303,7 +301,7 @@ public class SearchFragment extends BaseFragment {
         mAdapter.setPlayIndexPosition(-1);
 
         showLoadingView();
-        loadDataUtil(500, true);
+        loadDataUtil(0, true);
     }
 
     /**

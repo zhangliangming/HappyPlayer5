@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/transparent">
 
-        <com.zlm.hp.widget.PlayListBGRelativeLayout
+        <base.widget.PlayListBGRelativeLayout
             android:id="@+id/pop_list_parent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -55,7 +55,7 @@
                     android:textSize="15dp" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeAllTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
                     android:visibility="invisible" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeRandomTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -81,7 +81,7 @@
                     android:textSize="22dp" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeSingleTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                     android:background="#50ffffff"></View>
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -136,15 +136,15 @@
                 android:layout_below="@+id/line"
                 android:orientation="vertical">
 
-                <com.zlm.hp.widget.LinearLayoutRecyclerView
+                <base.widget.LinearLayoutRecyclerView
                     android:id="@+id/curplaylist_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:overScrollMode="never"></com.zlm.hp.widget.LinearLayoutRecyclerView>
+                    android:overScrollMode="never"/>
 
             </LinearLayout>
 
-        </com.zlm.hp.widget.PlayListBGRelativeLayout>
+        </base.widget.PlayListBGRelativeLayout>
 
         <View
             android:id="@+id/centerListLine"

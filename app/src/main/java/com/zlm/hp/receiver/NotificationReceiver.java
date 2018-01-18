@@ -8,9 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.util.Date;
+
+import base.utils.LoggerUtil;
 
 /**
  * 通知栏广播
@@ -50,6 +51,10 @@ public class NotificationReceiver {
      * 通知栏app下一首歌曲
      */
     public static String NOTIFIATION_APP_NEXTMUSIC = "com.notification.app.nextmusic";
+    /**
+     * 通知栏app关闭通知栏
+     */
+    public static String NOTIFIATION_APP_CLOSENOTIFICATION = "com.notification.app.closenotification";
 
     /**
      * 通知栏显示桌面歌词
@@ -80,6 +85,7 @@ public class NotificationReceiver {
         mNotificationIntentFilter.addAction(NOTIFIATION_APP_PAUSEMUSIC);
         mNotificationIntentFilter.addAction(NOTIFIATION_APP_PREMUSIC);
         mNotificationIntentFilter.addAction(NOTIFIATION_APP_NEXTMUSIC);
+        mNotificationIntentFilter.addAction(NOTIFIATION_APP_CLOSENOTIFICATION);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_SHOW);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_HIDE);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_UNLOCK);

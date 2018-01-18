@@ -1,5 +1,6 @@
 package com.zlm.hp.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,15 +10,17 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
+import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AsyncTaskUtil;
-import com.zlm.hp.widget.SetupBGButton;
+
+import base.widget.SetupBGButton;
 
 /**
  * @Description: tab我的界面
@@ -62,6 +65,14 @@ public class TabMyFragment extends BaseFragment {
      * wifi设置按钮
      */
     private SetupBGButton mWifiSetupBGButton;
+    /**
+     * 桌面歌词设置按钮
+     */
+    private SetupBGButton mDesktopBGButton;
+    /**
+     * 锁屏歌词设置按钮
+     */
+    private SetupBGButton mLockScreenBGButton;
     /**
      * 问候语按钮
      */
@@ -134,6 +145,7 @@ public class TabMyFragment extends BaseFragment {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -155,7 +167,6 @@ public class TabMyFragment extends BaseFragment {
     };
 
     private AudioBroadcastReceiver mAudioBroadcastReceiver;
-
     /**
      * 广播监听
      */
@@ -166,6 +177,13 @@ public class TabMyFragment extends BaseFragment {
         }
     };
 
+    private LockLrcReceiver mLockLrcReceiver;
+    private LockLrcReceiver.LockLrcReceiverListener mLockLrcReceiverListener = new LockLrcReceiver.LockLrcReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            doLockLrcReceive(context, intent);
+        }
+    };
 
     public TabMyFragment() {
 
@@ -262,6 +280,45 @@ public class TabMyFragment extends BaseFragment {
             }
         });
 
+        //桌面歌词设置按钮
+        mDesktopBGButton = mainView.findViewById(R.id.desktopbg);
+        if (mHPApplication.isDesktop()) {
+            mDesktopBGButton.setSelect(true);
+        }
+        mDesktopBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+                boolean selected = mDesktopBGButton.isSelect();
+                mHPApplication.setDesktop(!selected);
+                mDesktopBGButton.setSelect(mHPApplication.isDesktop());
+            }
+        });
+
+        //锁屏歌词设置按钮
+        mLockScreenBGButton = mainView.findViewById(R.id.lockScreenbg);
+        if (mHPApplication.isLockScreen()) {
+            mLockScreenBGButton.setSelect(true);
+        }
+        mLockScreenBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+                boolean selected = mLockScreenBGButton.isSelect();
+                mHPApplication.setLockScreen(!selected);
+                mLockScreenBGButton.setSelect(mHPApplication.isLockScreen());
+                if (mHPApplication.isLockScreen()) {
+                    Intent openIntent = new Intent(SystemReceiver.ACTION_OPENLRCMESSAGE);
+                    openIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mActivity.sendBroadcast(openIntent);
+                } else {
+                    Intent closeIntent = new Intent(SystemReceiver.ACTION_CLOSELRCMESSAGE);
+                    closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mActivity.sendBroadcast(closeIntent);
+                }
+            }
+        });
+
         //问候语按钮
         mSayHelloSetupBGButton = mainView.findViewById(R.id.sayhello);
         if (mHPApplication.isSayHello()) {
@@ -325,11 +382,17 @@ public class TabMyFragment extends BaseFragment {
 
         showContentView();
 
-
         //注册监听
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+
+        //注册锁屏歌词广播
+        mLockLrcReceiver = new LockLrcReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
+        if (mHPApplication.isLockScreen()) {
+            mLockLrcReceiver.registerReceiver(mActivity.getApplicationContext());
+        }
     }
 
     @Override
@@ -466,6 +529,24 @@ public class TabMyFragment extends BaseFragment {
             AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
             loadLikeCount();
         }
+    }
+
+    /**
+     * 处理锁屏歌词广播事件
+     *
+     * @param context
+     * @param intent
+     */
+    private void doLockLrcReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if (action.equals(LockLrcReceiver.ACTION_SHOWLRCMESSAGE)) {
+            //显示锁屏歌词
+            mHPApplication.setShowLockScreen(true);
+        } else if (action.equals(LockLrcReceiver.ACTION_HIDELRCMESSAGE)) {
+            //隐藏锁屏歌词
+            mHPApplication.setShowLockScreen(false);
+        }
+
     }
 
     @Override

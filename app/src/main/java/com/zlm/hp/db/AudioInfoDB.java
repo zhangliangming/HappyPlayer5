@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.utils.PingYinUtil;
@@ -17,6 +16,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import base.utils.DateUtil;
 
 /**
  * 音频数据库处理

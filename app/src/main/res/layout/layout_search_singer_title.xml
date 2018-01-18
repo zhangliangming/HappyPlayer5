@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_height"
-    android:background="@color/defColor"
+    android:background="@color/colorPrimary"
     android:focusable="true"
     android:focusableInTouchMode="true">
 
@@ -36,7 +36,7 @@
             android:layout_toLeftOf="@+id/right_flag"
             android:layout_toRightOf="@+id/backImg">
 
-            <com.zlm.hp.widget.IconfontTextView
+            <base.widget.IconfontTextView
                 android:layout_width="@dimen/title_height"
                 android:layout_height="@dimen/title_height"
                 android:layout_alignParentStart="true"
@@ -46,7 +46,7 @@
                 android:textColor="#fff"
                 android:textSize="@dimen/title_icon_size" />
 
-            <com.zlm.hp.widget.SearchEditText
+            <base.widget.SearchEditText
                 android:id="@+id/search"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -62,7 +62,7 @@
                 android:textSize="15dp" />
 
 
-            <com.zlm.hp.widget.IconfontTextView
+            <base.widget.IconfontTextView
                 android:id="@+id/clean_img"
                 android:layout_width="@dimen/title_height"
                 android:layout_height="@dimen/title_height"

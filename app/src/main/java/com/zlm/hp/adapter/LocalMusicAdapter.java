@@ -10,20 +10,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.Category;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
-import com.zlm.hp.widget.ListItemRelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.ToastUtil;
+import base.widget.IconfontImageButtonTextView;
+import base.widget.ListItemRelativeLayout;
 
 /**
  * 本地音乐

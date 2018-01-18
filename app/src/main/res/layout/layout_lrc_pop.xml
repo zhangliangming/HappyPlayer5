@@ -112,7 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dip"
                 android:layout_marginTop="5dp"
-                android:background="#40ffffff"></View>
+                android:background="#40ffffff"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -128,14 +128,14 @@
                     android:gravity="center_vertical"
                     android:text="歌词进度"
                     android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
+                    android:textSize="13dp"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="2">
 
-                    <com.zlm.hp.widget.ButtonRelativeLayout
+                    <base.widget.ButtonRelativeLayout
                         android:id="@+id/lyric_progress_jian"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -153,10 +153,10 @@
                             android:gravity="center_vertical|center_horizontal"
                             android:text="《《-0.5秒"
                             android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
+                            android:textSize="13dp"/>
 
 
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
+                    </base.widget.ButtonRelativeLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -164,7 +164,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <com.zlm.hp.widget.ButtonRelativeLayout
+                    <base.widget.ButtonRelativeLayout
                         android:id="@+id/lyric_progress_reset"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -180,10 +180,10 @@
                             android:gravity="center_vertical|center_horizontal"
                             android:text="重置"
                             android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
+                            android:textSize="13dp"/>
 
 
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
+                    </base.widget.ButtonRelativeLayout>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -191,7 +191,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="2">
 
-                    <com.zlm.hp.widget.ButtonRelativeLayout
+                    <base.widget.ButtonRelativeLayout
                         android:id="@+id/lyric_progress_jia"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -209,10 +209,10 @@
                             android:gravity="center_vertical|center_horizontal"
                             android:text="+0.5秒》》"
                             android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
+                            android:textSize="13dp"/>
 
 
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
+                    </base.widget.ButtonRelativeLayout>
                 </RelativeLayout>
             </LinearLayout>
 
@@ -220,7 +220,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dip"
                 android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+                android:background="#40ffffff"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -235,9 +235,9 @@
                     android:gravity="center_vertical"
                     android:text="字体大小"
                     android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
+                    android:textSize="13dp"/>
 
-                <com.zlm.hp.widget.IconfontImageButtonTextView
+                <base.widget.IconfontImageButtonTextView
                     android:id="@+id/lyric_decrease"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -250,7 +250,7 @@
                     android:textSize="16dp" />
 
 
-                <com.zlm.hp.widget.LrcSeekBar
+                <base.widget.LrcSeekBar
                     android:id="@+id/fontSizeseekbar"
                     android:layout_width="fill_parent"
                     android:layout_height="20dp"
@@ -260,7 +260,7 @@
                     android:layout_toLeftOf="@+id/lyric_increase"
                     android:layout_toRightOf="@+id/lyric_decrease" />
 
-                <com.zlm.hp.widget.IconfontImageButtonTextView
+                <base.widget.IconfontImageButtonTextView
                     android:id="@+id/lyric_increase"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -278,7 +278,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.5dip"
                 android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+                android:background="#40ffffff"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -293,13 +293,13 @@
                     android:gravity="center_vertical"
                     android:text="字体颜色"
                     android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
+                    android:textSize="13dp"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
                     android:layout_toRightOf="@+id/fontColor"
+                    android:layout_margin="5dp"
                     android:orientation="horizontal">
 
                     <RelativeLayout
@@ -452,13 +452,14 @@
 
 
                 </LinearLayout>
+
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dip"
                 android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+                android:background="#40ffffff"/>
 
             <LinearLayout
                 android:id="@+id/calcel"
@@ -473,7 +474,7 @@
                     android:gravity="center_vertical|center_horizontal"
                     android:text="取消"
                     android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
+                    android:textSize="13dp"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

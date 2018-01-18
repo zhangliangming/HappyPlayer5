@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
 
-    <com.zlm.hp.widget.ListItemRelativeLayout
+    <base.widget.ListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/songitem_height"
         android:clickable="true">
 
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/pause_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:textColor="#888"
             android:textSize="30dp" />
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/download_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -103,7 +103,7 @@
         </LinearLayout>
 
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -115,11 +115,11 @@
             android:textColor="#888"
             android:textSize="25dp" />
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignLeft="@+id/content"
             android:layout_alignParentBottom="true" />
-    </com.zlm.hp.widget.ListItemRelativeLayout>
+    </base.widget.ListItemRelativeLayout>
 
 </LinearLayout>

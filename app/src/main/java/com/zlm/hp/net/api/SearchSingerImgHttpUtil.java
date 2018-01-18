@@ -3,7 +3,6 @@ package com.zlm.hp.net.api;
 import android.content.Context;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.NetUtil;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SearchSingerImgResult;
 
@@ -11,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import base.utils.NetUtil;
 
 /**
  * 搜索歌手头像

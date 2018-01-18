@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <com.zlm.hp.widget.ListItemRelativeLayout
+    <base.widget.ListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/songitem_height"
@@ -19,7 +19,7 @@
             android:layout_height="40dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:background="@color/defColor"
+            android:background="@color/colorPrimary"
             android:visibility="invisible" />
 
 
@@ -75,13 +75,13 @@
             android:clickable="true" />
 
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignParentBottom="true" />
 
 
-    </com.zlm.hp.widget.ListItemRelativeLayout>
+    </base.widget.ListItemRelativeLayout>
 
     <LinearLayout
         android:id="@+id/menu"
@@ -90,7 +90,7 @@
         android:background="#263c56"
         android:orientation="horizontal">
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/unlike_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -103,7 +103,7 @@
             android:textSize="@dimen/title_icon_size" />
 
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/liked_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -116,7 +116,7 @@
             android:textSize="@dimen/title_icon_size" />
 
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/detail_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -128,7 +128,7 @@
             android:textColor="#FFF"
             android:textSize="@dimen/title_icon_size" />
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/delete_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

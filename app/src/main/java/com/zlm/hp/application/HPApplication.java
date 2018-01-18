@@ -4,8 +4,6 @@ import android.app.Application;
 
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.libs.utils.LoggerUtil;
-import com.zlm.hp.libs.utils.PreferencesUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
@@ -15,6 +13,9 @@ import com.zlm.hp.utils.SerializableObjUtil;
 
 import java.io.File;
 import java.util.List;
+
+import base.utils.LoggerUtil;
+import base.utils.PreferencesUtil;
 
 /**
  * Created by zhangliangming on 2017/7/15.
@@ -42,6 +43,18 @@ public class HPApplication extends Application {
      * 应用是否在wifi下联网
      */
     private boolean isWifi = true;
+    /**
+     * 应用是否在桌面显示歌词
+     */
+    private boolean isDesktop = false;
+    /**
+     * 应用是否显示锁屏，isLockScreen为true时才生效
+     */
+    private boolean isShowLockScreen = true;
+    /**
+     * 应用是否在锁屏显示歌词
+     */
+    private boolean isLockScreen = false;
 
     /**
      * 播放歌曲id
@@ -95,16 +108,16 @@ public class HPApplication extends Application {
     /**
      * 歌词字体大小
      */
-    private int lrcFontSize = 30;
+    private int lrcFontSize = 50;
     /**
      * 最小字体大小
      */
-    private int minLrcFontSize = 30;
+    private int minLrcFontSize = 50;
 
     /**
      * 最大字体大小
      */
-    private int maxLrcFontSize = 50;
+    private int maxLrcFontSize = 70;
     /**
      * 歌词颜色索引
      */
@@ -137,6 +150,12 @@ public class HPApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        //
+        //注册捕捉全局异常
+//        CrashHandler crashHandler = new CrashHandler();
+//        crashHandler.init(getApplicationContext());
+
+        logger = LoggerUtil.getZhangLogger(getApplicationContext());
     }
 
     public boolean isPlayServiceForceDestroy() {
@@ -182,6 +201,30 @@ public class HPApplication extends Application {
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isWifi_KEY, wifi);
     }
 
+    public boolean isDesktop() {
+        return (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isDesktop_KEY, isDesktop);
+    }
+
+    public void setDesktop(boolean desktop) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isDesktop_KEY, desktop);
+    }
+
+    public boolean isLockScreen() {
+        return (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isLockScreen_KEY, isLockScreen);
+    }
+
+    public void setLockScreen(boolean lockScreen) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isLockScreen_KEY, lockScreen);
+    }
+
+    public boolean isShowLockScreen() {
+        return (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, isShowLockScreen);
+    }
+
+    public void setShowLockScreen(boolean lockScreen) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, lockScreen);
+    }
+
     public String getPlayIndexHashID() {
         return (String) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.playIndexHashID_KEY, playIndexHashID);
     }
@@ -217,9 +260,6 @@ public class HPApplication extends Application {
 
     public List<AudioInfo> getCurAudioInfos() {
         if (curAudioInfos == null) {
-            if(logger == null){
-                logger = LoggerUtil.getZhangLogger(getApplicationContext());
-            }
             logger.e("curAudioInfos为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfos.ser");
             curAudioInfos = (List<AudioInfo>) SerializableObjUtil.readObj(filePath);
@@ -248,9 +288,6 @@ public class HPApplication extends Application {
 
     public AudioInfo getCurAudioInfo() {
         if (curAudioInfo == null) {
-            if(logger == null){
-                logger = LoggerUtil.getZhangLogger(getApplicationContext());
-            }
             logger.e("curAudioInfo为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfo.ser");
             curAudioInfo = (AudioInfo) SerializableObjUtil.readObj(filePath);
@@ -280,9 +317,6 @@ public class HPApplication extends Application {
 
     public AudioMessage getCurAudioMessage() {
         if (curAudioMessage == null) {
-            if(logger == null){
-                logger = LoggerUtil.getZhangLogger(getApplicationContext());
-            }
             logger.e("curAudioMessage为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioMessage.ser");
             curAudioMessage = (AudioMessage) SerializableObjUtil.readObj(filePath);
@@ -310,9 +344,6 @@ public class HPApplication extends Application {
 
     public RankListResult getRankListResult() {
         if (rankListResult == null) {
-            if(logger == null){
-                logger = LoggerUtil.getZhangLogger(getApplicationContext());
-            }
             logger.e("rankListResult为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "rankListResult.ser");
             rankListResult = (RankListResult) SerializableObjUtil.readObj(filePath);

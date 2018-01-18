@@ -23,9 +23,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.PageTransformer.ZoomOutPageTransformer;
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.fragment.LrcFragment;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.net.api.DownloadLyricsUtil;
@@ -34,10 +34,12 @@ import com.zlm.hp.net.entity.DownloadLyricsResult;
 import com.zlm.hp.net.entity.SearchLyricsResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AsyncTaskUtil;
-import com.zlm.hp.widget.IconfontTextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.ToastUtil;
+import base.widget.IconfontTextView;
 
 /**
  * 歌词搜索窗口

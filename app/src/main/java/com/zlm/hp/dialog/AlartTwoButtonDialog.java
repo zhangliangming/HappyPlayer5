@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.dialog.AlartDialogLeftButton;
-import com.zlm.hp.widget.dialog.AlartDialogRightButton;
+import com.zlm.hp.R;
 
+import base.widget.dialog.AlartDialogLeftButton;
+import base.widget.dialog.AlartDialogRightButton;
 
 public class AlartTwoButtonDialog extends Dialog {
 

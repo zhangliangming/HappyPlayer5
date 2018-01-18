@@ -5,7 +5,8 @@ import android.content.Context;
 import android.media.AudioManager;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
+
+import base.utils.LoggerUtil;
 
 /**
  * 耳机线控

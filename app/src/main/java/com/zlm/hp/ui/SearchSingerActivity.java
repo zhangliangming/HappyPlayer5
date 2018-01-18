@@ -1,6 +1,5 @@
 package com.zlm.hp.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,23 +22,26 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.SearchSingerAdapter;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.SongSingerInfo;
 import com.zlm.hp.net.api.SearchArtistPicUtil;
 import com.zlm.hp.net.entity.SearchArtistPicResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AsyncTaskUtil;
-import com.zlm.hp.widget.ButtonRelativeLayout;
-import com.zlm.hp.widget.IconfontTextView;
-import com.zlm.hp.widget.SearchEditText;
-import com.zlm.hp.widget.SwipeBackLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import base.utils.ToastUtil;
+import base.widget.ButtonRelativeLayout;
+import base.widget.IconfontTextView;
+import base.widget.SearchEditText;
+import base.widget.SwipeBackLayout;
 
 /**
  * 搜索歌手写真
@@ -173,7 +175,7 @@ public class SearchSingerActivity extends BaseActivity {
             public void finishView() {
 
                 //关闭输入法
-                InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager im = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                 new Thread() {
@@ -228,7 +230,7 @@ public class SearchSingerActivity extends BaseActivity {
                     }
 
                     //关闭输入法
-                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    InputMethodManager im = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                     im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
                     doSearch();
@@ -293,7 +295,7 @@ public class SearchSingerActivity extends BaseActivity {
         mRecyclerView.setLayoutManager(gridLayoutManager);
 
         //
-        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         mScreensWidth = display.getWidth();
         mScreensHeight = display.getHeight();
@@ -473,7 +475,7 @@ public class SearchSingerActivity extends BaseActivity {
             public void onPostExecute() {
 
                 if (mSelectDatas == null) {
-                    mSelectDatas = new ArrayMap<String, String>();
+                    mSelectDatas = new HashMap<>();
                 }
 
                 if (mDatas == null) {

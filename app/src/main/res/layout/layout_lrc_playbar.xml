@@ -9,7 +9,7 @@
         android:layout_height="40dp"
         android:orientation="horizontal">
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/unlike_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -21,7 +21,7 @@
             android:textColor="#FFF"
             android:textSize="@dimen/title_icon_size" />
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/liked_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -60,7 +60,7 @@
         </RelativeLayout>
 
 
-        <com.zlm.hp.widget.IconfontImageButtonTextView
+        <base.widget.IconfontImageButtonTextView
             android:id="@+id/more_menu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -92,7 +92,7 @@
             android:textColor="#ffffff"
             android:textSize="12dp" />
 
-        <com.zlm.hp.widget.LrcSeekBar
+        <base.widget.LrcSeekBar
             android:id="@+id/lrcseekbar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

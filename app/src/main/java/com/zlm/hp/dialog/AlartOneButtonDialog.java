@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.dialog.AlartDialogCenterButton;
+import com.zlm.hp.R;
+
+import base.widget.dialog.AlartDialogCenterButton;
 
 
 public class AlartOneButtonDialog extends Dialog {

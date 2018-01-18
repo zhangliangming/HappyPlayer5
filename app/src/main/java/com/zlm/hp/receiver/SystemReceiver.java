@@ -8,9 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.util.Date;
+
+import base.utils.LoggerUtil;
 
 /**
  * 系统广播
@@ -45,6 +46,14 @@ public class SystemReceiver {
      * 关闭线控
      */
     public static String ACTION_CLOSEWIREMESSAGE = "com.zlm.hp.phone.br.closewire";
+    /**
+     * 打开锁屏歌词
+     */
+    public static String ACTION_OPENLRCMESSAGE = "com.zlm.hp.lock.lrc.open";
+    /**
+     * 关闭锁屏歌词
+     */
+    public static String ACTION_CLOSELRCMESSAGE = "com.zlm.hp.lock.lrc.close";
 
     private BroadcastReceiver mSystemBroadcastReceiver;
     private IntentFilter mSystemIntentFilter;
@@ -59,9 +68,12 @@ public class SystemReceiver {
         //
         mSystemIntentFilter.addAction(ACTION_SUCCESS);
         mSystemIntentFilter.addAction(ACTION_TOASTMESSAGE);
+        //WIFI
         mSystemIntentFilter.addAction(ACTION_OPENWIREMESSAGE);
         mSystemIntentFilter.addAction(ACTION_CLOSEWIREMESSAGE);
-        
+        //歌词
+        mSystemIntentFilter.addAction(ACTION_OPENLRCMESSAGE);
+        mSystemIntentFilter.addAction(ACTION_CLOSELRCMESSAGE);
         //耳机
         mSystemIntentFilter.addAction("android.media.AUDIO_BECOMING_NOISY");
         //短信

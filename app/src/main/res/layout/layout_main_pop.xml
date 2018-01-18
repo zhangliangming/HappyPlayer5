@@ -52,7 +52,7 @@
                     android:textSize="15dp" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeAll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
                     android:visibility="invisible" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeRandom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                     android:textSize="22dp" />
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/modeSingle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -102,7 +102,7 @@
                     android:background="#e5e5e5"></View>
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -120,23 +120,22 @@
             <View
                 android:id="@+id/line"
                 android:layout_width="wrap_content"
-                android:layout_height="0.8dip"
+                android:layout_height="0.8dp"
                 android:layout_below="@+id/titlelayout"
                 android:layout_centerVertical="true"
-                android:background="#e5e5e5"></View>
+                android:background="#e5e5e5"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/line"
-                android:background="#fff"
                 android:orientation="vertical">
 
-                <com.zlm.hp.widget.LinearLayoutRecyclerView
+                <base.widget.LinearLayoutRecyclerView
                     android:id="@+id/curplaylist_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:overScrollMode="never"></com.zlm.hp.widget.LinearLayoutRecyclerView>
+                    android:overScrollMode="never"/>
 
             </LinearLayout>
         </RelativeLayout>
@@ -145,7 +144,7 @@
             android:id="@+id/centerLine"
             android:layout_width="wrap_content"
             android:layout_height="0.5dip"
-            android:layout_centerVertical="true"></View>
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 
 </LinearLayout>

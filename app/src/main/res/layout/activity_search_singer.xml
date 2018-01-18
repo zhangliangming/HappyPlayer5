@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zlm.hp.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<base.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeback_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:orientation="vertical"
-    tools:context="com.zlm.hp.ui.SearchSingerActivity">
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/singer_layout"
@@ -28,7 +27,7 @@
                 android:layout_height="match_parent">
 
 
-                <com.zlm.hp.widget.IconfontTextView
+                <base.widget.IconfontTextView
                     android:id="@+id/load_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -127,7 +126,7 @@
                     android:orientation="vertical">
 
 
-                    <com.zlm.hp.widget.ButtonRelativeLayout
+                    <base.widget.ButtonRelativeLayout
                         android:id="@+id/surebtn"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -145,11 +144,11 @@
                             android:textColor="#fff" />
 
 
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
+                    </base.widget.ButtonRelativeLayout>
                 </LinearLayout>
 
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 
-</com.zlm.hp.widget.SwipeBackLayout>
+</base.widget.SwipeBackLayout>

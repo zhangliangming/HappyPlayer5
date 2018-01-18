@@ -5,8 +5,6 @@ import android.content.Context;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskThreadEven;
-import com.zlm.hp.libs.utils.LoggerUtil;
-import com.zlm.hp.libs.utils.NetUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,6 +12,9 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
+import base.utils.LoggerUtil;
+import base.utils.NetUtil;
 
 
 /**

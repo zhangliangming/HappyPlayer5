@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
 
-    <com.zlm.hp.widget.PopListItemRelativeLayout
+    <base.widget.PopListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/songitem_height"
@@ -27,7 +27,7 @@
             android:textSize="15dp" />
 
 
-        <com.zlm.hp.libs.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <base.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/singPic"
             android:layout_width="55dp"
             android:layout_height="55dp"
@@ -98,7 +98,7 @@
 
         </LinearLayout>
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -110,6 +110,6 @@
             android:textSize="25dp" />
         />
 
-    </com.zlm.hp.widget.PopListItemRelativeLayout>
+    </base.widget.PopListItemRelativeLayout>
 
 </LinearLayout>

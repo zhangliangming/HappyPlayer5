@@ -8,9 +8,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 
 import java.util.Date;
+
+import base.utils.LoggerUtil;
 
 /**
  * Created by zhangliangming on 2017/8/16.

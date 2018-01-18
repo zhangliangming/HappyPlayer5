@@ -11,22 +11,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
-import com.zlm.hp.widget.ListItemRelativeLayout;
 
 import java.util.ArrayList;
+
+import base.utils.ToastUtil;
+import base.widget.IconfontImageButtonTextView;
+import base.widget.ListItemRelativeLayout;
 
 /**
  * 最近歌曲

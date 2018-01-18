@@ -11,19 +11,20 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.api.RankSongHttpUtil;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AsyncTaskHttpUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import base.utils.ToastUtil;
 
 /**
  * 排行详情
@@ -59,7 +60,7 @@ public class RankSongFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOADDATA:
-                    loadDataUtil(500, true);
+                    loadDataUtil(0, true);
                     break;
             }
         }
@@ -174,7 +175,7 @@ public class RankSongFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
-                loadDataUtil(500, true);
+                loadDataUtil(0, true);
             }
         });
 

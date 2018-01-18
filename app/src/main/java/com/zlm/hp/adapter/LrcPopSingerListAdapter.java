@@ -8,13 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.ui.LrcActivity;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.ui.SearchSingerActivity;
 import com.zlm.hp.utils.ImageUtil;
-import com.zlm.hp.widget.PopListItemRelativeLayout;
+
+import base.widget.CircleImageView;
+import base.widget.PopListItemRelativeLayout;
 
 /**
  * 歌手列表

@@ -5,7 +5,7 @@
     android:background="@color/transparent"
     android:orientation="vertical">
 
-    <com.zlm.hp.widget.ListItemRelativeLayout
+    <base.widget.ListItemRelativeLayout
         android:id="@+id/itemBG"
         android:layout_width="match_parent"
         android:layout_height="@dimen/songitem_height"
@@ -22,10 +22,10 @@
             android:textColor="#999"
             android:textSize="16dp" />
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignParentBottom="true" />
-    </com.zlm.hp.widget.ListItemRelativeLayout>
+    </base.widget.ListItemRelativeLayout>
 
 </LinearLayout>

@@ -15,7 +15,7 @@
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp" >
 
-            <com.zlm.hp.widget.dialog.AlartDialogTop
+            <base.widget.dialog.AlartDialogTop
                 android:id="@+id/top"
                 android:layout_width="fill_parent"
                 android:layout_height="80dp" >
@@ -31,7 +31,7 @@
                     android:layout_marginRight="10dp"
                     android:text=""
                     android:textColor="#787777" />
-            </com.zlm.hp.widget.dialog.AlartDialogTop>
+            </base.widget.dialog.AlartDialogTop>
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -39,7 +39,7 @@
                 android:layout_below="@+id/top"
                 android:orientation="horizontal" >
 
-                <com.zlm.hp.widget.dialog.AlartDialogLeftButton
+                <base.widget.dialog.AlartDialogLeftButton
                     android:id="@+id/alartDialogLeftButton"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -54,9 +54,9 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textColor="#000000" />
-                </com.zlm.hp.widget.dialog.AlartDialogLeftButton>
+                </base.widget.dialog.AlartDialogLeftButton>
 
-                <com.zlm.hp.widget.dialog.AlartDialogRightButton
+                <base.widget.dialog.AlartDialogRightButton
                     android:id="@+id/alartDialogRightButton"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
@@ -71,7 +71,7 @@
                         android:layout_centerInParent="true"
                         android:text=""
                         android:textColor="#000000" />
-                </com.zlm.hp.widget.dialog.AlartDialogRightButton>
+                </base.widget.dialog.AlartDialogRightButton>
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

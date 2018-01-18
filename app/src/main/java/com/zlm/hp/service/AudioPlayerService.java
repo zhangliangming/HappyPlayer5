@@ -15,28 +15,28 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.libs.utils.LoggerUtil;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
+import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.NotificationReceiver;
 import com.zlm.hp.ui.MainActivity;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
 
+import base.utils.LoggerUtil;
+import base.utils.ToastUtil;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -57,7 +57,7 @@ public class AudioPlayerService extends Service {
     /**
      * 播放器
      */
-    private IjkMediaPlayer mMediaPlayer;
+    private IMediaPlayer mMediaPlayer;
 
     /**
      * 播放线程
@@ -204,6 +204,7 @@ public class AudioPlayerService extends Service {
         // FLAG_NO_CLEAR 该通知不能被状态栏的清除按钮给清除掉
         // FLAG_ONGOING_EVENT 通知放置在正在运行
         // FLAG_INSISTENT 是否一直进行，比如音乐一直播放，知道用户响应
+        mPlayBarNotification.flags= Notification.FLAG_FOREGROUND_SERVICE;
         mPlayBarNotification.flags |= Notification.FLAG_ONGOING_EVENT;
         // mNotification.flags |= Notification.FLAG_NO_CLEAR;
 
@@ -303,6 +304,13 @@ public class AudioPlayerService extends Service {
             sendBroadcast(nextIntent);
 
         } else if (intent.getAction().equals(
+                NotificationReceiver.NOTIFIATION_APP_CLOSENOTIFICATION)) {
+            //
+            Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_CANCELNOTIFICATION);
+            nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            sendBroadcast(nextIntent);
+
+        }else if (intent.getAction().equals(
                 NotificationReceiver.NOTIFIATION_DESLRC_SHOW)) {
 
         } else if (intent.getAction().equals(
@@ -351,6 +359,14 @@ public class AudioPlayerService extends Service {
 
         mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.prew,
                 pendprewButtonIntent);
+
+        Intent buttonCloseIntent = new Intent(
+                NotificationReceiver.NOTIFIATION_APP_CLOSENOTIFICATION);
+        PendingIntent pendCloseButtonIntent = PendingIntent.getBroadcast(
+                AudioPlayerService.this, 0, buttonCloseIntent, 0);
+
+        mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.singClose,
+                pendCloseButtonIntent);
 
         String action = intent.getAction();
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
@@ -415,7 +431,7 @@ public class AudioPlayerService extends Service {
 
         mPlayBarNotification.contentView = mNotifyPlayBarRemoteViews;
 
-        mNotificationManager.notify(mNotificationPlayBarId, mPlayBarNotification);
+        startForeground(mNotificationPlayBarId, mPlayBarNotification);
 
     }
 
@@ -427,7 +443,6 @@ public class AudioPlayerService extends Service {
     }
 
     @SuppressLint("WrongConstant")
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
@@ -471,6 +486,19 @@ public class AudioPlayerService extends Service {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_PREMUSIC)) {
             //上一首
             preMusic();
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_CANCELNOTIFICATION)) {
+            //关闭通知栏
+            cancelNotification();
+        }
+
+        if(action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
+                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)
+                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
+
+            //针对锁屏歌词开启时有用
+            Intent closeIntent = new Intent(LockLrcReceiver.ACTION_SHOWLRCMESSAGE);
+            closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            sendBroadcast(closeIntent);
         }
 
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)
@@ -541,6 +569,18 @@ public class AudioPlayerService extends Service {
         playMusic(audioMessage);
     }
 
+    /**
+     * 关闭通知栏
+     */
+    private void cancelNotification() {
+        if (mMediaPlayer != null) {
+            if (mMediaPlayer.isPlaying()) {
+                mMediaPlayer.pause();
+            }
+        }
+        mHPApplication.setPlayStatus(AudioPlayerManager.PAUSE);
+        mNotificationManager.cancel(mNotificationPlayBarId);
+    }
 
     /**
      * 快进

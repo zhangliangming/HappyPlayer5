@@ -11,22 +11,23 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
-import com.zlm.hp.widget.ListItemRelativeLayout;
 
 import java.util.ArrayList;
+
+import base.utils.ToastUtil;
+import base.widget.IconfontImageButtonTextView;
+import base.widget.ListItemRelativeLayout;
 
 /**
  * 排行歌曲
@@ -89,9 +90,9 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         if (state == NODATA && mDatas.size() == position) {
             return NODATA;
         } else {
-            if (mDatas.size() + 1 == position) {
+            /*if (mDatas.size() + 1 == position) {
                 return COPYRIGHT;
-            } else if (mDatas.size() == position) {
+            } else */if (mDatas.size() == position) {
                 return state;
             }
             return OTHER;
@@ -393,7 +394,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         if (state == NODATA) return mDatas.size() + 1;
-        return mDatas.size() + 2;
+        return mDatas.size() + 1;
     }
 
 

@@ -1,5 +1,6 @@
 package com.zlm.hp.receiver;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,10 +10,14 @@ import android.os.Message;
 import android.view.KeyEvent;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import base.utils.LoggerUtil;
 
 /**
  * 耳机线控
@@ -24,21 +29,26 @@ public class MyPhoneReceiver extends BroadcastReceiver {
      *
      */
     private LoggerUtil logger;
-
     private Context mContext;
     private HPApplication mHPApplication;
+    private Timer timer;
+    private static MTask myTimer;
+    /**单击次数**/
+    private static int clickCount;
 
     //需要写一个默认构造方法，要不Manifest 会报错
     public MyPhoneReceiver() {
         this.mHPApplication = HPApplication.getInstance();
         this.mContext = mHPApplication.getApplicationContext();
         logger = LoggerUtil.getZhangLogger(mContext);
+        timer = new Timer(true);
     }
 
 
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mPhoneHandler = new Handler() {
 
         @Override
@@ -79,6 +89,15 @@ public class MyPhoneReceiver extends BroadcastReceiver {
                             break;
                     }
 
+                    break;
+                case 1://单击，暂停或者播放
+                    playOrPause();
+                    break;
+                case 2://双击，下一首音乐
+                    playNext();
+                    break;
+                case 3://三连击，上一首音乐
+                    playPrevious();
                     break;
                 // 快进
                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
@@ -229,33 +248,67 @@ public class MyPhoneReceiver extends BroadcastReceiver {
 
     }
 
+    /**
+     * 定时器，用于延迟1秒，判断是否会发生双击和三连击
+     */
+    class MTask extends TimerTask {
+        @Override
+        public void run() {
+            if (clickCount==1) {
+                mPhoneHandler.sendEmptyMessage(1);
+            }else if (clickCount==2) {
+                mPhoneHandler.sendEmptyMessage(2);
+            }
+            clickCount=0;
+        }
+    }
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
         String action = intent.getAction();
         if (action.equals("android.intent.action.MEDIA_BUTTON")) {
 
+            KeyEvent keyEvent = (KeyEvent)intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT); //获得KeyEvent对象
+            try {
+                if(keyEvent.getAction() == KeyEvent.ACTION_UP){
+                    if (clickCount==0) {//单击
+                        clickCount++;
+                        myTimer = new MTask();
+                        timer.schedule(myTimer,1000);
+                    }else if (clickCount==1) {//双击
+                        clickCount++;
+                    }else if (clickCount==2) {//三连击
+                        clickCount=0;
+                        myTimer.cancel();
+                        mPhoneHandler.sendEmptyMessage(3);
+                    }
+                }
+            } catch (Exception e) {
+            }
+            abortBroadcast();//终止广播(不让别的程序收到此广播，免受干扰)
+
             // 耳机事件 Intent 附加值为(Extra)点击MEDIA_BUTTON的按键码
 
-            KeyEvent event = (KeyEvent) intent
-                    .getParcelableExtra(Intent.EXTRA_KEY_EVENT);
-            if (event == null)
-                return;
-
-            boolean isActionUp = (event.getAction() == KeyEvent.ACTION_UP);
-            if (!isActionUp)
-                return;
-
-            int keyCode = event.getKeyCode();
-            long eventTime = event.getEventTime() - event.getDownTime();// 按键按下到松开的时长
-
-            Message msg = Message.obtain();
-            msg.what = 100;
-            Bundle data = new Bundle();
-            data.putInt("key_code", keyCode);
-            data.putLong("event_time", eventTime);
-            msg.setData(data);
-            mPhoneHandler.sendMessage(msg);
+//            KeyEvent event = (KeyEvent) intent
+//                    .getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+//            if (event == null)
+//                return;
+//
+//            boolean isActionUp = (event.getAction() == KeyEvent.ACTION_UP);
+//            if (!isActionUp)
+//                return;
+//
+//            int keyCode = event.getKeyCode();
+//            long eventTime = event.getEventTime() - event.getDownTime();// 按键按下到松开的时长
+//
+//            Message msg = Message.obtain();
+//            msg.what = 100;
+//            Bundle data = new Bundle();
+//            data.putInt("key_code", keyCode);
+//            data.putLong("event_time", eventTime);
+//            msg.setData(data);
+//            mPhoneHandler.sendMessage(msg);
         }
     }
 }

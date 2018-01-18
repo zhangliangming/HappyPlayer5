@@ -1,5 +1,6 @@
 package com.zlm.hp.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
@@ -12,16 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.ColorUtil;
-import com.zlm.hp.libs.utils.LoggerUtil;
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.IconfontTextView;
+
+import base.utils.ColorUtil;
+import base.utils.LoggerUtil;
 
 /**
  * Created by zhangliangming on 2017/7/23.
@@ -32,6 +31,7 @@ public abstract class BaseFragment extends StatedFragment {
      */
     public HPApplication mHPApplication;
     public Activity mActivity;
+    public Context mContext;
 
     /**
      * 内容布局
@@ -44,10 +44,6 @@ public abstract class BaseFragment extends StatedFragment {
      * 加载中布局
      */
     private LinearLayout mLoadingContainer;
-    /**
-     * 加载图标
-     */
-    private IconfontTextView mLoadImgView;
 
     /**
      * 旋转动画
@@ -74,6 +70,7 @@ public abstract class BaseFragment extends StatedFragment {
     private final int SHOWCONTENTVIEW = 1;
     private final int SHOWNONETView = 2;
 
+    @SuppressLint("HandlerLeak")
     private Handler mShowViewHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -193,6 +190,7 @@ public abstract class BaseFragment extends StatedFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.mContext = context;
         this.mActivity = (Activity) context;
     }
 
@@ -200,12 +198,6 @@ public abstract class BaseFragment extends StatedFragment {
      * 初始界面
      */
     private void initView() {
-
-        mLoadImgView = mLoadingContainer.findViewById(R.id.load_img);
-        rotateAnimation = AnimationUtils.loadAnimation(getContext(),
-                R.anim.anim_rotate);
-        rotateAnimation.setInterpolator(new LinearInterpolator());// 匀速
-        mLoadImgView.startAnimation(rotateAnimation);
         //
         mNetBGLayout = mNetContainer.findViewById(R.id.net_layout);
         mNetBGLayout.setOnClickListener(new View.OnClickListener() {
@@ -233,8 +225,6 @@ public abstract class BaseFragment extends StatedFragment {
         mNetContainer.setVisibility(View.GONE);
         mContentContainer.setVisibility(View.GONE);
         mLoadingContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
-        mLoadImgView.startAnimation(rotateAnimation);
 
     }
 
@@ -252,7 +242,6 @@ public abstract class BaseFragment extends StatedFragment {
         mContentContainer.setVisibility(View.VISIBLE);
         mLoadingContainer.setVisibility(View.GONE);
         mNetContainer.setVisibility(View.GONE);
-        mLoadImgView.clearAnimation();
     }
 
     /**
@@ -269,7 +258,6 @@ public abstract class BaseFragment extends StatedFragment {
         mContentContainer.setVisibility(View.GONE);
         mLoadingContainer.setVisibility(View.GONE);
         mNetContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
     }
 
     /**
@@ -319,7 +307,7 @@ public abstract class BaseFragment extends StatedFragment {
      */
     private int getStatusColor() {
 
-        return ColorUtil.parserColor(ContextCompat.getColor(mActivity.getApplicationContext(), R.color.defColor));
+        return ColorUtil.parserColor(ContextCompat.getColor(mActivity.getApplicationContext(), R.color.colorPrimary));
 
     }
 

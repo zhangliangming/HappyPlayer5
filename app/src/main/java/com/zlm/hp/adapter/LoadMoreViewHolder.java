@@ -3,8 +3,9 @@ package com.zlm.hp.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.zlm.hp.ui.R;
-import com.zlm.hp.widget.ListItemRelativeLayout;
+import com.zlm.hp.R;
+
+import base.widget.ListItemRelativeLayout;
 
 /**
  * 加载更多

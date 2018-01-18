@@ -8,11 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.entity.SearchArtistPicResult;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.ui.SearchSingerActivity;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;

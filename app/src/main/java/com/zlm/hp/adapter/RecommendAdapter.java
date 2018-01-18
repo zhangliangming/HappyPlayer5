@@ -9,17 +9,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
-import com.zlm.hp.widget.ListItemRelativeLayout;
 
-import java.io.File;
 import java.util.ArrayList;
+
+import base.widget.ListItemRelativeLayout;
 
 /**
  * 排行
@@ -57,9 +57,9 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         if (state == NODATA && mDatas.size() == position) {
             return NODATA;
         } else {
-            if (mDatas.size() == position) {
-                return FOOTER;
-            }
+//            if (mDatas.size() == position) {
+//                return FOOTER;
+//            }
             return OTHER;
         }
     }
@@ -67,15 +67,15 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         View view = null;
-        if (viewType == FOOTER) {
-            view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_copyright, null, false);
-            CopyrightViewHolder holder = new CopyrightViewHolder(view);
-            return holder;
-        } else if (viewType == NODATA) {
+        if (viewType == NODATA) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_nodata, null, false);
             NoDataViewHolder holder = new NoDataViewHolder(view);
             return holder;
-        } else {
+        } /*else if (viewType == FOOTER) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_copyright, null, false);
+            CopyrightViewHolder holder = new CopyrightViewHolder(view);
+            return holder;
+        }*/ else {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_recommend, null, false);
             RecommendViewHolder holder = new RecommendViewHolder(view);
             return holder;

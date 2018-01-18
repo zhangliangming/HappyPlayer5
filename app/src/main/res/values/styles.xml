@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -19,6 +19,12 @@
 
     </style>
 
+    <style name="LaunchStyle" parent="AppTheme">
+        <!--设置Appliction背景-->
+        <item name="android:windowBackground">@mipmap/splash</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+    </style>
 
     <!-- mainactivity style-->
     <style name="noTransparentTheme" parent="AppTheme">
@@ -42,7 +48,18 @@
 
     <style name="NotificationTitle">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
-        <item name="android:textStyle">bold</item>
+        <!--<item name="android:textStyle">bold</item>-->
+    </style>
+
+    <style name="LockScreenBase" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
 </resources>

@@ -3,17 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bg_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.zlm.hp.ui.LrcActivity">
+    android:layout_height="match_parent">
 
 
-    <com.zlm.hp.widget.RotateLinearLayout
+    <base.widget.RotateLinearLayout
         android:id="@+id/rotateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@mipmap/skin_player_bg">
 
-        <com.zlm.hp.widget.SingerImageView
+        <base.widget.SingerImageView
             android:id="@+id/singerimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -78,7 +77,7 @@
                             android:singleLine="true"
                             android:text="@string/def_songName"
                             android:textColor="#fff"
-                            android:textSize="15dp" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/singerName"
@@ -90,7 +89,7 @@
                             android:singleLine="true"
                             android:text="@string/def_artist"
                             android:textColor="#fff"
-                            android:textSize="12dp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -99,7 +98,7 @@
                         android:layout_width="@dimen/title_height"
                         android:layout_height="@dimen/title_height"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"></View>
+                        android:layout_alignParentTop="true"/>
 
 
                 </RelativeLayout>
@@ -112,7 +111,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_margin="10dp">
 
-                    <com.zlm.hp.widget.lrc.ManyLineLyricsViewV2
+                    <base.widget.lrc.ManyLineLyricsViewV2
                         android:id="@+id/manyLineLyricsView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -195,39 +194,40 @@
                     layout="@layout/layout_lrc_playbar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/lrc_bar_height"
-                    android:layout_alignParentBottom="true"></include>
+                    android:layout_alignParentBottom="true"/>
 
 
             </RelativeLayout>
         </LinearLayout>
 
-    </com.zlm.hp.widget.RotateLinearLayout>
+    </base.widget.RotateLinearLayout>
 
     <include
         layout="@layout/layout_lrc_list_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:visibility="invisible"/>
 
     <include
         layout="@layout/layout_lrc_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:visibility="invisible"/>
 
     <include
         layout="@layout/layout_lrc_singerlist_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:visibility="invisible"/>
 
     <include
         layout="@layout/layout_lrc_songinfo_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:visibility="invisible"/>
+
 </RelativeLayout>

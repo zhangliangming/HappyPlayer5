@@ -11,7 +11,7 @@
         android:layout_marginBottom="@dimen/player_height"
         android:clickable="true">
 
-        <com.zlm.hp.widget.IconfontTextView
+        <base.widget.IconfontTextView
             android:id="@+id/nonet_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

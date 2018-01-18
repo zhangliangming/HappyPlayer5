@@ -12,7 +12,7 @@
     <string name="def_text">乐乐音乐，开心每一天</string>
     <string name="def_artist">乐乐音乐</string>
     <string name="def_songName">开心每一天</string>
-    <string name="copyright">copyright ©2015-2018 zhangliangming All Rights Reserved.</string>
+    <string name="copyright">copyright ©2015-2017 zhangliangming All Rights Reserved.</string>
 
     <string name="loadmore">点击加载更多</string>
     <string name="loading">正在加载...</string>
@@ -36,6 +36,25 @@
     <string name="tab_control_img">&#xe8a1;</string>
     <string name="tab_close">退出程序</string>
     <string name="tab_close_img">&#xe812;</string>
+
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="share">分享</string>
+    <string name="delete">删除</string>
+    <string name="search">搜索</string>
+    <string name="save">保存</string>
+    <string name="weather_temp">%s°</string>
+    <string name="weather_wind">%1$s风%2$s级&#160;&#160;湿度%3$s%%</string>
+    <string name="timer_set">设置成功，将于%s分钟后关闭</string>
+    <string name="timer_cancel">定时停止播放已取消</string>
+    <string name="search_tips">歌曲名、歌手名</string>
+
+    <string name="menu_setting">功能设置</string>
+    <string name="menu_share">推荐给朋友</string>
+    <string name="menu_about">关于波尼音乐</string>
+    <string name="menu_night">夜间模式</string>
+    <string name="menu_timer">定时停止播放</string>
+    <string name="menu_exit">退出应用</string>
 
     <string name="no_net_img">&#xe62d;</string>
     <string name="loading_img">&#xe68e;</string>

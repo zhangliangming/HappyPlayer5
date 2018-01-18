@@ -3,7 +3,6 @@ package com.zlm.hp.net.api;
 import android.content.Context;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.NetUtil;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
 
@@ -15,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import base.utils.NetUtil;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;

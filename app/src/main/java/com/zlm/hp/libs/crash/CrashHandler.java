@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.widget.Toast;
 
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -22,6 +21,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import base.utils.LoggerUtil;
 
 /**
  * UncaughtException处理类,当程序发生Uncaught异常的时候,有该类来接管程序,并记录错误报告.

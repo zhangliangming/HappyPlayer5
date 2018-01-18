@@ -11,16 +11,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.DownloadMusicAdapter;
 import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.Category;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AsyncTaskUtil;
 
 import java.util.ArrayList;

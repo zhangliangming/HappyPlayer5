@@ -3,7 +3,6 @@ package com.zlm.hp.net.api;
 import android.content.Context;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.NetUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SongInfoResult;
@@ -17,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import base.utils.NetUtil;
 
 /**
  * 搜索

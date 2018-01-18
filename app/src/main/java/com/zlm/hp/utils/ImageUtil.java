@@ -19,17 +19,16 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.model.SongSingerInfo;
 import com.zlm.hp.net.api.SearchArtistPicUtil;
 import com.zlm.hp.net.api.SearchSingerImgHttpUtil;
 import com.zlm.hp.net.entity.SearchArtistPicResult;
 import com.zlm.hp.net.entity.SearchSingerImgResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.ui.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,14 +38,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import static org.apache.log4j.lf5.util.StreamUtils.getBytes;
+import base.widget.CircleImageView;
 
 /**
  * Created by zhangliangming on 2017/7/30.
  */
 public class ImageUtil {
 
-    ;
     // 缓存
     public static LruCache<String, Bitmap> sImageCache = getImageCache();
 
@@ -261,14 +259,12 @@ public class ImageUtil {
 
     /**
      * 获取歌手写真图片
-     *
-     * @param hPApplication
      * @param context
      * @param hash
      * @param singerName
      * @return
      */
-    public static Bitmap getSingerImgBitmap(final HPApplication hPApplication, final Context context, final String hash, final String singerName, String imgUrl, boolean maybeFormNet) {
+    public static Bitmap getSingerImgBitmap(final Context context, final String hash, final String singerName, String imgUrl, boolean maybeFormNet) {
         final String filePath = ResourceFileUtil.getFilePath(context, ResourceConstants.PATH_SINGER, singerName + File.separator + imgUrl.hashCode() + ".jpg");
         final String key = filePath.hashCode() + "";
 
@@ -362,7 +358,7 @@ public class ImageUtil {
                 //预加载图片
                 for (int i = 0; i < list.size(); i++) {
                     SongSingerInfo songSingerInfo = list.get(i);
-                    getSingerImgBitmap(hPApplication, context, songSingerInfo.getHash(), songSingerInfo.getSingerName(), songSingerInfo.getImgUrl(), true);
+                    getSingerImgBitmap(context, songSingerInfo.getHash(), songSingerInfo.getSingerName(), songSingerInfo.getImgUrl(), true);
                 }
 
                 return super.doInBackground(strings);
@@ -478,8 +474,7 @@ public class ImageUtil {
         options.inJustDecodeBounds = false;
 
         /** 这里是获取手机屏幕的分辨率用来处理 图片 溢出问题的。begin */
-        DisplayMetrics dm = new DisplayMetrics();
-        dm = context.getResources().getDisplayMetrics();
+        DisplayMetrics dm = context.getResources().getDisplayMetrics();
         int displaypixels = dm.widthPixels * dm.heightPixels;
 
         options.inSampleSize = computeSampleSize(options, -1, displaypixels);
@@ -517,7 +512,7 @@ public class ImageUtil {
             conn.setDoInput(true);
             conn.connect();
             InputStream is = conn.getInputStream();
-            byte[] bytes = getBytes(is);
+            byte[] bytes = inputStream2Bytes(is);
             BitmapFactory.Options opts = new BitmapFactory.Options();
             // 这3句是处理图片溢出的begin( 如果不需要处理溢出直接 opts.inSampleSize=1;)
             opts.inJustDecodeBounds = true;
@@ -607,6 +602,20 @@ public class ImageUtil {
         }
     }
 
+    private static byte[] inputStream2Bytes(InputStream is) {
+        String str = "";
+        byte[] readByte = new byte[1024];
+        int readCount = -1;
+        try {
+            while ((readCount = is.read(readByte, 0, 1024)) != -1) {
+                str += new String(readByte).trim();
+            }
+            return str.getBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public interface ImageLoadCallBack {
         public void callback(Bitmap bitmap);

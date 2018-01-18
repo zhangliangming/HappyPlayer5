@@ -5,16 +5,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.RecommendAdapter;
-import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.net.api.RankListHttpUtil;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.net.model.HttpResult;
-import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AsyncTaskHttpUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
+
+import base.utils.ToastUtil;
 
 /**
  * @Description: tab推荐界面
@@ -78,7 +79,7 @@ public class TabRecommendFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
-                loadDataUtil(500);
+                loadDataUtil(0);
             }
         });
     }
@@ -89,7 +90,7 @@ public class TabRecommendFragment extends BaseFragment {
             if (isRestoreInstance) {
                 mDatas.clear();
             }
-            loadDataUtil(500);
+            loadDataUtil(0);
         }
     }
 

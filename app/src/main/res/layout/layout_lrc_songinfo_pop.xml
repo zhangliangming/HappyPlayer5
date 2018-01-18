@@ -13,7 +13,7 @@
         android:background="@color/transparent">
 
 
-        <com.zlm.hp.widget.PlayListBGRelativeLayout
+        <base.widget.PlayListBGRelativeLayout
             android:id="@+id/pop_songinfo_parent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
                     android:textSize="13dp"></TextView>
             </LinearLayout>
 
-        </com.zlm.hp.widget.PlayListBGRelativeLayout>
+        </base.widget.PlayListBGRelativeLayout>
 
     </RelativeLayout>
 

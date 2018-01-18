@@ -8,11 +8,12 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioMessage;
 
 import java.util.Date;
+
+import base.utils.LoggerUtil;
 
 /**
  * 音频广播
@@ -54,6 +55,8 @@ public class AudioBroadcastReceiver {
     public static final String ACTION_PREMUSIC = "com.zlm.hp.pre.music";
     //点击下一首
     public static final String ACTION_NEXTMUSIC = "com.zlm.hp.next.music";
+    //点击关闭通知栏
+    public static final String ACTION_CANCELNOTIFICATION = "com.zlm.hp.cancel.notification";
 
     //播放器开始播放
     public static final String ACTION_SERVICE_PLAYMUSIC = "com.zlm.hp.service.play.music";
@@ -122,6 +125,7 @@ public class AudioBroadcastReceiver {
         mAudioIntentFilter.addAction(ACTION_SEEKTOMUSIC);
         mAudioIntentFilter.addAction(ACTION_PREMUSIC);
         mAudioIntentFilter.addAction(ACTION_NEXTMUSIC);
+        mAudioIntentFilter.addAction(ACTION_CANCELNOTIFICATION);
 
         mAudioIntentFilter.addAction(ACTION_SERVICE_PLAYMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_PAUSEMUSIC);

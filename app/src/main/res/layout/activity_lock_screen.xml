@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeback_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bg_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <FrameLayout
+            android:id="@+id/rotateLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@mipmap/skin_player_bg">
+
+            <base.widget.SingerImageView
+                android:id="@+id/singerimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/lrc_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#50000000"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/lrc_title_height"
+                        android:layout_alignParentTop="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toLeftOf="@+id/right_flag"
+                            android:layout_toRightOf="@+id/backImg"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/songName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentTop="true"
+                                android:layout_toEndOf="@+id/backImg"
+                                android:layout_weight="1"
+                                android:ellipsize="marquee"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:gravity="center|center_horizontal"
+                                android:marqueeRepeatLimit="marquee_forever"
+                                android:singleLine="true"
+                                android:text="@string/def_songName"
+                                android:textColor="#fff"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/singerName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:ellipsize="marquee"
+                                android:gravity="center|center_horizontal"
+                                android:singleLine="true"
+                                android:text="@string/def_artist"
+                                android:textColor="#fff"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/right_flag"
+                            android:layout_width="@dimen/title_height"
+                            android:layout_height="@dimen/title_height"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"/>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/lrc_playbar"
+                        android:layout_below="@+id/title"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp">
+
+                        <base.widget.lrc.ManyLineLyricsViewV2
+                            android:id="@+id/manyLineLyricsView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <ImageView
+                            android:id="@+id/hideTranslateImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bql"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTranslateImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqm"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTransliterationImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqo"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/hideTransliterationImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqn"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTTToTranslateImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqi"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTTToTransliterationImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqj"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/hideTTImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqk"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                    </RelativeLayout>
+
+
+                    <include
+                        android:id="@+id/lrc_playbar"
+                        layout="@layout/layout_lrc_playbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/lrc_bar_height"
+                        android:layout_alignParentBottom="true"/>
+
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+
+        <include
+            layout="@layout/layout_lrc_list_pop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"/>
+
+        <include
+            layout="@layout/layout_lrc_pop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"/>
+
+        <include
+            layout="@layout/layout_lrc_singerlist_pop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"/>
+
+        <include
+            layout="@layout/layout_lrc_songinfo_pop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+
+</base.widget.SwipeBackLayout>

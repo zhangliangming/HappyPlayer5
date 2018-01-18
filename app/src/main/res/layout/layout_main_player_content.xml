@@ -28,7 +28,7 @@
             android:background="@drawable/kg_ic_playing_bar_drag_opened"
             android:visibility="visible" />
 
-        <com.zlm.hp.libs.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <base.widget.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/play_bar_artist"
             android:layout_width="@dimen/player_artist_imgSize"
             android:layout_height="@dimen/player_artist_imgSize"
@@ -41,7 +41,7 @@
             app:civ_border_width="2dp" />
 
 
-        <com.zlm.hp.widget.LrcSeekBar
+        <base.widget.LrcSeekBar
             android:id="@+id/seekBar"
             android:layout_width="match_parent"
             android:layout_height="20dp"

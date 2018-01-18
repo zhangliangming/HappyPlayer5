@@ -20,7 +20,7 @@
             android:textColor="@color/def_bar_title_color"
             android:textSize="14.0dip" />
 
-        <com.zlm.hp.widget.DividerView
+        <base.widget.DividerView
             android:layout_width="match_parent"
             android:layout_height="1.5dip"
             android:layout_alignParentBottom="true" />

@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.zlm.hp.libs.utils.DateUtil;
 import com.zlm.hp.model.SongSingerInfo;
 
 import java.util.ArrayList;
@@ -16,6 +15,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import base.utils.DateUtil;
 
 /**
  * 歌曲歌手数据库

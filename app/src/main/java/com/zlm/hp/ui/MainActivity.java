@@ -9,10 +9,15 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -22,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zlm.hp.R;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -33,9 +39,6 @@ import com.zlm.hp.fragment.RecentMusicFragment;
 import com.zlm.hp.fragment.SearchFragment;
 import com.zlm.hp.fragment.TabMyFragment;
 import com.zlm.hp.fragment.TabRecommendFragment;
-import com.zlm.hp.libs.utils.ColorUtil;
-import com.zlm.hp.libs.utils.ToastUtil;
-import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
@@ -45,6 +48,7 @@ import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
+import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.MobliePhoneReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.receiver.PhoneReceiver;
@@ -53,18 +57,23 @@ import com.zlm.hp.service.AudioPlayerService;
 import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.MediaUtil;
+import com.zlm.hp.utils.NaviMenuHelper;
 import com.zlm.hp.utils.ToastShowUtil;
-import com.zlm.hp.widget.IconfontImageButtonTextView;
-import com.zlm.hp.widget.IconfontIndicatorTextView;
-import com.zlm.hp.widget.IconfontTextView;
-import com.zlm.hp.widget.LinearLayoutRecyclerView;
-import com.zlm.hp.widget.LrcSeekBar;
-import com.zlm.hp.widget.SlidingMenuLayout;
-import com.zlm.hp.widget.SwipeoutLayout;
-import com.zlm.hp.widget.lrc.FloatLyricsView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.ColorUtil;
+import base.utils.ToastUtil;
+import base.widget.CircleImageView;
+import base.widget.IconfontImageButtonTextView;
+import base.widget.IconfontIndicatorTextView;
+import base.widget.IconfontTextView;
+import base.widget.LinearLayoutRecyclerView;
+import base.widget.LrcSeekBar;
+import base.widget.SlidingMenuLayout;
+import base.widget.SwipeoutLayout;
+import base.widget.lrc.FloatLyricsView;
 
 /**
  * @Description: 主界面
@@ -87,12 +96,16 @@ public class MainActivity extends BaseActivity {
      */
     private long mExitTime;
 
+    //侧边栏
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+
     //////////////////////////标题栏/////////////////////////////////////////////////
 
     /**
      * 图标按钮
      */
-    private IconfontImageButtonTextView mIconButton;
+    private ImageView mIconButton;
 
 
     private IconfontImageButtonTextView mSearchButton;
@@ -231,6 +244,14 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    private LockLrcReceiver mLockLrcReceiver;
+    private LockLrcReceiver.LockLrcReceiverListener mLockLrcReceiverListener = new LockLrcReceiver.LockLrcReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            doLockLrcReceive(context, intent);
+        }
+    };
+
 
     /**
      *
@@ -326,6 +347,9 @@ public class MainActivity extends BaseActivity {
         //初始化标题栏视图
         initTitleViews();
 
+        //初始化侧边栏
+        initNavigation();
+
         //初始化中间视图
         initPageViews();
 
@@ -383,7 +407,6 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 处理系统广播
      *
@@ -420,7 +443,12 @@ public class MainActivity extends BaseActivity {
                 sendBroadcast(resumeIntent);
 
             }
-
+        } else if(action.equals(SystemReceiver.ACTION_OPENLRCMESSAGE)) {
+            //打开锁屏歌词
+            mLockLrcReceiver.registerReceiver(getApplicationContext());
+        } else if(action.equals(SystemReceiver.ACTION_CLOSELRCMESSAGE)) {
+            //关闭锁屏歌词
+            mLockLrcReceiver.unregisterReceiver(getApplicationContext());
         }
     }
 
@@ -543,6 +571,11 @@ public class MainActivity extends BaseActivity {
             mPauseImageView.setVisibility(View.INVISIBLE);
             mPlayImageView.setVisibility(View.VISIBLE);
 
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_CANCELNOTIFICATION)) {
+            //暂停完成
+            mPauseImageView.setVisibility(View.INVISIBLE);
+            mPlayImageView.setVisibility(View.VISIBLE);
+
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
             //唤醒完成
             mPauseImageView.setVisibility(View.VISIBLE);
@@ -611,6 +644,30 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * 处理锁屏歌词广播事件
+     *
+     * @param context
+     * @param intent
+     */
+    private void doLockLrcReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+//        if (action.equals(LockLrcReceiver.ACTION_OPENLRCMESSAGE)) {
+//            //打开锁屏歌词
+//            mLockLrcReceiver.registerReceiver(getApplicationContext());
+//        } else if (action.equals(LockLrcReceiver.ACTION_CLOSELRCMESSAGE)) {
+//            //关闭锁屏歌词
+//            mLockLrcReceiver.unregisterReceiver(getApplicationContext());
+//        }
+        boolean showLockScreen = mHPApplication.isShowLockScreen();
+        if (showLockScreen && action.equals(Intent.ACTION_SCREEN_OFF)) {
+            Intent lockscreen = new Intent(this, LockScreenActivity.class);
+            //在Service中启动一个Activity, 需要加上Intent.FLAG_ACTIVITY_NEW_TASK
+            lockscreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(lockscreen);
+        }
+    }
+
+    /**
      * 初始化服务
      */
     private void initService() {
@@ -647,28 +704,51 @@ public class MainActivity extends BaseActivity {
         mFragmentReceiver.setFragmentReceiverListener(mFragmentReceiverListener);
         mFragmentReceiver.registerReceiver(getApplicationContext());
 
+        //注册锁屏歌词广播
+        mLockLrcReceiver = new LockLrcReceiver(getApplicationContext(), mHPApplication);
+        mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
+        if (mHPApplication.isLockScreen()) {
+            mLockLrcReceiver.registerReceiver(getApplicationContext());
+        }
+
         //
         mCheckServiceHandler.postDelayed(mCheckServiceRunnable, mCheckServiceTime);
     }
 
+    private void initNavigation() {
+        //侧边栏
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.navigation_view);
+
+        // add navigation header
+        View vNavigationHeader = LayoutInflater.from(this).inflate(R.layout.navigation_header, navigationView, false);
+        navigationView.addHeaderView(vNavigationHeader);
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull final MenuItem item) {
+                drawerLayout.closeDrawers();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        item.setChecked(false);
+                    }
+                }, 500);
+                return NaviMenuHelper.onNavigationItemSelected(item, mActivity);
+            }
+        });
+    }
 
     /**
      * 初始化标题栏视图
      */
     private void initTitleViews() {
         //图标
-        mIconButton = findViewById(R.id.iconImageButton);
-        mIconButton.setConvert(true);
-        mIconButton.setPressed(false);
+        mIconButton = findViewById(R.id.iv_menu);
         mIconButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                //
-                Intent intent = new Intent(MainActivity.this, AboutActivity.class);
-                startActivity(intent);
-                //去掉动画
-                overridePendingTransition(0, 0);
+                drawerLayout.openDrawer(GravityCompat.START);
             }
         });
 
@@ -709,9 +789,8 @@ public class MainActivity extends BaseActivity {
         mSearchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 //不允许拖动
-                slidingMenuLayout.setAllowDrag(false);
+//                slidingMenuLayout.setAllowDrag(false);
                 mFragmentListener.openFragment(new SearchFragment());
 
 
@@ -959,7 +1038,7 @@ public class MainActivity extends BaseActivity {
         mPlayerBarParentLinearLayout = findViewById(R.id.playerBarParent);
 
         mSwipeoutLayout = findViewById(R.id.playerBar);
-        mSwipeoutLayout.setBackgroundColor(ColorUtil.parserColor("#ffffff", 245));
+        mSwipeoutLayout.setBackgroundColor(ColorUtil.parserColor("#ffffff", 235));
         ViewGroup barContentView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_content, null);
         barContentView.setBackgroundColor(Color.TRANSPARENT);
 
@@ -1224,7 +1303,6 @@ public class MainActivity extends BaseActivity {
         return 0;
     }
 
-
     @Override
     public void onBackPressed() {
         if (isPopViewShow) {
@@ -1293,7 +1371,6 @@ public class MainActivity extends BaseActivity {
         }
         return false;
     }
-
 
     @Override
     protected void onResume() {

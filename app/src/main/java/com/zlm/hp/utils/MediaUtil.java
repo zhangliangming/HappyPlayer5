@@ -1,15 +1,16 @@
 package com.zlm.hp.utils;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 
 import com.zlm.hp.audio.AudioFileReader;
 import com.zlm.hp.audio.TrackInfo;
 import com.zlm.hp.audio.utils.AudioUtil;
-import com.zlm.hp.libs.utils.DateUtil;
-import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.StorageInfo;
 
@@ -18,11 +19,21 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
+import base.utils.DateUtil;
+import base.utils.LoggerUtil;
+
 /**
  * 媒体处理娄
  * Created by zhangliangming on 2017/8/3.
  */
 public class MediaUtil {
+
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
 
     /**
@@ -46,16 +57,22 @@ public class MediaUtil {
      * @param foreachListener
      */
     public static void scanLocalMusic(Activity activity, ForeachListener foreachListener) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
 
         List<StorageInfo> list = StorageListUtil
                 .listAvaliableStorage(activity.getApplicationContext());
-        if(list == null || list.size() == 0){
-
-        }else{
-            for (int i = 0; i < list.size(); i++) {
-                StorageInfo storageInfo = list.get(i);
-                scanLocalAudioFile(storageInfo.path, foreachListener);
-            }
+        for (int i = 0; i < list.size(); i++) {
+            StorageInfo storageInfo = list.get(i);
+            scanLocalAudioFile(storageInfo.path, foreachListener);
         }
     }
 
