@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<clip xmlns:android="http://schemas.android.com/apk/res/android">
+    <shape android:shape="line">
+        <stroke
+            android:width="2.0dip"
+            android:color="@color/player_progress_bg"/>
+    </shape>
+</clip>

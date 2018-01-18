@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_video_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <org.dync.ijkplayerlib.base.widget.media.IjkVideoView
+        android:id="@+id/ijk_video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <ImageView
+        android:id="@+id/iv_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <org.dync.ijkplayerlib.base.widget.controller.PlayerTitleBar
+        android:id="@+id/player_title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_bar_height"
+        android:layout_alignParentTop="true"/>
+
+    <org.dync.ijkplayerlib.base.widget.controller.PlayerBottom
+        android:id="@+id/player_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/normal_bar_height"
+        android:layout_alignParentBottom="true"/>
+
+    <org.dync.ijkplayerlib.base.widget.controller.PlayerVolumeBright
+        android:id="@+id/player_volume_bright"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"/>
+
+    <!--加载中-->
+    <LinearLayout
+        android:id="@+id/ll_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:indeterminateDrawable="@drawable/player_loading_rotate"
+            android:maxHeight="38dp"
+            android:maxWidth="38dp"
+            android:minHeight="38dp"
+            android:minWidth="38dp"/>
+
+        <TextView
+            android:id="@+id/tv_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text=""
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

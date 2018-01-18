@@ -1,0 +1,63 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+
+        sourceSets {
+            main {
+                jniLibs.srcDir 'libs'
+            }
+            instrumentTest.setRoot('tests')
+            debug.setRoot('build-types/debug')
+            release.setRoot('build-types/release')
+        }
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:' + rootProject.supportLibraryVersion
+    testCompile 'junit:junit:4.12'
+    //第一种
+//    compile project(':ijkplayer-java')
+//    compile (project(':ijkplayer-exo2')){
+//        exclude group: 'tv.danmaku.ijk.media',
+//                module: 'ijkplayer-java'
+//    }
+    //第二种
+    compile 'org.dync.kathline:ijkplayer-exo2:0.8.4.2'
+//    compile (project(':ijkplayer-exo2'))
+//    compile ('org.dync.kathline:ijkplayer-exo2:0.8.4.1'){
+//        exclude group: 'tv.danmaku.ijk.media',
+//                module: 'ijkplayer-java'
+//    }
+
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-exo:0.8.4'
+
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
+    //    // Other ABIs: optional
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.4'
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.4'
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.4'
+    //    compile 'tv.danmaku.ijk.media:ijkplayer-x86_64:0.8.4'
+}

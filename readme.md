@@ -1,4 +1,13 @@
 # 更新日志 #
+- 2018-01-14：
+1.替换ijkplayer库
+2.统一版本
+3.删除log4j.jar、nineoldandroids.jar
+4.调整结构
+5.修复点击底部播放打开歌词界面，快速点击物理返回键会重复执行动画
+6.增加耳机线控，单击：播放/暂停 两次：下一曲 三次：上一曲
+7.增加锁屏界面、DrawerLayout布局在MainActivity页面（功能暂未实现）
+8.优化RecycleView显示界面和搜索界面
 - 2018-01-14：修复RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁。注：只在模拟器上面测试通过，真机没试过。
 - 2018-01-09：修复Android O系统时，通知栏报failed to post notification on channel....的问题
 - 2018-01-08：启动时，添加文件的读写权限判断。简单修复android6.0以上版本的权限问题。

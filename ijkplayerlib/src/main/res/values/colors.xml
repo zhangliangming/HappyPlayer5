@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="player_progress_first">#373938</color>
+    <color name="player_progress_second">#FF66AA</color>
+    <color name="player_progress_bg">#FF6669</color>
+
+</resources>
