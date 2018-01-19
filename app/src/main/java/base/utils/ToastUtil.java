@@ -11,7 +11,7 @@ import com.zlm.hp.receiver.SystemReceiver;
  */
 public class ToastUtil {
 
-    public static final String MESSAGEKEY = "com.zlm.hp.toast.message";
+    public static final String MESSAGEKEY = "ToastUtil";
 
     public static void showTextToast(Context context, String msg) {
 

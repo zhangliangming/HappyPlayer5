@@ -165,7 +165,7 @@ public class AudioPlayerService extends Service {
         mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         int icon = R.mipmap.singer_def;
-        String tickerText = "乐乐音乐";
+        String tickerText = mContext.getString(R.string.app_name);
 
         //判断系统版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -185,7 +185,7 @@ public class AudioPlayerService extends Service {
             // Create a notification and set the notification channel.
             mPlayBarNotification = new Notification.Builder(getApplicationContext())
                     .setContentTitle(tickerText)
-                    .setContentText("开心每一天")
+                    .setContentText(mContext.getString(R.string.def_songName))
                     .setSmallIcon(R.mipmap.notifi_icon)
                     .setChannelId(CHANNEL_ID)
                     .build();
@@ -196,7 +196,7 @@ public class AudioPlayerService extends Service {
 
                 mPlayBarNotification = new Notification.Builder(getApplicationContext())
                         .setContentTitle(tickerText)
-                        .setContentText("开心每一天")
+                        .setContentText(mContext.getString(R.string.def_songName))
                         .setSmallIcon(R.mipmap.notifi_icon)
                         .build();
 
@@ -204,7 +204,7 @@ public class AudioPlayerService extends Service {
                 // Create a notification and set the notification channel.
                 mPlayBarNotification = new Notification.Builder(getApplicationContext())
                         .setContentTitle(tickerText)
-                        .setContentText("开心每一天")
+                        .setContentText(mContext.getString(R.string.def_songName))
                         .setSmallIcon(R.mipmap.singer_def)
                         .build();
             }
@@ -809,7 +809,7 @@ public class AudioPlayerService extends Service {
                         errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         sendBroadcast(errorIntent);
 
-                        ToastUtil.showTextToast(getApplicationContext(), "播放歌曲出错，1秒后播放下一首");
+                        ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
 
 
                         new Thread() {
@@ -871,7 +871,7 @@ public class AudioPlayerService extends Service {
                 errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 sendBroadcast(errorIntent);
 
-                ToastUtil.showTextToast(getApplicationContext(), "播放歌曲出错，1秒后播放下一首");
+                ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
                 new Thread() {
                     @Override
                     public void run() {
@@ -956,7 +956,7 @@ public class AudioPlayerService extends Service {
                     errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     sendBroadcast(errorIntent);
 
-                    ToastUtil.showTextToast(getApplicationContext(), "播放歌曲出错，1秒后播放下一首");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
 
 
                     new Thread() {
@@ -1018,7 +1018,7 @@ public class AudioPlayerService extends Service {
             errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             sendBroadcast(errorIntent);
 
-            ToastUtil.showTextToast(getApplicationContext(), "播放歌曲出错，1秒后播放下一首");
+            ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
             new Thread() {
                 @Override
                 public void run() {

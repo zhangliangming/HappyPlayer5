@@ -79,7 +79,7 @@ public class LikeMusicFragment extends BaseFragment {
     @Override
     protected void initViews(Bundle savedInstanceState, View mainView) {
         TextView titleView = mainView.findViewById(R.id.title);
-        titleView.setText("喜欢");
+        titleView.setText(R.string.like);
 
         //返回
         RelativeLayout backImg = mainView.findViewById(R.id.backImg);

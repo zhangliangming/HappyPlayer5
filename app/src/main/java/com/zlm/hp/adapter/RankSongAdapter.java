@@ -193,7 +193,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     viewHolder.getLikedImgBtn().setVisibility(View.GONE);
                     viewHolder.getUnLikeImgBtn().setVisibility(View.VISIBLE);
-                    ToastUtil.showTextToast(mContext, "取消成功");
+                    ToastUtil.showTextToast(mContext, mContext.getString(R.string.cancel_success));
 
                     //删除喜欢歌曲
                     Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
@@ -208,7 +208,7 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 public void onClick(View view) {
                     viewHolder.getLikedImgBtn().setVisibility(View.VISIBLE);
                     viewHolder.getUnLikeImgBtn().setVisibility(View.GONE);
-                    ToastUtil.showTextToast(mContext, "已添加收藏");
+                    ToastUtil.showTextToast(mContext, mContext.getString(R.string.added_collection));
 
                     //添加喜欢歌曲
                     Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);

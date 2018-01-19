@@ -2,6 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.HttpClientUtils;
@@ -43,7 +44,7 @@ public class RankSongHttpUtil {
 
         if (!NetUtil.isNetworkAvailable(context)) {
             httpResult.setStatus(HttpResult.STATUS_NONET);
-            httpResult.setErrorMsg("当前网络不可用");
+            httpResult.setErrorMsg(context.getString(R.string.current_network_unavailable));
 
             return httpResult;
         }
@@ -52,7 +53,7 @@ public class RankSongHttpUtil {
         if (HPApplication.getInstance().isWifi()) {
             if (!NetUtil.isWifi(context)) {
                 httpResult.setStatus(HttpResult.STATUS_NOWIFI);
-                httpResult.setErrorMsg("当前网络不是wifi");
+                httpResult.setErrorMsg(context.getString(R.string.current_network_not_wifi));
 
                 return httpResult;
             }
@@ -106,7 +107,7 @@ public class RankSongHttpUtil {
                         audioInfo.setFileSizeText(MediaUtil.getFileSize(audioInfo.getFileSize()));
                         audioInfo.setHash(infoDataNode.getString("hash").toLowerCase());
                         audioInfo.setSongName(songName);
-                        audioInfo.setSingerName(singerName.equals("")?"未知":singerName);
+                        audioInfo.setSingerName(singerName.equals("")?context.getString(R.string.unknown):singerName);
                         audioInfo.setFileExt(infoDataNode.getString("extname"));
                         audioInfo.setDuration(infoDataNode.getInt("duration") * 1000);
                         audioInfo.setDurationText(MediaUtil.parseTimeToString((int) audioInfo.getDuration()));
@@ -127,7 +128,7 @@ public class RankSongHttpUtil {
 
                 } else {
                     httpResult.setStatus(HttpResult.STATUS_ERROR);
-                    httpResult.setErrorMsg("请求出错!");
+                    httpResult.setErrorMsg(context.getString(R.string.request_error));
                 }
             }
         } catch (Exception e) {

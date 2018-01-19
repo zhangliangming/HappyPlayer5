@@ -18,9 +18,7 @@ import base.utils.LoggerUtil;
 
 public class DownloadAudioReceiver {
 
-    /**
-     *
-     */
+    private static final String base_action = "com.zlm.hp";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -31,14 +29,14 @@ public class DownloadAudioReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_DOWMLOADMUSICSUCCESS = "com.zlm.hp.download.music.success_" + new Date().getTime();
-    public static final String ACTION_DOWMLOADMUSICWAIT = "com.zlm.hp.download.music.wait";
-    public static final String ACTION_DOWMLOADMUSICDOWNLOADING = "com.zlm.hp.download.music.downloading";
-    public static final String ACTION_DOWMLOADMUSICDOWNPAUSE = "com.zlm.hp.download.music.pause";
-    public static final String ACTION_DOWMLOADMUSICDOWNCANCEL = "com.zlm.hp.download.music.cancel";
-    public static final String ACTION_DOWMLOADMUSICDOWNERROR = "com.zlm.hp.download.music.error";
-    public static final String ACTION_DOWMLOADMUSICDOWNFINISH = "com.zlm.hp.download.music.finish";
-    public static final String ACTION_DOWMLOADMUSICDOWNADD = "com.zlm.hp.download.music.add";
+    private String ACTION_DOWMLOADMUSICSUCCESS = base_action + ".download.music.success_" + new Date().getTime();
+    public static final String ACTION_DOWMLOADMUSICWAIT = base_action + ".download.music.wait";
+    public static final String ACTION_DOWMLOADMUSICDOWNLOADING = base_action + ".download.music.downloading";
+    public static final String ACTION_DOWMLOADMUSICDOWNPAUSE = base_action + ".download.music.pause";
+    public static final String ACTION_DOWMLOADMUSICDOWNCANCEL = base_action + ".download.music.cancel";
+    public static final String ACTION_DOWMLOADMUSICDOWNERROR = base_action + "download.music.error";
+    public static final String ACTION_DOWMLOADMUSICDOWNFINISH = base_action + ".download.music.finish";
+    public static final String ACTION_DOWMLOADMUSICDOWNADD = base_action + ".download.music.add";
 
     private BroadcastReceiver mDownloadAudioBroadcastReceiver;
     private IntentFilter mDownloadAudioIntentFilter;

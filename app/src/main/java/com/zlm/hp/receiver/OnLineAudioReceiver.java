@@ -17,9 +17,8 @@ import base.utils.LoggerUtil;
  */
 
 public class OnLineAudioReceiver {
-    /**
-     *
-     */
+
+    private static final String base_action = "com.zlm.hp";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -30,9 +29,9 @@ public class OnLineAudioReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_ONLINEMUSICSUCCESS = "com.zlm.hp.online.music.success_" + new Date().getTime();
-    public static String ACTION_ONLINEMUSICDOWNLOADING = "com.zlm.hp.online.music.downloading";
-    public static String ACTION_ONLINEMUSICERROR = "com.zlm.hp.online.music.error";
+    private String ACTION_ONLINEMUSICSUCCESS = base_action + ".online.music.success_" + new Date().getTime();
+    public static String ACTION_ONLINEMUSICDOWNLOADING = base_action + ".online.music.downloading";
+    public static String ACTION_ONLINEMUSICERROR = base_action + ".online.music.error";
     private BroadcastReceiver mOnlineAudioBroadcastReceiver;
     private IntentFilter mOnlineAudioIntentFilter;
     private OnlineAudioReceiverListener mOnlineAudioReceiverListener;

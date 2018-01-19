@@ -187,7 +187,7 @@ public class LrcFragment extends BaseFragment {
                 mHash = mCurAudioInfo.getHash();
                 //歌词文件名
                 String fileName = "";
-                if (mCurAudioInfo.getSingerName().equals("未知")) {
+                if (mCurAudioInfo.getSingerName().equals(mContext.getString(R.string.unknown))) {
                     fileName = mCurAudioInfo.getSongName();
                 } else {
                     fileName = mCurAudioInfo.getSingerName() + " - " + mCurAudioInfo.getSongName();
@@ -224,7 +224,7 @@ public class LrcFragment extends BaseFragment {
         mManyLineLyricsView = mainView.findViewById(R.id.lrcview);
         mManyLineLyricsView.setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
         mManyLineLyricsView.setDefLrcColor(ColorUtil.parserColor("#888888"));
-        mManyLineLyricsView.setLrcColor(ColorUtil.parserColor("#0288d1"));
+        mManyLineLyricsView.setLrcColor(mContext.getResources().getColor(R.color.defColor));
         mManyLineLyricsView.setTouchInterceptTrue();
 
         //翻译歌词
@@ -369,7 +369,7 @@ public class LrcFragment extends BaseFragment {
                     searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     mActivity.sendBroadcast(searchingIntent);
 
-                    ToastUtil.showTextToast(mActivity.getApplicationContext(), "歌词设置成功");
+                    ToastUtil.showTextToast(mActivity, mContext.getString(R.string.lrc_set_success));
                 }
             }
         });

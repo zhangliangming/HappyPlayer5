@@ -416,7 +416,9 @@ public class MainActivity extends BaseActivity {
 
                                 }
                             });
-                            mExitAlartDialog.showDialog("需要访问短信？", "取消", "确定");
+                            mExitAlartDialog.showDialog(mContext.getString(R.string.need_access_read_sms),
+                                    mContext.getString(R.string.cancel),
+                                    mContext.getString(R.string.sure));
                         }
                     }).start();
         }
@@ -737,7 +739,7 @@ public class MainActivity extends BaseActivity {
         mSystemReceiver.registerReceiver(getApplicationContext());
 
         //耳机广播
-        mPhoneReceiver = new PhoneReceiver(getApplicationContext());
+        mPhoneReceiver = new PhoneReceiver();
         if (HPApplication.getInstance().isWire()) {
             mPhoneReceiver.registerReceiver(getApplicationContext());
         }
@@ -972,19 +974,19 @@ public class MainActivity extends BaseActivity {
     private void initPlayModeView(int playMode, IconfontTextView modeAllImg, IconfontTextView modeRandomImg, IconfontTextView modeSingleImg, boolean isTipShow) {
         if (playMode == 0) {
             if (isTipShow)
-                ToastUtil.showTextToast(MainActivity.this, "顺序播放");
+                ToastUtil.showTextToast(MainActivity.this, mContext.getString(R.string.order_play));
             modeAllImg.setVisibility(View.VISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else if (playMode == 1) {
             if (isTipShow)
-                ToastUtil.showTextToast(MainActivity.this, "随机播放");
+                ToastUtil.showTextToast(MainActivity.this, mContext.getString(R.string.random_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.VISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else {
             if (isTipShow)
-                ToastUtil.showTextToast(MainActivity.this, "单曲播放");
+                ToastUtil.showTextToast(MainActivity.this, mContext.getString(R.string.single_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.VISIBLE);

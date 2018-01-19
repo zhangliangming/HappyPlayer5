@@ -3,6 +3,7 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
+import com.zlm.hp.R;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
@@ -277,20 +278,20 @@ public class DownloadAudioManager {
         downloadInfo.setAudioInfo(audioInfo);
         if (audioInfo.getType() == AudioInfo.LOCAL || AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
 
-            ToastUtil.showTextToast(mContext, "本地歌曲，不用下载!");
+            ToastUtil.showTextToast(mContext, mContext.getString(R.string.local_song_no_download));
 
             return;
 
         } else if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())) {
             //下载任务已经存在
             if (taskIsExists(audioInfo.getHash())) {
-                ToastUtil.showTextToast(mContext, "歌曲已添加!");
+                ToastUtil.showTextToast(mContext, mContext.getString(R.string.song_has_added));
 
                 return;
             } else {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(downloadInfo.getDHash(), DownloadAudioManager.threadNum);
                 if (downloadedSize >= audioInfo.getFileSize()) {
-                    ToastUtil.showTextToast(mContext, "歌曲已下载!");
+                    ToastUtil.showTextToast(mContext, mContext.getString(R.string.song_has_downloaded));
 
                     return;
                 }
@@ -300,7 +301,7 @@ public class DownloadAudioManager {
             DownloadInfoDB.getAudioInfoDB(mContext).add(downloadInfo);
 
 
-            ToastUtil.showTextToast(mContext, "已添加到下载");
+            ToastUtil.showTextToast(mContext, mContext.getString(R.string.has_add_to_download));
 
 
             //添加下载任务

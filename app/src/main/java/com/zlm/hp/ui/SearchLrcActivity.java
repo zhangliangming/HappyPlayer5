@@ -159,7 +159,7 @@ public class SearchLrcActivity extends BaseActivity {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         TextView titleView = findViewById(R.id.title);
-        titleView.setText("选择歌词");
+        titleView.setText(mContext.getString(R.string.choose_lyrics));
 
 
         //关闭
@@ -411,7 +411,7 @@ public class SearchLrcActivity extends BaseActivity {
         String songName = mSongNameEditText.getText().toString();
         String singerName = mSingerNameEditText.getText().toString();
         if (songName.equals("") && singerName.equals("")) {
-            ToastUtil.showTextToast(getApplicationContext(), "请输入关键字");
+            ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_enter_keyword));
             return;
         }
 
@@ -456,7 +456,7 @@ public class SearchLrcActivity extends BaseActivity {
                 String singerName = mSingerNameEditText.getText().toString();
                 //加载歌词
                 String keyWords = "";
-                if (singerName.equals("未知")) {
+                if (singerName.equals(mContext.getString(R.string.unknown))) {
                     keyWords = songName;
                 } else {
                     keyWords = singerName + " - " + songName;
@@ -487,7 +487,7 @@ public class SearchLrcActivity extends BaseActivity {
                 }
                 //
                 if (mLrcViews.size() == 0) {
-                    ToastUtil.showTextToast(getApplicationContext(), "无歌词");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.not_lyrics));
 
                 } else {
                     mCurIndexTv.setText("1");

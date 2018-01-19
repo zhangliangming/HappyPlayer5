@@ -23,7 +23,6 @@ import com.zlm.hp.utils.ImageUtil;
 
 import java.util.List;
 
-import base.utils.ColorUtil;
 import base.widget.CircleImageView;
 import base.widget.IconfontTextView;
 import base.widget.PopListItemRelativeLayout;
@@ -136,8 +135,8 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             viewHolder.getSongIndexTv().setVisibility(View.INVISIBLE);
             viewHolder.getSingPicImg().setVisibility(View.VISIBLE);
             //
-            viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
-            viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
+            viewHolder.getSingerNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
+            viewHolder.getSongNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
 
             //加载歌手图片
             ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
@@ -190,8 +189,8 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 viewHolder.getSongIndexTv().setVisibility(View.INVISIBLE);
                 viewHolder.getSingPicImg().setVisibility(View.VISIBLE);
                 //
-                viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
-                viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
+                viewHolder.getSingerNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
+                viewHolder.getSongNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
                 //加载歌手图片
                 ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
 

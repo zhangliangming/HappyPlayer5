@@ -111,7 +111,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else if (viewHolder instanceof FooterViewHolder) {
             FooterViewHolder footerViewHolder = (FooterViewHolder) viewHolder;
             int size = getCategoryItemCount();
-            footerViewHolder.getFooterTextView().setText("共有" + size + "首歌曲");
+            footerViewHolder.getFooterTextView().setText(String.format(mContext.getString(R.string.count_song), size));
 
         } else if (viewHolder instanceof DownloadingMusicViewHolder) {
             DownloadInfo downloadInfo = (DownloadInfo) getItem(position);
@@ -180,19 +180,19 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             viewHolder.getDownloadingImg().setVisibility(View.VISIBLE);
             viewHolder.getDownloadPauseImg().setVisibility(View.INVISIBLE);
 
-            viewHolder.getOpTipTv().setText("等待下载");
+            viewHolder.getOpTipTv().setText(R.string.wait_download);
 
 
         } else if (status == DownloadTaskConstant.DOWNLOADING.getValue()) {
             viewHolder.getDownloadingImg().setVisibility(View.INVISIBLE);
             viewHolder.getDownloadPauseImg().setVisibility(View.VISIBLE);
 
-            viewHolder.getOpTipTv().setText("点击暂停");
+            viewHolder.getOpTipTv().setText(R.string.click_pause);
 
         } else {
             viewHolder.getDownloadingImg().setVisibility(View.VISIBLE);
             viewHolder.getDownloadPauseImg().setVisibility(View.INVISIBLE);
-            viewHolder.getOpTipTv().setText("点击继续下载");
+            viewHolder.getOpTipTv().setText(R.string.click_continue_download);
         }
 
         //
@@ -302,7 +302,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void onClick(View view) {
                     viewHolder.getLikedImgBtn().setVisibility(View.GONE);
                     viewHolder.getUnLikeImgBtn().setVisibility(View.VISIBLE);
-                    ToastUtil.showTextToast(mContext, "取消成功");
+                    ToastUtil.showTextToast(mContext, mContext.getString(R.string.cancel_success));
 
                     //删除喜欢歌曲
                     Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
@@ -317,7 +317,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void onClick(View view) {
                     viewHolder.getLikedImgBtn().setVisibility(View.VISIBLE);
                     viewHolder.getUnLikeImgBtn().setVisibility(View.GONE);
-                    ToastUtil.showTextToast(mContext, "已添加收藏");
+                    ToastUtil.showTextToast(mContext, mContext.getString(R.string.added_collection));
 
                     //添加喜欢歌曲
                     Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);

@@ -17,9 +17,7 @@ import base.utils.LoggerUtil;
 
 public class FragmentReceiver {
 
-    /**
-     *
-     */
+    private static final String base_action = "com.zlm.hp";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -29,34 +27,34 @@ public class FragmentReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_FRAGMENTSUCCESS = "com.zlm.hp.fragment.success_" + new Date().getTime();
+    private String ACTION_FRAGMENTSUCCESS = base_action + ".fragment.success_" + new Date().getTime();
     /**
      * 关闭
      */
-    public static final String ACTION_CLOSEDFRAGMENT = "com.zlm.hp.close.fragment";
+    public static final String ACTION_CLOSEDFRAGMENT = base_action + ".close.fragment";
     /**
      * 打开单个排行的歌曲列表
      */
-    public static final String ACTION_OPENRANKSONGFRAGMENT = "com.zlm.hp.fragment.open.ranksong";
+    public static final String ACTION_OPENRANKSONGFRAGMENT = base_action + ".fragment.open.ranksong";
 
     /**
      * 本地音乐界面
      */
-    public static final String ACTION_OPENLOCALMUSICFRAGMENT = "com.zlm.hp.fragment.open.localmusic";
+    public static final String ACTION_OPENLOCALMUSICFRAGMENT = base_action + ".fragment.open.localmusic";
 
     /**
      * 喜欢
      */
-    public static final String ACTION_OPENLIKEMUSICFRAGMENT = "com.zlm.hp.fragment.open.likemusic";
+    public static final String ACTION_OPENLIKEMUSICFRAGMENT = base_action + ".fragment.open.likemusic";
 
     /**
      * 下载
      */
-    public static final String ACTION_OPENDOWNLOADMUSICFRAGMENT = "com.zlm.hp.fragment.open.downloadmusic";
+    public static final String ACTION_OPENDOWNLOADMUSICFRAGMENT = base_action + ".fragment.open.downloadmusic";
     /**
      * 最近
      */
-    public static final String ACTION_OPENRECENTMUSICFRAGMENT = "com.zlm.hp.fragment.open.recentmusic";
+    public static final String ACTION_OPENRECENTMUSICFRAGMENT = base_action + ".fragment.open.recentmusic";
     private BroadcastReceiver mFragmentBroadcastReceiver;
     private IntentFilter mFragmentIntentFilter;
     private FragmentReceiverListener mFragmentReceiverListener;

@@ -442,7 +442,7 @@ public class LrcActivity extends BaseActivity {
 
             //加载歌词
             String keyWords = "";
-            if (audioInfo.getSingerName().equals("未知")) {
+            if (audioInfo.getSingerName().equals(mContext.getString(R.string.unknown))) {
                 keyWords = audioInfo.getSongName();
             } else {
                 keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
@@ -845,7 +845,7 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                    ToastUtil.showTextToast(getApplicationContext(), "取消成功");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.cancel_success));
 
                     mUnLikeImgBtn.setVisibility(View.VISIBLE);
                     mLikeImgBtn.setVisibility(View.GONE);
@@ -866,7 +866,7 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                    ToastUtil.showTextToast(getApplicationContext(), "已添加收藏");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.added_collection));
 
                     mUnLikeImgBtn.setVisibility(View.GONE);
                     mLikeImgBtn.setVisibility(View.VISIBLE);
@@ -1153,19 +1153,19 @@ public class LrcActivity extends BaseActivity {
     private void initPLPlayModeView(int playMode, IconfontTextView modeAllImg, IconfontTextView modeRandomImg, IconfontTextView modeSingleImg, boolean isTipShow) {
         if (playMode == 0) {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "顺序播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.order_play));
             modeAllImg.setVisibility(View.VISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else if (playMode == 1) {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "随机播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.random_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.VISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "单曲播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.single_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.VISIBLE);
@@ -1362,7 +1362,7 @@ public class LrcActivity extends BaseActivity {
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
-                    ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
 
                 } else {
                     hidePopView();
@@ -1392,7 +1392,7 @@ public class LrcActivity extends BaseActivity {
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
-                    ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
 
                 } else {
                     hidePopView();
@@ -1413,7 +1413,7 @@ public class LrcActivity extends BaseActivity {
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
-                    ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
 
                 } else {
                     hidePopView();
@@ -1452,7 +1452,7 @@ public class LrcActivity extends BaseActivity {
 
                 if (mManyLineLyricsView.getLyricsUtil() != null) {
                     mManyLineLyricsView.getLyricsUtil().setOffset(0);
-                    ToastUtil.showTextToast(LrcActivity.this, "还原了");
+                    ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.restore));
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
 
                         //保存歌词文件
@@ -1855,19 +1855,19 @@ public class LrcActivity extends BaseActivity {
     private void initPlayModeView(int playMode, ImageView modeAllImg, ImageView modeRandomImg, ImageView modeSingleImg, boolean isTipShow) {
         if (playMode == 0) {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "顺序播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.order_play));
             modeAllImg.setVisibility(View.VISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else if (playMode == 1) {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "随机播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.random_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.VISIBLE);
             modeSingleImg.setVisibility(View.INVISIBLE);
         } else {
             if (isTipShow)
-                ToastUtil.showTextToast(LrcActivity.this, "单曲播放");
+                ToastUtil.showTextToast(LrcActivity.this, mContext.getString(R.string.single_play));
             modeAllImg.setVisibility(View.INVISIBLE);
             modeRandomImg.setVisibility(View.INVISIBLE);
             modeSingleImg.setVisibility(View.VISIBLE);

@@ -76,7 +76,7 @@ public class RecentMusicFragment extends BaseFragment {
     @Override
     protected void initViews(Bundle savedInstanceState, View mainView) {
         TextView titleView = mainView.findViewById(R.id.title);
-        titleView.setText("最近播放");
+        titleView.setText(R.string.recent_play);
 
         //返回
         RelativeLayout backImg = mainView.findViewById(R.id.backImg);

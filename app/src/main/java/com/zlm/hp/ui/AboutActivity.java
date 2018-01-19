@@ -46,7 +46,7 @@ public class AboutActivity extends BaseActivity {
         mSwipeBackLayout.setShadowEnable(shadowEnable);
 
         TextView titleView = findViewById(R.id.title);
-        titleView.setText("关于");
+        titleView.setText(mContext.getString(R.string.about));
 
         //返回
         RelativeLayout backImg = findViewById(R.id.backImg);

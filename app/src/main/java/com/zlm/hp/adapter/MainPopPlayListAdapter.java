@@ -25,7 +25,6 @@ import com.zlm.hp.utils.ImageUtil;
 
 import java.util.List;
 
-import base.utils.ColorUtil;
 import base.utils.ToastUtil;
 import base.widget.CircleImageView;
 import base.widget.IconfontTextView;
@@ -138,7 +137,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void onClick(View view) {
                 viewHolder.getLikedImg().setVisibility(View.INVISIBLE);
                 viewHolder.getUnLikeTv().setVisibility(View.VISIBLE);
-                ToastUtil.showTextToast(mContext, "取消成功");
+                ToastUtil.showTextToast(mContext, mContext.getString(R.string.cancel_success));
 
                 //删除喜欢歌曲
                 Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
@@ -153,7 +152,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             public void onClick(View view) {
                 viewHolder.getLikedImg().setVisibility(View.VISIBLE);
                 viewHolder.getUnLikeTv().setVisibility(View.INVISIBLE);
-                ToastUtil.showTextToast(mContext, "已添加收藏");
+                ToastUtil.showTextToast(mContext, mContext.getString(R.string.added_collection));
 
                 //添加喜欢歌曲
                 Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);
@@ -214,8 +213,8 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.getSongIndexTv().setVisibility(View.INVISIBLE);
             viewHolder.getSingPicImg().setVisibility(View.VISIBLE);
             //
-            viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
-            viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
+            viewHolder.getSingerNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
+            viewHolder.getSongNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
 
             //加载歌手图片
             ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
@@ -225,7 +224,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder.getSongIndexTv().setVisibility(View.VISIBLE);
             viewHolder.getSingPicImg().setVisibility(View.INVISIBLE);
             //
-            viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#555555"));
+            viewHolder.getSingerNameTv().setTextColor(mContext.getResources().getColor(R.color.def_bar_title_color));
             viewHolder.getSongNameTv().setTextColor(Color.BLACK);
         }
 
@@ -268,8 +267,8 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 viewHolder.getSongIndexTv().setVisibility(View.INVISIBLE);
                 viewHolder.getSingPicImg().setVisibility(View.VISIBLE);
                 //
-                viewHolder.getSingerNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
-                viewHolder.getSongNameTv().setTextColor(ColorUtil.parserColor("#0288d1"));
+                viewHolder.getSingerNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
+                viewHolder.getSongNameTv().setTextColor(mContext.getResources().getColor(R.color.defColor));
                 //加载歌手图片
                 ImageUtil.loadSingerImage(mContext, viewHolder.getSingPicImg(), audioInfo.getSingerName());
 

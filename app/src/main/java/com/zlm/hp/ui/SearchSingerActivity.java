@@ -225,7 +225,7 @@ public class SearchSingerActivity extends BaseActivity {
                     //
                     String searchKey = mSearchEditText.getText().toString();
                     if (searchKey == null || searchKey.equals("")) {
-                        ToastUtil.showTextToast(getApplicationContext(), "请输入歌手名称");
+                        ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_enter_singer_name));
                         return true;
                     }
 
@@ -443,7 +443,7 @@ public class SearchSingerActivity extends BaseActivity {
 
         String singerName = mSearchEditText.getText().toString();
         if (singerName.equals("")) {
-            ToastUtil.showTextToast(getApplicationContext(), "请输入歌手名称");
+            ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_enter_singer_name));
             return;
         }
 

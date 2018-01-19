@@ -18,9 +18,7 @@ import base.utils.LoggerUtil;
 
 public class LockLrcReceiver {
 
-    /**
-     *
-     */
+    private static final String base_action = "com.zlm.hp";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -31,15 +29,15 @@ public class LockLrcReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_LOCKLRCSUCCESS = "com.zlm.hp.lock.lrc.success_" + new Date().getTime();
+    private String ACTION_LOCKLRCSUCCESS = base_action + ".lock.lrc.success_" + new Date().getTime();
     /**
      * 显示锁屏歌词
      */
-    public static String ACTION_SHOWLRCMESSAGE = "com.zlm.hp.lock.lrc.show";
+    public static String ACTION_SHOWLRCMESSAGE = base_action + ".lock.lrc.show";
     /**
      * 隐藏锁屏歌词
      */
-    public static String ACTION_HIDELRCMESSAGE = "com.zlm.hp.lock.lrc.hide";
+    public static String ACTION_HIDELRCMESSAGE = base_action + ".lock.lrc.hide";
 
     private BroadcastReceiver mLockLrcReceiver;
     private IntentFilter mLockLrcIntentFilter;

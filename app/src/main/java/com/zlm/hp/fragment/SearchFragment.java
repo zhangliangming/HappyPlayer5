@@ -143,7 +143,7 @@ public class SearchFragment extends BaseFragment {
                     //
                     String searchKey = mSearchEditText.getText().toString();
                     if (searchKey == null || searchKey.equals("")) {
-                        ToastUtil.showTextToast(mActivity.getApplicationContext(), "请输入关键字");
+                        ToastUtil.showTextToast(mActivity.getApplicationContext(), mContext.getString(R.string.please_enter_keyword));
                         return true;
                     }
 

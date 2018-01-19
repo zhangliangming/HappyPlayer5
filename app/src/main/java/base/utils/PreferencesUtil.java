@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
  * Created by zhangliangming on 2017/8/6.
  */
 public class PreferencesUtil {
-    private static final String PREFERENCE_NAME = "com.zlm.hp.sp";
+    private static final String PREFERENCE_NAME = "PreferencesUtil";
     private static SharedPreferences preferences;
 
     /**

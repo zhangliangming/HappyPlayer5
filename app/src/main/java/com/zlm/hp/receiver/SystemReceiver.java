@@ -18,9 +18,7 @@ import base.utils.LoggerUtil;
 
 public class SystemReceiver {
 
-    /**
-     *
-     */
+    private static final String base_action = "bear.love.peach";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -30,27 +28,27 @@ public class SystemReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_SUCCESS = "com.zlm.hp.system.success_" + new Date().getTime();
+    private String ACTION_SUCCESS = base_action + ".system.success_" + new Date().getTime();
     /**
      * 弹出窗口提示
      */
-    public static String ACTION_TOASTMESSAGE = "com.zlm.hp.system.toast";
+    public static String ACTION_TOASTMESSAGE = base_action + ".system.toast";
     /**
      * 打开线控
      */
-    public static String ACTION_OPENWIREMESSAGE = "com.zlm.hp.phone.br.openwire";
+    public static String ACTION_OPENWIREMESSAGE = base_action + ".phone.br.openwire";
     /**
      * 关闭线控
      */
-    public static String ACTION_CLOSEWIREMESSAGE = "com.zlm.hp.phone.br.closewire";
+    public static String ACTION_CLOSEWIREMESSAGE = base_action + ".phone.br.closewire";
     /**
      * 打开锁屏歌词
      */
-    public static String ACTION_OPENLRCMESSAGE = "com.zlm.hp.lock.lrc.open";
+    public static String ACTION_OPENLRCMESSAGE = base_action + ".lock.lrc.open";
     /**
      * 关闭锁屏歌词
      */
-    public static String ACTION_CLOSELRCMESSAGE = "com.zlm.hp.lock.lrc.close";
+    public static String ACTION_CLOSELRCMESSAGE = base_action + ".lock.lrc.close";
 
     private BroadcastReceiver mSystemBroadcastReceiver;
     private IntentFilter mSystemIntentFilter;

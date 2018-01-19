@@ -18,9 +18,7 @@ import base.utils.LoggerUtil;
 
 public class NotificationReceiver {
 
-    /**
-     *
-     */
+    private static final String base_action = "com.zlm.hp";
     private LoggerUtil logger;
     /**
      * 是否注册成功
@@ -30,41 +28,41 @@ public class NotificationReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_SUCCESS = "com.zlm.hp.notification.success_" + new Date().getTime();
+    private String ACTION_SUCCESS = base_action + ".notification.success_" + new Date().getTime();
 
     /**
      * 通知栏app播放歌曲
      */
-    public static String NOTIFIATION_APP_PLAYMUSIC = "com.notification.app.playmusic";
+    public static String NOTIFIATION_APP_PLAYMUSIC = base_action + ".notification.app.playmusic";
     /**
      * 通知栏app暂停歌曲
      */
-    public static String NOTIFIATION_APP_PAUSEMUSIC = "com.notification.app.pausemusic";
+    public static String NOTIFIATION_APP_PAUSEMUSIC = base_action + ".notification.app.pausemusic";
     /**
      * 通知栏app上一首歌曲
      */
-    public static String NOTIFIATION_APP_PREMUSIC = "com.notification.app.premusic";
+    public static String NOTIFIATION_APP_PREMUSIC = base_action + ".notification.app.premusic";
     /**
      * 通知栏app下一首歌曲
      */
-    public static String NOTIFIATION_APP_NEXTMUSIC = "com.notification.app.nextmusic";
+    public static String NOTIFIATION_APP_NEXTMUSIC = base_action + ".notification.app.nextmusic";
     /**
      * 通知栏app关闭通知栏
      */
-    public static String NOTIFIATION_APP_CLOSENOTIFICATION = "com.notification.app.closenotification";
+    public static String NOTIFIATION_APP_CLOSENOTIFICATION = base_action + ".notification.app.closenotification";
 
     /**
      * 通知栏显示桌面歌词
      */
-    public static String NOTIFIATION_DESLRC_SHOW = "com.notification.des.lrc.show";
+    public static String NOTIFIATION_DESLRC_SHOW = base_action + ".notification.des.lrc.show";
     /**
      * 通知栏隐藏桌面歌词
      */
-    public static String NOTIFIATION_DESLRC_HIDE = "com.notification.des.lrc.hide";
+    public static String NOTIFIATION_DESLRC_HIDE = base_action + ".notification.des.lrc.hide";
     /**
      * 通知栏桌面歌词解锁
      */
-    public static String NOTIFIATION_DESLRC_UNLOCK = "com.notification.des.lrc.unlock";
+    public static String NOTIFIATION_DESLRC_UNLOCK = base_action + ".notification.des.lrc.unlock";
 
     private BroadcastReceiver mNotificationBroadcastReceiver;
     private IntentFilter mNotificationIntentFilter;

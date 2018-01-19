@@ -163,7 +163,7 @@ public class DownloadMusicFragment extends BaseFragment {
     @Override
     protected void initViews(Bundle savedInstanceState, View mainView) {
         TextView titleView = mainView.findViewById(R.id.title);
-        titleView.setText("下载管理");
+        titleView.setText(R.string.download_management);
 
         //返回
         RelativeLayout backImg = mainView.findViewById(R.id.backImg);
@@ -190,13 +190,13 @@ public class DownloadMusicFragment extends BaseFragment {
 
 
         //注册下载广播
-        mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity);
+        mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity.getApplicationContext());
         mDownloadAudioReceiver.setDownloadAudioReceiverListener(mDownloadAudioReceiverListener);
         mDownloadAudioReceiver.registerReceiver(mActivity.getApplicationContext());
 
 
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
 
@@ -222,13 +222,13 @@ public class DownloadMusicFragment extends BaseFragment {
             @Override
             protected Void doInBackground(String... strings) {
                 Category category = new Category();
-                category.setCategoryName("下载中");
+                category.setCategoryName(mContext.getString(R.string.downloading));
                 List<Object> downloadInfos = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDownloadingAudio();
                 category.setCategoryItem(downloadInfos);
                 mDatas.add(category);
                 //
                 category = new Category();
-                category.setCategoryName("下载完成");
+                category.setCategoryName(mContext.getString(R.string.download_success));
                 downloadInfos = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDownloadedAudio();
                 category.setCategoryItem(downloadInfos);
                 mDatas.add(category);

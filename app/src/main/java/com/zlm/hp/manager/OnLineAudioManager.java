@@ -3,6 +3,7 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
+import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -126,7 +127,7 @@ public class OnLineAudioManager {
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
-                downloadMessage.setErrorMsg("在线播放错误");
+                downloadMessage.setErrorMsg(mContext.getString(R.string.online_playback_error));
 
                 //发送在线播放错误广播
                 Intent errorIntent = new Intent(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR);

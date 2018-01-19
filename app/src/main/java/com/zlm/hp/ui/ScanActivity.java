@@ -243,14 +243,14 @@ public class ScanActivity extends BaseActivity {
         mScaningImageView.setVisibility(View.INVISIBLE);
         mScaningImageView.clearAnimation();
         //
-        mFinishResultTextView.setText("更新本地歌曲(" + mAudioInfoLists.size() + ")");
+        mFinishResultTextView.setText(String.format(mContext.getString(R.string.update_local_songs, mAudioInfoLists.size())));
     }
 
     /**
      * 更新扫描中视图
      */
     private void updateScaningView() {
-        mResultTextView.setText("已扫描" + mAudioInfoLists.size() + "首歌曲");
+        mResultTextView.setText(String.format(mContext.getString(R.string.scan_local_songs, mAudioInfoLists.size())));
     }
 
     @Override
@@ -279,9 +279,9 @@ public class ScanActivity extends BaseActivity {
 
                     finish();
                     overridePendingTransition(0, 0);
-                    ToastUtil.showTextToast(getApplicationContext(), "添加成功");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_success));
                 } else {
-                    ToastUtil.showTextToast(getApplicationContext(), "添加失败");
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_fail));
                 }
             }
 

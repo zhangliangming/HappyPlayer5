@@ -363,7 +363,9 @@ public class TabMyFragment extends BaseFragment {
         mExitSetupBGButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mExitAlartDialog.showDialog("是否退出应用？", "取消", "确定");
+                mExitAlartDialog.showDialog(mContext.getString(R.string.do_you_quit_the_application),
+                        mContext.getString(R.string.cancel),
+                        mContext.getString(R.string.sure));
             }
         });
         //
