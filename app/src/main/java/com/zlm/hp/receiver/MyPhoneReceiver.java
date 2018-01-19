@@ -36,6 +36,9 @@ public class MyPhoneReceiver extends BroadcastReceiver {
     /**单击次数**/
     private static int clickCount;
 
+    public MyPhoneReceiver() {
+    }
+
     //需要写一个默认构造方法，要不Manifest 会报错
     public MyPhoneReceiver(Context context) {
         this.mContext = context;

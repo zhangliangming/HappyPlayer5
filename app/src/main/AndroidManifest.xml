@@ -75,7 +75,7 @@
             android:launchMode="singleInstance"
             android:taskAffinity="bear.love.peach.ui.lockscreen"
             android:theme="@style/LockScreenBase" />
-        <activity android:name=".ui.SkinActivity"></activity>
+        <activity android:name=".ui.SkinActivity"/>
     </application>
 
 </manifest>
