@@ -2,6 +2,7 @@ package com.zlm.hp.application;
 
 import android.app.Application;
 
+import com.tencent.bugly.Bugly;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
@@ -11,8 +12,6 @@ import com.zlm.hp.utils.SerializableObjUtil;
 
 import java.io.File;
 import java.util.List;
-
-import base.utils.LoggerUtil;
 
 /**
  * Created by zhangliangming on 2017/7/15.
@@ -45,11 +44,6 @@ public class HPApplication extends Application {
      * 排行数据
      */
     private RankListResult rankListResult;
-    ;
-    /**
-     *
-     */
-    private LoggerUtil logger;
 
     /**
      * 是否是歌词快进
@@ -67,12 +61,7 @@ public class HPApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        //
-        //注册捕捉全局异常
-//        CrashHandler crashHandler = new CrashHandler();
-//        crashHandler.init(getApplicationContext());
-
-        logger = LoggerUtil.getZhangLogger(getApplicationContext());
+        Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
     }
 
     public boolean isPlayServiceForceDestroy() {
@@ -93,7 +82,6 @@ public class HPApplication extends Application {
 
     public List<AudioInfo> getCurAudioInfos() {
         if (curAudioInfos == null) {
-            logger.e("curAudioInfos为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfos.ser");
             curAudioInfos = (List<AudioInfo>) SerializableObjUtil.readObj(filePath);
         }
@@ -121,7 +109,6 @@ public class HPApplication extends Application {
 
     public AudioInfo getCurAudioInfo() {
         if (curAudioInfo == null) {
-            logger.e("curAudioInfo为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfo.ser");
             curAudioInfo = (AudioInfo) SerializableObjUtil.readObj(filePath);
         }
@@ -150,7 +137,6 @@ public class HPApplication extends Application {
 
     public AudioMessage getCurAudioMessage() {
         if (curAudioMessage == null) {
-            logger.e("curAudioMessage为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioMessage.ser");
             curAudioMessage = (AudioMessage) SerializableObjUtil.readObj(filePath);
         }
@@ -177,7 +163,6 @@ public class HPApplication extends Application {
 
     public RankListResult getRankListResult() {
         if (rankListResult == null) {
-            logger.e("rankListResult为空，从本地获取");
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "rankListResult.ser");
             rankListResult = (RankListResult) SerializableObjUtil.readObj(filePath);
         }
