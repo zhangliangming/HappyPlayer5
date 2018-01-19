@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
 
@@ -55,7 +55,7 @@ public class DownloadLyricsUtil {
             return null;
         }
 //
-        if (PreferencesConstants.isWifi(context)) {
+        if (HPApplication.getInstance().isWifi()) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }
@@ -106,7 +106,7 @@ public class DownloadLyricsUtil {
             return null;
         }
 //
-        if (PreferencesConstants.isWifi(context)) {
+        if (HPApplication.getInstance().isWifi()) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }

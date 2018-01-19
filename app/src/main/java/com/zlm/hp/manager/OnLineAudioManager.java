@@ -3,7 +3,7 @@ package com.zlm.hp.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.download.DownloadTask;
@@ -137,9 +137,9 @@ public class OnLineAudioManager {
                 logger.e("在线播放任务名称：" + task.getTaskName() + " 在线缓存播放错误");
 
                 //如果当前歌曲播放时出现错误，则直接跳转下一首
-                if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYNET ||
-                        (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING &&
-                                PreferencesConstants.getPlayIndexHashID(mContext).equals(task.getTaskId()))) {
+                if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYNET ||
+                        (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING &&
+                                HPApplication.getInstance().getPlayIndexHashID().equals(task.getTaskId()))) {
                     //
                     Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
                     pauseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);

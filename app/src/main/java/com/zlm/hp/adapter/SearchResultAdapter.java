@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -271,9 +270,9 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
         }
 
-        if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
+        if (audioInfo.getHash().equals(HPApplication.getInstance().getPlayIndexHashID())) {
             playIndexPosition = position;
-            playIndexHash = PreferencesConstants.getPlayIndexHashID(mContext);
+            playIndexHash = HPApplication.getInstance().getPlayIndexHashID();
             //
             viewHolder.getStatusView().setVisibility(View.VISIBLE);
         } else {
@@ -291,7 +290,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             public void onClick(View view) {
 
                 if (playIndexPosition == position) {
-                    if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING) {
+                    if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING) {
                         // 当前正在播放，发送暂停
 
                         Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -299,7 +298,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                         mContext.sendBroadcast(pauseIntent);
 
                         return;
-                    } else if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PAUSE) {
+                    } else if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PAUSE) {
                         //当前正在暂停，发送唤醒播放
 
                         Intent remuseIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
@@ -324,7 +323,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 //
                 playIndexPosition = position;
                 playIndexHash = audioInfo.getHash();
-                PreferencesConstants.setPlayIndexHashID(mContext, playIndexHash);
+                HPApplication.getInstance().setPlayIndexHashID(playIndexHash);
 
                 //发送播放广播
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);

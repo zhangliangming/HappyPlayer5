@@ -2,7 +2,7 @@ package com.zlm.hp.net.api;
 
 import android.content.Context;
 
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.net.HttpClientUtils;
 import com.zlm.hp.net.entity.SearchLyricsResult;
 
@@ -38,7 +38,7 @@ public class SearchLyricsUtil {
             return null;
         }
 //
-        if (PreferencesConstants.isWifi(context)) {
+        if (HPApplication.getInstance().isWifi()) {
             if (!NetUtil.isWifi(context)) {
                 return null;
             }

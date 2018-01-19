@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioMessage;
 
@@ -169,7 +168,7 @@ public class AudioBroadcastReceiver {
                     //服务被强迫回收
                     if (HPApplication.getInstance().isPlayServiceForceDestroy()) {
                         HPApplication.getInstance().setPlayServiceForceDestroy(false);
-                        int playStatus = PreferencesConstants.getPlayStatus(mContext);
+                        int playStatus = HPApplication.getInstance().getPlayStatus();
                         if (playStatus == AudioPlayerManager.PLAYING) {
 
                             //
@@ -183,7 +182,7 @@ public class AudioBroadcastReceiver {
                             }
                         } else {
                             //服务回收了，修改当前的播放状态
-                            PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.STOP);
+                            HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
                         }
                     }
 

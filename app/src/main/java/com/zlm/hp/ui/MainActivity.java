@@ -4,13 +4,16 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,13 +33,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.soundcloud.android.crop.Crop;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.PermissionListener;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.fragment.DownloadMusicFragment;
@@ -284,8 +288,8 @@ public class MainActivity extends BaseActivity {
         public void run() {
 
             //如果歌曲正在播放，实时更新页面数据，防止回收后启动时，页面还是旧数据的问题
-            if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYING ||
-                    PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYNET) {
+            if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING ||
+                    HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYNET) {
                 if (HPApplication.getInstance().getCurAudioMessage() != null &&
                         HPApplication.getInstance().getCurAudioInfo() != null) {
                     if (!mCurPlayIndexHash.equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
@@ -475,7 +479,7 @@ public class MainActivity extends BaseActivity {
              * 但是这个广播只是针对有线耳机，或者无线耳机的手机断开连接的事件，监听不到有线耳机和蓝牙耳机的接入
              * ，但对于我的需求来说足够了，监听这个广播就没有延迟了，UI可以立即响应
              */
-            int playStatus = PreferencesConstants.getPlayStatus(mContext);
+            int playStatus = HPApplication.getInstance().getPlayStatus();
             if (playStatus == AudioPlayerManager.PLAYING) {
 
                 Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -502,7 +506,7 @@ public class MainActivity extends BaseActivity {
         String action = intent.getAction();
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
+            if (HPApplication.getInstance().getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
                 double pre = downloadedSize * 1.0 / HPApplication.getInstance().getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
@@ -510,7 +514,7 @@ public class MainActivity extends BaseActivity {
             }
         } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (PreferencesConstants.getPlayIndexHashID(mContext).equals(downloadMessage.getTaskId())) {
+            if (HPApplication.getInstance().getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
                 ToastUtil.showTextToast(getApplicationContext(), downloadMessage.getErrorMsg());
             }
         }
@@ -701,7 +705,7 @@ public class MainActivity extends BaseActivity {
 //            //关闭锁屏歌词
 //            mLockLrcReceiver.unregisterReceiver(getApplicationContext());
 //        }
-        boolean showLockScreen = PreferencesConstants.isShowLockScreen(mContext);
+        boolean showLockScreen = HPApplication.getInstance().isShowLockScreen();
         if (showLockScreen && action.equals(Intent.ACTION_SCREEN_OFF)) {
             Intent lockscreen = new Intent(this, LockScreenActivity.class);
             //在Service中启动一个Activity, 需要加上Intent.FLAG_ACTIVITY_NEW_TASK
@@ -734,7 +738,7 @@ public class MainActivity extends BaseActivity {
 
         //耳机广播
         mPhoneReceiver = new PhoneReceiver(mContext);
-        if (PreferencesConstants.isWire(mContext)) {
+        if (HPApplication.getInstance().isWire()) {
             mPhoneReceiver.registerReceiver(mContext);
         }
 
@@ -750,7 +754,7 @@ public class MainActivity extends BaseActivity {
         //注册锁屏歌词广播
         mLockLrcReceiver = new LockLrcReceiver(mContext);
         mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
-        if (PreferencesConstants.isLockScreen(mContext)) {
+        if (HPApplication.getInstance().isLockScreen()) {
             mLockLrcReceiver.registerReceiver(mContext);
         }
 
@@ -945,7 +949,7 @@ public class MainActivity extends BaseActivity {
                 initPlayModeView(0, modeAllTv, modeRandomTv, modeSingleTv, true);
             }
         });
-        initPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPlayModeView(HPApplication.getInstance().getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //删除播放列表按钮
         mDeleteTv = findViewById(R.id.delete);
@@ -986,9 +990,8 @@ public class MainActivity extends BaseActivity {
             modeSingleImg.setVisibility(View.VISIBLE);
         }
         //
-        PreferencesConstants.setPlayModel(mContext, playMode);
+        HPApplication.getInstance().setPlayModel(playMode);
     }
-
 
     /**
      * 隐藏popview
@@ -1025,7 +1028,7 @@ public class MainActivity extends BaseActivity {
      */
     private void showPopView() {
 
-        initPlayModeView(PreferencesConstants.getPlayModel(mContext), modeAllTv, modeRandomTv, modeSingleTv, false);
+        initPlayModeView(HPApplication.getInstance().getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
         //加载当前播放列表数据
         List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
         if (curAudioInfos == null) {
@@ -1100,7 +1103,7 @@ public class MainActivity extends BaseActivity {
         mBarCloseFlagView = barContentView.findViewById(R.id.bar_dragflagClosed);
         mBarOpenFlagView = barContentView.findViewById(R.id.bar_dragflagOpen);
         //
-        if (PreferencesConstants.isBarMenuShow(mContext)) {
+        if (HPApplication.getInstance().isBarMenuShow()) {
             mSwipeoutLayout.initViewAndShowMenuView(barContentView, barMenuView, mSingerImg);
         } else {
             mSwipeoutLayout.initViewAndShowContentView(barContentView, barMenuView, mSingerImg);
@@ -1132,7 +1135,7 @@ public class MainActivity extends BaseActivity {
                 }
 
                 //
-                PreferencesConstants.setBarMenuShow(mContext, false);
+                HPApplication.getInstance().setBarMenuShow(false);
             }
 
 
@@ -1147,7 +1150,7 @@ public class MainActivity extends BaseActivity {
                 }
 
                 //
-                PreferencesConstants.setBarMenuShow(mContext, true);
+                HPApplication.getInstance().setBarMenuShow(true);
             }
         });
         mSwipeoutLayout.setPlayerBarOnClickListener(new SwipeoutLayout.PlayerBarOnClickListener() {
@@ -1183,7 +1186,7 @@ public class MainActivity extends BaseActivity {
         mPlayImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = PreferencesConstants.getPlayStatus(mContext);
+                int playStatus = HPApplication.getInstance().getPlayStatus();
                 if (playStatus == AudioPlayerManager.PAUSE) {
 
                     AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
@@ -1217,7 +1220,7 @@ public class MainActivity extends BaseActivity {
         mPauseImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int playStatus = PreferencesConstants.getPlayStatus(mContext);
+                int playStatus = HPApplication.getInstance().getPlayStatus();
                 if (playStatus == AudioPlayerManager.PLAYING) {
 
                     Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -1268,7 +1271,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void dragFinish() {
                 //
-                int playStatus = PreferencesConstants.getPlayStatus(mContext);
+                int playStatus = HPApplication.getInstance().getPlayStatus();
                 if (playStatus == AudioPlayerManager.PLAYING) {
                     //正在播放
                     if (HPApplication.getInstance().getCurAudioMessage() != null) {
@@ -1319,8 +1322,6 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MAINTOLRCRESULTCODE) {
             if (resultCode == LRCTOMAINRESULTCODE) {
-
-
                 //设置底部点击后，下沉动画
                 TranslateAnimation transAnim = new TranslateAnimation(0, 0, mPlayerBarParentLinearLayout.getHeight(), 0);
                 transAnim.setDuration(150);
@@ -1328,6 +1329,18 @@ public class MainActivity extends BaseActivity {
                 mPlayerBarParentLinearLayout.setAnimation(transAnim);
                 mPlayerBarParentLinearLayout.startAnimation(transAnim);
 
+            }
+        }else if(requestCode == PHOTO_REQUEST_GALLERY) {
+            Uri output = Crop.getOutput(data);
+            if(!TextUtils.isEmpty(output.getPath())){
+                String [] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(output, filePathColumn, null,
+                        null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String path = cursor.getString(columnIndex);
+
+                Bitmap bitmap = BitmapFactory.decodeFile(path);
             }
         }
     }
@@ -1388,7 +1401,7 @@ public class MainActivity extends BaseActivity {
         //系统广播
         mSystemReceiver.unregisterReceiver(getApplicationContext());
 
-        if (PreferencesConstants.isWire(mContext))
+        if (HPApplication.getInstance().isWire())
             //耳机广播
             mPhoneReceiver.unregisterReceiver(getApplicationContext());
 

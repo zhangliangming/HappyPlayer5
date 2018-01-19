@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.manager.AudioPlayerManager;
 
 import base.utils.LoggerUtil;
@@ -41,7 +41,7 @@ public class MobliePhoneReceiver {
 
 
                     //暂停
-                    int playStatus = PreferencesConstants.getPlayStatus(mContext);
+                    int playStatus = HPApplication.getInstance().getPlayStatus();
                     if (playStatus == AudioPlayerManager.PLAYING) {
 
                         Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);

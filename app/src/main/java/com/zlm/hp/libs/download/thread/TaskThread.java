@@ -2,7 +2,7 @@ package com.zlm.hp.libs.download.thread;
 
 import android.content.Context;
 
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.download.DownloadTask;
 import com.zlm.hp.libs.download.interfaces.IDownloadTaskThreadEven;
 
@@ -194,7 +194,7 @@ public class TaskThread extends Thread {
                         return;
                     }
 
-                    if (PreferencesConstants.isWifi(context) && !NetUtil.isWifi(context)) {
+                    if (HPApplication.getInstance().isWifi() && !NetUtil.isWifi(context)) {
                         // 不是wifi
                         if (taskThreadEven != null) {
                             taskThreadErrorMsg = "非wifi网络";

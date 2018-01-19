@@ -20,7 +20,6 @@ import android.widget.RemoteViews;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -247,7 +246,7 @@ public class AudioPlayerService extends Service {
     private void doNotificationReceive(Context context, Intent intent) {
         if (intent.getAction().equals(NotificationReceiver.NOTIFIATION_APP_PLAYMUSIC)) {
 
-            int playStatus = PreferencesConstants.getPlayStatus(mContext);
+            int playStatus = HPApplication.getInstance().getPlayStatus();
             if (playStatus == AudioPlayerManager.PAUSE) {
 
                 AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
@@ -278,7 +277,7 @@ public class AudioPlayerService extends Service {
         } else if (intent.getAction().equals(
                 NotificationReceiver.NOTIFIATION_APP_PAUSEMUSIC)) {
 
-            int playStatus = PreferencesConstants.getPlayStatus(mContext);
+            int playStatus = HPApplication.getInstance().getPlayStatus();
             if (playStatus == AudioPlayerManager.PLAYING) {
 
                 Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
@@ -523,7 +522,7 @@ public class AudioPlayerService extends Service {
     private void preMusic() {
 
         logger.e("准备播放上一首");
-        int playModel = PreferencesConstants.getPlayModel(mContext);
+        int playModel = HPApplication.getInstance().getPlayModel();
         AudioInfo audioInfo = AudioPlayerManager.getAudioPlayerManager(getApplicationContext())
                 .preMusic(playModel);
         if (audioInfo == null) {
@@ -550,7 +549,7 @@ public class AudioPlayerService extends Service {
      */
     private void nextMusic() {
         logger.e("准备播放下一首");
-        int playModel = PreferencesConstants.getPlayModel(mContext);
+        int playModel = HPApplication.getInstance().getPlayModel();
         AudioInfo audioInfo = AudioPlayerManager.getAudioPlayerManager(getApplicationContext())
                 .nextMusic(playModel);
         if (audioInfo == null) {
@@ -580,7 +579,7 @@ public class AudioPlayerService extends Service {
                 mMediaPlayer.pause();
             }
         }
-        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PAUSE);
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PAUSE);
         stopForeground(true);
     }
 
@@ -608,7 +607,7 @@ public class AudioPlayerService extends Service {
                 HPApplication.getInstance().getCurAudioInfo().getType() == AudioInfo.NET) {
             //如果进度为0，表示上一次下载直接错误。
             int downloadedSize = DownloadThreadDB.getDownloadThreadDB(
-                    getApplicationContext()).getDownloadedSize(PreferencesConstants.getPlayIndexHashID(mContext), OnLineAudioManager.threadNum);
+                    getApplicationContext()).getDownloadedSize(HPApplication.getInstance().getPlayIndexHashID(), OnLineAudioManager.threadNum);
             if (downloadedSize == 0) {
                 //发送init的广播
                 Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
@@ -622,7 +621,7 @@ public class AudioPlayerService extends Service {
                 isSeekTo = true;
                 mMediaPlayer.seekTo(audioMessage.getPlayProgress());
             }
-            PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PLAYING);
+            HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
         }
 
         Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC);
@@ -639,7 +638,7 @@ public class AudioPlayerService extends Service {
                 mMediaPlayer.pause();
             }
         }
-        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PAUSE);
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PAUSE);
         Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC);
         nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         sendBroadcast(nextIntent);
@@ -665,7 +664,7 @@ public class AudioPlayerService extends Service {
                 //设置当前正在播放的歌曲数据
                 HPApplication.getInstance().setCurAudioInfo(audioInfo);
                 //设置当前的播放索引
-                PreferencesConstants.setPlayIndexHashID(mContext, audioInfo.getHash());
+                HPApplication.getInstance().setPlayIndexHashID(audioInfo.getHash());
 
                 //发送init的广播
                 Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
@@ -681,7 +680,7 @@ public class AudioPlayerService extends Service {
             //设置当前正在播放的歌曲数据
             HPApplication.getInstance().setCurAudioInfo(audioInfo);
             //设置当前的播放索引
-            PreferencesConstants.setPlayIndexHashID(mContext, audioInfo.getHash());
+            HPApplication.getInstance().setPlayIndexHashID(audioInfo.getHash());
 
             //发送init的广播
             Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
@@ -721,11 +720,11 @@ public class AudioPlayerService extends Service {
     private Runnable mDownloadCheckRunnable = new Runnable() {
         @Override
         public void run() {
-            if (PreferencesConstants.getPlayStatus(mContext) == AudioPlayerManager.PLAYNET) {
+            if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYNET) {
 
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(
                         getApplicationContext()).getDownloadedSize(
-                                PreferencesConstants.getPlayIndexHashID(mContext),
+                        HPApplication.getInstance().getPlayIndexHashID(),
                         OnLineAudioManager.threadNum);
                 logger.e("在线播放任务名称：" + HPApplication.getInstance().getCurAudioInfo().
                         getSongName() + "  缓存播放时，监听已下载大小：" + downloadedSize);
@@ -733,7 +732,7 @@ public class AudioPlayerService extends Service {
                 mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);
                 if (downloadedSize > 1024 * 200) {
 
-                    if (PreferencesConstants.getPlayStatus(mContext) != AudioPlayerManager.PAUSE) {
+                    if (HPApplication.getInstance().getPlayStatus() != AudioPlayerManager.PAUSE) {
                         playNetMusic();
                     }
 
@@ -833,7 +832,7 @@ public class AudioPlayerService extends Service {
 
 
                             //设置当前播放的状态
-                            PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PLAYING);
+                            HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
 
                             //发送play的广播
                             Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
@@ -886,7 +885,7 @@ public class AudioPlayerService extends Service {
         AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
         mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);
         //设置当前的播放状态
-        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PLAYNET);
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYNET);
 
         //下载
         if (!OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).taskIsExists(audioInfo.getHash())) {
@@ -980,7 +979,7 @@ public class AudioPlayerService extends Service {
 
 
                         //设置当前播放的状态
-                        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.PLAYING);
+                        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
 
                         //发送play的广播
                         Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
@@ -1057,7 +1056,7 @@ public class AudioPlayerService extends Service {
      * 释放播放器
      */
     private void releasePlayer() {
-        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.STOP);
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
         if (mPlayerThread != null) {
             mPlayerThread = null;
         }
@@ -1079,6 +1078,6 @@ public class AudioPlayerService extends Service {
         HPApplication.getInstance().setCurAudioMessage(null);
         //设置当前播放的状态
         HPApplication.getInstance().setCurAudioInfo(null);
-        PreferencesConstants.setPlayIndexHashID(mContext, "");
+        HPApplication.getInstance().setPlayIndexHashID("");
     }
 }

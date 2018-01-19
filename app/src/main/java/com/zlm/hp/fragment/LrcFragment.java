@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.zlm.hp.R;
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.LyricsManager;
@@ -222,7 +222,7 @@ public class LrcFragment extends BaseFragment {
 
         //歌词视图
         mManyLineLyricsView = mainView.findViewById(R.id.lrcview);
-        mManyLineLyricsView.setLrcFontSize(PreferencesConstants.getLrcFontSize(mContext));
+        mManyLineLyricsView.setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
         mManyLineLyricsView.setDefLrcColor(ColorUtil.parserColor("#888888"));
         mManyLineLyricsView.setLrcColor(ColorUtil.parserColor("#0288d1"));
         mManyLineLyricsView.setTouchInterceptTrue();

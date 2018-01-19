@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.zlm.hp.R;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -76,7 +77,7 @@ public class SplashActivity extends BaseActivity {
 
             //设置延迟时间
             mDelayTime *= 2;
-            PreferencesConstants.setFrist(mContext, false);
+            HPApplication.getInstance().setFrist(false);
         } else {
             //设置延迟时间
             mDelayTime *= 3;
@@ -93,8 +94,8 @@ public class SplashActivity extends BaseActivity {
     protected void loadSplashMusic() {
         boolean isSayHello = PreferencesUtil.getBooleanValue(mContext,
                 PreferencesConstants.isSayHello_KEY,
-                PreferencesConstants.isSayHello(mContext));
-        PreferencesConstants.setSayHello(mContext, isSayHello);
+                HPApplication.getInstance().isSayHello());
+        HPApplication.getInstance().setSayHello(isSayHello);
         if (isSayHello) {
             AssetManager assetManager = getAssets();
             AssetFileDescriptor fileDescriptor;
@@ -116,16 +117,16 @@ public class SplashActivity extends BaseActivity {
      * 初始化配置数据
      */
     private void initPreferencesData() {
-        PreferencesConstants.setPlayStatus(mContext, AudioPlayerManager.STOP);
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
         //初始化wifi值
-        PreferencesConstants.setWire(mContext, PreferencesConstants.isWire(mContext));
-        PreferencesConstants.setWifi(mContext, PreferencesConstants.isWifi(mContext));
-        PreferencesConstants.setBarMenuShow(mContext, PreferencesConstants.isBarMenuShow(mContext));
-        PreferencesConstants.setPlayIndexHashID(mContext, PreferencesConstants.getPlayIndexHashID(mContext));
-        PreferencesConstants.setPlayModel(mContext, PreferencesConstants.getPlayModel(mContext));
-        PreferencesConstants.setLrcColorIndex(mContext, PreferencesConstants.getLrcColorIndex(mContext));
-        PreferencesConstants.setLrcFontSize(mContext, PreferencesConstants.getLrcFontSize(mContext));
-        PreferencesConstants.setManyLineLrc(mContext, PreferencesConstants.isManyLineLrc(mContext));
+        HPApplication.getInstance().setWire(HPApplication.getInstance().isWire());
+        HPApplication.getInstance().setWifi(HPApplication.getInstance().isWifi());
+        HPApplication.getInstance().setBarMenuShow(HPApplication.getInstance().isBarMenuShow());
+        HPApplication.getInstance().setPlayIndexHashID(HPApplication.getInstance().getPlayIndexHashID());
+        HPApplication.getInstance().setPlayModel(HPApplication.getInstance().getPlayModel());
+        HPApplication.getInstance().setLrcColorIndex(HPApplication.getInstance().getLrcColorIndex());
+        HPApplication.getInstance().setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
+        HPApplication.getInstance().setManyLineLrc(HPApplication.getInstance().isManyLineLrc());
     }
 
     @Override

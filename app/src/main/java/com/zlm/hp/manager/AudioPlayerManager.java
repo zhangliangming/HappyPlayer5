@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -72,7 +71,7 @@ public class AudioPlayerManager {
         //从本地文件中获取上次的播放歌曲列表
         List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
         if (curAudioInfos != null && curAudioInfos.size() > 0) {
-            String playInfoHashID = PreferencesConstants.getPlayIndexHashID(mContext);
+            String playInfoHashID = HPApplication.getInstance().getPlayIndexHashID();
             //
             if (playInfoHashID == null || playInfoHashID.equals("")) {
 
@@ -125,8 +124,8 @@ public class AudioPlayerManager {
      */
     private void resetData() {
         //清空之前的播放数据
-        PreferencesConstants.setPlayStatus(mContext, STOP);
-        PreferencesConstants.setPlayIndexHashID(mContext, "-1");
+        HPApplication.getInstance().setPlayStatus(STOP);
+        HPApplication.getInstance().setPlayIndexHashID("-1");
         HPApplication.getInstance().setCurAudioInfos(null);
         HPApplication.getInstance().setCurAudioInfo(null);
         HPApplication.getInstance().setCurAudioMessage(null);
@@ -267,7 +266,7 @@ public class AudioPlayerManager {
         int index = -1;
         for (int i = 0; i < HPApplication.getInstance().getCurAudioInfos().size(); i++) {
             AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfos().get(i);
-            if (audioInfo.getHash().equals(PreferencesConstants.getPlayIndexHashID(mContext))) {
+            if (audioInfo.getHash().equals(HPApplication.getInstance().getPlayIndexHashID())) {
                 return i;
             }
         }
