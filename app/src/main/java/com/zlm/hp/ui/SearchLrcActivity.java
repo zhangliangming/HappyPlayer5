@@ -339,9 +339,9 @@ public class SearchLrcActivity extends BaseActivity {
         mContentContainer = findViewById(R.id.content);
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mContext);
+        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
 
 
     }

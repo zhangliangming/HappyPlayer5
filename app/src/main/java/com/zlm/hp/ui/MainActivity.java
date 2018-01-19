@@ -722,40 +722,40 @@ public class MainActivity extends BaseActivity {
         startService(playerServiceIntent);
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mContext);
+        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
 
         //在线音乐广播
-        mOnLineAudioReceiver = new OnLineAudioReceiver(mContext);
+        mOnLineAudioReceiver = new OnLineAudioReceiver(getApplicationContext());
         mOnLineAudioReceiver.setOnlineAudioReceiverListener(mOnlineAudioReceiverListener);
-        mOnLineAudioReceiver.registerReceiver(mContext);
+        mOnLineAudioReceiver.registerReceiver(getApplicationContext());
 
         //系统广播
-        mSystemReceiver = new SystemReceiver(mContext);
+        mSystemReceiver = new SystemReceiver(getApplicationContext());
         mSystemReceiver.setSystemReceiverListener(mSystemReceiverListener);
-        mSystemReceiver.registerReceiver(mContext);
+        mSystemReceiver.registerReceiver(getApplicationContext());
 
         //耳机广播
-        mPhoneReceiver = new PhoneReceiver(mContext);
+        mPhoneReceiver = new PhoneReceiver(getApplicationContext());
         if (HPApplication.getInstance().isWire()) {
-            mPhoneReceiver.registerReceiver(mContext);
+            mPhoneReceiver.registerReceiver(getApplicationContext());
         }
 
         //电话监听
-        mMobliePhoneReceiver = new MobliePhoneReceiver(mContext);
-        mMobliePhoneReceiver.registerReceiver(mContext);
+        mMobliePhoneReceiver = new MobliePhoneReceiver(getApplicationContext());
+        mMobliePhoneReceiver.registerReceiver(getApplicationContext());
 
         //mFragment广播
-        mFragmentReceiver = new FragmentReceiver(mContext);
+        mFragmentReceiver = new FragmentReceiver(getApplicationContext());
         mFragmentReceiver.setFragmentReceiverListener(mFragmentReceiverListener);
-        mFragmentReceiver.registerReceiver(mContext);
+        mFragmentReceiver.registerReceiver(getApplicationContext());
 
         //注册锁屏歌词广播
-        mLockLrcReceiver = new LockLrcReceiver(mContext);
+        mLockLrcReceiver = new LockLrcReceiver(getApplicationContext());
         mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
         if (HPApplication.getInstance().isLockScreen()) {
-            mLockLrcReceiver.registerReceiver(mContext);
+            mLockLrcReceiver.registerReceiver(getApplicationContext());
         }
 
         //

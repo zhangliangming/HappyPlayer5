@@ -192,7 +192,7 @@ public class DownloadMusicFragment extends BaseFragment {
         //注册下载广播
         mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity);
         mDownloadAudioReceiver.setDownloadAudioReceiverListener(mDownloadAudioReceiverListener);
-        mDownloadAudioReceiver.registerReceiver(mActivity);
+        mDownloadAudioReceiver.registerReceiver(mActivity.getApplicationContext());
 
 
         //注册监听

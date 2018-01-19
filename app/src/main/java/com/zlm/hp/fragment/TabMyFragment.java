@@ -385,15 +385,15 @@ public class TabMyFragment extends BaseFragment {
         showContentView();
 
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mActivity);
+        mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
 
         //注册锁屏歌词广播
-        mLockLrcReceiver = new LockLrcReceiver(mActivity);
+        mLockLrcReceiver = new LockLrcReceiver(mActivity.getApplicationContext());
         mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
         if (HPApplication.getInstance().isLockScreen()) {
-            mLockLrcReceiver.registerReceiver(mActivity);
+            mLockLrcReceiver.registerReceiver(mActivity.getApplicationContext());
         }
     }
 

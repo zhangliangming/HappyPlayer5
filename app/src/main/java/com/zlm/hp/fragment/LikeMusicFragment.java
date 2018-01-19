@@ -107,9 +107,9 @@ public class LikeMusicFragment extends BaseFragment {
 
         //
         //注册监听
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mActivity);
+        mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
 
     }
 
