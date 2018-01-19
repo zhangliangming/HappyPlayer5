@@ -63,7 +63,7 @@
         <activity android:name=".SearchLrcActivity" />
         <activity android:name=".SearchSingerActivity"></activity>
 
-        <receiver android:name="com.zlm.hp.receiver.MyPhoneReceiver">
+        <receiver android:name="com.zlm.hp.receiver.PhoneReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>

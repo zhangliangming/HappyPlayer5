@@ -633,7 +633,7 @@ public class MainActivity extends BaseActivity {
         mSystemReceiver.registerReceiver(getApplicationContext());
 
         //耳机广播
-        mPhoneReceiver = new PhoneReceiver(getApplicationContext(), mHPApplication);
+        mPhoneReceiver = new PhoneReceiver();
         if (mHPApplication.isWire()) {
             mPhoneReceiver.registerReceiver(getApplicationContext());
         }
