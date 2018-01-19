@@ -53,7 +53,14 @@ public class PreferencesConstants {
      * 是否线控key
      */
     public static String isWire_KEY = "isWire_KEY";
-    
+
+
+    /**
+     * 是否是第一次设置
+     */
+
+    public static String isFristSettingLockScreen_KEY = "isFristSettingLockScreen_KEY";
+
     /**
      * 是否显示锁屏歌词key
      */

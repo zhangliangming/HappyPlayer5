@@ -1,10 +1,13 @@
 package com.zlm.hp.fragment;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -279,6 +282,12 @@ public class TabMyFragment extends BaseFragment {
                 boolean selected = mLocklrcSetupBGButton.isSelect();
                 mHPApplication.setShowLockScreen(!selected);
                 mLocklrcSetupBGButton.setSelect(mHPApplication.isShowLockScreen());
+
+                if (mHPApplication.isFristSettingLockScreen()){
+                    mHPApplication.setFristSettingLockScreen(false);
+                    goToSettingDialog();
+                }
+
             }
         });
 
@@ -351,6 +360,31 @@ public class TabMyFragment extends BaseFragment {
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+    }
+
+    /**
+     * 跳转到权限设置页面
+     */
+    private void goToSettingDialog() {
+        try {
+            // 开启悬浮窗设置界面
+            Intent localIntent = new Intent(
+                    "miui.intent.action.APP_PERM_EDITOR");
+            localIntent
+                    .setClassName("com.miui.securitycenter",
+                            "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
+            localIntent.putExtra("extra_pkgname",
+                    mHPApplication.getApplicationContext().getPackageName());
+            startActivity(localIntent);
+        } catch (ActivityNotFoundException localActivityNotFoundException) {
+            // 设置页面
+            Intent intent = new Intent(
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package",
+                    mHPApplication.getApplicationContext().getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        }
     }
 
     @Override

@@ -126,6 +126,10 @@ public class HPApplication extends Application {
      * 是否显示锁屏
      */
     private boolean isShowLockScreen = false;
+    /**
+     * 是否是第一次设置锁屏
+     */
+    private boolean isFristSettingLockScreen = true;
 
     /**
      * 是否是多行歌词
@@ -376,6 +380,15 @@ public class HPApplication extends Application {
     public void setWire(boolean wire) {
         isWire = wire;
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isWire_KEY, isWire);
+    }
+
+    public boolean isFristSettingLockScreen() {
+        return isFristSettingLockScreen;
+    }
+
+    public void setFristSettingLockScreen(boolean fristSettingLockScreen) {
+        isFristSettingLockScreen = fristSettingLockScreen;
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isFristSettingLockScreen_KEY, isFristSettingLockScreen);
     }
 
     public boolean isShowLockScreen() {

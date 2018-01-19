@@ -120,6 +120,7 @@ public class SplashActivity extends BaseActivity {
     private void initPreferencesData() {
         mHPApplication.setPlayStatus(AudioPlayerManager.STOP);
         //锁屏标志
+        mHPApplication.setFristSettingLockScreen((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isFristSettingLockScreen_KEY, true));
         mHPApplication.setShowLockScreen((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, false));
         //线控标志
         mHPApplication.setWire((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isWire_KEY, false));
