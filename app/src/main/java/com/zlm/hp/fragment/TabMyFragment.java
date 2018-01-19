@@ -71,6 +71,10 @@ public class TabMyFragment extends BaseFragment {
      * 线控
      */
     private SetupBGButton mWireSetupBGButton;
+    /**
+     * 锁屏按钮
+     */
+    private SetupBGButton mLocklrcSetupBGButton;
 
     /**
      * 退出设置按钮
@@ -262,6 +266,22 @@ public class TabMyFragment extends BaseFragment {
             }
         });
 
+
+        //锁屏按钮
+        mLocklrcSetupBGButton = mainView.findViewById(R.id.locklrcbg);
+        if (mHPApplication.isShowLockScreen()) {
+            mLocklrcSetupBGButton.setSelect(true);
+        }
+        mLocklrcSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+                boolean selected = mLocklrcSetupBGButton.isSelect();
+                mHPApplication.setShowLockScreen(!selected);
+                mLocklrcSetupBGButton.setSelect(mHPApplication.isShowLockScreen());
+            }
+        });
+
         //问候语按钮
         mSayHelloSetupBGButton = mainView.findViewById(R.id.sayhello);
         if (mHPApplication.isSayHello()) {
@@ -298,6 +318,7 @@ public class TabMyFragment extends BaseFragment {
                 }
             }
         });
+
 
         //关闭设置按钮
         mExitSetupBGButton = mainView.findViewById(R.id.exitbg);

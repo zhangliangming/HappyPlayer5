@@ -123,6 +123,11 @@ public class HPApplication extends Application {
     private boolean isWire = true;
 
     /**
+     * 是否显示锁屏
+     */
+    private boolean isShowLockScreen = false;
+
+    /**
      * 是否是多行歌词
      */
     private boolean isManyLineLrc = true;
@@ -217,7 +222,7 @@ public class HPApplication extends Application {
 
     public List<AudioInfo> getCurAudioInfos() {
         if (curAudioInfos == null) {
-            if(logger == null){
+            if (logger == null) {
                 logger = LoggerUtil.getZhangLogger(getApplicationContext());
             }
             logger.e("curAudioInfos为空，从本地获取");
@@ -248,7 +253,7 @@ public class HPApplication extends Application {
 
     public AudioInfo getCurAudioInfo() {
         if (curAudioInfo == null) {
-            if(logger == null){
+            if (logger == null) {
                 logger = LoggerUtil.getZhangLogger(getApplicationContext());
             }
             logger.e("curAudioInfo为空，从本地获取");
@@ -280,7 +285,7 @@ public class HPApplication extends Application {
 
     public AudioMessage getCurAudioMessage() {
         if (curAudioMessage == null) {
-            if(logger == null){
+            if (logger == null) {
                 logger = LoggerUtil.getZhangLogger(getApplicationContext());
             }
             logger.e("curAudioMessage为空，从本地获取");
@@ -310,7 +315,7 @@ public class HPApplication extends Application {
 
     public RankListResult getRankListResult() {
         if (rankListResult == null) {
-            if(logger == null){
+            if (logger == null) {
                 logger = LoggerUtil.getZhangLogger(getApplicationContext());
             }
             logger.e("rankListResult为空，从本地获取");
@@ -371,6 +376,15 @@ public class HPApplication extends Application {
     public void setWire(boolean wire) {
         isWire = wire;
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isWire_KEY, isWire);
+    }
+
+    public boolean isShowLockScreen() {
+        return isShowLockScreen;
+    }
+
+    public void setShowLockScreen(boolean showLockScreen) {
+        isShowLockScreen = showLockScreen;
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, isShowLockScreen);
     }
 
     public boolean isManyLineLrc() {

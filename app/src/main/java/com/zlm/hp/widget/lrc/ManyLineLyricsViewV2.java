@@ -166,6 +166,10 @@ public class ManyLineLyricsViewV2 extends View {
      */
     private boolean mTouchIntercept = false;
     /**
+     * 是否允许触摸
+     */
+    private boolean mTouchAble = true;
+    /**
      * 正在拖动
      */
     private boolean isTouchMove = false;
@@ -1403,7 +1407,7 @@ public class ManyLineLyricsViewV2 extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mLyricsLineTreeMap == null || mLyricsLineTreeMap.size() == 0 || !isManyLineLrc) {
+        if (mLyricsLineTreeMap == null || mLyricsLineTreeMap.size() == 0 || !isManyLineLrc || !mTouchAble) {
             return super.onTouchEvent(event);
         }
         obtainVelocityTracker(event);
@@ -2025,6 +2029,10 @@ public class ManyLineLyricsViewV2 extends View {
         mDefLrcColor = color;
         initColor();
         invalidateView();
+    }
+
+    public void setTouchAble(boolean mTouchAble) {
+        this.mTouchAble = mTouchAble;
     }
 
     /***

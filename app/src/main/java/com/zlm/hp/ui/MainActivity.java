@@ -45,6 +45,7 @@ import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
+import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.MobliePhoneReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.receiver.PhoneReceiver;
@@ -230,7 +231,16 @@ public class MainActivity extends BaseActivity {
             doFragmentReceive(context, intent);
         }
     };
-
+    /**
+     * 锁屏广播
+     */
+    private LockLrcReceiver mLockLrcReceiver;
+    private LockLrcReceiver.LockLrcReceiverListener mLockLrcReceiverListener = new LockLrcReceiver.LockLrcReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            doLockLrcReceiver(context, intent);
+        }
+    };
 
     /**
      *
@@ -611,6 +621,27 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
+     * 处理锁屏广播事件
+     *
+     * @param context
+     * @param intent
+     */
+    private void doLockLrcReceiver(Context context, Intent intent) {
+
+        if (intent.getAction().equals(LockLrcReceiver.ACTION_LOCKLRC_SCREEN_OFF)) {
+
+            if (mHPApplication.isShowLockScreen() && !LockActivity.isRunning) {
+                Intent lockIntent = new Intent(MainActivity.this,
+                        LockActivity.class);
+                lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(lockIntent);
+            }
+
+        }
+    }
+
+    /**
      * 初始化服务
      */
     private void initService() {
@@ -646,6 +677,11 @@ public class MainActivity extends BaseActivity {
         mFragmentReceiver = new FragmentReceiver(getApplicationContext(), mHPApplication);
         mFragmentReceiver.setFragmentReceiverListener(mFragmentReceiverListener);
         mFragmentReceiver.registerReceiver(getApplicationContext());
+
+        //锁屏广播
+        mLockLrcReceiver = new LockLrcReceiver(getApplicationContext());
+        mLockLrcReceiver.setLockLrcReceiverListener(mLockLrcReceiverListener);
+        mLockLrcReceiver.registerReceiver(getApplicationContext());
 
         //
         mCheckServiceHandler.postDelayed(mCheckServiceRunnable, mCheckServiceTime);
@@ -1274,6 +1310,9 @@ public class MainActivity extends BaseActivity {
 
         //Fragment广播
         mFragmentReceiver.unregisterReceiver(getApplicationContext());
+
+        //锁屏广播
+        mLockLrcReceiver.unregisterReceiver(getApplicationContext());
 
         super.onDestroy();
     }

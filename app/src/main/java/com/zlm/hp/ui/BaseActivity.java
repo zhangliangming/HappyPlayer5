@@ -85,6 +85,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
 
         }
+        preLoad();
         mHPApplication = (HPApplication) getApplication();
         mStoragePermissionUtil = new StoragePermissionUtil(mHPApplication, this);
         setContentView(layout);
@@ -98,6 +99,10 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
         loadData(false);
+    }
+
+    protected void preLoad() {
+
     }
 
     @Override

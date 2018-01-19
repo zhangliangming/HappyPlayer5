@@ -1828,9 +1828,9 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 //
-                Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_PREMUSIC);
-                nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(nextIntent);
+                Intent preIntent = new Intent(AudioBroadcastReceiver.ACTION_PREMUSIC);
+                preIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                sendBroadcast(preIntent);
             }
         });
 
