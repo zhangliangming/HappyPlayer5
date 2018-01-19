@@ -1,4 +1,9 @@
+# 项目分支代码声明 #
+branch-master：该分支代码是我与DyncKathline参与开发，该APP的界面和功能与我之前写的有较大的差别，请注意。
+branch-zlm：该分支代码是我个人开发的，如需要查看我之前写的代码，请切换分支即可。
+
 # 更新日志 #
+- 2018-01-19(@zlm)：修复RotateLinearLayout旋转角度在0.x时布局闪烁问题，关闭硬件加速。
 - 2018-01-18:
 1.去掉直接传递HPApplication作为参数
 2.在Mainactivity写了一个权限检查的样例
