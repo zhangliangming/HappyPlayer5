@@ -37,15 +37,13 @@ public class PhoneReceiver extends BroadcastReceiver {
     private AudioManager mAudioManager;
     private ComponentName mRemoteControlResponder;
 
-    public PhoneReceiver(){}
-
-    public PhoneReceiver(Context context) {
-        this.mContext = HPApplication.getInstance();
-        logger = LoggerUtil.getZhangLogger(context);
+    public PhoneReceiver() {
+        this.mContext = HPApplication.getInstance().getApplicationContext();
+        logger = LoggerUtil.getZhangLogger(mContext);
         timer = new Timer(true);
         //
-        mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-        mRemoteControlResponder = new ComponentName(context.getPackageName(), this.getClass().getName());
+        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mRemoteControlResponder = new ComponentName(mContext.getPackageName(), this.getClass().getName());
     }
 
     /**
