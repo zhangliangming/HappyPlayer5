@@ -6,6 +6,10 @@
             android:icon="@mipmap/ic_menu_settings"
             android:title="@string/menu_setting" />
         <item
+            android:id="@+id/action_skin_peeler"
+            android:icon="@mipmap/ic_menu_skin"
+            android:title="@string/menu_skin_peeler" />
+        <item
             android:id="@+id/action_night"
             android:icon="@mipmap/ic_menu_night"
             android:title="@string/menu_night" />

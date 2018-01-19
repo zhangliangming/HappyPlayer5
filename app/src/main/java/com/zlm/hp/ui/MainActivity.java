@@ -97,6 +97,10 @@ public class MainActivity extends BaseActivity {
      * 歌词界面跳转到主界面的code
      */
     private final int LRCTOMAINRESULTCODE = 1;
+    /**
+     * 从相册中选择，换肤
+     */
+    public static final int PHOTO_REQUEST_GALLERY = 2;
 
     /**
      * 保存退出时间

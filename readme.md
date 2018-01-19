@@ -1,7 +1,7 @@
 # 更新日志 #
 - 2018-01-18:
 1.去掉直接传递HPApplication作为参数
-2.在Mainactivity写了一个权限检查的样例  
+2.在Mainactivity写了一个权限检查的样例
 - 2018-01-18：  
 1.替换ijkplayer库  
 2.统一版本  
