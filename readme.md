@@ -1,4 +1,5 @@
 # 更新日志 #
+- 2018-01-19：引用别人项目工具类，主要用于判断各种手机的权限设置页面，项目地址如下：https://github.com/SenhLinsh/Utils-Everywhere.git
 - 2018-01-19：第一次点击锁屏时，跳转到权限选择页面。
 - 2018-01-19：新添加锁屏界面，预览如下：
 ![](https://i.imgur.com/hZlES1d.png)
