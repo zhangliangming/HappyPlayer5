@@ -186,16 +186,28 @@ public class AudioPlayerService extends Service {
             mPlayBarNotification = new Notification.Builder(getApplicationContext())
                     .setContentTitle(tickerText)
                     .setContentText("开心每一天")
-                    .setSmallIcon(icon)
+                    .setSmallIcon(R.mipmap.notifi_icon)
                     .setChannelId(CHANNEL_ID)
                     .build();
         } else {
-            // Create a notification and set the notification channel.
-            mPlayBarNotification = new Notification.Builder(getApplicationContext())
-                    .setContentTitle(tickerText)
-                    .setContentText("开心每一天")
-                    .setSmallIcon(icon)
-                    .build();
+
+            //android5.0修改通知栏图标
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                mPlayBarNotification = new Notification.Builder(getApplicationContext())
+                        .setContentTitle(tickerText)
+                        .setContentText("开心每一天")
+                        .setSmallIcon(R.mipmap.notifi_icon)
+                        .build();
+
+            } else {
+                // Create a notification and set the notification channel.
+                mPlayBarNotification = new Notification.Builder(getApplicationContext())
+                        .setContentTitle(tickerText)
+                        .setContentText("开心每一天")
+                        .setSmallIcon(R.mipmap.singer_def)
+                        .build();
+            }
         }
 
 
