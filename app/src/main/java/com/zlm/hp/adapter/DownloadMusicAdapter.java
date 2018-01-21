@@ -16,6 +16,7 @@ import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.libs.download.constant.DownloadTaskConstant;
+import com.zlm.hp.lyrics.utils.FileUtils;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.model.AudioInfo;
@@ -25,7 +26,6 @@ import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
-import com.zlm.hp.utils.FileUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,12 +6,10 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
-import com.soundcloud.android.crop.Crop;
 import com.zlm.hp.R;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.ui.AboutActivity;
 import com.zlm.hp.ui.BaseActivity;
-import com.zlm.hp.ui.MainActivity;
 import com.zlm.hp.ui.SkinActivity;
 
 import base.utils.PreferencesUtil;
@@ -72,12 +70,11 @@ public class NaviMenuHelper {
     }
 
     private static void updateSkin(BaseActivity activity) {
-        Intent intent = new Intent(activity, SkinActivity.class);
-        activity.startActivity(intent);
 //        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 //        intent.setType("image/*");
 //        activity.startActivityForResult(intent, MainActivity.PHOTO_REQUEST_GALLERY);
-        Crop.pickImage(activity, MainActivity.PHOTO_REQUEST_GALLERY);
+        Intent intent = new Intent(activity, SkinActivity.class);
+        activity.startActivity(intent);
     }
 
     private static void startTimer(Context context, int minute) {

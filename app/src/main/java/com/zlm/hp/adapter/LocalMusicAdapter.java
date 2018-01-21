@@ -332,18 +332,18 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
         // 添加了底部的菜单，所以加多一个item和版权声明
-        return count + 2;
+        return count + 1;
 
     }
 
     @Override
     public int getItemViewType(int position) {
         // 异常情况处理
-        if (null == mDatas || position < 0 || position == getItemCount() - 1) {
+        if (null == mDatas || position < 0 /*|| position == getItemCount() - 1*/) {
             return COPYRIGHT;
         }
 
-        if (position == getItemCount() - 2)
+        if (position == getItemCount() - 1)
             return FOOTER;
 
         int categroyFirstIndex = 0;
