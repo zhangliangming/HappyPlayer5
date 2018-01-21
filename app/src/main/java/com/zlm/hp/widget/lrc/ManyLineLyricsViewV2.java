@@ -130,7 +130,7 @@ public class ManyLineLyricsViewV2 extends View {
     /**
      * Y轴移动的时间
      */
-    private int mDuration = 200;
+    private int mDuration = 400;
     /**
      * 歌词在Y轴上的偏移量
      */
