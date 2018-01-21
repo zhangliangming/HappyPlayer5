@@ -1,113 +1,150 @@
 package com.zlm.hp.ui;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.R;
-import com.zlm.hp.adapter.LrcPopPlayListAdapter;
-import com.zlm.hp.adapter.LrcPopSingerListAdapter;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.db.DownloadInfoDB;
-import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.lyrics.model.LyricsInfo;
-import com.zlm.hp.lyrics.model.LyricsTag;
-import com.zlm.hp.lyrics.utils.LyricsIOUtils;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
-import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.LyricsManager;
-import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.SongSingerInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.receiver.LockLrcReceiver;
-import com.zlm.hp.receiver.OnLineAudioReceiver;
+import com.zlm.hp.utils.AniUtil;
 import com.zlm.hp.utils.ImageUtil;
-import com.zlm.hp.utils.MediaUtil;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 import base.utils.ColorUtil;
-import base.utils.ToastUtil;
-import base.widget.ButtonRelativeLayout;
-import base.widget.IconfontImageButtonTextView;
-import base.widget.IconfontTextView;
-import base.widget.LinearLayoutRecyclerView;
-import base.widget.LrcSeekBar;
-import base.widget.PlayListBGRelativeLayout;
 import base.widget.SingerImageView;
 import base.widget.SwipeBackLayout;
+import base.widget.lock.LockButtonRelativeLayout;
+import base.widget.lock.LockPalyOrPauseButtonRelativeLayout;
 import base.widget.lrc.ManyLineLyricsViewV2;
 
+/**
+ * @Description: 锁屏界面
+ * @Param:
+ * @Return:
+ * @Author: zhangliangming
+ * @Date: 2018/1/19 16:07
+ * @Throws:
+ */
 public class LockScreenActivity extends BaseActivity {
+
+    private HPApplication mHPApplication;
+
     /**
-     * 歌词界面跳转到主界面的code
-     */
-    private final int LRCTOMAINRESULTCODE = 1;
-    /**
-     * 旋转布局界面
+     *
      */
     private SwipeBackLayout mSwipeBackLayout;
-    private LinearLayout mLrcPlaybarLinearLayout;
 
     /**
-     * 歌曲名称tv
+     * 滑动提示图标
      */
-    private TextView mSongNameTextView;
-    /**
-     * 歌手tv
-     */
-    private TextView mSingerNameTextView;
-    ////////////////////////////底部
-
-    private LrcSeekBar mLrcSeekBar;
-    /**
-     * 播放
-     */
-    private RelativeLayout mPlayBtn;
-    /**
-     * 暂停
-     */
-    private RelativeLayout mPauseBtn;
-    /**
-     * 下一首
-     */
-    private RelativeLayout mNextBtn;
+    private ImageView lockImageView;
+    private AnimationDrawable aniLoading;
 
     /**
-     * 上一首
+     * 时间
      */
-    private RelativeLayout mPreBtn;
+    private TextView timeTextView;
     /**
-     * 播放进度
+     * 日期
      */
-    private TextView mSongProgressTv;
+    private TextView dateTextView;
+    /**
+     * 星期几
+     */
+    private TextView dayTextView;
 
     /**
-     * 歌曲总长度
+     * 歌名
      */
-    private TextView mSongDurationTv;
+    private TextView songNameTextView;
+    /**
+     * 歌手
+     */
+    private TextView songerTextView;
+    //暂停、播放图标
+    private ImageView playImageView;
+    private ImageView pauseImageView;
+
+    /**
+     * 上一首按钮
+     */
+    private LockButtonRelativeLayout prewButton;
+    /**
+     * 下一首按钮
+     */
+    private LockButtonRelativeLayout nextButton;
+
+    /**
+     * 播放或者暂停按钮
+     */
+    private LockPalyOrPauseButtonRelativeLayout playOrPauseButton;
+
+    /**
+     * 音频广播
+     */
+    private AudioBroadcastReceiver mAudioBroadcastReceiver;
+
+    /**
+     * 广播监听
+     */
+    private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            doAudioReceive(context, intent);
+        }
+    };
+
+    /**
+     * 分钟广播
+     */
+    private Handler mTimeHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            setDate();
+        }
+    };
+
+    /**
+     * 分钟变化广播
+     */
+    private BroadcastReceiver mTimeReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
+                mTimeHandler.sendEmptyMessage(0);
+            }
+        }
+    };
+
+    /**
+     * 歌手写真
+     */
+    private SingerImageView mSingerImageView;
 
     /**
      * 多行歌词视图
@@ -131,6 +168,11 @@ public class LockScreenActivity extends BaseActivity {
     private final int HASTRANSLITERATIONLRC = 1;
     private final int HASTRANSLATEANDTRANSLITERATIONLRC = 2;
     private final int NOEXTRALRC = 3;
+
+    /**
+     * 屏幕宽度
+     */
+    private int mScreensWidth;
 
     private Handler mExtraLrcTypeHandler = new Handler() {
         @Override
@@ -163,12 +205,12 @@ public class LockScreenActivity extends BaseActivity {
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //翻译歌词/音译歌词
                         mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
                         mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                         mHideTTImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //翻译歌词/音译歌词
                         mShowTTToTranslateImg.setVisibility(View.VISIBLE);
                         mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
@@ -182,11 +224,11 @@ public class LockScreenActivity extends BaseActivity {
                     mHideTranslateImg.setVisibility(View.INVISIBLE);
                     mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //音译歌词
                         mHideTransliterationImg.setVisibility(View.VISIBLE);
                         mShowTransliterationImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //音译歌词
                         mHideTransliterationImg.setVisibility(View.INVISIBLE);
                         mShowTransliterationImg.setVisibility(View.VISIBLE);
@@ -201,11 +243,11 @@ public class LockScreenActivity extends BaseActivity {
                     break;
                 case HASTRANSLATELRC:
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //翻译歌词
                         mHideTranslateImg.setVisibility(View.VISIBLE);
                         mShowTranslateImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //翻译歌词
                         mHideTranslateImg.setVisibility(View.INVISIBLE);
                         mShowTranslateImg.setVisibility(View.VISIBLE);
@@ -230,378 +272,11 @@ public class LockScreenActivity extends BaseActivity {
     };
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
-    /**
-     * 歌手写真
-     */
-    private SingerImageView mSingerImageView;
-
-    //播放模式
-    private ImageView modeAllImg;
-    private ImageView modeRandomImg;
-    private ImageView modeSingleImg;
-
-    /**
-     * 屏幕宽度
-     */
-    private int mScreensWidth;
 
 
-    /////////////////////////////菜单///////////////////////////
-    private IconfontImageButtonTextView mMoreMenuImgBtn;
-    private ImageView mDownloadImgBtn;
-    private ImageView mDownloadedImgBtn;
-    private IconfontImageButtonTextView mLikeImgBtn;
-    private IconfontImageButtonTextView mUnLikeImgBtn;
-
-    //、、、、、、、、、、、、、、、、、、更多弹出窗口、、、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isPopViewShow = false;
-    private LinearLayout mPopLinearLayout;
-    private LinearLayout mMenuLayout;
-
-    //、、、、、、、、、、、、、、、、、、、当前播放列表窗口、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isPLPopViewShow = false;
-    private LinearLayout mPlPopLinearLayout;
-    private PlayListBGRelativeLayout mPlPLayout;
-
-    //、、、、、、、、、、、、、、、、、、、、、、歌手列表、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isSPLPopViewShow = false;
-    private LinearLayout mSPlPopLinearLayout;
-    private PlayListBGRelativeLayout mSPlPLayout;
-    private LinearLayoutRecyclerView mSingerNameRecyclerView;
-    private LrcPopSingerListAdapter mLrcPopSingerListAdapter;
-    private LrcActivity.LrcActivityListener mLrcActivityListener = new LrcActivity.LrcActivityListener() {
-        @Override
-        public void closeSingerPopListVeiw() {
-            hideSPLPopView();
-        }
-    };
-
-    //、、、、、、、、、、、、、、、、、、、当前歌曲信息窗口、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isSIPopViewShow = false;
-    private LinearLayout mSIPopLinearLayout;
-    private PlayListBGRelativeLayout mSIPLayout;
-    private TextView mPopSingerNameTv;
-    private TextView mPopFileExtTv;
-    private TextView mPopTimeTv;
-    private TextView mPopFileSizeTv;
-
-    //、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
-    //播放模式
-    private IconfontTextView modeAllTv;
-    private IconfontTextView modeRandomTv;
-    private IconfontTextView modeSingleTv;
-
-    //删除播放列表
-    private IconfontTextView mDeleteTv;
-    /**
-     * 当前播放列表
-     */
-    private LinearLayoutRecyclerView mCurRecyclerView;
-
-    /**
-     *
-     */
-    private LrcPopPlayListAdapter mPopPlayListAdapter;
-    /**
-     * 当前播放列表歌曲总数
-     */
-    private TextView mCurPLSizeTv;
-
-    /////////////////////////////////////////////////////////////////////////////////
-
-    /**
-     * 音频广播
-     */
-    private AudioBroadcastReceiver mAudioBroadcastReceiver;
-
-    /**
-     * 广播监听
-     */
-    private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            doAudioReceive(context, intent);
-        }
-    };
-
-    /**
-     * 在线音乐广播
-     */
-    private OnLineAudioReceiver mOnLineAudioReceiver;
-    private OnLineAudioReceiver.OnlineAudioReceiverListener mOnlineAudioReceiverListener = new OnLineAudioReceiver.OnlineAudioReceiverListener() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            doNetMusicReceive(context, intent);
-        }
-    };
-
-    /**
-     * 处理网络歌曲广播
-     *
-     * @param context
-     * @param intent
-     */
-    private void doNetMusicReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
-            DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (HPApplication.getInstance().getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
-                double pre = downloadedSize * 1.0 / HPApplication.getInstance().getCurAudioInfo().getFileSize();
-                int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
-                mLrcSeekBar.setSecondaryProgress(downloadProgress);
-            }
-        } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
-            DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
-            if (HPApplication.getInstance().getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
-                ToastUtil.showTextToast(getApplicationContext(), downloadMessage.getErrorMsg());
-            }
-        }
-
-    }
-
-
-    /**
-     * 处理音频广播事件
-     *
-     * @param context
-     * @param intent
-     */
-    private void doAudioReceive(Context context, Intent intent) {
-        String action = intent.getAction();
-        if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
-            //空数据
-            mSongNameTextView.setText(R.string.def_songName);
-            mSingerNameTextView.setText(R.string.def_artist);
-            mPauseBtn.setVisibility(View.INVISIBLE);
-            mPlayBtn.setVisibility(View.VISIBLE);
-
-            mSongProgressTv.setText("00:00");
-            mSongDurationTv.setText("00:00");
-
-            //
-            mLrcSeekBar.setEnabled(false);
-            mLrcSeekBar.setProgress(0);
-            mLrcSeekBar.setSecondaryProgress(0);
-            mLrcSeekBar.setMax(0);
-
-            //
-            mManyLineLyricsView.setLyricsUtil(null, 0,0);
-            //歌手写真
-            mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(mContext, null);
-
-            //重置弹出窗口播放列表
-            if (isPLPopViewShow) {
-                if (mPopPlayListAdapter != null) {
-                    mPopPlayListAdapter.reshViewHolder(null);
-                }
-            }
-
-            //设置喜欢
-            mUnLikeImgBtn.setVisibility(View.VISIBLE);
-            mLikeImgBtn.setVisibility(View.GONE);
-
-
-            //下载
-            mDownloadedImgBtn.setVisibility(View.INVISIBLE);
-            mDownloadImgBtn.setVisibility(View.VISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
-            //初始化
-            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-
-            mSongNameTextView.setText(audioInfo.getSongName());
-            mSingerNameTextView.setText(audioInfo.getSingerName());
-
-            if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING) {
-                mPauseBtn.setVisibility(View.VISIBLE);
-                mPlayBtn.setVisibility(View.GONE);
-            } else {
-                mPauseBtn.setVisibility(View.GONE);
-                mPlayBtn.setVisibility(View.VISIBLE);
-            }
-
-
-            //
-            mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
-            mSongDurationTv.setText(MediaUtil.parseTimeToString((int) audioInfo.getDuration()));
-            //
-            mLrcSeekBar.setEnabled(true);
-            mLrcSeekBar.setMax((int) audioInfo.getDuration());
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-            mLrcSeekBar.setSecondaryProgress(0);
-
-            //加载歌词
-            String keyWords = "";
-            if (audioInfo.getSingerName().equals(mContext.getString(R.string.unknown))) {
-                keyWords = audioInfo.getSongName();
-            } else {
-                keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
-            }
-            LyricsManager.getLyricsManager(mContext).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
-
-            //
-            mManyLineLyricsView.setLyricsUtil(null, 0,0);
-
-            //设置弹出窗口播放列表
-            if (isPLPopViewShow) {
-                if (mPopPlayListAdapter != null) {
-                    mPopPlayListAdapter.reshViewHolder(audioInfo);
-                }
-            }
-
-            mSingerImageView.setVisibility(View.INVISIBLE);
-            mSingerImageView.setSongSingerInfos(mContext, null);
-            //加载歌手写真
-            ImageUtil.loadSingerImg(mContext, audioInfo.getHash(), audioInfo.getSingerName());
-
-
-            //设置喜欢
-            boolean isLike = AudioInfoDB.getAudioInfoDB(getApplicationContext()).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
-            if (isLike) {
-                mUnLikeImgBtn.setVisibility(View.GONE);
-                mLikeImgBtn.setVisibility(View.VISIBLE);
-            } else {
-                mUnLikeImgBtn.setVisibility(View.VISIBLE);
-                mLikeImgBtn.setVisibility(View.GONE);
-            }
-
-            //
-
-            if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
-
-                //下载
-                if (DownloadInfoDB.getAudioInfoDB(getApplicationContext()).isExists(audioInfo.getHash()) || AudioInfoDB.getAudioInfoDB(getApplicationContext()).isNetAudioExists(audioInfo.getHash())) {
-
-                    mDownloadedImgBtn.setVisibility(View.VISIBLE);
-                    mDownloadImgBtn.setVisibility(View.INVISIBLE);
-                } else {
-                    mDownloadedImgBtn.setVisibility(View.INVISIBLE);
-                    mDownloadImgBtn.setVisibility(View.VISIBLE);
-                }
-
-            } else {
-                mDownloadedImgBtn.setVisibility(View.VISIBLE);
-                mDownloadImgBtn.setVisibility(View.INVISIBLE);
-            }
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
-            //播放
-
-            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-
-            mPauseBtn.setVisibility(View.VISIBLE);
-            mPlayBtn.setVisibility(View.INVISIBLE);
-
-            //
-            mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
-            //
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
-            //暂停完成
-            mPauseBtn.setVisibility(View.INVISIBLE);
-            mPlayBtn.setVisibility(View.VISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
-            //唤醒完成
-            mPauseBtn.setVisibility(View.VISIBLE);
-            mPlayBtn.setVisibility(View.INVISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            //播放中
-            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            if (audioMessage != null) {
-                mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
-                mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-                if (audioInfo != null) {
-                    //更新歌词
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
-                        mManyLineLyricsView.updateView((int) audioMessage.getPlayProgress());
-                    }
-                }
-
-            }
-
-        }
-//        else if (action.equals(AudioBroadcastReceiver.ACTION_MUSICRESTART)) {
-        //重新启动播放服务
-//            Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-//            mHPApplication.startService(playerServiceIntent);
-//            logger.e("接收广播并且重新启动音频播放服务");
-
-//        }
-        else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
-            //歌词加载完成
-            AudioMessage curAudioMessage = HPApplication.getInstance().getCurAudioMessage();
-            AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            String hash = audioMessage.getHash();
-            if (hash.equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
-                //
-                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mContext).getLyricsUtil(hash);
-                if (lyricsUtil != null) {
-                    lyricsUtil.setHash(hash);
-                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2,(int) curAudioMessage.getPlayProgress());
-                    mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
-                }
-            }
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCSEEKTO)) {
-            //歌词快进
-            if (HPApplication.getInstance().getCurAudioMessage() != null) {
-                mSongProgressTv.setText(MediaUtil.parseTimeToString((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress()));
-                mLrcSeekBar.setProgress((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-                if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash()
-                            .equals(HPApplication.getInstance().getCurAudioInfo().getHash())) {
-                        mManyLineLyricsView.updateView((int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-                    }
-                }
-            }
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_RELOADSINGERIMG)) {
-            //重新加载歌手写真
-            if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                String hash = intent.getStringExtra("hash");
-                if (HPApplication.getInstance().getCurAudioInfo().getHash().equals(hash)) {
-                    String singerName = intent.getStringExtra("singerName");
-                    mSingerImageView.setVisibility(View.INVISIBLE);
-                    mSingerImageView.setSongSingerInfos(mContext, null);
-                    //加载歌手写真
-                    ImageUtil.loadSingerImg(mContext, hash, singerName);
-
-                }
-            }
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SINGERIMGLOADED)) {
-            //歌手写真加载完成
-            if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                String hash = intent.getStringExtra("hash");
-                if (HPApplication.getInstance().getCurAudioInfo().getHash().equals(hash)) {
-                    mSingerImageView.setVisibility(View.VISIBLE);
-
-                    String singerName = intent.getStringExtra("singerName");
-                    String[] singerNameArray = null;
-                    if (singerName.contains("、")) {
-
-                        String regex = "\\s*、\\s*";
-                        singerNameArray = singerName.split(regex);
-
-
-                    } else {
-                        singerNameArray = new String[1];
-                        singerNameArray[0] = singerName;
-                    }
-
-
-                    //设置数据
-                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, false);
-                    mSingerImageView.setSongSingerInfos(mContext, list);
-                }
-            }
-        }
+    @Override
+    protected int setContentViewId() {
+        return R.layout.activity_lock_screen;
     }
 
     @Override
@@ -613,35 +288,118 @@ public class LockScreenActivity extends BaseActivity {
     }
 
     @Override
-    protected int setContentViewId() {
-        return R.layout.activity_lock_screen;
-    }
-
-    @Override
     protected void initViews(Bundle savedInstanceState) {
-        WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        mScreensWidth = display.getWidth();
-        //
-        mLrcPlaybarLinearLayout = findViewById(R.id.lrc_playbar);
-        mSwipeBackLayout = findViewById(R.id.swipeback_layout);
 
+        //
+        mHPApplication = HPApplication.getInstance();
+        //
+        mSwipeBackLayout = findViewById(R.id.swipeback_layout);
+        mSwipeBackLayout.setShadowEnable(false);
         mSwipeBackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
-                Intent closeIntent = new Intent(LockLrcReceiver.ACTION_HIDELRCMESSAGE);
-                closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(closeIntent);
                 finish();
                 overridePendingTransition(0, 0);
             }
         });
-        //
-        mSongNameTextView = findViewById(R.id.songName);
-        mSingerNameTextView = findViewById(R.id.singerName);
+
+        //提示右滑动图标
+        lockImageView = (ImageView) findViewById(R.id.tip_image);
+        aniLoading = (AnimationDrawable) lockImageView.getBackground();
+
+        //时间
+        timeTextView = (TextView) findViewById(R.id.time);
+        dateTextView = (TextView) findViewById(R.id.date);
+        dayTextView = (TextView) findViewById(R.id.day);
+
+        //歌手与歌名
+        songNameTextView = (TextView) findViewById(R.id.songName);
+        songerTextView = (TextView) findViewById(R.id.songer);
+
+
+        playImageView = (ImageView) findViewById(R.id.play);
+        pauseImageView = (ImageView) findViewById(R.id.pause);
+        //播放按钮、上一首，下一首
+        prewButton = (LockButtonRelativeLayout) findViewById(R.id.prev_button);
+        prewButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //
+                Intent preIntent = new Intent(AudioBroadcastReceiver.ACTION_PREMUSIC);
+                preIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                sendBroadcast(preIntent);
+
+            }
+        });
+
+        nextButton = (LockButtonRelativeLayout) findViewById(R.id.next_button);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                //
+                Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_NEXTMUSIC);
+                nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                sendBroadcast(nextIntent);
+
+            }
+        });
+
+        playOrPauseButton = (LockPalyOrPauseButtonRelativeLayout) findViewById(R.id.play_pause_button);
+        playOrPauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int playStatus = mHPApplication.getPlayStatus();
+                if (playStatus == AudioPlayerManager.PLAYING) {
+
+                    Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
+                    resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    sendBroadcast(resumeIntent);
+
+                } else {
+                    if (playStatus == AudioPlayerManager.PAUSE) {
+
+                        AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                        if (audioInfo != null) {
+
+                            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                            Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
+                            resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
+                            resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            sendBroadcast(resumeIntent);
+
+                        }
+
+                    } else {
+                        if (mHPApplication.getCurAudioMessage() != null) {
+                            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                            if (audioInfo != null) {
+                                audioMessage.setAudioInfo(audioInfo);
+                                Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
+                                resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
+                                resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                sendBroadcast(resumeIntent);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        //歌手写真
+        mSingerImageView = findViewById(R.id.singerimg);
+        mSingerImageView.setVisibility(View.INVISIBLE);
+
+        //多行歌词
 
         //
-        mManyLineLyricsView = findViewById(R.id.manyLineLyricsView);
+        mManyLineLyricsView = findViewById(R.id.lock_manyLineLyricsView);
+        //不能触摸和点击事件
+        mManyLineLyricsView.setTouchAble(false);
         //翻译歌词
         mHideTranslateImg = findViewById(R.id.hideTranslateImg);
         mHideTranslateImg.setOnClickListener(new View.OnClickListener() {
@@ -649,7 +407,13 @@ public class LockScreenActivity extends BaseActivity {
             public void onClick(View view) {
                 mHideTranslateImg.setVisibility(View.INVISIBLE);
                 mShowTranslateImg.setVisibility(View.VISIBLE);
-                setExtraLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                }
+
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
 
             }
         });
@@ -660,7 +424,13 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTranslateImg.setVisibility(View.VISIBLE);
                 mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                setTranslateLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+                }
+
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
 
             }
         });
@@ -672,7 +442,12 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.INVISIBLE);
                 mShowTransliterationImg.setVisibility(View.VISIBLE);
 
-                setExtraLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                }
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
 
             }
         });
@@ -683,7 +458,13 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.VISIBLE);
                 mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                setTransliterationLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                }
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
@@ -696,7 +477,12 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                setTranslateLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+                }
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mShowTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
@@ -707,7 +493,12 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.VISIBLE);
 
-                setTransliterationLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                }
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mHideTTImg = findViewById(R.id.hideTTImg);
@@ -718,7 +509,12 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                setExtraLrc();
+                if (mHPApplication.getCurAudioMessage() != null) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                } else {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                }
+                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
@@ -746,906 +542,44 @@ public class LockScreenActivity extends BaseActivity {
                 mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
             }
         });
-        //
-        mManyLineLyricsView.setOnLrcClickListener(new ManyLineLyricsViewV2.OnLrcClickListener() {
-            @Override
-            public void onLrcPlayClicked(int progress, boolean isLrcSeekTo) {
-                seekToMusic(progress, isLrcSeekTo);
-            }
-        });
-
         //设置字体大小和歌词颜色
-        mManyLineLyricsView.setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
-        int lrcColor = ColorUtil.parserColor(HPApplication.getInstance().getLrcColorStr()[HPApplication.getInstance().getLrcColorIndex()]);
+        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
+        int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
         mManyLineLyricsView.setLrcColor(lrcColor);
-        mManyLineLyricsView.setManyLineLrc(HPApplication.getInstance().isManyLineLrc(), 0);
-        //歌手写真
-        mSingerImageView = findViewById(R.id.singerimg);
-        mSingerImageView.setVisibility(View.INVISIBLE);
-
-        //初始化底部播放器视图
-        initPlayerViews();
+        mManyLineLyricsView.setManyLineLrc(mHPApplication.isManyLineLrc(), 0);
 
 
-        //初始化服务
-        initService();
+        WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        mScreensWidth = display.getWidth();
 
-        //菜单
-        mMoreMenuImgBtn = findViewById(R.id.more_menu);
-        mMoreMenuImgBtn.setConvert(true);
-        mMoreMenuImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopView();
-            }
-        });
-
-        //下载按钮
-        mDownloadImgBtn = findViewById(R.id.download_img);
-        mDownloadImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-                if (audioInfo != null) {
-                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
-                    mDownloadedImgBtn.setVisibility(View.VISIBLE);
-                    mDownloadImgBtn.setVisibility(View.INVISIBLE);
-                }
-
-            }
-        });
-        //已下载按钮
-        mDownloadedImgBtn = findViewById(R.id.downloaded_img);
-        mDownloadedImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-                if (audioInfo != null) {
-                    DownloadAudioManager.getDownloadAudioManager(mContext).addTask(audioInfo);
-
-                }
-            }
-        });
-        mDownloadedImgBtn.setVisibility(View.INVISIBLE);
-
-        //喜欢按钮
-        mLikeImgBtn = findViewById(R.id.liked_menu);
-        mLikeImgBtn.setConvert(true);
-        mLikeImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.cancel_success));
-
-                    mUnLikeImgBtn.setVisibility(View.VISIBLE);
-                    mLikeImgBtn.setVisibility(View.GONE);
-
-                    //删除喜欢歌曲
-                    Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                    delIntent.putExtra(AudioInfo.KEY, HPApplication.getInstance().getCurAudioInfo());
-                    delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    sendBroadcast(delIntent);
-                }
-
-            }
-        });
-        //不喜欢
-        mUnLikeImgBtn = findViewById(R.id.unlike_menu);
-        mUnLikeImgBtn.setConvert(true);
-        mUnLikeImgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (HPApplication.getInstance().getCurAudioInfo() != null) {
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.added_collection));
-
-                    mUnLikeImgBtn.setVisibility(View.GONE);
-                    mLikeImgBtn.setVisibility(View.VISIBLE);
-
-                    //添加喜欢歌曲
-                    Intent addIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEADD);
-                    addIntent.putExtra(AudioInfo.KEY, HPApplication.getInstance().getCurAudioInfo());
-                    addIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    sendBroadcast(addIntent);
-                }
-            }
-        });
-        mUnLikeImgBtn.setVisibility(View.VISIBLE);
-        mLikeImgBtn.setVisibility(View.GONE);
-
-        initPopView();
-        initPLPopView();
-        initSPLPopView();
-        initSIPopView();
+        //注册广播
+        registerReceiver();
 
     }
 
-    private void setTranslateLrc() {
-        if (HPApplication.getInstance().getCurAudioMessage() != null) {
-            mManyLineLyricsView.setExtraLrcStatus(
-                    ManyLineLyricsViewV2.SHOWTRANSLATELRC,
-                    (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-        } else {
-            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
-        }
+    private void registerReceiver() {
 
-        HPApplication.getInstance().setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+
+        //注册接收音频播放广播
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());
+        mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
+        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
+
+        //注册分钟变化广播
+        IntentFilter mTimeFilter = new IntentFilter();
+        mTimeFilter.addAction(Intent.ACTION_TIME_TICK);
+        registerReceiver(mTimeReceiver, mTimeFilter);
     }
-
-    private void setTransliterationLrc() {
-        if (HPApplication.getInstance().getCurAudioMessage() != null) {
-            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-
-        } else {
-            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
-        }
-        HPApplication.getInstance().setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-    }
-
-    private void setExtraLrc() {
-        if (HPApplication.getInstance().getCurAudioMessage() != null) {
-            mManyLineLyricsView.setExtraLrcStatus(
-                    ManyLineLyricsViewV2.NOSHOWEXTRALRC,
-                    (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-        } else {
-            mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
-        }
-
-        HPApplication.getInstance().setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-    }
-
-
-    /**
-     * 隐藏歌曲信息
-     */
-    private void hideSIPopView() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, mSIPLayout.getHeight());
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isSIPopViewShow = false;
-                mSIPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-    }
-
-    /**
-     * 显示歌曲信息
-     */
-    private void showSPIPopView(AudioInfo audioInfo) {
-        //设置歌曲信息
-        mPopSingerNameTv.setText(audioInfo.getSingerName());
-        mPopFileExtTv.setText(audioInfo.getFileExt());
-        mPopTimeTv.setText(audioInfo.getDurationText());
-        mPopFileSizeTv.setText(audioInfo.getFileSizeText());
-        //
-        mSIPopLinearLayout.setVisibility(View.VISIBLE);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSIPLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isSIPopViewShow = true;
-    }
-
-    /**
-     * 初始化歌曲信息窗口
-     */
-    private void initSIPopView() {
-
-        mSIPopLinearLayout = findViewById(R.id.songinfoPopLayout);
-        mSIPopLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSIPopView();
-            }
-        });
-        mSIPopLinearLayout.setVisibility(View.INVISIBLE);
-        mSIPLayout = findViewById(R.id.pop_songinfo_parent);
-        //
-        LinearLayout splcalcel = findViewById(R.id.songcalcel);
-        splcalcel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSIPopView();
-            }
-        });
-        //
-        mPopSingerNameTv = findViewById(R.id.pop_singerName);
-        mPopFileExtTv = findViewById(R.id.pop_fileext);
-        mPopTimeTv = findViewById(R.id.pop_time);
-        mPopFileSizeTv = findViewById(R.id.pop_filesize);
-    }
-
-    /**
-     * 隐藏歌手列表窗口
-     */
-    private void hideSPLPopView() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, mSPlPLayout.getHeight());
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isSPLPopViewShow = false;
-                mSPlPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mSPlPLayout.clearAnimation();
-        mSPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-    }
-
-    /**
-     * 显示歌手列表弹出窗口
-     */
-    private void showSPLPopView(String[] singerNameArray) {
-
-        //
-        mLrcPopSingerListAdapter = new LrcPopSingerListAdapter(mContext, singerNameArray, mLrcActivityListener);
-        mSingerNameRecyclerView.setAdapter(mLrcPopSingerListAdapter);
-
-        mSPlPopLinearLayout.setVisibility(View.VISIBLE);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSPlPLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        mSPlPLayout.clearAnimation();
-        mSPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isSPLPopViewShow = true;
-    }
-
-    /**
-     * 初始化歌手列表窗口
-     */
-    private void initSPLPopView() {
-
-        mSPlPopLinearLayout = findViewById(R.id.singerListPopLayout);
-        mSPlPopLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSPLPopView();
-            }
-        });
-        mSPlPopLinearLayout.setVisibility(View.INVISIBLE);
-        mSPlPLayout = findViewById(R.id.pop_singerlist_parent);
-        //
-        LinearLayout splcalcel = findViewById(R.id.splcalcel);
-        splcalcel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSPLPopView();
-            }
-        });
-
-        //
-        mSingerNameRecyclerView = findViewById(R.id.singerlist_recyclerView);
-        mSingerNameRecyclerView.setLinearLayoutManager(new LinearLayoutManager(getApplicationContext()));
-    }
-
-    /**
-     * 初始化播放列表弹出窗口
-     */
-    private void initPLPopView() {
-
-        mCurPLSizeTv = findViewById(R.id.list_size);
-        mCurRecyclerView = findViewById(R.id.curplaylist_recyclerView);
-        //初始化内容视图
-        mCurRecyclerView.setLinearLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-
-        mPlPopLinearLayout = findViewById(R.id.lrcListPopLayout);
-        mPlPopLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hidePlPopView();
-            }
-        });
-        mPlPopLinearLayout.setVisibility(View.INVISIBLE);
-        mPlPLayout = findViewById(R.id.pop_list_parent);
-
-        //播放模式
-        modeAllTv = findViewById(R.id.modeAllTv);
-        modeRandomTv = findViewById(R.id.modeRandomTv);
-        modeSingleTv = findViewById(R.id.modeSingleTv);
-        //
-        modeAllTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPLPlayModeView(1, modeAllTv, modeRandomTv, modeSingleTv, true);
-                initPlayModeView(1, modeAllImg, modeRandomImg, modeSingleImg, false);
-            }
-        });
-
-        modeRandomTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPLPlayModeView(3, modeAllTv, modeRandomTv, modeSingleTv, true);
-                initPlayModeView(3, modeAllImg, modeRandomImg, modeSingleImg, false);
-            }
-        });
-
-        modeSingleTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPLPlayModeView(0, modeAllTv, modeRandomTv, modeSingleTv, true);
-                initPlayModeView(0, modeAllImg, modeRandomImg, modeSingleImg, false);
-            }
-        });
-        initPLPlayModeView(HPApplication.getInstance().getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
-
-        //删除播放列表
-        mDeleteTv = findViewById(R.id.delete);
-        mDeleteTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-    }
-
-    /**
-     * 初始化播放列表播放模式
-     *
-     * @param playMode
-     * @param modeAllImg
-     * @param modeRandomImg
-     * @param modeSingleImg
-     */
-    private void initPLPlayModeView(int playMode, IconfontTextView modeAllImg, IconfontTextView modeRandomImg, IconfontTextView modeSingleImg, boolean isTipShow) {
-        if (playMode == 0) {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.order_play));
-            modeAllImg.setVisibility(View.VISIBLE);
-            modeRandomImg.setVisibility(View.INVISIBLE);
-            modeSingleImg.setVisibility(View.INVISIBLE);
-        } else if (playMode == 1) {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.random_play));
-            modeAllImg.setVisibility(View.INVISIBLE);
-            modeRandomImg.setVisibility(View.VISIBLE);
-            modeSingleImg.setVisibility(View.INVISIBLE);
-        } else {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.single_play));
-            modeAllImg.setVisibility(View.INVISIBLE);
-            modeRandomImg.setVisibility(View.INVISIBLE);
-            modeSingleImg.setVisibility(View.VISIBLE);
-        }
-
-    }
-
-    /**
-     * 显示播放列表弹出窗口
-     */
-    private void showPlPopView() {
-        initPLPlayModeView(HPApplication.getInstance().getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
-
-        //加载当前播放列表数据
-        List<AudioInfo> curAudioInfos = HPApplication.getInstance().getCurAudioInfos();
-        if (curAudioInfos == null) {
-            curAudioInfos = new ArrayList<AudioInfo>();
-        }
-        mCurPLSizeTv.setText(curAudioInfos.size() + "");
-        mPopPlayListAdapter = new LrcPopPlayListAdapter(mContext, curAudioInfos);
-        mCurRecyclerView.setAdapter(mPopPlayListAdapter);
-
-             /*
-                参数解释：
-                    第一个参数：X轴水平缩放起始位置的大小（fromX）。1代表正常大小
-                    第二个参数：X轴水平缩放完了之后（toX）的大小，0代表完全消失了
-                    第三个参数：Y轴垂直缩放起始时的大小（fromY）
-                    第四个参数：Y轴垂直缩放结束后的大小（toY）
-                    第五个参数：pivotXType为动画在X轴相对于物件位置类型
-                    第六个参数：pivotXValue为动画相对于物件的X坐标的开始位置
-                    第七个参数：pivotXType为动画在Y轴相对于物件位置类型
-                    第八个参数：pivotYValue为动画相对于物件的Y坐标的开始位置
-
-                   （第五个参数，第六个参数），（第七个参数,第八个参数）是用来指定缩放的中心点
-                    0.5f代表从中心缩放
-             */
-        ScaleAnimation translateAnimation = new ScaleAnimation(0f, 1f, 0f, 1f,
-                Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 1f);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
-                if (position >= 0)
-                    mCurRecyclerView.move(position,
-                            LinearLayoutRecyclerView.smoothScroll);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        mPlPopLinearLayout.setVisibility(View.VISIBLE);
-        mPlPLayout.clearAnimation();
-        mPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isPLPopViewShow = true;
-
-
-    }
-
-    /**
-     * 隐藏播放列表弹出窗口
-     */
-    private void hidePlPopView() {
-  /*
-                参数解释：
-                    第一个参数：X轴水平缩放起始位置的大小（fromX）。1代表正常大小
-                    第二个参数：X轴水平缩放完了之后（toX）的大小，0代表完全消失了
-                    第三个参数：Y轴垂直缩放起始时的大小（fromY）
-                    第四个参数：Y轴垂直缩放结束后的大小（toY）
-                    第五个参数：pivotXType为动画在X轴相对于物件位置类型
-                    第六个参数：pivotXValue为动画相对于物件的X坐标的开始位置
-                    第七个参数：pivotXType为动画在Y轴相对于物件位置类型
-                    第八个参数：pivotYValue为动画相对于物件的Y坐标的开始位置
-
-                   （第五个参数，第六个参数），（第七个参数,第八个参数）是用来指定缩放的中心点
-                    0.5f代表从中心缩放
-             */
-        ScaleAnimation translateAnimation = new ScaleAnimation(1f, 0f, 1f, 0f,
-                Animation.RELATIVE_TO_SELF, 1f, Animation.RELATIVE_TO_SELF, 1f);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isPLPopViewShow = false;
-                mPlPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-
-        mPlPLayout.clearAnimation();
-        mPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-
-    }
-
-    /**
-     * 隐藏popview
-     */
-    private void hidePopView() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, mMenuLayout.getHeight());
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isPopViewShow = false;
-                mPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-    }
-
-    /**
-     * 显示popview
-     */
-    private void showPopView() {
-        mPopLinearLayout.setVisibility(View.VISIBLE);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mMenuLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isPopViewShow = true;
-    }
-
-    /**
-     * 初始化pop
-     */
-    private void initPopView() {
-
-
-        mPopLinearLayout = findViewById(R.id.lrcPopLayout);
-        mPopLinearLayout.setVisibility(View.INVISIBLE);
-        mPopLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hidePopView();
-            }
-        });
-        //
-        mMenuLayout = findViewById(R.id.menuLayout);
-        //
-        LinearLayout cancelLinearLayout = findViewById(R.id.calcel);
-        cancelLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hidePopView();
-            }
-        });
-
-
-        //搜索歌手写真
-        ImageView searchSingerImg = findViewById(R.id.search_singer_pic);
-        searchSingerImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (HPApplication.getInstance().getCurAudioInfo() == null) {
-
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
-
-                } else {
-                    hidePopView();
-                    //歌手名称
-                    String singerName = HPApplication.getInstance().getCurAudioInfo().getSingerName();
-                    if (singerName.contains("、")) {
-
-                        String regex = "\\s*、\\s*";
-                        String[] singerNameArray = singerName.split(regex);
-                        showSPLPopView(singerNameArray);
-
-                    } else {
-                        Intent intent = new Intent(mActivity, SearchSingerActivity.class);
-                        intent.putExtra("singerName", singerName);
-                        startActivity(intent);
-                        //
-                        overridePendingTransition(0, 0);
-                    }
-                }
-            }
-        });
-
-        //搜索歌词
-        ImageView searchLrcImg = findViewById(R.id.search_lrc);
-        searchLrcImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (HPApplication.getInstance().getCurAudioInfo() == null) {
-
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
-
-                } else {
-                    hidePopView();
-                    //
-                    Intent intent = new Intent(mActivity, SearchLrcActivity.class);
-                    startActivity(intent);
-                    //
-                    overridePendingTransition(R.anim.in_from_bottom, 0);
-                }
-
-            }
-        });
-
-        //歌曲详情
-        ImageView songInfoImg = findViewById(R.id.songinfo);
-        songInfoImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (HPApplication.getInstance().getCurAudioInfo() == null) {
-
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
-
-                } else {
-                    hidePopView();
-                    showSPIPopView(HPApplication.getInstance().getCurAudioInfo());
-                }
-            }
-        });
-
-        //歌词进度减少按钮
-        ButtonRelativeLayout lrcProgressJianBtn = findViewById(R.id.lyric_progress_jian);
-        lrcProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
-        lrcProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
-        lrcProgressJianBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(mManyLineLyricsView.getLyricsUtil().getOffset() + (-500));
-                    ToastUtil.showTextToast(mActivity, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-
-
-                        //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
-
-                    }
-                }
-            }
-        });
-        //歌词进度重置
-        ButtonRelativeLayout resetProgressJianBtn = findViewById(R.id.lyric_progress_reset);
-        resetProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
-        resetProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
-        resetProgressJianBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(0);
-                    ToastUtil.showTextToast(mActivity, mContext.getString(R.string.restore));
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-
-                        //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
-
-                    }
-                }
-            }
-        });
-        //歌词进度增加
-        ButtonRelativeLayout lrcProgressJiaBtn = findViewById(R.id.lyric_progress_jia);
-        lrcProgressJiaBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
-        lrcProgressJiaBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
-        lrcProgressJiaBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(mManyLineLyricsView.getLyricsUtil().getOffset() + (500));
-                    ToastUtil.showTextToast(mActivity, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-
-                        //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
-
-                    }
-                }
-            }
-        });
-
-
-        //字体大小
-        final LrcSeekBar lrcSizeLrcSeekBar = findViewById(R.id.fontSizeseekbar);
-        lrcSizeLrcSeekBar.setMax(HPApplication.getInstance().getMaxLrcFontSize() - HPApplication.getInstance().getMinLrcFontSize());
-        lrcSizeLrcSeekBar.setProgress((HPApplication.getInstance().getLrcFontSize() - HPApplication.getInstance().getMinLrcFontSize()));
-        lrcSizeLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor(Color.WHITE, 50));
-        lrcSizeLrcSeekBar.setProgressColor(Color.WHITE);
-        lrcSizeLrcSeekBar.setThumbColor(Color.WHITE);
-        lrcSizeLrcSeekBar.setOnChangeListener(new LrcSeekBar.OnChangeListener() {
-            @Override
-            public void onProgressChanged() {
-                //logger.e("progress=" + lrcSizeLrcSeekBar.getProgress());
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-                        if (HPApplication.getInstance().getCurAudioMessage() != null) {
-                            mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + HPApplication.getInstance().getMinLrcFontSize(), (int) HPApplication.getInstance().getCurAudioMessage().getPlayProgress());
-                        }
-                    }
-                } else {
-                    mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + HPApplication.getInstance().getMinLrcFontSize());
-                }
-            }
-
-            @Override
-            public String getTimeText() {
-                return null;
-            }
-
-            @Override
-            public String getLrcText() {
-                return null;
-            }
-
-            @Override
-            public void dragFinish() {
-                HPApplication.getInstance().setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + HPApplication.getInstance().getMinLrcFontSize());
-            }
-        });
-
-        //字体减小
-        IconfontImageButtonTextView lrcSizeDecrease = findViewById(R.id.lyric_decrease);
-        lrcSizeDecrease.setConvert(true);
-        lrcSizeDecrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int curProgress = lrcSizeLrcSeekBar.getProgress();
-                curProgress -= 2;
-                if (curProgress < 0) {
-                    curProgress = 0;
-                }
-                lrcSizeLrcSeekBar.setProgress(curProgress);
-            }
-        });
-
-        //字体增加
-        IconfontImageButtonTextView lrcSizeIncrease = findViewById(R.id.lyric_increase);
-        lrcSizeIncrease.setConvert(true);
-        lrcSizeIncrease.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int curProgress = lrcSizeLrcSeekBar.getProgress();
-                curProgress += 2;
-                if (curProgress > lrcSizeLrcSeekBar.getMax()) {
-                    curProgress = lrcSizeLrcSeekBar.getMax();
-                }
-                lrcSizeLrcSeekBar.setProgress(curProgress);
-            }
-        });
-
-        //歌词颜色面板
-        ImageView[] colorPanel = new ImageView[HPApplication.getInstance().getLrcColorStr().length];
-        final ImageView[] colorStatus = new ImageView[colorPanel.length];
-
-        int i = 0;
-        //
-        colorPanel[i] = findViewById(R.id.color_panel1);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 0);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status1);
-
-        //
-        i++;
-        colorPanel[i] = findViewById(R.id.color_panel2);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 1);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status2);
-
-        //
-        i++;
-        colorPanel[i] = findViewById(R.id.color_panel3);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 2);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status3);
-
-        //
-        i++;
-        colorPanel[i] = findViewById(R.id.color_panel4);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 3);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status4);
-
-        //
-        i++;
-        colorPanel[i] = findViewById(R.id.color_panel5);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 4);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status5);
-
-        //
-        i++;
-        colorPanel[i] = findViewById(R.id.color_panel6);
-        colorPanel[i].setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setColorPanel(colorStatus, 5);
-            }
-        });
-        colorStatus[i] = findViewById(R.id.color_status6);
-
-        //
-        colorStatus[HPApplication.getInstance().getLrcColorIndex()].setVisibility(View.VISIBLE);
-
-    }
-
-    private void setColorPanel(ImageView[] colorStatus, int curColorPanel) {
-        int index = HPApplication.getInstance().getLrcColorIndex();
-        if (index != curColorPanel) {
-            HPApplication.getInstance().setLrcColorIndex(curColorPanel);
-            colorStatus[index].setVisibility(View.GONE);
-            colorStatus[curColorPanel].setVisibility(View.VISIBLE);
-
-            int lrcColor = ColorUtil.parserColor(
-                    HPApplication.getInstance().getLrcColorStr()[HPApplication.getInstance().getLrcColorIndex()]);
-            mManyLineLyricsView.setLrcColor(lrcColor);
-        }
-    }
-
-
-    /**
-     * 保存歌词文件
-     *
-     * @param lrcFilePath lrc歌词路径
-     * @param lyricsInfo  lrc歌词数据
-     * @param playOffset  lrc歌词快进进度
-     */
-    private void saveLrcFile(final String lrcFilePath, final LyricsInfo lyricsInfo, final int playOffset) {
-        new Thread() {
-
-            @Override
-            public void run() {
-
-                Map<String, Object> tags = lyricsInfo.getLyricsTags();
-
-                tags.put(LyricsTag.TAG_OFFSET, playOffset);
-                lyricsInfo.setLyricsTags(tags);
-
-
-                //保存修改的歌词文件
-                try {
-                    LyricsIOUtils.getLyricsFileWriter(lrcFilePath).writer(lyricsInfo, lrcFilePath);
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
-            }
-
-        }.start();
-    }
-
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
-        //
-        AudioInfo curAudioInfo = HPApplication.getInstance().getCurAudioInfo();
+
+        AniUtil.startAnimation(aniLoading);
+        setDate();
+
+        //加载音频数据
+        AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
         if (curAudioInfo != null) {
             Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
             doAudioReceive(getApplicationContext(), initIntent);
@@ -1655,289 +589,253 @@ public class LockScreenActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 设置日期
+     */
+    private void setDate() {
+
+        String str = "";
+        SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat sdfTime = new SimpleDateFormat("HH:mm");
+
+        Calendar lastDate = Calendar.getInstance();
+        str = sdfDate.format(lastDate.getTime());
+        dateTextView.setText(str);
+        str = sdfTime.format(lastDate.getTime());
+        timeTextView.setText(str);
+
+        String mWay = String.valueOf(lastDate.get(Calendar.DAY_OF_WEEK));
+        if ("1".equals(mWay)) {
+            mWay = "日";
+        } else if ("2".equals(mWay)) {
+            mWay = "一";
+        } else if ("3".equals(mWay)) {
+            mWay = "二";
+        } else if ("4".equals(mWay)) {
+            mWay = "三";
+        } else if ("5".equals(mWay)) {
+            mWay = "四";
+        } else if ("6".equals(mWay)) {
+            mWay = "五";
+        } else if ("7".equals(mWay)) {
+            mWay = "六";
+        }
+        dayTextView.setText("星期" + mWay);
+
+    }
+
 
     /**
-     * 初始化底部播放菜单
+     * 处理音频广播事件
+     *
+     * @param context
+     * @param intent
      */
-    private void initPlayerViews() {
+    private void doAudioReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
+            //空数据
 
-        mSongProgressTv = findViewById(R.id.songProgress);
-        mSongDurationTv = findViewById(R.id.songDuration);
+            songNameTextView.setText(R.string.def_songName);
+            songerTextView.setText(R.string.def_artist);
 
-        //进度条
-        mLrcSeekBar = findViewById(R.id.lrcseekbar);
-        mLrcSeekBar.setOnChangeListener(new LrcSeekBar.OnChangeListener() {
+            playImageView.setVisibility(View.VISIBLE);
+            pauseImageView.setVisibility(View.INVISIBLE);
 
-            @Override
-            public void onProgressChanged() {
-                int playStatus = HPApplication.getInstance().getPlayStatus();
-                if (playStatus != AudioPlayerManager.PLAYING) {
-                    mSongProgressTv.setText(MediaUtil.parseTimeToString((mLrcSeekBar.getProgress())));
+            playOrPauseButton.setPlayingProgress(0);
+            playOrPauseButton.setMaxProgress(0);
+            playOrPauseButton.invalidate();
+
+
+            //歌手写真
+            mSingerImageView.setVisibility(View.INVISIBLE);
+            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+
+            //
+            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
+
+            //初始化
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+
+
+            songNameTextView.setText(audioInfo.getSongName());
+            songerTextView.setText(audioInfo.getSingerName());
+
+            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
+                playImageView.setVisibility(View.INVISIBLE);
+                pauseImageView.setVisibility(View.VISIBLE);
+            } else {
+                playImageView.setVisibility(View.VISIBLE);
+                pauseImageView.setVisibility(View.INVISIBLE);
+            }
+
+            playOrPauseButton.setMaxProgress((int) audioInfo
+                    .getDuration());
+            playOrPauseButton.setPlayingProgress((int) audioMessage.getPlayProgress());
+            playOrPauseButton.invalidate();
+
+
+            //
+            mSingerImageView.setVisibility(View.INVISIBLE);
+            mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+            //加载歌手写真
+            ImageUtil.loadSingerImg(getApplicationContext(), audioInfo.getHash(), audioInfo.getSingerName());
+
+
+            //加载歌词
+            String keyWords = "";
+            if (audioInfo.getSingerName().equals("未知")) {
+                keyWords = audioInfo.getSongName();
+            } else {
+                keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
+            }
+            LyricsManager.getLyricsManager(getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
+
+            //
+            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
+
+            //播放
+
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+
+            if (pauseImageView.getVisibility() != View.VISIBLE) {
+                pauseImageView.setVisibility(View.VISIBLE);
+            }
+            if (playImageView.getVisibility() != View.INVISIBLE) {
+                playImageView.setVisibility(View.INVISIBLE);
+            }
+            playOrPauseButton.setPlayingProgress((int) audioMessage.getPlayProgress());
+            playOrPauseButton.invalidate();
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
+            //暂停完成
+            pauseImageView.setVisibility(View.INVISIBLE);
+            playImageView.setVisibility(View.VISIBLE);
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
+            //唤醒完成
+            pauseImageView.setVisibility(View.VISIBLE);
+            playImageView.setVisibility(View.INVISIBLE);
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
+            //播放中
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            if (audioMessage != null) {
+
+                playOrPauseButton.setPlayingProgress((int) audioMessage.getPlayProgress());
+                playOrPauseButton.invalidate();
+
+                AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
+                if (audioInfo != null) {
+                    //更新歌词
+                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
+                        mManyLineLyricsView.updateView((int) audioMessage.getPlayProgress());
+                    }
+                }
+
+            }
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
+
+            //歌词加载完成
+            AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
+            AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+            String hash = audioMessage.getHash();
+            if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
+                //
+                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(getApplicationContext()).getLyricsUtil(hash);
+                if (lyricsUtil != null) {
+                    lyricsUtil.setHash(hash);
+                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2, (int) curAudioMessage.getPlayProgress());
+                    mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
                 }
             }
 
-            @Override
-            public String getTimeText() {
-                return MediaUtil.parseTimeToString(mLrcSeekBar.getProgress());
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_RELOADSINGERIMG)) {
+
+            //重新加载歌手写真
+            if (mHPApplication.getCurAudioInfo() != null) {
+                String hash = intent.getStringExtra("hash");
+                if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
+                    String singerName = intent.getStringExtra("singerName");
+                    mSingerImageView.setVisibility(View.INVISIBLE);
+                    mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
+                    //加载歌手写真
+                    ImageUtil.loadSingerImg(getApplicationContext(), hash, singerName);
+
+                }
             }
 
-            @Override
-            public String getLrcText() {
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SINGERIMGLOADED)) {
+            //歌手写真加载完成
+            if (mHPApplication.getCurAudioInfo() != null) {
+                String hash = intent.getStringExtra("hash");
+                if (mHPApplication.getCurAudioInfo().getHash().equals(hash)) {
+                    mSingerImageView.setVisibility(View.VISIBLE);
+
+                    String singerName = intent.getStringExtra("singerName");
+                    String[] singerNameArray = null;
+                    if (singerName.contains("、")) {
+
+                        String regex = "\\s*、\\s*";
+                        singerNameArray = singerName.split(regex);
 
 
-                return null;
-            }
-
-            @Override
-            public void dragFinish() {
-                seekToMusic(mLrcSeekBar.getProgress(), false);
-            }
-        });
-        //
-        mLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor("#eeeeee", 50));
-        mLrcSeekBar.setSecondProgressColor(Color.argb(100, 255, 255, 255));
-        mLrcSeekBar.setProgressColor(Color.rgb(255, 64, 129));
-        mLrcSeekBar.setThumbColor(Color.rgb(255, 64, 129));
-        mLrcSeekBar.setTimePopupWindowViewColor(Color.argb(200, 255, 64, 129));
-
-        //播放
-        mPlayBtn = findViewById(R.id.playbtn);
-        mPlayBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int playStatus = HPApplication.getInstance().getPlayStatus();
-                if (playStatus == AudioPlayerManager.PAUSE) {
-
-                    AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-                    if (audioInfo != null) {
-
-                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
-                        Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_RESUMEMUSIC);
-                        resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
-                        resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        sendBroadcast(resumeIntent);
-
+                    } else {
+                        singerNameArray = new String[1];
+                        singerNameArray[0] = singerName;
                     }
 
-                } else {
-                    if (HPApplication.getInstance().getCurAudioMessage() != null) {
-                        AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
-                        AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-                        if (audioInfo != null) {
-                            audioMessage.setAudioInfo(audioInfo);
-                            Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
-                            resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
-                            resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            sendBroadcast(resumeIntent);
-                        }
-                    }
+
+                    //设置数据
+                    List<SongSingerInfo> list = SongSingerDB.getSongSingerDB(context).getAllSingerImg(singerNameArray, false);
+                    mSingerImageView.setSongSingerInfos(getApplicationContext(), list);
                 }
             }
-        });
-        //暂停
-        mPauseBtn = findViewById(R.id.pausebtn);
-        mPauseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int playStatus = HPApplication.getInstance().getPlayStatus();
-                if (playStatus == AudioPlayerManager.PLAYING) {
-
-                    Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
-                    resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    sendBroadcast(resumeIntent);
-
-                }
-            }
-        });
-
-        //下一首
-        mNextBtn = findViewById(R.id.nextbtn);
-        mNextBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //
-                Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_NEXTMUSIC);
-                nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(nextIntent);
-            }
-        });
-
-        //上一首
-        mPreBtn = findViewById(R.id.prebtn);
-        mPreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //
-                Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_PREMUSIC);
-                nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(nextIntent);
-            }
-        });
-
-        /////////播放模式//////////////
-        //顺序播放
-        modeAllImg = findViewById(R.id.modeAll);
-        modeRandomImg = findViewById(R.id.modeRandom);
-        modeSingleImg = findViewById(R.id.modeSingle);
-
-
-        modeAllImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPlayModeView(1, modeAllImg, modeRandomImg, modeSingleImg, true);
-            }
-        });
-
-        modeRandomImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPlayModeView(3, modeAllImg, modeRandomImg, modeSingleImg, true);
-            }
-        });
-
-        modeSingleImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                initPlayModeView(0, modeAllImg, modeRandomImg, modeSingleImg, true);
-            }
-        });
-        initPlayModeView(HPApplication.getInstance().getPlayModel(), modeAllImg, modeRandomImg, modeSingleImg, false);
-
-        //
-        RelativeLayout playListMenu = findViewById(R.id.playlistmenu);
-        playListMenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPlPopView();
-            }
-        });
-
-    }
-
-    /**
-     * 初始化播放列表播放模式
-     *
-     * @param playMode
-     * @param modeAllImg
-     * @param modeRandomImg
-     * @param modeSingleImg
-     */
-    private void initPlayModeView(int playMode, ImageView modeAllImg, ImageView modeRandomImg, ImageView modeSingleImg, boolean isTipShow) {
-        if (playMode == 0) {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.order_play));
-            modeAllImg.setVisibility(View.VISIBLE);
-            modeRandomImg.setVisibility(View.INVISIBLE);
-            modeSingleImg.setVisibility(View.INVISIBLE);
-        } else if (playMode == 1) {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.random_play));
-            modeAllImg.setVisibility(View.INVISIBLE);
-            modeRandomImg.setVisibility(View.VISIBLE);
-            modeSingleImg.setVisibility(View.INVISIBLE);
-        } else {
-            if (isTipShow)
-                ToastUtil.showTextToast(mActivity, mContext.getString(R.string.single_play));
-            modeAllImg.setVisibility(View.INVISIBLE);
-            modeRandomImg.setVisibility(View.INVISIBLE);
-            modeSingleImg.setVisibility(View.VISIBLE);
         }
-        //
-        HPApplication.getInstance().setPlayModel(playMode);
-    }
-
-    /**
-     * 快进播放
-     *
-     * @param progress
-     * @param isLrcSeekTo
-     */
-    private void seekToMusic(int progress, boolean isLrcSeekTo) {
-        HPApplication.getInstance().setLrcSeekTo(isLrcSeekTo);
-        //判断歌词快进时，是否超过歌曲的总时间
-        if (HPApplication.getInstance().getCurAudioInfo().getDuration() < progress) {
-            progress = (int) HPApplication.getInstance().getCurAudioInfo().getDuration();
-        }
-        //
-        int playStatus = HPApplication.getInstance().getPlayStatus();
-        if (playStatus == AudioPlayerManager.PLAYING) {
-            //正在播放
-            if (HPApplication.getInstance().getCurAudioMessage() != null) {
-                AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
-                // AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
-                //if (audioInfo != null) {
-                //  audioMessage.setAudioInfo(audioInfo);
-                if (audioMessage != null) {
-                    audioMessage.setPlayProgress(progress);
-                    Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_SEEKTOMUSIC);
-                    resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
-                    resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    sendBroadcast(resumeIntent);
-                }
-            }
-        } else {
-
-            if (HPApplication.getInstance().getCurAudioMessage() != null)
-                HPApplication.getInstance().getCurAudioMessage().setPlayProgress(progress);
-
-            //歌词快进
-            Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);
-            lrcSeektoIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            sendBroadcast(lrcSeektoIntent);
-
-
-        }
-    }
-
-    /**
-     * 初始化服务
-     */
-    private void initService() {
-
-        //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
-        mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
-
-        //在线音乐广播
-        mOnLineAudioReceiver = new OnLineAudioReceiver(mContext);
-        mOnLineAudioReceiver.setOnlineAudioReceiverListener(mOnlineAudioReceiverListener);
-        mOnLineAudioReceiver.registerReceiver(getApplicationContext());
-    }
-
-
-    @Override
-    protected void onDestroy() {
-
-        //注销广播
-        mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
-
-        //在线歌曲
-        mOnLineAudioReceiver.unregisterReceiver(getApplicationContext());
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-
     }
 
 
     @Override
     protected boolean isAddStatusBar() {
-
         setStatusColor(Color.TRANSPARENT);
-
         return true;
     }
 
     @Override
     public int setStatusBarParentView() {
-        return R.id.lrc_layout;
+        return R.id.status_parent_view;
     }
 
+    @Override
+    public void finish() {
+        AniUtil.stopAnimation(aniLoading);
 
-    public interface LrcActivityListener {
-        void closeSingerPopListVeiw();
+        //注销广播
+        mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
+        //注销分钟变化广播
+        unregisterReceiver(mTimeReceiver);
+        //
+        super.finish();
     }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) { // 屏蔽按键
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                || keyCode == KeyEvent.KEYCODE_MENU) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

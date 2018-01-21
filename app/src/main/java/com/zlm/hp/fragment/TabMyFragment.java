@@ -13,13 +13,16 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.dialog.AlartOneButtonDialog;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
+import com.zlm.hp.utils.AppOpsUtils;
 import com.zlm.hp.utils.AsyncTaskUtil;
+import com.zlm.hp.utils.IntentUtils;
 
 import base.widget.SetupBGButton;
 
@@ -70,6 +73,12 @@ public class TabMyFragment extends BaseFragment {
      * 桌面歌词设置按钮
      */
     private SetupBGButton mDesktopBGButton;
+
+    /***
+     * 桌面歌词弹出窗口
+     */
+    private AlartOneButtonDialog mFloatWPAlartDialog;
+
     /**
      * 锁屏歌词设置按钮
      */
@@ -281,6 +290,13 @@ public class TabMyFragment extends BaseFragment {
             }
         });
 
+        mFloatWPAlartDialog = new AlartOneButtonDialog(getActivity(), new AlartOneButtonDialog.ButtonDialogListener() {
+            @Override
+            public void ButtonClick() {
+                IntentUtils.gotoPermissionSetting(getActivity());
+            }
+        });
+
         //桌面歌词设置按钮
         mDesktopBGButton = mainView.findViewById(R.id.desktopbg);
         if (HPApplication.getInstance().isDesktop()) {
@@ -290,7 +306,15 @@ public class TabMyFragment extends BaseFragment {
             @Override
             public void onClick(View view) {
                 //
+
                 boolean selected = mDesktopBGButton.isSelect();
+                if (!selected) {
+                    if (!AppOpsUtils.allowFloatWindow(getActivity())) {
+                        mFloatWPAlartDialog.showDialog(getString(R.string.desktop_dialog_tip), getString(R.string.desktop_dialog_title));
+                        return;
+                    }
+                }
+
                 HPApplication.getInstance().setDesktop(!selected);
                 mDesktopBGButton.setSelect(HPApplication.getInstance().isDesktop());
             }

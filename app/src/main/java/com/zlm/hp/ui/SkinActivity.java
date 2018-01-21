@@ -36,7 +36,7 @@ public class SkinActivity extends BaseActivity {
         mSwipeBackLayout.setShadowEnable(shadowEnable);
 
         TextView titleView = findViewById(R.id.title);
-        titleView.setText(mContext.getString(R.string.about));
+        titleView.setText(mContext.getString(R.string.menu_skin_peeler));
 
         //返回
         RelativeLayout backImg = findViewById(R.id.backImg);
@@ -61,7 +61,7 @@ public class SkinActivity extends BaseActivity {
 
     @Override
     public int setStatusBarParentView() {
-        return R.id.about_layout;
+        return R.id.skin_layout;
     }
 
     @Override

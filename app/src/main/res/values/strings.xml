@@ -124,4 +124,7 @@
     <string name="mode_single">&#xe62f;</string>
 
 
+    //桌面歌词弹出窗口提示语
+    <string name="desktop_dialog_tip">1.进入设置>更多应用>乐乐音乐>权限管理>显示悬浮窗\n2.开启允许</string>
+    <string name="desktop_dialog_title">立即设置</string>
 </resources>

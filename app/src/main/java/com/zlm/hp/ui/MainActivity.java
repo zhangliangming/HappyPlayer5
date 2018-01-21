@@ -708,7 +708,7 @@ public class MainActivity extends BaseActivity {
 //            mLockLrcReceiver.unregisterReceiver(getApplicationContext());
 //        }
         boolean showLockScreen = HPApplication.getInstance().isShowLockScreen();
-        if (showLockScreen && action.equals(Intent.ACTION_SCREEN_OFF)) {
+        if (showLockScreen && action.equals(Intent.ACTION_SCREEN_OFF) && HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING) {
             Intent lockscreen = new Intent(this, LockScreenActivity.class);
             //在Service中启动一个Activity, 需要加上Intent.FLAG_ACTIVITY_NEW_TASK
             lockscreen.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
