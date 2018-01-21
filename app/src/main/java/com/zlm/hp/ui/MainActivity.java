@@ -630,7 +630,8 @@ public class MainActivity extends BaseActivity {
 
         if (intent.getAction().equals(LockLrcReceiver.ACTION_LOCKLRC_SCREEN_OFF)) {
 
-            if (mHPApplication.isShowLockScreen() && !LockActivity.isRunning) {
+            //显示锁屏歌词和正在播放
+            if (mHPApplication.isShowLockScreen() && mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
                 Intent lockIntent = new Intent(MainActivity.this,
                         LockActivity.class);
                 lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

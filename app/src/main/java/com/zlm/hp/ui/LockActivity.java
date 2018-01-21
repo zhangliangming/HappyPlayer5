@@ -16,8 +16,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.lyrics.utils.LyricsUtil;
@@ -29,7 +27,6 @@ import com.zlm.hp.model.SongSingerInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AniUtil;
 import com.zlm.hp.utils.ImageUtil;
-import com.zlm.hp.utils.MediaUtil;
 import com.zlm.hp.widget.SingerImageView;
 import com.zlm.hp.widget.SwipeBackLayout;
 import com.zlm.hp.widget.lock.LockButtonRelativeLayout;
@@ -49,11 +46,6 @@ import java.util.List;
  * @Throws:
  */
 public class LockActivity extends BaseActivity {
-
-    /**
-     * 判断该界面是否正在运行
-     */
-    public static boolean isRunning = false;
 
     /**
      *
@@ -292,9 +284,9 @@ public class LockActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        isRunning = true;
         //
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
+        mSwipeBackLayout.setPaintFade(false);
         mSwipeBackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
@@ -819,7 +811,6 @@ public class LockActivity extends BaseActivity {
 
     @Override
     public void finish() {
-        isRunning = false;
         AniUtil.stopAnimation(aniLoading);
 
         //注销广播

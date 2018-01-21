@@ -353,6 +353,7 @@
 
 
                         <com.zlm.hp.widget.SetupBGButton
+                            android:id="@+id/floatwbg"
                             android:layout_width="@dimen/item_imgSize"
                             android:layout_height="@dimen/item_imgSize"
                             android:layout_centerInParent="true"

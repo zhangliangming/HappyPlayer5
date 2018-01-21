@@ -3,21 +3,21 @@
     package="com.zlm.hp.ui">
 
     <!-- 短信权限 -->
-    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <!-- 读取电话状态权限 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+
+    <!-- 显示悬浮窗口权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- 锁屏权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
 
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -73,7 +73,8 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:taskAffinity=""></activity>
+            android:taskAffinity="com.zlm.lockscreen"
+            android:theme="@style/LockScreenBase"></activity>
     </application>
 
 </manifest>

@@ -65,6 +65,10 @@ public class SwipeBackLayout extends LinearLayout {
      */
     private Paint mFadePaint;
     /**
+     * 是否绘画阴影
+     */
+    private boolean isPaintFade = true;
+    /**
      * 是否动画结束
      */
     private boolean isDragFinish = true;
@@ -358,19 +362,23 @@ public class SwipeBackLayout extends LinearLayout {
      */
     private void drawMask() {
 
-        float percent = contentView.getLeft() * 1.0f / getWidth();
-        int alpha = 200 - (int) (200 * percent);
-        mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
+        if (isPaintFade) {
+            float percent = contentView.getLeft() * 1.0f / getWidth();
+            int alpha = 200 - (int) (200 * percent);
+            mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
 
-        invalidate();
+            invalidate();
+        }
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        //拖动未结束或者正在拖动
-        if (!isDragFinish || isTouchMove)
-            canvas.drawRect(0, 0, contentView.getLeft(), getHeight(), mFadePaint);
+        if (isPaintFade) {
+            //拖动未结束或者正在拖动
+            if (!isDragFinish || isTouchMove)
+                canvas.drawRect(0, 0, contentView.getLeft(), getHeight(), mFadePaint);
+        }
     }
 
     @Override
@@ -390,6 +398,10 @@ public class SwipeBackLayout extends LinearLayout {
 
         }
 
+    }
+
+    public void setPaintFade(boolean paintFade) {
+        isPaintFade = paintFade;
     }
 
     /**

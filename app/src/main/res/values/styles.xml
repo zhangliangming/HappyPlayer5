@@ -25,6 +25,16 @@
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
+    <style name="LockScreenBase" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 
     <style name="alertDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>

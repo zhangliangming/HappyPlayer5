@@ -56,10 +56,10 @@ public class PreferencesConstants {
 
 
     /**
-     * 是否是第一次设置
+     * 是否显示桌面歌词
      */
 
-    public static String isFristSettingLockScreen_KEY = "isFristSettingLockScreen_KEY";
+    public static String isShowDesktop_KEY = "isShowDesktop_KEY";
 
     /**
      * 是否显示锁屏歌词key

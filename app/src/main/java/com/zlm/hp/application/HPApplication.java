@@ -126,10 +126,11 @@ public class HPApplication extends Application {
      * 是否显示锁屏
      */
     private boolean isShowLockScreen = false;
+
     /**
-     * 是否是第一次设置锁屏
+     * 是否显示桌面歌词
      */
-    private boolean isFristSettingLockScreen = true;
+    private boolean isShowDesktop = false;
 
     /**
      * 是否是多行歌词
@@ -382,13 +383,14 @@ public class HPApplication extends Application {
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isWire_KEY, isWire);
     }
 
-    public boolean isFristSettingLockScreen() {
-        return isFristSettingLockScreen;
+    public boolean isShowDesktop() {
+        return isShowDesktop;
     }
 
-    public void setFristSettingLockScreen(boolean fristSettingLockScreen) {
-        isFristSettingLockScreen = fristSettingLockScreen;
-        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isFristSettingLockScreen_KEY, isFristSettingLockScreen);
+    public void setShowDesktop(boolean showDesktop) {
+        isShowDesktop = showDesktop;
+
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.isShowDesktop_KEY, isShowDesktop);
     }
 
     public boolean isShowLockScreen() {

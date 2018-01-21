@@ -10,12 +10,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.dialog.AlartOneButtonDialog;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.ui.R;
+import com.zlm.hp.utils.AppOpsUtils;
 import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.IntentUtils;
 import com.zlm.hp.widget.SetupBGButton;
@@ -78,6 +80,11 @@ public class TabMyFragment extends BaseFragment {
     private SetupBGButton mLocklrcSetupBGButton;
 
     /**
+     * 桌面按钮
+     */
+    private SetupBGButton mFloatWSetupBGButton;
+
+    /**
      * 退出设置按钮
      */
     private SetupBGButton mExitSetupBGButton;
@@ -86,6 +93,10 @@ public class TabMyFragment extends BaseFragment {
      * 退出提示窗口
      */
     private AlartTwoButtonDialog mExitAlartDialog;
+    /***
+     * 桌面歌词弹出窗口
+     */
+    private AlartOneButtonDialog mFloatWPAlartDialog;
 
     /**
      * 更新本地音乐
@@ -276,14 +287,38 @@ public class TabMyFragment extends BaseFragment {
         mLocklrcSetupBGButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+
                 boolean selected = mLocklrcSetupBGButton.isSelect();
                 mHPApplication.setShowLockScreen(!selected);
                 mLocklrcSetupBGButton.setSelect(mHPApplication.isShowLockScreen());
 
-                if (mHPApplication.isFristSettingLockScreen() && IntentUtils.gotoPermissionSetting(getActivity())) {
-                    mHPApplication.setFristSettingLockScreen(false);
+            }
+        });
+
+        mFloatWPAlartDialog = new AlartOneButtonDialog(getActivity(), new AlartOneButtonDialog.ButtonDialogListener() {
+            @Override
+            public void ButtonClick() {
+                IntentUtils.gotoPermissionSetting(getActivity());
+            }
+        });
+
+        mFloatWSetupBGButton = mainView.findViewById(R.id.floatwbg);
+        if (mHPApplication.isShowDesktop()) {
+            mFloatWSetupBGButton.setSelect(true);
+        }
+        mFloatWSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean selected = mFloatWSetupBGButton.isSelect();
+                if (!selected) {
+                    if (!AppOpsUtils.allowFloatWindow(getActivity())) {
+                        mFloatWPAlartDialog.showDialog("1.进入设置>更多应用>乐乐音乐>权限管理>显示悬浮窗\n2.开启允许", "立即设置");
+                        return;
+                    }
                 }
+                mHPApplication.setShowDesktop(!selected);
+                mFloatWSetupBGButton.setSelect(mHPApplication.isShowDesktop());
+
             }
         });
 
