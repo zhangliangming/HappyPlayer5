@@ -1005,8 +1005,7 @@ public class LrcActivity extends BaseActivity {
             }
         });
         mSPlPLayout.clearAnimation();
-        mSPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mSPlPLayout.startAnimation(translateAnimation);
     }
 
     /**
@@ -1253,11 +1252,8 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
-
         mPlPLayout.clearAnimation();
-        mPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-
+        mPlPLayout.startAnimation(translateAnimation);
     }
 
     /**
