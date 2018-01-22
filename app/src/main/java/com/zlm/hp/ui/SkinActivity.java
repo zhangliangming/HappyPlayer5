@@ -71,7 +71,7 @@ public class SkinActivity extends BaseActivity {
 
     @Override
     public int setStatusBarParentView() {
-        return R.id.about_layout;
+        return R.id.skin_layout;
     }
 
     @Override

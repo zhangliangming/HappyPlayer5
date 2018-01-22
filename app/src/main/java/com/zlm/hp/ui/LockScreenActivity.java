@@ -271,7 +271,7 @@ public class LockScreenActivity extends BaseActivity {
     private LrcPopSingerListAdapter mLrcPopSingerListAdapter;
     private LrcActivity.LrcActivityListener mLrcActivityListener = new LrcActivity.LrcActivityListener() {
         @Override
-        public void closeSingerPopListView() {
+        public void closeSingerPopListVeiw() {
             hideSPLPopView();
         }
     };
@@ -1936,7 +1936,8 @@ public class LockScreenActivity extends BaseActivity {
         return R.id.lrc_layout;
     }
 
+
     public interface LrcActivityListener {
-        void closeSingerPopListView();
+        void closeSingerPopListVeiw();
     }
 }

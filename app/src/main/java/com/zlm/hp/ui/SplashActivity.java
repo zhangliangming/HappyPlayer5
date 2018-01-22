@@ -12,6 +12,7 @@ import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
+import com.zlm.hp.libs.crash.CrashHandler;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.utils.MediaUtil;
@@ -33,7 +34,7 @@ public class SplashActivity extends BaseActivity {
 
     private Handler mAnimationHandler;
     private Runnable mAnimationRunnable;
-    private int mDelayTime = 0;
+    private int mDelayTime = 1000;
 
 
     @Override
@@ -54,7 +55,7 @@ public class SplashActivity extends BaseActivity {
      */
     private void doSomeThing() {
         //是否是第一次使用
-        boolean isFrist = PreferencesUtil.getBooleanValue(getApplicationContext(), PreferencesConstants.isFrist_KEY, true);
+        boolean isFrist = (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isFrist_KEY, true);
         if (isFrist) {
             //第一次使用扫描本地歌曲
             final List<AudioInfo> audioInfos = new ArrayList<AudioInfo>();
@@ -82,6 +83,10 @@ public class SplashActivity extends BaseActivity {
             //设置延迟时间
             mDelayTime *= 3;
         }
+
+        //注册捕捉全局异常
+        CrashHandler crashHandler = new CrashHandler();
+        crashHandler.init(HPApplication.getInstance());
         //初始化配置数据
         initPreferencesData();
         loadSplashMusic();
@@ -92,9 +97,7 @@ public class SplashActivity extends BaseActivity {
      * 加载启动页面的问候语
      */
     protected void loadSplashMusic() {
-        boolean isSayHello = PreferencesUtil.getBooleanValue(mContext,
-                PreferencesConstants.isSayHello_KEY,
-                HPApplication.getInstance().isSayHello());
+        boolean isSayHello = (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isSayHello_KEY, HPApplication.getInstance().isSayHello());
         HPApplication.getInstance().setSayHello(isSayHello);
         if (isSayHello) {
             AssetManager assetManager = getAssets();
@@ -118,19 +121,25 @@ public class SplashActivity extends BaseActivity {
      */
     private void initPreferencesData() {
         HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
-        //初始化wifi值
-        HPApplication.getInstance().setWire(HPApplication.getInstance().isWire());
-        HPApplication.getInstance().setWifi(HPApplication.getInstance().isWifi());
-        HPApplication.getInstance().setBarMenuShow(HPApplication.getInstance().isBarMenuShow());
-        HPApplication.getInstance().setPlayIndexHashID(HPApplication.getInstance().getPlayIndexHashID());
-        HPApplication.getInstance().setPlayModel(HPApplication.getInstance().getPlayModel());
-        HPApplication.getInstance().setLrcColorIndex(HPApplication.getInstance().getLrcColorIndex());
-        HPApplication.getInstance().setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
-        HPApplication.getInstance().setManyLineLrc(HPApplication.getInstance().isManyLineLrc());
+        //桌面歌词
+        HPApplication.getInstance().setDesktop((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isDesktop_KEY, false));
+        //锁屏标志
+        HPApplication.getInstance().setShowLockScreen((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, false));
+        //线控标志
+        HPApplication.getInstance().setWire((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isWire_KEY, false));
+        //wifi标志
+        HPApplication.getInstance().setWifi((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isWifi_KEY, true));
+        HPApplication.getInstance().setBarMenuShow((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isBarMenuShow_KEY, false));
+        HPApplication.getInstance().setPlayIndexHashID((String) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.playIndexHashID_KEY, ""));
+        HPApplication.getInstance().setPlayModel((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.playModel_KEY, 0));
+        HPApplication.getInstance().setLrcColorIndex((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.lrcColorIndex_KEY, 0));
+        HPApplication.getInstance().setLrcFontSize((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.lrcFontSize_KEY, 30));
+        HPApplication.getInstance().setManyLineLrc((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isManyLineLrc_KEY, true));
     }
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
+
         if (!isRestoreInstance) {
             //
             doSomeThing();
@@ -164,7 +173,7 @@ public class SplashActivity extends BaseActivity {
         Intent intent = new Intent(this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-//        overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
+        overridePendingTransition(R.anim.zoomin, R.anim.zoomout);
 
         finish();
     }

@@ -1,16 +1,12 @@
 package base.widget.lrc;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathEffect;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -83,7 +79,7 @@ public class ManyLineLyricsViewV2 extends View {
     /**
      * 歌词字体大小
      */
-    private int mFontSize = 50;
+    private int mFontSize = 32;
     /**
      * 歌词颜色
      */
@@ -135,7 +131,7 @@ public class ManyLineLyricsViewV2 extends View {
     /**
      * Y轴移动的时间
      */
-    private int mDuration = 200;
+    private int mDuration = 400;
     /**
      * 歌词在Y轴上的偏移量
      */
@@ -170,6 +166,10 @@ public class ManyLineLyricsViewV2 extends View {
      * 是否直接拦截
      */
     private boolean mTouchIntercept = false;
+    /**
+     * 是否允许触摸
+     */
+    private boolean mTouchAble = true;
     /**
      * 正在拖动
      */
@@ -268,20 +268,32 @@ public class ManyLineLyricsViewV2 extends View {
     private int mExtraLyricsWordIndex = -1;
 
     public ManyLineLyricsViewV2(Context context) {
-        this(context, null);
+        super(context);
+        init(context);
     }
 
     public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, 0);
+        super(context, attrs);
+        init(context);
     }
 
     public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        this(context, attrs, defStyleAttr, 0);
+        super(context, attrs, defStyleAttr);
+        init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public ManyLineLyricsViewV2(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        init(context);
+    }
+
+    /**
+     * 初始化
+     *
+     * @param context
+     */
+    private void init(Context context) {
+
         //
         logger = LoggerUtil.getZhangLogger(context);
         mDefText = context.getString(R.string.def_text);
@@ -292,14 +304,6 @@ public class ManyLineLyricsViewV2 extends View {
                 .get(getContext());
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity();
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
-
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ManyLineLyricsViewV2, defStyleAttr, defStyleRes);
-        mFontSize = a.getDimensionPixelSize(R.styleable.ManyLineLyricsViewV2_textSize, 50);
-        mDefLrcColor = a.getColor(R.styleable.ManyLineLyricsViewV2_textDefaultColor, Color.parseColor("#ffffff"));
-        mLrcColor = a.getColor(R.styleable.ManyLineLyricsViewV2_textColor, Color.parseColor("#fada83"));
-
-//        final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
-//        mFontSize = (int) (16 * fontScale + 0.5f);
 
 
         //默认画笔
@@ -369,6 +373,7 @@ public class ManyLineLyricsViewV2 extends View {
      * 初始化字体大小
      */
     private void initFontSize() {
+
         mPaint.setTextSize(mFontSize);
         mPaintHL.setTextSize(mFontSize);
         mPaintIndicator.setTextSize(mFontSize);
@@ -1403,7 +1408,7 @@ public class ManyLineLyricsViewV2 extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (mLyricsLineTreeMap == null || mLyricsLineTreeMap.size() == 0 || !isManyLineLrc) {
+        if (mLyricsLineTreeMap == null || mLyricsLineTreeMap.size() == 0 || !isManyLineLrc || !mTouchAble) {
             return super.onTouchEvent(event);
         }
         obtainVelocityTracker(event);
@@ -2025,6 +2030,10 @@ public class ManyLineLyricsViewV2 extends View {
         mDefLrcColor = color;
         initColor();
         invalidateView();
+    }
+
+    public void setTouchAble(boolean mTouchAble) {
+        this.mTouchAble = mTouchAble;
     }
 
     /***

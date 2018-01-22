@@ -4,7 +4,9 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -100,6 +102,7 @@ public class SwipeBackLayout extends LinearLayout {
         init(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public SwipeBackLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -300,7 +303,8 @@ public class SwipeBackLayout extends LinearLayout {
                 //1.计算view移动的百分比0~1
                 float percent = left * 1f / getWidth();
 
-                drawMask();
+                if (mShadowEnable)
+                    drawMask();
 
 
                 //logger.e("mContentViewCurX=" + left);
@@ -364,9 +368,6 @@ public class SwipeBackLayout extends LinearLayout {
 
         float percent = contentView.getLeft() * 1.0f / getWidth();
         int alpha = 200 - (int) (200 * percent);
-        if(!mShadowEnable) {
-            alpha = 0;
-        }
         mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
 
         invalidate();
@@ -380,7 +381,7 @@ public class SwipeBackLayout extends LinearLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         //拖动未结束或者正在拖动
-        if (!isDragFinish || isTouchMove)
+        if ((!isDragFinish || isTouchMove) && mShadowEnable)
             canvas.drawRect(0, 0, contentView.getLeft(), getHeight(), mFadePaint);
     }
 

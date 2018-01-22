@@ -1,15 +1,21 @@
 # 项目分支代码声明 #
-branch-master：该分支代码是我与DyncKathline参与开发，该APP的界面和功能与我之前写的有较大的差别，请注意。
-branch-zlm：该分支代码是我个人开发的，如需要查看我之前写的代码，请切换分支即可。
+branch-master：该分支代码是我与DyncKathline、liupeng110参与开发，该APP的界面和功能与我之前写的有较大的差别。
+branch-zlm：该分支代码是我个人开发的（我会不定期同步最新的代码），如需要查看我之前写的代码，请切换分支即可。
 
 # 更新日志 #
 - 2018-01-22：
 1.使用Dialog替换歌词界面的菜单设置和歌词详情（原因是直接使用会有卡顿）
 2.尝试解决android8.0：java.lang.IllegalStateException
       Not allowed to start service Intent { cmp=bear.love.peach/.service.AudioPlayerService }: app is in background uid UidRecord
-- 2018-01-20：
-1.优化了按住item导致能看见上一个页面的问题
-2.适配android8.0启动服务异常的问题
+3.优化了按住item导致能看见上一个页面的问题
+- 2018-01-22(@zlm)：
+- 加大歌词行的移动时间，让歌词移动动画更流畅，有需要的小伙伴也可以根据当前歌词的行数（因为歌词换行导致动画移动不流畅）适当地动态增加移动的时间，可以使移动动画更流畅。
+- 添加自定义的锁屏界面，其中部分手机（如：我的小米2s，android 5.0），需要到权限设置界面设置“锁屏显示”权限(注：歌曲只有在播放时，才会显示锁屏界面)，实现图片预览：
+![](https://i.imgur.com/hZlES1d.png)
+- 添加悬浮窗口权限判断，直接跳转到权限设置页面（桌面歌词暂时没实现）。
+- 引用别人项目工具类，主要用于判断各种手机的权限设置页面，项目地址如下：https://github.com/SenhLinsh/Utils-Everywhere.git
+
+- 2018-01-21：好高兴这个项目可以邀请到liupeng110参与开发
 - 2018-01-19：把类里面的string字符串提取到string.xml中
 - 2018-01-19：广播不能传参的，初级错误
 - 2018-01-19(@zlm)：
