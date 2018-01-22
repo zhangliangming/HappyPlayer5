@@ -3,6 +3,7 @@ branch-master：该分支代码是我与DyncKathline、liupeng110参与开发，
 branch-zlm：该分支代码是我个人开发的（我会不定期同步最新的代码），如需要查看我之前写的代码，请切换分支即可。
 
 # 更新日志 #
+- 2018-01-22：对SwipeBackLayout.java也增加是否允许滑动
 - 2018-01-22：
 1.使用Dialog替换歌词界面的菜单设置和歌词详情（原因是直接使用会有卡顿）
 2.尝试解决android8.0：java.lang.IllegalStateException
