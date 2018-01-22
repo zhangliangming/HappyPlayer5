@@ -32,7 +32,7 @@ public class PlayListBGRelativeLayout extends RelativeLayout {
         int strokeWidth = 1; // 3dp 边框宽度
         float[] roundRadius = {15, 15, 15, 15, 0, 0, 0, 0}; // 圆角半径
         int strokeColor = Color.TRANSPARENT;// 边框颜色
-        int fillColor = ColorUtil.parserColor("#263c56", 245);
+        int fillColor = ColorUtil.parserColor("#263c56", 255);
 
         GradientDrawable gd = new GradientDrawable();// 创建drawable
         gd.setColor(fillColor);

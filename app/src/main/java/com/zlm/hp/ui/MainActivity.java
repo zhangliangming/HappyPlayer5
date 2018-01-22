@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -281,13 +282,14 @@ public class MainActivity extends BaseActivity {
 
                     //服务被强迫回收
                     Intent playerServiceIntent = new Intent(getApplicationContext(), AudioPlayerService.class);
-                    mHPApplication.startService(playerServiceIntent);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        mHPApplication.startForegroundService(playerServiceIntent);
+                    }else{
+                        mHPApplication.startService(playerServiceIntent);
+                    }
 
                     mHPApplication.setPlayServiceForceDestroy(true);
-//                    Intent restartIntent = new Intent(AudioBroadcastReceiver.ACTION_MUSICRESTART);
-//                    restartIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-//                    sendBroadcast(restartIntent);
-                    logger.e("发送重新启动音频播放服务广播");
+                    logger.e("重新启动音频播放服务广播");
                 }
             }
             mCheckServiceHandler.postDelayed(mCheckServiceRunnable, mCheckServiceTime);
@@ -573,21 +575,7 @@ public class MainActivity extends BaseActivity {
 
             }
 
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_LOCALUPDATE)) {
-            //
-            //更新当前的播放列表
-//            List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(getApplicationContext()).getAllLocalAudio();
-//            mHPApplication.setCurAudioInfos(data);
-
-        }
-//        else if (action.equals(AudioBroadcastReceiver.ACTION_MUSICRESTART)) {
-        //重新启动播放服务
-//            Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-//            mHPApplication.startService(playerServiceIntent);
-//            logger.e("接收广播并且重新启动音频播放服务");
-
-//        }
-        else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
+        }else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
             if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
                 //歌词加载完成
                 AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
@@ -647,7 +635,12 @@ public class MainActivity extends BaseActivity {
      */
     private void initService() {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        mHPApplication.startService(playerServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mHPApplication.startForegroundService(playerServiceIntent);
+        }else{
+            mHPApplication.startService(playerServiceIntent);
+        }
+
 
         //注册接收音频播放广播
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext(), mHPApplication);
@@ -1288,7 +1281,11 @@ public class MainActivity extends BaseActivity {
         //
         mCheckServiceHandler.removeCallbacks(mCheckServiceRunnable);
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        mHPApplication.stopService(playerServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mHPApplication.startForegroundService(playerServiceIntent);
+        }else{
+            mHPApplication.startService(playerServiceIntent);
+        }
 
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
@@ -1339,7 +1336,12 @@ public class MainActivity extends BaseActivity {
 
                 //服务被强迫回收
                 Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-                mHPApplication.startService(playerServiceIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    mHPApplication.startForegroundService(playerServiceIntent);
+                }else{
+                    mHPApplication.startService(playerServiceIntent);
+                }
+
                 mHPApplication.setPlayServiceForceDestroy(true);
 
                 logger.e("resume时，重新启动音频播放服务广播");

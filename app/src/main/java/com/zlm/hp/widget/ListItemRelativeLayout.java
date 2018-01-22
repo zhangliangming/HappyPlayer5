@@ -36,7 +36,7 @@ public class ListItemRelativeLayout extends RelativeLayout {
 
     private void init(Context context) {
         defColor = ColorUtil.parserColor("#ffffff", 255);
-        pressColor = ColorUtil.parserColor("#e1e1e1", 200);
+        pressColor = ColorUtil.parserColor("#e1e1e1", 255);
     }
 
     @Override
