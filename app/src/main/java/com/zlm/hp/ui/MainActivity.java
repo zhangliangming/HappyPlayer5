@@ -1027,8 +1027,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         mPopMenuRelativeLayout.clearAnimation();
-        mPopMenuRelativeLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPopMenuRelativeLayout.startAnimation(translateAnimation);
     }
 
     /**
@@ -1373,7 +1372,10 @@ public class MainActivity extends BaseActivity {
             slidingMenuLayout.hideMenuView(getSupportFragmentManager());
             return;
         }
-
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawers();
+            return;
+        }
         if ((System.currentTimeMillis() - mExitTime) > 2000) {
             // Toast.makeText(getApplicationContext(), getString(R.string.back_tip), Toast.LENGTH_SHORT).show();
             ToastUtil.showTextToast(getApplicationContext(), getString(R.string.back_tip));

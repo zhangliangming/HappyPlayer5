@@ -17,13 +17,13 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/centerLine"
             android:layout_marginTop="-55dp"
+            android:background="#fff"
             android:clickable="true">
 
             <RelativeLayout
                 android:id="@+id/titlelayout"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#fff">
+                android:layout_height="50dp">
 
                 <TextView
                     android:id="@+id/title"
@@ -135,7 +135,9 @@
                     android:id="@+id/curplaylist_recyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:overScrollMode="never"/>
+                    android:clipToPadding="false"
+                    android:divider="@null"
+                    android:paddingBottom="@dimen/player_height"/>
 
             </LinearLayout>
         </RelativeLayout>

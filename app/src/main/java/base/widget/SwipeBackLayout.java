@@ -309,9 +309,7 @@ public class SwipeBackLayout extends LinearLayout {
                 //1.计算view移动的百分比0~1
                 float percent = left * 1f / getWidth();
 
-                if (mShadowEnable) {
-                    drawMask();
-                }
+                drawMask();
 
 
                 //logger.e("mContentViewCurX=" + left);
@@ -375,6 +373,9 @@ public class SwipeBackLayout extends LinearLayout {
 
         float percent = contentView.getLeft() * 1.0f / getWidth();
         int alpha = 200 - (int) (200 * percent);
+        if(!mShadowEnable) {
+            alpha = 0;
+        }
         mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
 
         invalidate();
@@ -388,8 +389,9 @@ public class SwipeBackLayout extends LinearLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         //拖动未结束或者正在拖动
-        if (!isDragFinish || isTouchMove && mShadowEnable)
+        if (!isDragFinish || isTouchMove) {
             canvas.drawRect(0, 0, contentView.getLeft(), getHeight(), mFadePaint);
+        }
     }
 
     @Override

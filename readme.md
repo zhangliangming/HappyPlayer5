@@ -5,6 +5,10 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-22：
+1.优化了SwipeBackLayout.java不允许滑动时，没有阴影
+2.修复了按返回键，播放列表布局不能隐藏的问题
+3.修复了点击换肤崩溃
 - 2018-01-22(@zlm)：去掉歌手写真界面的酷狗背景图片
 - 2018-01-22(@zlm)：修复播放歌曲时，界面无更新问题：修复AudioPlayerService无被调用的问题。
 - 2018-01-22：对SwipeBackLayout.java也增加是否允许滑动

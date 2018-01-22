@@ -13,7 +13,6 @@ import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.libs.crash.CrashHandler;
-import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.utils.MediaUtil;
 
@@ -34,7 +33,7 @@ public class SplashActivity extends BaseActivity {
 
     private Handler mAnimationHandler;
     private Runnable mAnimationRunnable;
-    private int mDelayTime = 1000;
+    private int mDelayTime = 500;
 
 
     @Override
@@ -120,21 +119,28 @@ public class SplashActivity extends BaseActivity {
      * 初始化配置数据
      */
     private void initPreferencesData() {
-        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
+        //歌曲播放状态
+        HPApplication.getInstance().setPlayStatus(HPApplication.getInstance().getPlayStatus());
         //桌面歌词
-        HPApplication.getInstance().setDesktop((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isDesktop_KEY, false));
+        HPApplication.getInstance().setDesktop(HPApplication.getInstance().isDesktop());
         //锁屏标志
-        HPApplication.getInstance().setShowLockScreen((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, false));
+        HPApplication.getInstance().setShowLockScreen(HPApplication.getInstance().isLockScreen());
         //线控标志
-        HPApplication.getInstance().setWire((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isWire_KEY, false));
+        HPApplication.getInstance().setWire(HPApplication.getInstance().isWire());
         //wifi标志
-        HPApplication.getInstance().setWifi((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isWifi_KEY, true));
-        HPApplication.getInstance().setBarMenuShow((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isBarMenuShow_KEY, false));
-        HPApplication.getInstance().setPlayIndexHashID((String) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.playIndexHashID_KEY, ""));
-        HPApplication.getInstance().setPlayModel((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.playModel_KEY, 0));
-        HPApplication.getInstance().setLrcColorIndex((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.lrcColorIndex_KEY, 0));
-        HPApplication.getInstance().setLrcFontSize((int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.lrcFontSize_KEY, 30));
-        HPApplication.getInstance().setManyLineLrc((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isManyLineLrc_KEY, true));
+        HPApplication.getInstance().setWifi(HPApplication.getInstance().isWifi());
+        //底部按钮是否打开
+        HPApplication.getInstance().setBarMenuShow(HPApplication.getInstance().isBarMenuShow());
+        //播放歌曲id
+        HPApplication.getInstance().setPlayIndexHashID(HPApplication.getInstance().getPlayIndexHashID());
+        //歌曲播放模式
+        HPApplication.getInstance().setPlayModel(HPApplication.getInstance().getPlayModel());
+        //歌词颜色索引
+        HPApplication.getInstance().setLrcColorIndex(HPApplication.getInstance().getLrcColorIndex());
+        //歌词字体大小
+        HPApplication.getInstance().setLrcFontSize(HPApplication.getInstance().getLrcFontSize());
+        //是否是多行歌词
+        HPApplication.getInstance().setManyLineLrc(HPApplication.getInstance().isManyLineLrc());
     }
 
     @Override
