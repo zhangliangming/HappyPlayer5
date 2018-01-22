@@ -31,6 +31,8 @@ public class PingYinUtil {
                         "[\\u4E00-\\u9FA5]+")) {
                     String[] temp = PinyinHelper.toHanyuPinyinStringArray(
                             input[i], format);
+                    //不是汉字
+                    if (temp == null) continue;
                     output += temp[0];
                 } else
                     output += Character.toString(input[i]);
