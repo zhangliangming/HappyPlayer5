@@ -56,7 +56,6 @@
 
         <service
             android:name=".service.AudioPlayerService"
-            android:process=":remote"
             android:enabled="true"
             android:exported="true" />
 
