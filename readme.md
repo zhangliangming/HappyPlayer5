@@ -3,6 +3,13 @@ branch-master：该分支代码是我与DyncKathline参与开发，该APP的界�
 branch-zlm：该分支代码是我个人开发的，如需要查看我之前写的代码，请切换分支即可。
 
 # 更新日志 #
+- 2018-01-22：
+1.使用Dialog替换歌词界面的菜单设置和歌词详情（原因是直接使用会有卡顿）
+2.尝试解决android8.0：java.lang.IllegalStateException
+      Not allowed to start service Intent { cmp=bear.love.peach/.service.AudioPlayerService }: app is in background uid UidRecord
+- 2018-01-20：
+1.优化了按住item导致能看见上一个页面的问题
+2.适配android8.0启动服务异常的问题
 - 2018-01-19：把类里面的string字符串提取到string.xml中
 - 2018-01-19：广播不能传参的，初级错误
 - 2018-01-19(@zlm)：

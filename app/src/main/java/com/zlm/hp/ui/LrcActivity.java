@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -57,6 +58,7 @@ import base.widget.LrcSeekBar;
 import base.widget.PlayListBGRelativeLayout;
 import base.widget.RotateLinearLayout;
 import base.widget.SingerImageView;
+import base.widget.dialog.CustomDialog;
 import base.widget.lrc.ManyLineLyricsViewV2;
 
 /**
@@ -260,11 +262,6 @@ public class LrcActivity extends BaseActivity {
     private IconfontImageButtonTextView mLikeImgBtn;
     private IconfontImageButtonTextView mUnLikeImgBtn;
 
-    //、、、、、、、、、、、、、、、、、、更多弹出窗口、、、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isPopViewShow = false;
-    private LinearLayout mPopLinearLayout;
-    private LinearLayout mMenuLayout;
-
     //、、、、、、、、、、、、、、、、、、、当前播放列表窗口、、、、、、、、、、、、、、、、、、、、、、、、
     private boolean isPLPopViewShow = false;
     private LinearLayout mPlPopLinearLayout;
@@ -282,15 +279,6 @@ public class LrcActivity extends BaseActivity {
             hideSPLPopView();
         }
     };
-
-    //、、、、、、、、、、、、、、、、、、、当前歌曲信息窗口、、、、、、、、、、、、、、、、、、、、、、、、
-    private boolean isSIPopViewShow = false;
-    private LinearLayout mSIPopLinearLayout;
-    private PlayListBGRelativeLayout mSIPLayout;
-    private TextView mPopSingerNameTv;
-    private TextView mPopFileExtTv;
-    private TextView mPopTimeTv;
-    private TextView mPopFileSizeTv;
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、、
     //播放模式
@@ -341,6 +329,8 @@ public class LrcActivity extends BaseActivity {
             doNetMusicReceive(context, intent);
         }
     };
+    private CustomDialog mPopDialog;
+    private CustomDialog mSonginfoPopDialog;
 
     /**
      * 处理网络歌曲广播
@@ -882,10 +872,10 @@ public class LrcActivity extends BaseActivity {
         mUnLikeImgBtn.setVisibility(View.VISIBLE);
         mLikeImgBtn.setVisibility(View.GONE);
 
-        initPopView();
+//        initPopView(customDialog);
         initPLPopView();
         initSPLPopView();
-        initSIPopView();
+//        initSIPopView(customDialog);
 
     }
 
@@ -929,79 +919,64 @@ public class LrcActivity extends BaseActivity {
      * 隐藏歌曲信息
      */
     private void hideSIPopView() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, mSIPLayout.getHeight());
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isSIPopViewShow = false;
-                mSIPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mSonginfoPopDialog.dismiss();
     }
 
     /**
      * 显示歌曲信息
      */
-    private void showSPIPopView(AudioInfo audioInfo) {
-        //设置歌曲信息
-        mPopSingerNameTv.setText(audioInfo.getSingerName());
-        mPopFileExtTv.setText(audioInfo.getFileExt());
-        mPopTimeTv.setText(audioInfo.getDurationText());
-        mPopFileSizeTv.setText(audioInfo.getFileSizeText());
-        //
-        mSIPopLinearLayout.setVisibility(View.VISIBLE);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSIPLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isSIPopViewShow = true;
+    private void showSPIPopView(final AudioInfo audioInfo) {
+        CustomDialog.Builder builder = new CustomDialog.Builder(mContext);
+        mSonginfoPopDialog = builder.setContentView(R.layout.layout_lrc_songinfo_pop)
+                .setAnimId(R.style.AnimBottom)
+                .setLayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                .setBackgroundDrawable(true)
+                .setDimAmount(0)
+                .setGravity(Gravity.BOTTOM)
+                .show(new CustomDialog.Builder.onInitListener() {
+                    @Override
+                    public void init(final CustomDialog customDialog) {
+                        initSIPopView(customDialog, audioInfo);
+                    }
+                });
     }
 
     /**
      * 初始化歌曲信息窗口
+     * @param dialog
+     * @param audioInfo
      */
-    private void initSIPopView() {
+    private void initSIPopView(CustomDialog dialog, AudioInfo audioInfo) {
+        LinearLayout cancelLinearLayout = dialog.findViewById(R.id.songcalcel);
+        LinearLayout sIPopLinearLayout = dialog.findViewById(R.id.songinfoPopLayout);
+        TextView popSingerNameTv = dialog.findViewById(R.id.pop_singerName);
+        TextView popFileExtTv = dialog.findViewById(R.id.pop_fileext);
+        TextView popTimeTv = dialog.findViewById(R.id.pop_time);
+        TextView popFileSizeTv = dialog.findViewById(R.id.pop_filesize);
+        //设置歌曲信息
+        popSingerNameTv.setText(audioInfo.getSingerName());
+        popFileExtTv.setText(audioInfo.getFileExt());
+        popTimeTv.setText(audioInfo.getDurationText());
+        popFileSizeTv.setText(audioInfo.getFileSizeText());
+        sIPopLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideSIPopView();
+            }
+        });
+        cancelLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideSIPopView();
+            }
+        });
 
-        mSIPopLinearLayout = findViewById(R.id.songinfoPopLayout);
-        mSIPopLinearLayout.setOnClickListener(new View.OnClickListener() {
+        sIPopLinearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 hideSIPopView();
             }
         });
-        mSIPopLinearLayout.setVisibility(View.INVISIBLE);
-        mSIPLayout = findViewById(R.id.pop_songinfo_parent);
-        //
-        LinearLayout splcalcel = findViewById(R.id.songcalcel);
-        splcalcel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hideSIPopView();
-            }
-        });
-        //
-        mPopSingerNameTv = findViewById(R.id.pop_singerName);
-        mPopFileExtTv = findViewById(R.id.pop_fileext);
-        mPopTimeTv = findViewById(R.id.pop_time);
-        mPopFileSizeTv = findViewById(R.id.pop_filesize);
     }
 
     /**
@@ -1289,80 +1264,41 @@ public class LrcActivity extends BaseActivity {
      * 隐藏popview
      */
     private void hidePopView() {
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, 0, mMenuLayout.getHeight());
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        translateAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-                isPopViewShow = false;
-                mPopLinearLayout.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPopDialog.dismiss();
     }
 
     /**
      * 显示popview
      */
     private void showPopView() {
-        mPopLinearLayout.setVisibility(View.VISIBLE);
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mMenuLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
-        translateAnimation.setFillAfter(true);
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
-        isPopViewShow = true;
+        CustomDialog.Builder builder = new CustomDialog.Builder(mContext);
+        mPopDialog = builder.setContentView(R.layout.layout_lrc_pop)
+                .setAnimId(R.style.AnimBottom)
+                .setLayoutParams(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+                .setBackgroundDrawable(true)
+                .setDimAmount(0)
+                .setGravity(Gravity.BOTTOM)
+                .show(new CustomDialog.Builder.onInitListener() {
+                    @Override
+                    public void init(final CustomDialog customDialog) {
+                        initPopView(customDialog);
+                    }
+                });
     }
 
     /**
      * 初始化pop
+     * @param dialog
      */
-    private void initPopView() {
-
-
-        mPopLinearLayout = findViewById(R.id.lrcPopLayout);
-        mPopLinearLayout.setVisibility(View.INVISIBLE);
-        mPopLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hidePopView();
-            }
-        });
-        //
-        mMenuLayout = findViewById(R.id.menuLayout);
-        //
-        LinearLayout cancelLinearLayout = findViewById(R.id.calcel);
-        cancelLinearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                hidePopView();
-            }
-        });
-
-
+    private void initPopView(CustomDialog dialog) {
         //搜索歌手写真
-        ImageView searchSingerImg = findViewById(R.id.search_singer_pic);
+        ImageView searchSingerImg = dialog.findViewById(R.id.search_singer_pic);
         searchSingerImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (HPApplication.getInstance().getCurAudioInfo() == null) {
 
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.please_choose_a_song));
+                    ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
 
                 } else {
                     hidePopView();
@@ -1386,7 +1322,7 @@ public class LrcActivity extends BaseActivity {
         });
 
         //搜索歌词
-        ImageView searchLrcImg = findViewById(R.id.search_lrc);
+        ImageView searchLrcImg = dialog.findViewById(R.id.search_lrc);
         searchLrcImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1406,8 +1342,10 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
+        LinearLayout cancelLinearLayout = dialog.findViewById(R.id.calcel);
+        LinearLayout popLinearLayout = dialog.findViewById(R.id.lrcPopLayout);
         //歌曲详情
-        ImageView songInfoImg = findViewById(R.id.songinfo);
+        ImageView songInfoImg = dialog.findViewById(R.id.songinfo);
         songInfoImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1421,9 +1359,21 @@ public class LrcActivity extends BaseActivity {
                 }
             }
         });
+        popLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hidePopView();
+            }
+        });
+        cancelLinearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hidePopView();
+            }
+        });
 
         //歌词进度减少按钮
-        ButtonRelativeLayout lrcProgressJianBtn = findViewById(R.id.lyric_progress_jian);
+        ButtonRelativeLayout lrcProgressJianBtn = dialog.findViewById(R.id.lyric_progress_jian);
         lrcProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         lrcProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
         lrcProgressJianBtn.setOnClickListener(new View.OnClickListener() {
@@ -1443,7 +1393,7 @@ public class LrcActivity extends BaseActivity {
             }
         });
         //歌词进度重置
-        ButtonRelativeLayout resetProgressJianBtn = findViewById(R.id.lyric_progress_reset);
+        ButtonRelativeLayout resetProgressJianBtn = dialog.findViewById(R.id.lyric_progress_reset);
         resetProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         resetProgressJianBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
         resetProgressJianBtn.setOnClickListener(new View.OnClickListener() {
@@ -1463,7 +1413,7 @@ public class LrcActivity extends BaseActivity {
             }
         });
         //歌词进度增加
-        ButtonRelativeLayout lrcProgressJiaBtn = findViewById(R.id.lyric_progress_jia);
+        ButtonRelativeLayout lrcProgressJiaBtn = dialog.findViewById(R.id.lyric_progress_jia);
         lrcProgressJiaBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
         lrcProgressJiaBtn.setPressedFillColor(ColorUtil.parserColor(Color.WHITE, 50));
         lrcProgressJiaBtn.setOnClickListener(new View.OnClickListener() {
@@ -1484,7 +1434,7 @@ public class LrcActivity extends BaseActivity {
 
 
         //字体大小
-        final LrcSeekBar lrcSizeLrcSeekBar = findViewById(R.id.fontSizeseekbar);
+        final LrcSeekBar lrcSizeLrcSeekBar = dialog.findViewById(R.id.fontSizeseekbar);
         lrcSizeLrcSeekBar.setMax(HPApplication.getInstance().getMaxLrcFontSize() - HPApplication.getInstance().getMinLrcFontSize());
         lrcSizeLrcSeekBar.setProgress((HPApplication.getInstance().getLrcFontSize() - HPApplication.getInstance().getMinLrcFontSize()));
         lrcSizeLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor(Color.WHITE, 50));
@@ -1523,7 +1473,7 @@ public class LrcActivity extends BaseActivity {
         });
 
         //字体减小
-        IconfontImageButtonTextView lrcSizeDecrease = findViewById(R.id.lyric_decrease);
+        IconfontImageButtonTextView lrcSizeDecrease = dialog.findViewById(R.id.lyric_decrease);
         lrcSizeDecrease.setConvert(true);
         lrcSizeDecrease.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1538,7 +1488,7 @@ public class LrcActivity extends BaseActivity {
         });
 
         //字体增加
-        IconfontImageButtonTextView lrcSizeIncrease = findViewById(R.id.lyric_increase);
+        IconfontImageButtonTextView lrcSizeIncrease = dialog.findViewById(R.id.lyric_increase);
         lrcSizeIncrease.setConvert(true);
         lrcSizeIncrease.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1558,69 +1508,69 @@ public class LrcActivity extends BaseActivity {
 
         int i = 0;
         //
-        colorPanel[i] = findViewById(R.id.color_panel1);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel1);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 0);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status1);
+        colorStatus[i] = dialog.findViewById(R.id.color_status1);
 
         //
         i++;
-        colorPanel[i] = findViewById(R.id.color_panel2);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel2);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 1);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status2);
+        colorStatus[i] = dialog.findViewById(R.id.color_status2);
 
         //
         i++;
-        colorPanel[i] = findViewById(R.id.color_panel3);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel3);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 2);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status3);
+        colorStatus[i] = dialog.findViewById(R.id.color_status3);
 
         //
         i++;
-        colorPanel[i] = findViewById(R.id.color_panel4);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel4);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 3);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status4);
+        colorStatus[i] = dialog.findViewById(R.id.color_status4);
 
         //
         i++;
-        colorPanel[i] = findViewById(R.id.color_panel5);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel5);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 4);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status5);
+        colorStatus[i] = dialog.findViewById(R.id.color_status5);
 
         //
         i++;
-        colorPanel[i] = findViewById(R.id.color_panel6);
+        colorPanel[i] = dialog.findViewById(R.id.color_panel6);
         colorPanel[i].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 setColorPanel(colorStatus, 5);
             }
         });
-        colorStatus[i] = findViewById(R.id.color_status6);
+        colorStatus[i] = dialog.findViewById(R.id.color_status6);
 
         //
         colorStatus[HPApplication.getInstance().getLrcColorIndex()].setVisibility(View.VISIBLE);
@@ -1925,14 +1875,14 @@ public class LrcActivity extends BaseActivity {
     private void initService() {
 
         //注册接收音频播放广播
-        mAudioBroadcastReceiver = new AudioBroadcastReceiver(mContext);
+        mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
-        mAudioBroadcastReceiver.registerReceiver(mContext);
+        mAudioBroadcastReceiver.registerReceiver(getApplicationContext());
 
         //在线音乐广播
-        mOnLineAudioReceiver = new OnLineAudioReceiver(mContext);
+        mOnLineAudioReceiver = new OnLineAudioReceiver(getApplicationContext());
         mOnLineAudioReceiver.setOnlineAudioReceiverListener(mOnlineAudioReceiverListener);
-        mOnLineAudioReceiver.registerReceiver(mContext);
+        mOnLineAudioReceiver.registerReceiver(getApplicationContext());
     }
 
 
@@ -1949,17 +1899,11 @@ public class LrcActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (isPopViewShow) {
-            hidePopView();
-            return;
-        } else if (isPLPopViewShow) {
+        if (isPLPopViewShow) {
             hidePlPopView();
             return;
         } else if (isSPLPopViewShow) {
             hideSPLPopView();
-            return;
-        } else if (isSIPopViewShow) {
-            hideSIPopView();
             return;
         }
         mRotateLinearLayout.finish();

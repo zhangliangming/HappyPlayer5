@@ -72,7 +72,7 @@ public class LrcPopSingerListAdapter extends RecyclerView.Adapter<RecyclerView.V
                 mContext.startActivity(intent);
 
                 if (mLrcActivityListener != null) {
-                    mLrcActivityListener.closeSingerPopListVeiw();
+                    mLrcActivityListener.closeSingerPopListView();
                 }
 
             }

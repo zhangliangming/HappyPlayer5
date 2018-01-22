@@ -210,21 +210,7 @@
         android:visibility="invisible"/>
 
     <include
-        layout="@layout/layout_lrc_pop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"/>
-
-    <include
         layout="@layout/layout_lrc_singerlist_pop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"/>
-
-    <include
-        layout="@layout/layout_lrc_songinfo_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"

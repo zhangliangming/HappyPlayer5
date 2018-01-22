@@ -723,7 +723,11 @@ public class MainActivity extends BaseActivity {
      */
     private void initService() {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        startService(playerServiceIntent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            HPApplication.getInstance().startForegroundService(playerServiceIntent);
+        } else {
+            HPApplication.getInstance().startService(playerServiceIntent);
+        }
 
         //注册接收音频播放广播
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());
@@ -1437,7 +1441,11 @@ public class MainActivity extends BaseActivity {
 
                 //服务被强迫回收
                 Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-                startService(playerServiceIntent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    HPApplication.getInstance().startForegroundService(playerServiceIntent);
+                } else {
+                    HPApplication.getInstance().startService(playerServiceIntent);
+                }
                 HPApplication.getInstance().setPlayServiceForceDestroy(true);
 
                 logger.e("resume时，重新启动音频播放服务广播");

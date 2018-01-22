@@ -62,4 +62,10 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!--底部Dialog动画-->
+    <style name="AnimBottom" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/dialog_bottom_out</item>
+    </style>
+
 </resources>
