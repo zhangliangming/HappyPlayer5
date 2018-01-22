@@ -930,9 +930,8 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-        mPopMenuRelativeLayout.clearAnimation();
-        mPopMenuRelativeLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+
+        mPopMenuRelativeLayout.startAnimation(translateAnimation);
     }
 
     /**
@@ -978,9 +977,7 @@ public class MainActivity extends BaseActivity {
             }
         });
         mListPopLinearLayout.setVisibility(View.VISIBLE);
-        mPopMenuRelativeLayout.clearAnimation();
-        mPopMenuRelativeLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPopMenuRelativeLayout.startAnimation(translateAnimation);
         isPopViewShow = true;
 
 
@@ -1078,7 +1075,6 @@ public class MainActivity extends BaseActivity {
                 TranslateAnimation transAnim = new TranslateAnimation(0, 0, 0, mPlayerBarParentLinearLayout.getHeight());
                 transAnim.setDuration(500);
                 transAnim.setFillAfter(true);
-                mPlayerBarParentLinearLayout.setAnimation(transAnim);
                 mPlayerBarParentLinearLayout.startAnimation(transAnim);
 
 
@@ -1238,7 +1234,6 @@ public class MainActivity extends BaseActivity {
                 TranslateAnimation transAnim = new TranslateAnimation(0, 0, mPlayerBarParentLinearLayout.getHeight(), 0);
                 transAnim.setDuration(150);
                 transAnim.setFillAfter(true);
-                mPlayerBarParentLinearLayout.setAnimation(transAnim);
                 mPlayerBarParentLinearLayout.startAnimation(transAnim);
 
             }

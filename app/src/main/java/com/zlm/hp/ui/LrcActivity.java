@@ -943,9 +943,8 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mSIPLayout.startAnimation(translateAnimation);
+
     }
 
     /**
@@ -962,9 +961,8 @@ public class LrcActivity extends BaseActivity {
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSIPLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
-        mSIPLayout.clearAnimation();
-        mSIPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mSIPLayout.startAnimation(translateAnimation);
+
         isSIPopViewShow = true;
     }
 
@@ -1022,9 +1020,9 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-        mSPlPLayout.clearAnimation();
-        mSPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+
+        mSPlPLayout.startAnimation(translateAnimation);
+
     }
 
     /**
@@ -1040,9 +1038,8 @@ public class LrcActivity extends BaseActivity {
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSPlPLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
-        mSPlPLayout.clearAnimation();
-        mSPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mSPlPLayout.startAnimation(translateAnimation);
+
         isSPLPopViewShow = true;
     }
 
@@ -1222,9 +1219,8 @@ public class LrcActivity extends BaseActivity {
         });
 
         mPlPopLinearLayout.setVisibility(View.VISIBLE);
-        mPlPLayout.clearAnimation();
-        mPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPlPLayout.startAnimation(translateAnimation);
+
         isPLPopViewShow = true;
 
 
@@ -1271,10 +1267,7 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
-
-        mPlPLayout.clearAnimation();
-        mPlPLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPlPLayout.startAnimation(translateAnimation);
 
     }
 
@@ -1303,9 +1296,9 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+
+        mMenuLayout.startAnimation(translateAnimation);
+
     }
 
     /**
@@ -1316,9 +1309,8 @@ public class LrcActivity extends BaseActivity {
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mMenuLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
-        mMenuLayout.clearAnimation();
-        mMenuLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mMenuLayout.startAnimation(translateAnimation);
+
         isPopViewShow = true;
     }
 
