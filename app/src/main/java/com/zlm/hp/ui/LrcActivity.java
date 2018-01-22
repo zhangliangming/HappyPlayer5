@@ -275,7 +275,7 @@ public class LrcActivity extends BaseActivity {
     private LrcPopSingerListAdapter mLrcPopSingerListAdapter;
     private LrcActivityListener mLrcActivityListener = new LrcActivityListener() {
         @Override
-        public void closeSingerPopListVeiw() {
+        public void closeSingerPopListView() {
             hideSPLPopView();
         }
     };
@@ -1925,6 +1925,6 @@ public class LrcActivity extends BaseActivity {
 
 
     public interface LrcActivityListener {
-        void closeSingerPopListVeiw();
+        void closeSingerPopListView();
     }
 }
