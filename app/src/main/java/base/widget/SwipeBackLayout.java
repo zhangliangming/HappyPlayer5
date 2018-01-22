@@ -83,6 +83,10 @@ public class SwipeBackLayout extends LinearLayout {
      * layout初始化
      */
     private boolean isLayoutInit = false;
+    /**
+     * 是否允许拖动
+     */
+    private boolean isAllowDrag = true;
 
     //
     private SwipeBackLayoutListener mSwipeBackLayoutListener;
@@ -157,6 +161,7 @@ public class SwipeBackLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        if (!isAllowDrag) return super.onInterceptTouchEvent(event);
         try {
 
 
@@ -225,6 +230,7 @@ public class SwipeBackLayout extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (!isAllowDrag) return super.onTouchEvent(event);
         try {
             obtainVelocityTracker(event);
             mDragHelper.processTouchEvent(event);
@@ -303,8 +309,9 @@ public class SwipeBackLayout extends LinearLayout {
                 //1.计算view移动的百分比0~1
                 float percent = left * 1f / getWidth();
 
-                if (mShadowEnable)
+                if (mShadowEnable) {
                     drawMask();
+                }
 
 
                 //logger.e("mContentViewCurX=" + left);
@@ -381,7 +388,7 @@ public class SwipeBackLayout extends LinearLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         //拖动未结束或者正在拖动
-        if ((!isDragFinish || isTouchMove) && mShadowEnable)
+        if (!isDragFinish || isTouchMove && mShadowEnable)
             canvas.drawRect(0, 0, contentView.getLeft(), getHeight(), mFadePaint);
     }
 
@@ -414,6 +421,9 @@ public class SwipeBackLayout extends LinearLayout {
 
     /////////////////////////////////////////////////////////////////////
 
+    public void setAllowDrag(boolean allowDrag) {
+        isAllowDrag = allowDrag;
+    }
 
     public void setmSwipeBackLayoutListener(SwipeBackLayoutListener mSwipeBackLayoutListener) {
         this.mSwipeBackLayoutListener = mSwipeBackLayoutListener;
