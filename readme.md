@@ -1,6 +1,8 @@
 # 项目分支代码声明 #
 branch-master：该分支代码是我与DyncKathline、liupeng110参与开发，该APP的界面和功能与我之前写的有较大的差别。
 branch-zlm：该分支代码是我个人开发的（我会不定期同步最新的代码），如需要查看我之前写的代码，请切换分支即可。
+> Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
+这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
 - 2018-01-22：对SwipeBackLayout.java也增加是否允许滑动

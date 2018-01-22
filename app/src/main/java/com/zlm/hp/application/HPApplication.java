@@ -2,8 +2,6 @@ package com.zlm.hp.application;
 
 import android.app.Application;
 
-import com.tencent.bugly.Bugly;
-import com.zlm.hp.constants.Constant;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -146,7 +144,7 @@ public class HPApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
+//        Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
     }
 
     public boolean isPlayServiceForceDestroy() {
