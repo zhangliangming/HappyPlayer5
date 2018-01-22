@@ -10,7 +10,7 @@
         android:id="@+id/rotateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/skin_player_bg">
+        android:background="@android:color/black">
 
         <base.widget.SingerImageView
             android:id="@+id/singerimg"
@@ -98,7 +98,7 @@
                         android:layout_width="@dimen/title_height"
                         android:layout_height="@dimen/title_height"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true"/>
+                        android:layout_alignParentTop="true" />
 
 
                 </RelativeLayout>
@@ -194,7 +194,7 @@
                     layout="@layout/layout_lrc_playbar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/lrc_bar_height"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true" />
 
 
             </RelativeLayout>
@@ -207,13 +207,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
     <include
         layout="@layout/layout_lrc_singerlist_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"/>
+        android:visibility="invisible" />
 
 </RelativeLayout>
