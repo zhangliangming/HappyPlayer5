@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.manager.ActivityManage;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -74,8 +75,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 logger.e(e.toString());
             }
             //退出程序
-            android.os.Process.killProcess(android.os.Process.myPid());
-            System.exit(1);
+            ActivityManage.getInstance().exit();
         }
     }
 

@@ -4,7 +4,7 @@
     android:id="@+id/rotateLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/skin_player_bg"
+    android:background="@android:color/black"
     tools:context="com.zlm.hp.ui.LrcActivity">
 
     <com.zlm.hp.widget.SingerImageView

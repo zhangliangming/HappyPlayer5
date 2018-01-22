@@ -87,7 +87,6 @@ public class AudioPlayerService extends Service {
 
     ///////////////////////////////通知栏//////////////////////////////
     private int mNotificationPlayBarId = 19900420;
-    private NotificationManager mNotificationManager;
     /**
      * 状态栏播放器视图
      */
@@ -163,23 +162,23 @@ public class AudioPlayerService extends Service {
      */
     private void initNotificationView() {
 
-        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         String tickerText = "乐乐音乐";
 
         //判断系统版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
             // 通知渠道的id
             String CHANNEL_ID = "hp_channel";
             String CHANNEL_NAME = "hp";
 
-            if (mNotificationManager.getNotificationChannel(CHANNEL_ID) == null) {
+            if (notificationManager.getNotificationChannel(CHANNEL_ID) == null) {
 
                 int importance = NotificationManager.IMPORTANCE_LOW;
                 NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, CHANNEL_NAME, importance);
                 mChannel.enableLights(true);
-                mNotificationManager.createNotificationChannel(mChannel);
+                notificationManager.createNotificationChannel(mChannel);
             }
 
             // Create a notification and set the notification channel.
@@ -426,7 +425,7 @@ public class AudioPlayerService extends Service {
 
         mPlayBarNotification.contentView = mNotifyPlayBarRemoteViews;
 
-        mNotificationManager.notify(mNotificationPlayBarId, mPlayBarNotification);
+        startForeground(mNotificationPlayBarId, mPlayBarNotification);
 
     }
 
@@ -445,7 +444,7 @@ public class AudioPlayerService extends Service {
         mNotificationReceiver.unregisterReceiver(getApplicationContext());
 
         //关闭通知栏
-        mNotificationManager.cancel(mNotificationPlayBarId);
+        stopForeground(true);
 
         releasePlayer();
         logger.i("音频播放服务销毁");

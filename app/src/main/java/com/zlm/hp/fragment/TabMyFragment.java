@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.dialog.AlartOneButtonDialog;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
+import com.zlm.hp.manager.ActivityManage;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
@@ -379,8 +380,9 @@ public class TabMyFragment extends BaseFragment {
             public void twoButtonClick() {
 
                 mHPApplication.setAppClose(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+
+                ActivityManage.getInstance().exit();
+
             }
         });
 

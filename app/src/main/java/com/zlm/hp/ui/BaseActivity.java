@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.view.WindowManager;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.manager.ActivityManage;
 import com.zlm.hp.permissions.StoragePermissionUtil;
 
 import java.lang.reflect.Field;
@@ -99,6 +102,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
         loadData(false);
+
+        ActivityManage.getInstance().addActivity(this);
     }
 
     protected void preLoad() {
@@ -184,4 +189,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void finish() {
+        ActivityManage.getInstance().removeActivity(this);
+        super.finish();
+    }
 }
