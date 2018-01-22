@@ -23,7 +23,7 @@ public class NaviMenuHelper {
     public static boolean onNavigationItemSelected(MenuItem item, BaseActivity activity) {
         switch (item.getItemId()) {
             case R.id.action_setting:
-                startActivity(activity, AboutActivity.class);
+//                startActivity(activity, AboutActivity.class);
                 return true;
             case R.id.action_skin_peeler:
                 updateSkin(activity);
