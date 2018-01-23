@@ -76,6 +76,8 @@
     <string name="choose_lyrics">"选择歌词"</string>
     <string name="not_lyrics">"无歌词"</string>
     <string name="please_enter_singer_name">"请输入歌手名称"</string>
+    <string name="current_network_not_available">当前网络不可用，点击屏幕刷新</string>
+    <string name="current_network_not_wifi_close_only_wifi_mode">当前网络不是WIFI，关闭仅WIFI联网模式</string>
 
     <string name="sure">确定</string>
     <string name="cancel">取消</string>

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.zlm.hp.R;
 
@@ -56,6 +58,10 @@ public abstract class BaseFragment extends StatedFragment {
      *
      */
     private RelativeLayout mNetBGLayout;
+    /**
+     * 没有网络时的文字描述
+     */
+    private TextView mTvNonetMsg;
 
 
     /////////////////////////////////////////////////////////////////////
@@ -78,6 +84,10 @@ public abstract class BaseFragment extends StatedFragment {
                     showLoadingViewHandler();
                     break;
                 case SHOWNONETView:
+                    @StringRes int resId = (int) msg.obj;
+                    if(mTvNonetMsg != null) {
+                        mTvNonetMsg.setText(resId);
+                    }
                     showNoNetViewHandler();
                     break;
             }
@@ -110,6 +120,7 @@ public abstract class BaseFragment extends StatedFragment {
         //
         mNetContainer = mainView.findViewById(R.id.net_container);
         View noNetView = inflater.inflate(R.layout.layout_fragment_nonet, null, false);
+        mTvNonetMsg = noNetView.findViewById(R.id.nonet_msg);
 
         //
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -241,8 +252,11 @@ public abstract class BaseFragment extends StatedFragment {
     /**
      * 显示无网络界面
      */
-    public void showNoNetView() {
-        mShowViewHandler.sendEmptyMessage(SHOWNONETView);
+    public void showNoNetView(@StringRes int resId) {
+        Message obtain = Message.obtain();
+        obtain.what = SHOWNONETView;
+        obtain.obj = resId;
+        mShowViewHandler.sendMessage(obtain);
     }
 
     /**

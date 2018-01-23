@@ -118,7 +118,9 @@ public class TabRecommendFragment extends BaseFragment {
             @Override
             public void onPostExecute(HttpResult httpResult) {
                 if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
-                    showNoNetView();
+                    showNoNetView(R.string.current_network_not_available);
+                } else if(httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                    showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
                     //

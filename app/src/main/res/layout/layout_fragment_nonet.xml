@@ -22,15 +22,16 @@
             android:textSize="@dimen/base_img_height" />
 
         <TextView
+            android:id="@+id/nonet_msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nonet_img"
             android:layout_marginTop="10dp"
             android:gravity="center|center_vertical"
             android:singleLine="true"
-            android:text="当前网络不可用，点击屏幕刷新"
+            android:text="@string/current_network_not_available"
             android:textColor="@color/def_bar_title_color"
-            android:textSize="18dp" />
+            android:textSize="18sp" />
 
 
     </RelativeLayout>

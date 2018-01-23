@@ -338,9 +338,14 @@ public class SearchFragment extends BaseFragment {
             @Override
             public void onPostExecute(HttpResult httpResult) {
                 if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
-                    if (showView)
-                        showNoNetView();
+                    if (showView) {
+                        showNoNetView(R.string.current_network_not_available);
+                    }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
+
+                } else if(httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                    showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
+
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
                     //
@@ -363,12 +368,14 @@ public class SearchFragment extends BaseFragment {
                         }
                     }
                     mAdapter.notifyDataSetChanged();
-                    if (showView)
+                    if (showView) {
                         showContentView();
+                    }
 
                 } else {
-                    if (showView)
+                    if (showView) {
                         showContentView();
+                    }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
                 }
 
