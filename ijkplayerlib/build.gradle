@@ -10,16 +10,16 @@ android {
         versionCode 1
         versionName "1.0"
 
-        sourceSets {
-            main {
-                jniLibs.srcDir 'libs'
-            }
-            instrumentTest.setRoot('tests')
-            debug.setRoot('build-types/debug')
-            release.setRoot('build-types/release')
-        }
+//        sourceSets {
+//            main {
+//                jniLibs.srcDir 'libs'
+//            }
+//            instrumentTest.setRoot('tests')
+//            debug.setRoot('build-types/debug')
+//            release.setRoot('build-types/release')
+//        }
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
     buildTypes {
