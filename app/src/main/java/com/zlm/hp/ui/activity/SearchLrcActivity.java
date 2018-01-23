@@ -14,9 +14,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -26,12 +23,12 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.application.HPApplication;
+import com.zlm.hp.media.net.api.DownloadLyricsUtil;
+import com.zlm.hp.media.net.api.SearchLyricsUtil;
+import com.zlm.hp.media.net.entity.DownloadLyricsResult;
+import com.zlm.hp.media.net.entity.SearchLyricsResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.mp3.net.api.DownloadLyricsUtil;
-import com.zlm.hp.mp3.net.api.SearchLyricsUtil;
-import com.zlm.hp.mp3.net.entity.DownloadLyricsResult;
-import com.zlm.hp.mp3.net.entity.SearchLyricsResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.ui.fragment.LrcFragment;
 import com.zlm.hp.ui.widget.transformer.ZoomOutPageTransformer;
@@ -83,15 +80,6 @@ public class SearchLrcActivity extends BaseActivity {
      * 加载中布局
      */
     private RelativeLayout mLoadingContainer;
-    /**
-     * 加载图标
-     */
-    private IconfontTextView mLoadImgView;
-
-    /**
-     * 旋转动画
-     */
-    private Animation rotateAnimation;
 
     /**
      * 内容布局
@@ -330,10 +318,6 @@ public class SearchLrcActivity extends BaseActivity {
         mCurIndexTv.setText("0");
         //
         mLoadingContainer = findViewById(R.id.loading);
-        mLoadImgView = findViewById(R.id.load_img);
-        rotateAnimation = AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate);
-        rotateAnimation.setInterpolator(new LinearInterpolator());// 匀速
-        mLoadImgView.startAnimation(rotateAnimation);
         //
         mContentContainer = findViewById(R.id.content);
 
@@ -356,13 +340,8 @@ public class SearchLrcActivity extends BaseActivity {
      * 显示加载窗口
      */
     private void showLoadingViewHandler() {
-
-
         mContentContainer.setVisibility(View.GONE);
         mLoadingContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
-        mLoadImgView.startAnimation(rotateAnimation);
-
     }
 
     /**
@@ -378,7 +357,6 @@ public class SearchLrcActivity extends BaseActivity {
     private void showContentViewHandler() {
         mContentContainer.setVisibility(View.VISIBLE);
         mLoadingContainer.setVisibility(View.GONE);
-        mLoadImgView.clearAnimation();
     }
 
     /**

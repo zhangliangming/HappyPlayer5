@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
+import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.model.AudioInfo;

@@ -8,9 +8,9 @@ import android.database.Cursor;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 
-import com.zlm.hp.mp3.audio.AudioFileReader;
-import com.zlm.hp.mp3.audio.TrackInfo;
-import com.zlm.hp.mp3.audio.utils.AudioUtil;
+import com.zlm.hp.media.audio.AudioFileReader;
+import com.zlm.hp.media.audio.TrackInfo;
+import com.zlm.hp.media.audio.utils.AudioUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.StorageInfo;
 

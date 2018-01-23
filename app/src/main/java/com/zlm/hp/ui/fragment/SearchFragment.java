@@ -20,8 +20,8 @@ import com.zlm.hp.adapter.RankSongAdapter;
 import com.zlm.hp.adapter.SearchResultAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.mp3.net.api.SearchResultHttpUtil;
-import com.zlm.hp.mp3.net.model.HttpResult;
+import com.zlm.hp.media.net.api.SearchResultHttpUtil;
+import com.zlm.hp.media.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 

@@ -23,10 +23,10 @@ import com.zlm.hp.R;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.model.SongSingerInfo;
-import com.zlm.hp.mp3.net.api.SearchArtistPicUtil;
-import com.zlm.hp.mp3.net.api.SearchSingerImgHttpUtil;
-import com.zlm.hp.mp3.net.entity.SearchArtistPicResult;
-import com.zlm.hp.mp3.net.entity.SearchSingerImgResult;
+import com.zlm.hp.media.net.api.SearchArtistPicUtil;
+import com.zlm.hp.media.net.api.SearchSingerImgHttpUtil;
+import com.zlm.hp.media.net.entity.SearchArtistPicResult;
+import com.zlm.hp.media.net.entity.SearchSingerImgResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 
 import java.io.File;

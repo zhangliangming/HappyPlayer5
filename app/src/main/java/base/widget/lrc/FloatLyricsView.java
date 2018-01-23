@@ -12,8 +12,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.zlm.hp.R;
-import com.zlm.hp.mp3.lyrics.model.LyricsLineInfo;
-import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
+import com.zlm.hp.media.lyrics.model.LyricsLineInfo;
+import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 
 import java.util.TreeMap;
 

@@ -14,9 +14,6 @@ import android.view.Display;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
@@ -26,10 +23,10 @@ import com.zlm.hp.R;
 import com.zlm.hp.adapter.SearchSingerAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.SongSingerDB;
+import com.zlm.hp.media.net.api.SearchArtistPicUtil;
+import com.zlm.hp.media.net.entity.SearchArtistPicResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.SongSingerInfo;
-import com.zlm.hp.mp3.net.api.SearchArtistPicUtil;
-import com.zlm.hp.mp3.net.entity.SearchArtistPicResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 
 import java.util.ArrayList;
@@ -73,16 +70,6 @@ public class SearchSingerActivity extends BaseActivity {
      * 加载中布局
      */
     private RelativeLayout mLoadingContainer;
-    /**
-     * 加载图标
-     */
-    private IconfontTextView mLoadImgView;
-
-    /**
-     * 旋转动画
-     */
-    private Animation rotateAnimation;
-
     /**
      * 内容布局
      */
@@ -278,11 +265,6 @@ public class SearchSingerActivity extends BaseActivity {
         //
         //
         mLoadingContainer = findViewById(R.id.loading);
-        mLoadImgView = findViewById(R.id.load_img);
-        rotateAnimation = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.anim_rotate);
-        rotateAnimation.setInterpolator(new LinearInterpolator());// 匀速
-        mLoadImgView.startAnimation(rotateAnimation);
         //
         mContentContainer = findViewById(R.id.content);
 
@@ -395,13 +377,8 @@ public class SearchSingerActivity extends BaseActivity {
      * 显示加载窗口
      */
     private void showLoadingViewHandler() {
-
-
         mContentContainer.setVisibility(View.GONE);
         mLoadingContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
-        mLoadImgView.startAnimation(rotateAnimation);
-
     }
 
     /**
@@ -417,7 +394,6 @@ public class SearchSingerActivity extends BaseActivity {
     private void showContentViewHandler() {
         mContentContainer.setVisibility(View.VISIBLE);
         mLoadingContainer.setVisibility(View.GONE);
-        mLoadImgView.clearAnimation();
     }
 
 

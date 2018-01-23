@@ -11,7 +11,7 @@ import android.widget.RelativeLayout;
 import com.zlm.hp.R;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.mp3.net.entity.SearchArtistPicResult;
+import com.zlm.hp.media.net.entity.SearchArtistPicResult;
 import com.zlm.hp.ui.activity.SearchSingerActivity;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;

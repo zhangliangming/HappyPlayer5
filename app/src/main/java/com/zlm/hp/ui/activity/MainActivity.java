@@ -45,7 +45,7 @@ import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
-import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
+import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;

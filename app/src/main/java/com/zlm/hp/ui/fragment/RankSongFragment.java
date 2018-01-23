@@ -16,9 +16,9 @@ import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.mp3.net.api.RankSongHttpUtil;
-import com.zlm.hp.mp3.net.entity.RankListResult;
-import com.zlm.hp.mp3.net.model.HttpResult;
+import com.zlm.hp.media.net.api.RankSongHttpUtil;
+import com.zlm.hp.media.net.entity.RankListResult;
+import com.zlm.hp.media.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 
