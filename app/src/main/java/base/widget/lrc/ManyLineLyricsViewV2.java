@@ -20,9 +20,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Scroller;
 
 import com.zlm.hp.R;
-import com.zlm.hp.lyrics.model.LyricsLineInfo;
-import com.zlm.hp.lyrics.model.TranslateLrcLineInfo;
-import com.zlm.hp.lyrics.utils.LyricsUtil;
+import com.zlm.hp.mp3.lyrics.model.LyricsLineInfo;
+import com.zlm.hp.mp3.lyrics.model.TranslateLrcLineInfo;
+import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.util.List;

@@ -29,7 +29,7 @@ import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.NotificationReceiver;
-import com.zlm.hp.ui.MainActivity;
+import com.zlm.hp.ui.activity.MainActivity;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 

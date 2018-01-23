@@ -39,7 +39,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.SplashActivity"
+            android:name=".ui.activity.SplashActivity"
             android:theme="@style/LaunchStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -48,19 +48,19 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:theme="@style/noTransparentTheme" />
-        <activity android:name=".ui.LrcActivity" />
-        <activity android:name=".ui.AboutActivity" />
-        <activity android:name=".ui.ScanActivity" />
+        <activity android:name=".ui.activity.LrcActivity" />
+        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.ScanActivity" />
 
         <service
             android:name=".service.AudioPlayerService"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.SearchLrcActivity" />
-        <activity android:name=".ui.SearchSingerActivity" />
+        <activity android:name=".ui.activity.SearchLrcActivity" />
+        <activity android:name=".ui.activity.SearchSingerActivity" />
 
         <receiver android:name=".receiver.PhoneReceiver">
             <intent-filter>
@@ -69,13 +69,13 @@
         </receiver>
 
         <activity
-            android:name=".ui.LockScreenActivity"
+            android:name=".ui.activity.LockScreenActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:launchMode="singleInstance"
             android:taskAffinity="bear.love.peach.ui.lockscreen"
             android:theme="@style/LockScreenBase" />
-        <activity android:name=".ui.SkinActivity"/>
+        <activity android:name=".ui.activity.SkinActivity"/>
     </application>
 
 </manifest>

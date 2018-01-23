@@ -10,13 +10,12 @@ import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.net.entity.RankListResult;
+import com.zlm.hp.mp3.net.entity.RankListResult;
 import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.SerializableObjUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import base.utils.PreferencesUtil;
