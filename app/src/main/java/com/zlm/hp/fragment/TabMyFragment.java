@@ -401,10 +401,7 @@ public class TabMyFragment extends BaseFragment {
 
             @Override
             public void twoButtonClick() {
-
-                HPApplication.getInstance().setAppClose(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
+                    HPApplication.getInstance().exit();
             }
         });
 

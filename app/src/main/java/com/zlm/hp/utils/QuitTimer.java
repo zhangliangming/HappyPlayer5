@@ -60,10 +60,8 @@ public class QuitTimer {
                 mTimerCallback.onEvent(mTimerRemain);
                 mHandler.postDelayed(this, DateUtils.SECOND_IN_MILLIS);
             } else {
-                HPApplication.getInstance().setAppClose(true);
-                android.os.Process.killProcess(android.os.Process.myPid());
-                System.exit(0);
                 mPlayService.onDestroy();
+                HPApplication.getInstance().exit();
             }
         }
     };

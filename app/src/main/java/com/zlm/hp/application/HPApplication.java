@@ -1,8 +1,10 @@
 package com.zlm.hp.application;
 
+import android.app.Activity;
 import android.app.Application;
 
 import com.tencent.bugly.Bugly;
+import com.zlm.hp.constants.Constant;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -13,6 +15,8 @@ import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.SerializableObjUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import base.utils.PreferencesUtil;
@@ -21,131 +25,44 @@ import base.utils.PreferencesUtil;
  * Created by zhangliangming on 2017/7/15.
  */
 public class HPApplication extends Application {
-    /**
-     * 播放服务是否被强迫回收
-     */
-    private boolean playServiceForceDestroy = false;
-    /**
-     * 应用关闭
-     */
-    private boolean appClose = false;
-    /**
-     * 应用是否是第一次启动
-     */
-    private boolean isFrist = true;
-
-    /**
-     * 是否开启问候音
-     */
-    private boolean isSayHello = false;
-
-    /**
-     * 应用是否在wifi下联网
-     */
-    private boolean isWifi = true;
-    /**
-     * 应用是否在桌面显示歌词
-     */
-    private boolean isDesktop = false;
-    /**
-     * 应用是否显示锁屏，isLockScreen为true时才生效
-     */
-    private boolean isShowLockScreen = true;
-    /**
-     * 应用是否在锁屏显示歌词
-     */
-    private boolean isLockScreen = false;
-
-    /**
-     * 播放歌曲id
-     */
-    private String playIndexHashID = "";
-
-    /**
-     * 底部按钮是否打开
-     */
-    private boolean isBarMenuShow = false;
-
-    /**
-     * 歌曲播放模式
-     */
-    private int playModel = 0; // 0是 顺序播放 1是随机播放 2是循环播放 3是单曲播放
-
-    /**
-     * 播放歌曲状态
-     */
-    private int playStatus;
-
-    /**
-     * 当前播放列表
-     */
-    private List<AudioInfo> curAudioInfos;
-    /**
-     * 设置当前正在播放的歌曲
-     */
-    private AudioInfo curAudioInfo;
-
-    /**
-     * 当前歌曲
-     */
-    private AudioMessage curAudioMessage;
-
-    /**
-     * 排行数据
-     */
-    private RankListResult rankListResult;
-
-    /**
-     * 是否是歌词快进
-     */
-    private boolean isLrcSeekTo = false;
-
-    /**
-     * 歌词字体大小
-     */
-    private int lrcFontSize = 50;
-    /**
-     * 最小字体大小
-     */
-    private int minLrcFontSize = 50;
-
-    /**
-     * 最大字体大小
-     */
-    private int maxLrcFontSize = 70;
-    /**
-     * 歌词颜色索引
-     */
-    private int lrcColorIndex = 0;
-
-    /**
-     * 歌词颜色集合
-     */
-    private String[] lrcColorStr = {"#fada83", "#fe8db6", "#feb88e",
-            "#adfe8e", "#8dc7ff", "#e69bff"};
-
-
-    /**
-     * 是否线控
-     */
-    private boolean isWire = true;
-
-    /**
-     * 是否是多行歌词
-     */
-    private boolean isManyLineLrc = true;
+    private boolean playServiceForceDestroy = false;//播放服务是否被强迫回收
+    private boolean appClose = false;//应用关闭
+    private boolean isFrist = true;//应用是否是第一次启动
+    private boolean isSayHello = false;//是否开启问候音
+    private boolean isWifi = true;//应用是否在wifi下联网
+    private boolean isDesktop = false;//应用是否在桌面显示歌词
+    private boolean isShowLockScreen = true;//应用是否显示锁屏，isLockScreen为true时才生效
+    private boolean isLockScreen = false;//应用是否在锁屏显示歌词
+    private String playIndexHashID = "";// 播放歌曲id
+    private boolean isBarMenuShow = false;//底部按钮是否打开
+    private int playModel = 0; //歌曲播放模式   0 顺序   1随机   2循环 3单曲
+    private int playStatus;//播放歌曲状态
+    private List<AudioInfo> curAudioInfos;//当前播放列表
+    private AudioInfo curAudioInfo;//设置当前正在播放的歌曲
+    private AudioMessage curAudioMessage;//当前歌曲
+    private RankListResult rankListResult;//排行数据
+    private boolean isLrcSeekTo = false;//是否是歌词快进
+    private int lrcFontSize = 50;//歌词字体大小
+    private int minLrcFontSize = 50;//最小字体大小
+    private int maxLrcFontSize = 70;//最大字体大小
+    private int lrcColorIndex = 0;//歌词颜色索引
+    private String[] lrcColorStr = {"#fada83", "#fe8db6", "#feb88e", "#adfe8e", "#8dc7ff", "#e69bff"};//歌词颜色集合
+    private boolean isWire = true;//是否线控
+    private boolean isManyLineLrc = true;//是否是多行歌词
     private static HPApplication instance;
+      List<Activity> list=new ArrayList<>();
+
 
     public static HPApplication getInstance() {
         return instance;
     }
 
-
-    @Override
-    public void onCreate() {
+    @Override  public void onCreate() {
         super.onCreate();
         instance = this;
+        registerActivityLifecycleCallbacks(new LifeCallback_Activity());
         Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
+
     }
 
     public boolean isPlayServiceForceDestroy() {
@@ -170,7 +87,6 @@ public class HPApplication extends Application {
 
     public void setFrist(boolean frist) {
         isFrist = frist;
-        //
         PreferencesUtil.putValue(getApplicationContext(), PreferencesConstants.isFrist_KEY, isFrist);
     }
 
@@ -399,9 +315,6 @@ public class HPApplication extends Application {
         PreferencesUtil.putValue(getApplicationContext(), PreferencesConstants.isManyLineLrc_KEY, isManyLineLrc);
     }
 
-    ///////////////////////
-
-
     public String[] getLrcColorStr() {
         return lrcColorStr;
     }
@@ -413,4 +326,14 @@ public class HPApplication extends Application {
     public int getMaxLrcFontSize() {
         return maxLrcFontSize;
     }
+
+    public void exit(){
+        HPApplication.getInstance().setAppClose(true);
+        for (Activity activity : list) {
+                  activity.finish();
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
+    }
+
 }
