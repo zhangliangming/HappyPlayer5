@@ -5,9 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/HappyPlayer5.iml" filepath="$PROJECT_DIR$/.idea/HappyPlayer5.iml" />
       <module fileurl="file://G:\diy\app\HappyPlayer5\HappyPlayer5.iml" filepath="G:\diy\app\HappyPlayer5\HappyPlayer5.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://G:\diy\app\HappyPlayer5\app\app.iml" filepath="G:\diy\app\HappyPlayer5\app\app.iml" />
       <module fileurl="file://$PROJECT_DIR$/ijkplayerlib/ijkplayerlib.iml" filepath="$PROJECT_DIR$/ijkplayerlib/ijkplayerlib.iml" />
-      <module fileurl="file://G:\diy\app\HappyPlayer5\ijkplayerlib\ijkplayerlib.iml" filepath="G:\diy\app\HappyPlayer5\ijkplayerlib\ijkplayerlib.iml" />
     </modules>
   </component>
 </project>
