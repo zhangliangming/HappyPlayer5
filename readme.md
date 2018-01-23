@@ -5,6 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-23:之前退出会黑一下,改为全局退出方式 需要退出的地方调用 HPApplication.getInstance().exit();
 - 2018-01-22(@zlm)：修复歌曲多个歌手时，获取歌手名称的首字母出错的问题。
 - 2018-01-22：
 1.优化了SwipeBackLayout.java不允许滑动时，没有阴影
