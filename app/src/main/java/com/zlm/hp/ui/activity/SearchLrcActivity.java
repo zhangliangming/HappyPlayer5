@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +23,9 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zlm.hp.ui.widget.transformer.ZoomOutPageTransformer;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.ui.fragment.LrcFragment;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.mp3.net.api.DownloadLyricsUtil;
@@ -34,11 +33,13 @@ import com.zlm.hp.mp3.net.api.SearchLyricsUtil;
 import com.zlm.hp.mp3.net.entity.DownloadLyricsResult;
 import com.zlm.hp.mp3.net.entity.SearchLyricsResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
+import com.zlm.hp.ui.fragment.LrcFragment;
+import com.zlm.hp.ui.widget.transformer.ZoomOutPageTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.IconfontTextView;
 
@@ -69,10 +70,6 @@ public class SearchLrcActivity extends BaseActivity {
     private final int SHOWLOADINGVIEW = 2;
     private final int SHOWCONTENTVIEW = 3;
 
-    /**
-     * http请求
-     */
-    private AsyncTaskUtil mAsyncTaskUtil;
     private List<DownloadLyricsResult> mDatas;
     private ArrayList<Fragment> mLrcViews;
     private ViewPager mViewPager;
@@ -105,6 +102,7 @@ public class SearchLrcActivity extends BaseActivity {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -140,6 +138,7 @@ public class SearchLrcActivity extends BaseActivity {
     };
 
     private TabFragmentAdapter adapter;
+    private Runnable runnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -442,16 +441,12 @@ public class SearchLrcActivity extends BaseActivity {
             mDatas.clear();
         }
 
-        //
-        if (mAsyncTaskUtil != null && !mAsyncTaskUtil.isCancelled()) {
-            mAsyncTaskUtil.cancel(true);
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
         }
-        mAsyncTaskUtil = new AsyncTaskUtil();
-        mAsyncTaskUtil.setSleepTime(sleepTime);
-        mAsyncTaskUtil.setAsyncTaskListener(new AsyncTaskUtil.AsyncTaskListener() {
+        runnable = new Runnable() {
             @Override
-            public void doInBackground() {
-
+            public void run() {
                 String songName = mSongNameEditText.getText().toString();
                 String singerName = mSingerNameEditText.getText().toString();
                 //加载歌词
@@ -464,7 +459,7 @@ public class SearchLrcActivity extends BaseActivity {
 
                 //获取歌曲列表
                 List<SearchLyricsResult> results = SearchLyricsUtil.searchLyrics(mContext, keyWords, mDuration, "");
-                if (results != null && results.size() > 0)
+                if (results != null && results.size() > 0) {
                     for (int i = 0; i < results.size(); i++) {
                         SearchLyricsResult searchLyricsResult = results.get(i);
                         if (searchLyricsResult != null) {
@@ -474,11 +469,7 @@ public class SearchLrcActivity extends BaseActivity {
                             }
                         }
                     }
-            }
-
-            @Override
-            public void onPostExecute() {
-                //
+                }
 
                 for (int i = 0; i < mDatas.size(); i++) {
                     DownloadLyricsResult downloadLyricsResult = mDatas.get(i);
@@ -500,8 +491,8 @@ public class SearchLrcActivity extends BaseActivity {
 
                 showContentView();
             }
-        });
-        mAsyncTaskUtil.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
 
     }
 
@@ -546,9 +537,8 @@ public class SearchLrcActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        //
-        if (mAsyncTaskUtil != null && !mAsyncTaskUtil.isCancelled()) {
-            mAsyncTaskUtil.cancel(true);
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
         }
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());

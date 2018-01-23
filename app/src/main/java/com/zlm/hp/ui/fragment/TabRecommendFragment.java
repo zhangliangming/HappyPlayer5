@@ -10,11 +10,11 @@ import com.zlm.hp.adapter.RecommendAdapter;
 import com.zlm.hp.mp3.net.api.RankListHttpUtil;
 import com.zlm.hp.mp3.net.entity.RankListResult;
 import com.zlm.hp.mp3.net.model.HttpResult;
-import com.zlm.hp.utils.AsyncTaskHttpUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 
 /**
@@ -39,10 +39,7 @@ public class TabRecommendFragment extends BaseFragment {
     //
     private RecommendAdapter mAdapter;
     private ArrayList<RankListResult> mDatas;
-    /**
-     * http请求
-     */
-    private AsyncTaskHttpUtil mAsyncTaskHttpUtil;
+    private Runnable runnable;
 
     public TabRecommendFragment() {
 
@@ -107,19 +104,14 @@ public class TabRecommendFragment extends BaseFragment {
      * 加载数据
      */
     private void loadDataUtil(final int sleepTime) {
-        mAsyncTaskHttpUtil = new AsyncTaskHttpUtil();
-        mAsyncTaskHttpUtil.setSleepTime(sleepTime);
-        mAsyncTaskHttpUtil.setAsyncTaskListener(new AsyncTaskHttpUtil.AsyncTaskListener() {
+        //
+        runnable = new Runnable() {
             @Override
-            public HttpResult doInBackground() {
-                return RankListHttpUtil.rankList(mActivity);
-            }
-
-            @Override
-            public void onPostExecute(HttpResult httpResult) {
+            public void run() {
+                HttpResult httpResult = RankListHttpUtil.rankList(mActivity);
                 if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
                     showNoNetView(R.string.current_network_not_available);
-                } else if(httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
                     showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
@@ -145,14 +137,15 @@ public class TabRecommendFragment extends BaseFragment {
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
                 }
             }
-        });
-        mAsyncTaskHttpUtil.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
     @Override
     public void onDestroy() {
-        if (mAsyncTaskHttpUtil != null)
-            mAsyncTaskHttpUtil.cancel(true);
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         super.onDestroy();
     }
 

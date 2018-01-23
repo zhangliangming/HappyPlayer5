@@ -8,19 +8,18 @@ import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.mp3.download.DownloadTask;
-import com.zlm.hp.mp3.download.constant.DownloadTaskConstant;
-import com.zlm.hp.mp3.download.interfaces.IDownloadTaskEvent;
-import com.zlm.hp.mp3.download.manager.DownloadTaskManage;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.DownloadThreadInfo;
+import com.zlm.hp.mp3.download.DownloadTask;
+import com.zlm.hp.mp3.download.constant.DownloadTaskConstant;
+import com.zlm.hp.mp3.download.interfaces.IDownloadTaskEvent;
+import com.zlm.hp.mp3.download.manager.DownloadTaskManage;
 import com.zlm.hp.mp3.net.api.SongInfoHttpUtil;
 import com.zlm.hp.mp3.net.entity.SongInfoResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.util.Date;
@@ -28,6 +27,7 @@ import java.util.List;
 
 import base.utils.DateUtil;
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 
 /**
@@ -310,11 +310,9 @@ public class DownloadAudioManager {
             mContext.sendBroadcast(updateIntent);
         }
         //重新获取歌曲下载路径
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected Void doInBackground(String... strings) {
-
-
+            public void run() {
                 //获取歌曲最新的下载路径
 
                 SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
@@ -348,12 +346,8 @@ public class DownloadAudioManager {
                 Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
                 updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(updateIntent);
-
-                return super.doInBackground(strings);
             }
-        }.execute("");
-
-
+        });
     }
 
     /**

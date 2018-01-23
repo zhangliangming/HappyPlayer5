@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zlm.hp.constants.ResourceConstants;
+import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.mp3.lyrics.model.LyricsInfo;
 import com.zlm.hp.mp3.lyrics.utils.LyricsIOUtils;
 import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
-import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.mp3.net.api.DownloadLyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -18,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 
 /**
  * 歌词管理器
@@ -65,24 +65,9 @@ public class LyricsManager {
         //1.从缓存中获取
         //2.从本地文件中获取
         //3.从网络中获取
-        new AsyncTaskUtil() {
-
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
-                AudioMessage audioMessage = new AudioMessage();
-                audioMessage.setHash(hash);
-                //发送加载完成广播
-                Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCLOADED);
-                loadedIntent.putExtra(AudioMessage.KEY, audioMessage);
-                loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                mContext.sendBroadcast(loadedIntent);
-            }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-
+            public void run() {
                 AudioMessage audioMessage = new AudioMessage();
                 audioMessage.setHash(hash);
                 //发送搜索中广播
@@ -92,7 +77,7 @@ public class LyricsManager {
                 mContext.sendBroadcast(searchingIntent);
 
                 if (mLyricsUtils.containsKey(hash)) {
-                    return null;
+                    return;
                 }
                 //
                 File lrcFile = LyricsUtil.getLrcFile(mContext, fileName);
@@ -118,9 +103,13 @@ public class LyricsManager {
                     }
                 }
 
-                return super.doInBackground(strings);
+                //发送加载完成广播
+                Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCLOADED);
+                loadedIntent.putExtra(AudioMessage.KEY, audioMessage);
+                loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                mContext.sendBroadcast(loadedIntent);
             }
-        }.execute("");
+        });
     }
 
     public LyricsUtil getLyricsUtil(String hash) {

@@ -39,22 +39,13 @@ import com.zlm.hp.adapter.MainPopPlayListAdapter;
 import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
-import com.zlm.hp.ui.fragment.DownloadMusicFragment;
-import com.zlm.hp.ui.fragment.LikeMusicFragment;
-import com.zlm.hp.ui.fragment.LocalMusicFragment;
-import com.zlm.hp.ui.fragment.RankSongFragment;
-import com.zlm.hp.ui.fragment.RecentMusicFragment;
-import com.zlm.hp.ui.fragment.SearchFragment;
-import com.zlm.hp.ui.fragment.TabMyFragment;
-import com.zlm.hp.ui.fragment.TabRecommendFragment;
-import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
+import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;
@@ -63,7 +54,15 @@ import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.receiver.PhoneReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.service.AudioPlayerService;
-import com.zlm.hp.utils.AsyncTaskUtil;
+import com.zlm.hp.ui.fragment.DownloadMusicFragment;
+import com.zlm.hp.ui.fragment.LikeMusicFragment;
+import com.zlm.hp.ui.fragment.LocalMusicFragment;
+import com.zlm.hp.ui.fragment.RankSongFragment;
+import com.zlm.hp.ui.fragment.RecentMusicFragment;
+import com.zlm.hp.ui.fragment.SearchFragment;
+import com.zlm.hp.ui.fragment.TabMyFragment;
+import com.zlm.hp.ui.fragment.TabRecommendFragment;
+import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.MediaUtil;
 import com.zlm.hp.utils.NaviMenuHelper;
@@ -73,6 +72,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.utils.ColorUtil;
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.CircleImageView;
 import base.widget.IconfontImageButtonTextView;
@@ -386,13 +386,12 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
         if (!isRestoreInstance) {
-            new AsyncTaskUtil() {
+            ThreadUtil.runInThread(new Runnable() {
                 @Override
-                protected Void doInBackground(String... strings) {
+                public void run() {
                     AudioPlayerManager.getAudioPlayerManager(mContext).initSongInfoData();
-                    return super.doInBackground(strings);
                 }
-            }.execute("");
+            });
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AndPermission.with(mActivity)

@@ -13,17 +13,17 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.ui.widget.dialog.AlartOneButtonDialog;
-import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
+import com.zlm.hp.ui.widget.dialog.AlartOneButtonDialog;
+import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.utils.AppOpsUtils;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.IntentUtils;
 
+import base.utils.ThreadUtil;
 import base.widget.SetupBGButton;
 
 /**
@@ -432,88 +432,52 @@ public class TabMyFragment extends BaseFragment {
      * 加载喜欢歌曲列表
      */
     private void loadDownloadCount() {
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
+            public void run() {
+                mDownloadCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDonwloadAudioCount();
                 mHandler.sendEmptyMessage(UPDATEDOWNLOADCOUNT);
             }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-
-                mDownloadCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDonwloadAudioCount();
-
-                return super.doInBackground(strings);
-            }
-        }.execute("");
+        });
     }
 
     /**
      * 加载喜欢歌曲列表
      */
     private void loadLikeCount() {
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
+            public void run() {
+                mLikeCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLikeAudioCount();
                 mHandler.sendEmptyMessage(UPDATELIKECOUNT);
             }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-
-                mLikeCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLikeAudioCount();
-
-                return super.doInBackground(strings);
-            }
-        }.execute("");
+        });
     }
 
     /**
      * 加载本地音乐个数
      */
     private void loadLocalCount() {
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
+            public void run() {
+                mLocalCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLocalAudioCount();
                 mHandler.sendEmptyMessage(UPDATELOCALCOUNT);
             }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-
-                mLocalCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getLocalAudioCount();
-
-                return super.doInBackground(strings);
-            }
-        }.execute("");
+        });
     }
 
     /**
      * 获取最近音乐个数
      */
     private void loadRecentCount() {
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-
+            public void run() {
+                mRecentCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getRecentAudioCount();
                 mHandler.sendEmptyMessage(UPDATERECENTCOUNT);
             }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-
-                mRecentCount = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getRecentAudioCount();
-
-                return super.doInBackground(strings);
-            }
-        }.execute("");
+        });
     }
 
     /**

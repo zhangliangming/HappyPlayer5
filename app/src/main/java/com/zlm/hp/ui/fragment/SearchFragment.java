@@ -24,11 +24,11 @@ import com.zlm.hp.mp3.net.api.SearchResultHttpUtil;
 import com.zlm.hp.mp3.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.utils.AsyncTaskHttpUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.IconfontTextView;
 import base.widget.SearchEditText;
@@ -82,11 +82,6 @@ public class SearchFragment extends BaseFragment {
      * 每页显示条数
      */
     private int mPageSize = 30;
-
-    /**
-     * http请求
-     */
-    private AsyncTaskHttpUtil mAsyncTaskHttpUtil;
     /**
      * 清空
      */
@@ -103,6 +98,7 @@ public class SearchFragment extends BaseFragment {
             doAudioReceive(context, intent);
         }
     };
+    private Runnable runnable;
 
     public SearchFragment() {
 
@@ -316,34 +312,20 @@ public class SearchFragment extends BaseFragment {
      * 加载数据
      */
     private void loadDataUtil(int sleepTime, final boolean showView) {
-        //
-        if (mAsyncTaskHttpUtil != null && !mAsyncTaskHttpUtil.isCancelled()) {
-            mAsyncTaskHttpUtil.cancel(true);
-        }
-        //
-        //
         mAdapter.setState(RankSongAdapter.LOADING);
         mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
         //
-        mAsyncTaskHttpUtil = new AsyncTaskHttpUtil();
-        mAsyncTaskHttpUtil.setSleepTime(sleepTime);
-        mAsyncTaskHttpUtil.setAsyncTaskListener(new AsyncTaskHttpUtil.AsyncTaskListener() {
+        runnable = new Runnable() {
             @Override
-            public HttpResult doInBackground() {
-
-                return SearchResultHttpUtil.search(mActivity, mSearchEditText.getText().toString(), mPage + "", mPageSize + "");
-
-            }
-
-            @Override
-            public void onPostExecute(HttpResult httpResult) {
+            public void run() {
+                HttpResult httpResult = SearchResultHttpUtil.search(mActivity, mSearchEditText.getText().toString(), mPage + "", mPageSize + "");
                 if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
                     if (showView) {
                         showNoNetView(R.string.current_network_not_available);
                     }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
 
-                } else if(httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
                     showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
 
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
@@ -378,19 +360,17 @@ public class SearchFragment extends BaseFragment {
                     }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
                 }
-
-
             }
-        });
-
-        mAsyncTaskHttpUtil.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
 
     @Override
     public void onDestroy() {
-        if (mAsyncTaskHttpUtil != null)
-            mAsyncTaskHttpUtil.cancel(true);
+        if (runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
         super.onDestroy();
     }

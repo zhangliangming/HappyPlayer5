@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,13 +31,13 @@ import com.zlm.hp.model.SongSingerInfo;
 import com.zlm.hp.mp3.net.api.SearchArtistPicUtil;
 import com.zlm.hp.mp3.net.entity.SearchArtistPicResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.ButtonRelativeLayout;
 import base.widget.IconfontTextView;
@@ -89,6 +90,7 @@ public class SearchSingerActivity extends BaseActivity {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -127,10 +129,6 @@ public class SearchSingerActivity extends BaseActivity {
     private SearchSingerAdapter mAdapter;
     private List<SearchArtistPicResult> mDatas;
     private AudioInfo mAudioInfo;
-    /**
-     * http请求
-     */
-    private AsyncTaskUtil mAsyncTaskUtil;
 
     /**
      * 屏幕宽度
@@ -160,6 +158,7 @@ public class SearchSingerActivity extends BaseActivity {
     private TextView mAllSelectTv;
 
     private String mCurSingerName;
+    private Runnable runnable;
 
     @Override
     protected int setContentViewId() {
@@ -456,23 +455,12 @@ public class SearchSingerActivity extends BaseActivity {
     private void loadDataUtil(int sleepTime) {
         showLoadingView();
 
-        //
-        if (mAsyncTaskUtil != null && !mAsyncTaskUtil.isCancelled()) {
-            mAsyncTaskUtil.cancel(true);
-        }
-        mAsyncTaskUtil = new AsyncTaskUtil();
-        mAsyncTaskUtil.setSleepTime(sleepTime);
-        mAsyncTaskUtil.setAsyncTaskListener(new AsyncTaskUtil.AsyncTaskListener() {
+        runnable = new Runnable() {
             @Override
-            public void doInBackground() {
-                //
+            public void run() {
                 String singerName = mSearchEditText.getText().toString();
                 mSelectDatas = SongSingerDB.getSongSingerDB(getApplicationContext()).getAllImgUrlBySingerName(mCurSingerName);
                 mDatas = SearchArtistPicUtil.searchArtistPic(mContext, singerName, mScreensWidth + "", mScreensHeight + "", "app");
-            }
-
-            @Override
-            public void onPostExecute() {
 
                 if (mSelectDatas == null) {
                     mSelectDatas = new HashMap<>();
@@ -488,17 +476,15 @@ public class SearchSingerActivity extends BaseActivity {
 
                 showContentView();
             }
-        });
-        mAsyncTaskUtil.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
     @Override
     protected void onDestroy() {
-        //
-        if (mAsyncTaskUtil != null && !mAsyncTaskUtil.isCancelled()) {
-            mAsyncTaskUtil.cancel(true);
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
         }
-
         super.onDestroy();
     }
 

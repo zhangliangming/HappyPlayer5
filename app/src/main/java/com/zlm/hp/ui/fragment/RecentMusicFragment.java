@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +19,11 @@ import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.ThreadUtil;
 
 /**
  * 最近音乐
@@ -36,18 +38,21 @@ public class RecentMusicFragment extends BaseFragment {
     //
     private RecentOrLikeMusicAdapter mAdapter;
 
+    private Runnable runnable;
+
     private static final int LOADDATA = 0;
 
 
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOADDATA:
-                    loadDataUtil(500);
+                    loadDataUtil(0);
                     break;
             }
         }
@@ -145,10 +150,14 @@ public class RecentMusicFragment extends BaseFragment {
      */
     private void loadDataUtil(int sleepTime) {
         mDatas.clear();
-        new AsyncTaskUtil() {
+        runnable = new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
+            public void run() {
+                List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getAllRecentAudio();
+                for (int i = 0; i < data.size(); i++) {
+                    mDatas.add(data.get(i));
+                }
+
                 if (mDatas.size() > 0) {
                     mAdapter.setState(RecentOrLikeMusicAdapter.NOMOREDATA);
                 } else {
@@ -157,21 +166,16 @@ public class RecentMusicFragment extends BaseFragment {
                 mAdapter.notifyDataSetChanged();
                 showContentView();
             }
-
-            @Override
-            protected Void doInBackground(String... strings) {
-                List<AudioInfo> data = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getAllRecentAudio();
-                for (int i = 0; i < data.size(); i++) {
-                    mDatas.add(data.get(i));
-                }
-                return super.doInBackground(strings);
-            }
-        }.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
     @Override
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         super.onDestroy();
     }
 

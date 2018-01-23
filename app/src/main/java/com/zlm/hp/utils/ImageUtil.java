@@ -37,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import base.utils.ThreadUtil;
 import base.widget.CircleImageView;
 
 /**
@@ -292,19 +293,9 @@ public class ImageUtil {
      * @param hash
      */
     public static void loadSingerImg(final Context context, final String hash, final String singerName) {
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-
-                Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_SINGERIMGLOADED);
-                loadedIntent.putExtra("hash", hash);
-                loadedIntent.putExtra("singerName", singerName);
-                loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                context.sendBroadcast(loadedIntent);
-            }
-
-            @Override
-            protected Void doInBackground(String... strings) {
+            public void run() {
                 WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
                 Display display = wm.getDefaultDisplay();
                 int screensWidth = display.getWidth();
@@ -358,9 +349,13 @@ public class ImageUtil {
                     getSingerImgBitmap(context, songSingerInfo.getHash(), songSingerInfo.getSingerName(), songSingerInfo.getImgUrl(), true);
                 }
 
-                return super.doInBackground(strings);
+                Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_SINGERIMGLOADED);
+                loadedIntent.putExtra("hash", hash);
+                loadedIntent.putExtra("singerName", singerName);
+                loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                context.sendBroadcast(loadedIntent);
             }
-        }.execute("");
+        });
     }
 
     /**

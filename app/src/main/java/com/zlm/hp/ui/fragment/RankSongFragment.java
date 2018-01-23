@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,11 +21,11 @@ import com.zlm.hp.mp3.net.entity.RankListResult;
 import com.zlm.hp.mp3.net.model.HttpResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.utils.AsyncTaskHttpUtil;
 
 import java.util.ArrayList;
 import java.util.Map;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 
 /**
@@ -48,14 +49,11 @@ public class RankSongFragment extends BaseFragment {
     private RecyclerView mRecyclerView;
 
     private static final int LOADDATA = 0;
-    /**
-     * http请求
-     */
-    private AsyncTaskHttpUtil mAsyncTaskHttpUtil;
 
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -87,6 +85,7 @@ public class RankSongFragment extends BaseFragment {
             doAudioReceive(context, intent);
         }
     };
+    private Runnable runnable;
 
 
     public RankSongFragment() {
@@ -211,34 +210,23 @@ public class RankSongFragment extends BaseFragment {
      */
     private void loadDataUtil(int sleepTime, final boolean showView) {
         //
-        if (mAsyncTaskHttpUtil != null && !mAsyncTaskHttpUtil.isCancelled()) {
-            mAsyncTaskHttpUtil.cancel(true);
-        }
-
-        //
         mAdapter.setState(RankSongAdapter.LOADING);
         mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
-        //
-        mAsyncTaskHttpUtil = new AsyncTaskHttpUtil();
-        mAsyncTaskHttpUtil.setSleepTime(sleepTime);
-        mAsyncTaskHttpUtil.setAsyncTaskListener(new AsyncTaskHttpUtil.AsyncTaskListener() {
+
+        if (runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
+        runnable = new Runnable() {
             @Override
-            public HttpResult doInBackground() {
-
-                return RankSongHttpUtil.rankSong(mActivity, mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
-
-            }
-
-            @Override
-            public void onPostExecute(HttpResult httpResult) {
-
+            public void run() {
+                HttpResult httpResult = RankSongHttpUtil.rankSong(mActivity, mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
                 if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
                     if (showView) {
                         showNoNetView(R.string.current_network_not_available);
                     }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
 
-                } else if(httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
                     showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
 
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
@@ -273,19 +261,17 @@ public class RankSongFragment extends BaseFragment {
                     }
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
                 }
-
-
             }
-        });
-
-        mAsyncTaskHttpUtil.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
 
     @Override
     public void onDestroy() {
-        if (mAsyncTaskHttpUtil != null)
-            mAsyncTaskHttpUtil.cancel(true);
+        if (runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
         super.onDestroy();
     }

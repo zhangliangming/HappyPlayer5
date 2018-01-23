@@ -17,12 +17,12 @@ import com.zlm.hp.R;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.ButtonRelativeLayout;
 import base.widget.IconfontImageButtonTextView;
@@ -110,6 +110,7 @@ public class ScanActivity extends BaseActivity {
     };
     //////////////////////////////////////////////////
     private List<AudioInfo> mAudioInfoLists;
+    private Runnable runnable;
 
     @Override
     protected int setContentViewId() {
@@ -263,12 +264,11 @@ public class ScanActivity extends BaseActivity {
      */
     @SuppressLint("StaticFieldLeak")
     private void doFinish() {
-
-        new AsyncTaskUtil() {
-
+        runnable = new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
+            public void run() {
+                mAddResult = AudioInfoDB.getAudioInfoDB(getApplicationContext()).add(mAudioInfoLists);
+
                 if (mAddResult) {
 
                     //发送更新广播
@@ -284,14 +284,16 @@ public class ScanActivity extends BaseActivity {
                     ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_fail));
                 }
             }
+        };
+        ThreadUtil.runInThread(runnable);
+    }
 
-            @Override
-            protected Void doInBackground(String... strings) {
-                mAddResult = AudioInfoDB.getAudioInfoDB(getApplicationContext()).add(mAudioInfoLists);
-                return super.doInBackground(strings);
-            }
-        }.execute("");
-
+    @Override
+    public void onDestroy() {
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
+        super.onDestroy();
     }
 
     @Override

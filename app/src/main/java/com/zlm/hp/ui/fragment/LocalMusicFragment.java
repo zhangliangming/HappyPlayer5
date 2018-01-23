@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +20,11 @@ import com.zlm.hp.model.Category;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.ui.activity.ScanActivity;
-import com.zlm.hp.utils.AsyncTaskUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import base.utils.ThreadUtil;
 import base.widget.IconfontImageButtonTextView;
 
 /**
@@ -45,6 +46,7 @@ public class LocalMusicFragment extends BaseFragment {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -67,6 +69,7 @@ public class LocalMusicFragment extends BaseFragment {
             doAudioReceive(context, intent);
         }
     };
+    private Runnable runnable;
 
 
     public LocalMusicFragment() {
@@ -141,20 +144,9 @@ public class LocalMusicFragment extends BaseFragment {
 
 
     private void loadDataUtil() {
-
-
-        new AsyncTaskUtil() {
+        runnable = new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (mDatas.size() > 0) {
-                    mAdapter.notifyDataSetChanged();
-                }
-                showContentView();
-            }
-
-            @Override
-            protected Void doInBackground(String... strings) {
+            public void run() {
                 List<String> categorys = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getAllLocalCategory();
                 for (int i = 0; i < categorys.size(); i++) {
                     Category category = new Category();
@@ -164,10 +156,15 @@ public class LocalMusicFragment extends BaseFragment {
                     category.setCategoryItem(audioInfos);
 
                     mDatas.add(category);
+
+                    if (mDatas.size() > 0) {
+                        mAdapter.notifyDataSetChanged();
+                    }
+                    showContentView();
                 }
-                return super.doInBackground(strings);
             }
-        }.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
     /**
@@ -197,6 +194,9 @@ public class LocalMusicFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         super.onDestroy();
     }
 

@@ -20,6 +20,7 @@ import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.ui.activity.BaseActivity;
 import com.zlm.hp.ui.activity.MainActivity;
+import com.zlm.hp.utils.IntentUtils;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.io.IOException;
@@ -27,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.utils.ColorUtil;
-import base.utils.PermissionsCheckUtil;
 import base.utils.PreferencesUtil;
 
 /**
@@ -73,7 +73,7 @@ public class SplashActivity extends BaseActivity {
 
                         @Override
                         public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
-                            PermissionsCheckUtil.showMissingPermissionDialog(mActivity, R.string.need_access_read_write_external_storage);
+                            IntentUtils.gotoPermissionSetting(mActivity);
                         }
                     }).start();
         }else {

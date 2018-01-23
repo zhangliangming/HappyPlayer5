@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,10 +22,11 @@ import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import base.utils.ThreadUtil;
 
 /**
  * 下载音乐
@@ -44,6 +46,7 @@ public class DownloadMusicFragment extends BaseFragment {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -141,6 +144,7 @@ public class DownloadMusicFragment extends BaseFragment {
             }
         }
     };
+    private Runnable runnable;
 
 
     public DownloadMusicFragment() {
@@ -208,19 +212,9 @@ public class DownloadMusicFragment extends BaseFragment {
 
         mDatas.clear();
 
-
-        new AsyncTaskUtil() {
+        runnable = new Runnable() {
             @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                if (mDatas.size() > 0) {
-                    mAdapter.notifyDataSetChanged();
-                }
-                showContentView();
-            }
-
-            @Override
-            protected Void doInBackground(String... strings) {
+            public void run() {
                 Category category = new Category();
                 category.setCategoryName(mContext.getString(R.string.downloading));
                 List<Object> downloadInfos = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getDownloadingAudio();
@@ -233,15 +227,22 @@ public class DownloadMusicFragment extends BaseFragment {
                 category.setCategoryItem(downloadInfos);
                 mDatas.add(category);
 
-                return super.doInBackground(strings);
+                if (mDatas.size() > 0) {
+                    mAdapter.notifyDataSetChanged();
+                }
+                showContentView();
             }
-        }.execute("");
+        };
+        ThreadUtil.runInThread(runnable);
     }
 
     @Override
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
         mDownloadAudioReceiver.unregisterReceiver(mActivity.getApplicationContext());
+        if(runnable != null) {
+            ThreadUtil.cancelThread(runnable);
+        }
         super.onDestroy();
     }
 

@@ -7,18 +7,17 @@ import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
+import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.model.DownloadMessage;
+import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.mp3.download.DownloadTask;
 import com.zlm.hp.mp3.download.constant.DownloadTaskConstant;
 import com.zlm.hp.mp3.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.mp3.download.manager.DownloadTaskManage;
-import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.model.DownloadMessage;
-import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.mp3.net.api.SongInfoHttpUtil;
 import com.zlm.hp.mp3.net.entity.SongInfoResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -26,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 
 /**
  * 在线音频管理
@@ -210,10 +210,9 @@ public class OnLineAudioManager {
         }
         // String fileName = audioInfo.getSingerName() + " - " + audioInfo.getSongName();
         //重新获取歌曲下载路径
-        new AsyncTaskUtil() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
-            protected Void doInBackground(String... strings) {
-
+            public void run() {
                 //获取歌曲下载路径
 
                 SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
@@ -252,9 +251,8 @@ public class OnLineAudioManager {
 
 
                 mCurTaskId = task.getTaskId();
-                return super.doInBackground(strings);
             }
-        }.execute("");
+        });
     }
 
     /**
