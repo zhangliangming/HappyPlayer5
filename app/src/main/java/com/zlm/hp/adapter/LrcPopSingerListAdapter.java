@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.zlm.hp.R;
-import com.zlm.hp.ui.LrcActivity;
-import com.zlm.hp.ui.SearchSingerActivity;
+import com.zlm.hp.ui.activity.LrcActivity;
+import com.zlm.hp.ui.activity.SearchSingerActivity;
 import com.zlm.hp.utils.ImageUtil;
 
 import base.widget.CircleImageView;

@@ -8,9 +8,9 @@ import android.view.MenuItem;
 
 import com.zlm.hp.R;
 import com.zlm.hp.constants.PreferencesConstants;
-import com.zlm.hp.ui.AboutActivity;
-import com.zlm.hp.ui.BaseActivity;
-import com.zlm.hp.ui.SkinActivity;
+import com.zlm.hp.ui.activity.AboutActivity;
+import com.zlm.hp.ui.activity.BaseActivity;
+import com.zlm.hp.ui.activity.SkinActivity;
 
 import base.utils.PreferencesUtil;
 

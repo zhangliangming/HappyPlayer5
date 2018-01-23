@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.net.entity.RankListResult;
+import com.zlm.hp.mp3.net.entity.RankListResult;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ResourceFileUtil;

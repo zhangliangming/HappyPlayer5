@@ -4,11 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.zlm.hp.constants.ResourceConstants;
-import com.zlm.hp.lyrics.model.LyricsInfo;
-import com.zlm.hp.lyrics.utils.LyricsIOUtils;
-import com.zlm.hp.lyrics.utils.LyricsUtil;
+import com.zlm.hp.mp3.lyrics.model.LyricsInfo;
+import com.zlm.hp.mp3.lyrics.utils.LyricsIOUtils;
+import com.zlm.hp.mp3.lyrics.utils.LyricsUtil;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.net.api.DownloadLyricsUtil;
+import com.zlm.hp.mp3.net.api.DownloadLyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ResourceFileUtil;

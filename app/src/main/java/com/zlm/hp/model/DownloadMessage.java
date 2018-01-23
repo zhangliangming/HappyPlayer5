@@ -1,7 +1,5 @@
 package com.zlm.hp.model;
 
-import com.zlm.hp.libs.download.DownloadTask;
-
 import java.io.Serializable;
 
 /**
