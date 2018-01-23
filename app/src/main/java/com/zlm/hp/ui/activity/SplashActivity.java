@@ -18,6 +18,8 @@ import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.ui.activity.BaseActivity;
+import com.zlm.hp.ui.activity.MainActivity;
 import com.zlm.hp.utils.MediaUtil;
 
 import java.io.IOException;
