@@ -27,7 +27,6 @@ import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
-import com.zlm.hp.receiver.LockLrcReceiver;
 import com.zlm.hp.receiver.NotificationReceiver;
 import com.zlm.hp.ui.activity.MainActivity;
 import com.zlm.hp.utils.ImageUtil;
@@ -509,15 +508,15 @@ public class AudioPlayerService extends Service {
             cancelNotification();
         }
 
-        if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
-                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)
-                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-
-            //针对锁屏歌词开启时有用
-            Intent closeIntent = new Intent(LockLrcReceiver.ACTION_SHOWLRCMESSAGE);
-            closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            sendBroadcast(closeIntent);
-        }
+//        if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
+//                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)
+//                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
+//
+//            //针对锁屏歌词开启时有用
+//            Intent closeIntent = new Intent(LockLrcReceiver.ACTION_SHOWLRCMESSAGE);
+//            closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//            sendBroadcast(closeIntent);
+//        }
 
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)

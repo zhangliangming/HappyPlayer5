@@ -1,5 +1,6 @@
 package com.zlm.hp.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -120,6 +121,7 @@ public class LockScreenActivity extends BaseActivity {
     /**
      * 分钟广播
      */
+    @SuppressLint("HandlerLeak")
     private Handler mTimeHandler = new Handler() {
 
         @Override
@@ -174,6 +176,7 @@ public class LockScreenActivity extends BaseActivity {
      */
     private int mScreensWidth;
 
+    @SuppressLint("HandlerLeak")
     private Handler mExtraLrcTypeHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -825,7 +828,10 @@ public class LockScreenActivity extends BaseActivity {
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
         //注销分钟变化广播
-        unregisterReceiver(mTimeReceiver);
+        if(mTimeReceiver != null) {
+            unregisterReceiver(mTimeReceiver);
+            mTimeReceiver = null;
+        }
         //
         super.finish();
     }

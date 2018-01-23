@@ -1,5 +1,6 @@
 package com.zlm.hp.receiver;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -155,6 +156,7 @@ public class AudioBroadcastReceiver {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mAudioHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

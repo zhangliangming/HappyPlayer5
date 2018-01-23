@@ -1,5 +1,6 @@
 package com.zlm.hp.receiver;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -57,6 +58,7 @@ public class LockLrcReceiver {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mLockLrcHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
