@@ -28,7 +28,7 @@ public class NotificationReceiver {
     /**
      * 注册成功广播
      */
-    private String ACTION_SUCCESS = base_action + ".notification.success_" + new Date().getTime();
+    public static String ACTION_SUCCESS = base_action + ".notification.success_" + new Date().getTime();
 
     /**
      * 通知栏app播放歌曲
@@ -97,7 +97,7 @@ public class NotificationReceiver {
                 Intent intent = (Intent) msg.obj;
                 if (intent.getAction().equals(ACTION_SUCCESS)) {
                     isRegisterSuccess = true;
-
+                    mNotificationReceiverListener.onReceive(mContext, intent);
                 } else {
                     mNotificationReceiverListener.onReceive(mContext, intent);
                 }

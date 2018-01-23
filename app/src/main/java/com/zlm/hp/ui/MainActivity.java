@@ -409,12 +409,12 @@ public class MainActivity extends BaseActivity {
                         public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
                             AlartTwoButtonDialog mExitAlartDialog = new AlartTwoButtonDialog(mActivity, new AlartTwoButtonDialog.TwoButtonDialogListener() {
                                 @Override
-                                public void oneButtonClick() {
+                                public void onLeftButtonClick() {
 
                                 }
 
                                 @Override
-                                public void twoButtonClick() {
+                                public void onRightButtonClick() {
 
                                 }
                             });

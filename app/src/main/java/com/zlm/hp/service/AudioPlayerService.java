@@ -85,6 +85,8 @@ public class AudioPlayerService extends Service {
     private boolean isSeekTo = false;
 
     ///////////////////////////////通知栏//////////////////////////////
+    private final int NOTIFICATION_INIT = 0;
+    private final int NOTIFICATION_MSG = 1;
     private int mNotificationPlayBarId = 19900420;
     private NotificationManager mNotificationManager;
     /**
@@ -106,10 +108,14 @@ public class AudioPlayerService extends Service {
     private NotificationReceiver.NotificationReceiverListener mNotificationReceiverListener = new NotificationReceiver.NotificationReceiverListener() {
         @Override
         public void onReceive(Context context, Intent intent) {
-
-            Message msg = new Message();
+            Message msg = Message.obtain();
             msg.obj = intent;
-            msg.what = 1;
+            if (intent.getAction().equals(NotificationReceiver.ACTION_SUCCESS)) {
+                msg.what = NOTIFICATION_INIT;
+            } else {
+                msg.what = NOTIFICATION_MSG;
+            }
+
             mNotificationHandler.sendMessage(msg);
 
 
@@ -119,13 +125,17 @@ public class AudioPlayerService extends Service {
     /**
      *
      */
+    @SuppressLint("HandlerLeak")
     private Handler mNotificationHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             Intent intent = (Intent) msg.obj;
-            if (msg.what == 1) {
-
+            if (msg.what == NOTIFICATION_MSG) {
                 doNotificationReceive(getApplicationContext(), intent);
+            } else if(msg.what == NOTIFICATION_INIT) {
+                //初始化通知栏
+                initNotificationView();
+                doNotification(getApplicationContext(), intent);
             } else {
                 doNotification(getApplicationContext(), intent);
             }
@@ -152,9 +162,6 @@ public class AudioPlayerService extends Service {
 
 
         logger.i("音频播放服务启动");
-
-        //初始化通知栏
-        initNotificationView();
     }
 
     /**
@@ -215,7 +222,7 @@ public class AudioPlayerService extends Service {
         // FLAG_NO_CLEAR 该通知不能被状态栏的清除按钮给清除掉
         // FLAG_ONGOING_EVENT 通知放置在正在运行
         // FLAG_INSISTENT 是否一直进行，比如音乐一直播放，知道用户响应
-        mPlayBarNotification.flags= Notification.FLAG_FOREGROUND_SERVICE;
+        mPlayBarNotification.flags = Notification.FLAG_FOREGROUND_SERVICE;
         mPlayBarNotification.flags |= Notification.FLAG_ONGOING_EVENT;
         // mNotification.flags |= Notification.FLAG_NO_CLEAR;
 
@@ -321,7 +328,7 @@ public class AudioPlayerService extends Service {
             nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             sendBroadcast(nextIntent);
 
-        }else if (intent.getAction().equals(
+        } else if (intent.getAction().equals(
                 NotificationReceiver.NOTIFIATION_DESLRC_SHOW)) {
 
         } else if (intent.getAction().equals(
@@ -502,7 +509,7 @@ public class AudioPlayerService extends Service {
             cancelNotification();
         }
 
-        if(action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
+        if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
 

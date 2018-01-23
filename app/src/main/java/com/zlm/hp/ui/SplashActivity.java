@@ -1,18 +1,22 @@
 package com.zlm.hp.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.PermissionListener;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.libs.crash.CrashHandler;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.utils.MediaUtil;
 
@@ -21,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.utils.ColorUtil;
+import base.utils.PermissionsCheckUtil;
 import base.utils.PreferencesUtil;
 
 /**
@@ -53,8 +58,30 @@ public class SplashActivity extends BaseActivity {
      * 处理后台数据
      */
     private void doSomeThing() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            AndPermission.with(mActivity)
+                    .requestCode(110)
+                    .permission(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .callback(new PermissionListener() {
+                        @Override
+                        public void onSucceed(int requestCode, @NonNull List<String> grantPermissions) {
+                            scanLocalMusic();
+                        }
+
+                        @Override
+                        public void onFailed(int requestCode, @NonNull List<String> deniedPermissions) {
+                            PermissionsCheckUtil.showMissingPermissionDialog(mActivity, R.string.need_access_read_write_external_storage);
+                        }
+                    }).start();
+        }else {
+            scanLocalMusic();
+        }
+    }
+
+    private void scanLocalMusic() {
         //是否是第一次使用
-        boolean isFrist = (boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isFrist_KEY, true);
+        boolean isFrist = PreferencesUtil.getBooleanValue(getApplicationContext(), PreferencesConstants.isFrist_KEY, true);
         if (isFrist) {
             //第一次使用扫描本地歌曲
             final List<AudioInfo> audioInfos = new ArrayList<AudioInfo>();
@@ -82,10 +109,6 @@ public class SplashActivity extends BaseActivity {
             //设置延迟时间
             mDelayTime *= 3;
         }
-
-        //注册捕捉全局异常
-        CrashHandler crashHandler = new CrashHandler();
-        crashHandler.init(HPApplication.getInstance());
         //初始化配置数据
         initPreferencesData();
         loadSplashMusic();

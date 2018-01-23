@@ -66,7 +66,7 @@ public class AlartTwoButtonDialog extends Dialog {
             public void onClick(View arg0) {
                 if (listener != null) {
                     dismiss();
-                    listener.oneButtonClick();
+                    listener.onLeftButtonClick();
                 }
             }
         });
@@ -78,7 +78,7 @@ public class AlartTwoButtonDialog extends Dialog {
             public void onClick(View arg0) {
                 if (listener != null) {
                     dismiss();
-                    listener.twoButtonClick();
+                    listener.onRightButtonClick();
                 }
             }
         });
@@ -108,9 +108,9 @@ public class AlartTwoButtonDialog extends Dialog {
     }
 
     public interface TwoButtonDialogListener {
-        public void oneButtonClick();
+        public void onLeftButtonClick();
 
-        public void twoButtonClick();
+        public void onRightButtonClick();
     }
 
 }

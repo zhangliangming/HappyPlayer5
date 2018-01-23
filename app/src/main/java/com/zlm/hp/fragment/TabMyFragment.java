@@ -395,12 +395,12 @@ public class TabMyFragment extends BaseFragment {
         //
         mExitAlartDialog = new AlartTwoButtonDialog(mActivity, new AlartTwoButtonDialog.TwoButtonDialogListener() {
             @Override
-            public void oneButtonClick() {
+            public void onLeftButtonClick() {
 
             }
 
             @Override
-            public void twoButtonClick() {
+            public void onRightButtonClick() {
                     HPApplication.getInstance().exit();
             }
         });

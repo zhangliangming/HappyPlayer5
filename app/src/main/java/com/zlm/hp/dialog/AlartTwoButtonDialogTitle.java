@@ -74,7 +74,7 @@ public class AlartTwoButtonDialogTitle extends Dialog {
             public void onClick(View arg0) {
                 if (listener != null) {
                     dismiss();
-                    listener.oneButtonClick();
+                    listener.onLeftButtonClick();
                 }
             }
         });
@@ -86,7 +86,7 @@ public class AlartTwoButtonDialogTitle extends Dialog {
             public void onClick(View arg0) {
                 if (listener != null) {
                     dismiss();
-                    listener.twoButtonClick();
+                    listener.onRightButtonClick();
                 }
             }
         });

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.tencent.bugly.Bugly;
-import com.zlm.hp.constants.Constant;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
@@ -16,7 +15,6 @@ import com.zlm.hp.utils.SerializableObjUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import base.utils.PreferencesUtil;
@@ -60,7 +58,7 @@ public class HPApplication extends Application {
     @Override  public void onCreate() {
         super.onCreate();
         instance = this;
-        registerActivityLifecycleCallbacks(new LifeCallback_Activity());
+        registerActivityLifecycleCallbacks(new LifeCallbackActivity());
         Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
 
     }
@@ -328,7 +326,7 @@ public class HPApplication extends Application {
     }
 
     public void exit(){
-        HPApplication.getInstance().setAppClose(true);
+        setAppClose(true);
         for (Activity activity : list) {
                   activity.finish();
         }

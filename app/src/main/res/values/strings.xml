@@ -68,6 +68,7 @@
     <string name="please_choose_a_song">请选择歌曲</string>
     <string name="restore">还原了</string>
     <string name="need_access_read_sms">需要访问短信</string>
+    <string name="need_access_read_write_external_storage">需要访问本地读写权限</string>
     <string name="update_local_songs">"更新本地歌曲(%d)"</string>
     <string name="scan_local_songs">"已扫描(%d)首歌曲"</string>
     <string name="add_success">"添加成功"</string>
@@ -127,4 +128,6 @@
     //桌面歌词弹出窗口提示语
     <string name="desktop_dialog_tip">1.进入设置>更多应用>乐乐音乐>权限管理>显示悬浮窗\n2.开启允许</string>
     <string name="desktop_dialog_title">立即设置</string>
+    <string name="help">帮助</string>
+    <string name="please_manually_go_to_permission_management_page_to_set_up">请手动前往权限管理页面进行设置</string>
 </resources>
