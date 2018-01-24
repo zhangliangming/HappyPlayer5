@@ -30,6 +30,7 @@ import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.NotificationReceiver;
 import com.zlm.hp.ui.activity.MainActivity;
 import com.zlm.hp.utils.ImageUtil;
+import com.zlm.hp.utils.QuitTimer;
 import com.zlm.hp.utils.ResourceFileUtil;
 
 import java.io.File;
@@ -57,6 +58,7 @@ public class AudioPlayerService extends Service {
      * 播放器
      */
     private IMediaPlayer mMediaPlayer;
+    private final Handler mHandler = new Handler();
 
     /**
      * 播放线程
@@ -159,6 +161,16 @@ public class AudioPlayerService extends Service {
         mNotificationReceiver.setNotificationReceiverListener(mNotificationReceiverListener);
         mNotificationReceiver.registerReceiver(getApplicationContext());
 
+        QuitTimer.getInstance().init(this, mHandler, new QuitTimer.EventCallback<Long>() {
+            @Override
+            public void onEvent(Long aLong) {
+                //更新定时停止播放时间
+                Intent intent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_UPDATESTOPPLAYTIME);
+                intent.putExtra(AudioBroadcastReceiver.ACTION_SERVICE_UPDATESTOPPLAYTIME, aLong);
+                intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                sendBroadcast(intent);
+            }
+        });
 
         logger.i("音频播放服务启动");
     }
@@ -465,7 +477,7 @@ public class AudioPlayerService extends Service {
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
         mNotificationReceiver.unregisterReceiver(getApplicationContext());
 
-        //
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PAUSE);
         stopForeground(true);
         releasePlayer();
         logger.i("音频播放服务销毁");

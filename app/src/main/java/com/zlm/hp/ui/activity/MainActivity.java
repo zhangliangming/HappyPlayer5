@@ -42,10 +42,10 @@ import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.manager.OnLineAudioManager;
+import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
-import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.LockLrcReceiver;
@@ -66,6 +66,7 @@ import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.MediaUtil;
 import com.zlm.hp.utils.NaviMenuHelper;
+import com.zlm.hp.utils.QuitTimer;
 import com.zlm.hp.utils.ToastShowUtil;
 
 import java.util.ArrayList;
@@ -112,6 +113,7 @@ public class MainActivity extends BaseActivity {
     //侧边栏
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
+    private MenuItem timerItem;
 
     //////////////////////////标题栏/////////////////////////////////////////////////
 
@@ -690,6 +692,14 @@ public class MainActivity extends BaseActivity {
                 }
             }
 
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_UPDATESTOPPLAYTIME)) {
+            //更新定时停止播放时间
+            if (timerItem == null) {
+                timerItem = navigationView.getMenu().findItem(R.id.action_timer);
+            }
+            long remain = intent.getLongExtra(AudioBroadcastReceiver.ACTION_SERVICE_UPDATESTOPPLAYTIME, 0L);
+            String title = getString(R.string.menu_timer);
+            timerItem.setTitle(remain == 0 ? title : QuitTimer.formatTime(title + "(mm:ss)", remain));
         }
     }
 

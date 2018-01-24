@@ -7,6 +7,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.MenuItem;
 
 import com.zlm.hp.R;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.ui.activity.AboutActivity;
 import com.zlm.hp.ui.activity.BaseActivity;
@@ -87,10 +88,7 @@ public class NaviMenuHelper {
     }
 
     private static void exit(BaseActivity activity) {
-        activity.finish();
-//        PlayService service = AppCache.get().getPlayService();
-//        if (service != null) {
-//            service.quit();
-//        }
+        HPApplication.getInstance().exit();
+        QuitTimer.getInstance().stop();
     }
 }

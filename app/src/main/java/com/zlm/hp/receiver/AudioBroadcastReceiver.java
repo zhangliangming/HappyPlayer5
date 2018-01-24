@@ -68,6 +68,8 @@ public class AudioBroadcastReceiver {
     public static final String ACTION_SERVICE_PLAYINGMUSIC = base_action + ".service.playing.music";
     //播放错误
     public static final String ACTION_SERVICE_PLAYERRORMUSIC = base_action + ".service.playerror.music";
+    //更新定时停止播放时间
+    public static final String ACTION_SERVICE_UPDATESTOPPLAYTIME = base_action + ".service.update.stopplaytime";
 
     //歌词搜索中广播
     public static final String ACTION_LRCSEARCHING = base_action + ".lrc.searching";
@@ -125,6 +127,7 @@ public class AudioBroadcastReceiver {
         mAudioIntentFilter.addAction(ACTION_PREMUSIC);
         mAudioIntentFilter.addAction(ACTION_NEXTMUSIC);
         mAudioIntentFilter.addAction(ACTION_CANCELNOTIFICATION);
+        mAudioIntentFilter.addAction(ACTION_SERVICE_UPDATESTOPPLAYTIME);
 
         mAudioIntentFilter.addAction(ACTION_SERVICE_PLAYMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_PAUSEMUSIC);
