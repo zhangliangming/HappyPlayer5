@@ -449,25 +449,30 @@ public class SearchLrcActivity extends BaseActivity {
                     }
                 }
 
-                for (int i = 0; i < mDatas.size(); i++) {
-                    DownloadLyricsResult downloadLyricsResult = mDatas.get(i);
-                    LrcFragment lrcFragment = new LrcFragment(downloadLyricsResult, mCurAudioInfo);
-                    mLrcViews.add(lrcFragment);
-                }
-                //
-                if (mLrcViews.size() == 0) {
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.not_lyrics));
+                ThreadUtil.runOnUiThread(new Runnable() {//子线程里不能在开启线程，需要在UI线程中开启线程
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < mDatas.size(); i++) {
+                            DownloadLyricsResult downloadLyricsResult = mDatas.get(i);
+                            LrcFragment lrcFragment = new LrcFragment(downloadLyricsResult, mCurAudioInfo);
+                            mLrcViews.add(lrcFragment);
+                        }
+                        //
+                        if (mLrcViews.size() == 0) {
+                            ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.not_lyrics));
 
-                } else {
-                    mCurIndexTv.setText("1");
-                }
-                //
-                mSumTv.setText(mLrcViews.size() + "");
-                adapter = new TabFragmentAdapter(getSupportFragmentManager(), mLrcViews);
-                mViewPager.setAdapter(adapter);
+                        } else {
+                            mCurIndexTv.setText("1");
+                        }
+                        //
+                        mSumTv.setText(mLrcViews.size() + "");
+                        adapter = new TabFragmentAdapter(getSupportFragmentManager(), mLrcViews);
+                        mViewPager.setAdapter(adapter);
 
 
-                showContentView();
+                        showContentView();
+                    }
+                });
             }
         };
         ThreadUtil.runInThread(runnable);

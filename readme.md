@@ -5,6 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-24：修复了线程中开启线程的问题
 - 2018-01-23：
 1.使用线程池替代之前的线程
 2.修复了显示锁屏界面
