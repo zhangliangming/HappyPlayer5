@@ -283,6 +283,17 @@ public class LockScreenActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isAddStatusBar() {
+        setStatusColor(Color.TRANSPARENT);
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return R.id.status_parent_view;
+    }
+
+    @Override
     protected void preLoad() {
         super.preLoad();
         getWindow().addFlags(
@@ -807,18 +818,6 @@ public class LockScreenActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-
-    @Override
-    protected boolean isAddStatusBar() {
-        setStatusColor(Color.TRANSPARENT);
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return R.id.status_parent_view;
     }
 
     @Override

@@ -40,6 +40,22 @@ public class SplashActivity extends BaseActivity {
     private Runnable mAnimationRunnable;
     private int mDelayTime = 500;
 
+    @Override
+    protected int setContentViewId() {
+        //设置状态栏颜色
+        setStatusColor(ColorUtil.parserColor(Color.BLACK, 30));
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return 0;
+    }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
@@ -175,24 +191,6 @@ public class SplashActivity extends BaseActivity {
         }
 
     }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    protected int setContentViewId() {
-        //设置状态栏颜色
-        setStatusColor(ColorUtil.parserColor(Color.BLACK, 30));
-        return R.layout.activity_splash;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return 0;
-    }
-
 
     /**
      * 跳转到主页面

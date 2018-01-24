@@ -32,6 +32,16 @@ public class SkinActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return R.id.skin_layout;
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         //
@@ -62,16 +72,6 @@ public class SkinActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
 
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return R.id.skin_layout;
     }
 
     @Override

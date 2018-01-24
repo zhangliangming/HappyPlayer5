@@ -332,6 +332,24 @@ public class LrcActivity extends BaseActivity {
     private CustomDialog mPopDialog;
     private CustomDialog mSonginfoPopDialog;
 
+    @Override
+    protected int setContentViewId() {
+        return R.layout.activity_lrc;
+    }
+
+    @Override
+    protected boolean isAddStatusBar() {
+
+        setStatusColor(Color.TRANSPARENT);
+
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return R.id.lrc_layout;
+    }
+
     /**
      * 处理网络歌曲广播
      *
@@ -600,11 +618,6 @@ public class LrcActivity extends BaseActivity {
                 }
             }
         }
-    }
-
-    @Override
-    protected int setContentViewId() {
-        return R.layout.activity_lrc;
     }
 
     @Override
@@ -1904,21 +1917,6 @@ public class LrcActivity extends BaseActivity {
         }
         mRotateLinearLayout.finish();
     }
-
-
-    @Override
-    protected boolean isAddStatusBar() {
-
-        setStatusColor(Color.TRANSPARENT);
-
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return R.id.lrc_layout;
-    }
-
 
     public interface LrcActivityListener {
         void closeSingerPopListView();

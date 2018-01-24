@@ -363,6 +363,22 @@ public class MainActivity extends BaseActivity {
     private IconfontTextView mDeleteTv;
 
     @Override
+    protected int setContentViewId() {
+
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected boolean isAddStatusBar() {
+        return false;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return 0;
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
 
         //初始化标题栏视图
@@ -1353,22 +1369,6 @@ public class MainActivity extends BaseActivity {
 
             }
         }
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return false;
-    }
-
-    @Override
-    protected int setContentViewId() {
-
-        return R.layout.activity_main;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return 0;
     }
 
     @Override

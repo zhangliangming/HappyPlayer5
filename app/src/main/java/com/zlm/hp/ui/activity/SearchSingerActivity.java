@@ -153,6 +153,16 @@ public class SearchSingerActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return R.id.singer_layout;
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
         //
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
@@ -467,16 +477,6 @@ public class SearchSingerActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
         mHandler.sendEmptyMessage(INITDATA);
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return R.id.singer_layout;
     }
 
     @Override

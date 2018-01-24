@@ -31,6 +31,16 @@ public class AboutActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return R.id.about_layout;
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
 
         //
@@ -62,16 +72,6 @@ public class AboutActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
 
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return R.id.about_layout;
     }
 
     @Override

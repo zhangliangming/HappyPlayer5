@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -129,18 +128,18 @@ public class SearchLrcActivity extends BaseActivity {
     private Runnable runnable;
 
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
     protected int setContentViewId() {
         return R.layout.activity_search_lrc;
+    }
+
+    @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return 0;
     }
 
     @Override
@@ -535,16 +534,6 @@ public class SearchLrcActivity extends BaseActivity {
     public void finish() {
         super.finish();
         overridePendingTransition(0, R.anim.out_to_bottom);
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return 0;
     }
 
     @Override

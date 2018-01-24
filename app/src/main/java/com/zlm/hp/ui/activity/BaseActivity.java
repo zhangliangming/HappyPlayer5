@@ -114,6 +114,15 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     protected abstract int setContentViewId();
 
+    protected abstract boolean isAddStatusBar();
+
+    /**
+     * 设置添加状态栏的视图
+     *
+     * @return
+     */
+    public abstract int setStatusBarParentView();
+
     /**
      * 初始化view视图
      *
@@ -125,15 +134,6 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 加载数据
      */
     protected abstract void loadData(boolean isRestoreInstance);
-
-    protected abstract boolean isAddStatusBar();
-
-    /**
-     * 设置添加状态栏的视图
-     *
-     * @return
-     */
-    public abstract int setStatusBarParentView();
 
     /**
      * @Description: 获取状态栏高度

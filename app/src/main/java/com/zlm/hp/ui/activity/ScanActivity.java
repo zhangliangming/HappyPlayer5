@@ -118,6 +118,16 @@ public class ScanActivity extends BaseActivity {
     }
 
     @Override
+    protected boolean isAddStatusBar() {
+        return true;
+    }
+
+    @Override
+    public int setStatusBarParentView() {
+        return 0;
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
 
         IconfontImageButtonTextView closeImg = findViewById(R.id.close_img);
@@ -294,15 +304,5 @@ public class ScanActivity extends BaseActivity {
             ThreadUtil.cancelThread(runnable);
         }
         super.onDestroy();
-    }
-
-    @Override
-    protected boolean isAddStatusBar() {
-        return true;
-    }
-
-    @Override
-    public int setStatusBarParentView() {
-        return 0;
     }
 }
