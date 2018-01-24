@@ -327,6 +327,7 @@ public class HPApplication extends Application {
 
     public void exit(){
         setAppClose(true);
+        setPlayStatus(AudioPlayerManager.STOP);
         for (Activity activity : list) {
                   activity.finish();
         }

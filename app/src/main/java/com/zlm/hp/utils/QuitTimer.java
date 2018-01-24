@@ -62,8 +62,9 @@ public class QuitTimer {
                 mTimerCallback.onEvent(mTimerRemain);
                 mHandler.postDelayed(this, DateUtils.SECOND_IN_MILLIS);
             } else {
-                mPlayService.onDestroy();
+                //定时结束后退出APP
                 HPApplication.getInstance().exit();
+                mPlayService.onDestroy();
             }
         }
     };

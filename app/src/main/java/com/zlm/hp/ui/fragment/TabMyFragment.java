@@ -22,6 +22,7 @@ import com.zlm.hp.ui.widget.dialog.AlartOneButtonDialog;
 import com.zlm.hp.ui.widget.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.utils.AppOpsUtils;
 import com.zlm.hp.utils.IntentUtils;
+import com.zlm.hp.utils.QuitTimer;
 
 import base.utils.ThreadUtil;
 import base.widget.SetupBGButton;
@@ -401,7 +402,8 @@ public class TabMyFragment extends BaseFragment {
 
             @Override
             public void onRightButtonClick() {
-                    HPApplication.getInstance().exit();
+                HPApplication.getInstance().exit();
+                QuitTimer.getInstance().stop();
             }
         });
 
