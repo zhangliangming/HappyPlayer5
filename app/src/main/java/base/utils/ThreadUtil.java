@@ -51,8 +51,9 @@ public class ThreadUtil {
      *
      * @param task
      */
-    public static void runOnUiThread(Runnable task) {
+    public static Runnable runOnUiThread(Runnable task) {
         mHandler.post(task);
+        return task;
     }
 
 
@@ -62,8 +63,13 @@ public class ThreadUtil {
      * @param task
      * @param delayMillis 延时时间，单位毫秒
      */
-    public static void runOnUIThread(Runnable task, long delayMillis) {
+    public static Runnable runOnUIThread(Runnable task, long delayMillis) {
         mHandler.postDelayed(task, delayMillis);
+        return task;
+    }
+
+    public static void cancelUIThread(Runnable task) {
+        mHandler.removeCallbacks(task);
     }
 
 
@@ -78,7 +84,7 @@ public class ThreadUtil {
                 if (mThreadPool == null) {
                     // cpu个数
                     int cpuNum = Runtime.getRuntime().availableProcessors();
-                     int count = cpuNum * 2 + 1;
+                    int count = cpuNum * 2 + 1;
 //                    int count = 15;
                     System.out.println("cpu个数:" + cpuNum);
                     mThreadPool = new ThreadPool(count, count, 0L);

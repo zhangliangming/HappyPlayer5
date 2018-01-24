@@ -449,7 +449,7 @@ public class SearchLrcActivity extends BaseActivity {
                     }
                 }
 
-                ThreadUtil.runOnUiThread(new Runnable() {//子线程里不能在开启线程，需要在UI线程中开启线程
+                Runnable runnable = ThreadUtil.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < mDatas.size(); i++) {
@@ -473,6 +473,7 @@ public class SearchLrcActivity extends BaseActivity {
                         showContentView();
                     }
                 });
+                ThreadUtil.cancelUIThread(runnable);
             }
         };
         ThreadUtil.runInThread(runnable);
