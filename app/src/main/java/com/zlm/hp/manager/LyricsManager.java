@@ -77,6 +77,11 @@ public class LyricsManager {
                 mContext.sendBroadcast(searchingIntent);
 
                 if (mLyricsUtils.containsKey(hash)) {
+                    //发送加载完成广播
+                    Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCLOADED);
+                    loadedIntent.putExtra(AudioMessage.KEY, audioMessage);
+                    loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(loadedIntent);
                     return;
                 }
                 //
