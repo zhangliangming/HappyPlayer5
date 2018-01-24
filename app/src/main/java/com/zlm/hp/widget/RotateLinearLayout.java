@@ -308,8 +308,8 @@ public class RotateLinearLayout extends FrameLayout {
                     float curY = event.getRawY();
                     int deltaX = (int) (mInterceptX - curX);
                     int deltaY = (int) (mInterceptY - curY);
-                    if (Math.abs(deltaX) < mTouchSlop && Math.abs(deltaY) < mTouchSlop) {
-                        if (mRotateListener != null && !isInIgnoreView(event)) {
+                    if (Math.abs(deltaX) < mTouchSlop && Math.abs(deltaY) < mTouchSlop && !isInIgnoreView(event)) {
+                        if (mRotateListener != null) {
                             mRotateListener.onClick();
                             return true;
                         }
