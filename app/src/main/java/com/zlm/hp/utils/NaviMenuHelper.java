@@ -33,7 +33,7 @@ public class NaviMenuHelper {
 //                nightMode(activity);
                 return true;
             case R.id.action_timer:
-//                timerDialog(activity);
+                timerDialog(activity);
                 return true;
             case R.id.action_exit:
                 exit(activity);
