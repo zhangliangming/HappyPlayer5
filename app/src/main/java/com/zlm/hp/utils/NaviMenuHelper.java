@@ -11,6 +11,7 @@ import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.ui.activity.AboutActivity;
 import com.zlm.hp.ui.activity.BaseActivity;
+import com.zlm.hp.ui.activity.SettingActivity;
 import com.zlm.hp.ui.activity.SkinActivity;
 
 import base.utils.PreferencesUtil;
@@ -24,7 +25,7 @@ public class NaviMenuHelper {
     public static boolean onNavigationItemSelected(MenuItem item, BaseActivity activity) {
         switch (item.getItemId()) {
             case R.id.action_setting:
-//                startActivity(activity, AboutActivity.class);
+                startActivity(activity, SettingActivity.class);
                 return true;
             case R.id.action_skin_peeler:
                 updateSkin(activity);

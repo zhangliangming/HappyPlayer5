@@ -77,6 +77,9 @@ public class PreferencesConstants {
     public static String playMode_KEY = "play_mode";
     public static String splashUrl_KEY = "splash_url";
     public static String nightMode_KEY = "night_mode";
+    public static String sound_effect_setting_KEY = "sound_effect";
+    public static String filter_size_setting_KEY = "filter_size";
+    public static String filter_time_setting_KEY = "filter_time";
     ///////////////////////////////如下是临时变量key//////////////////////////////////////////
     /**
      * 播放状态key

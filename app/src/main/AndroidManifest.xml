@@ -3,7 +3,7 @@
     package="com.zlm.hp">
 
     <!-- 短信权限 -->
-    <!--<uses-permission android:name="android.permission.SEND_SMS" />-->
+    <!-- <uses-permission android:name="android.permission.SEND_SMS" /> -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
 
@@ -38,6 +38,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <provider
+            android:name=".ui.MyProvider"
+            android:authorities="${applicationId}.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/LaunchStyle">
@@ -75,7 +84,8 @@
             android:launchMode="singleInstance"
             android:taskAffinity="bear.love.peach.ui.lockscreen"
             android:theme="@style/LockScreenBase" />
-        <activity android:name=".ui.activity.SkinActivity"/>
+        <activity android:name=".ui.activity.SkinActivity" />
+        <activity android:name=".ui.activity.SettingActivity"/>
     </application>
 
 </manifest>

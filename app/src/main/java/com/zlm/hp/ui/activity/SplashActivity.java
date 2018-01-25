@@ -101,21 +101,27 @@ public class SplashActivity extends BaseActivity {
         if (isFrist) {
             //第一次使用扫描本地歌曲
             final List<AudioInfo> audioInfos = new ArrayList<AudioInfo>();
-            MediaUtil.scanLocalMusic(SplashActivity.this, new MediaUtil.ForeachListener() {
+            MediaUtil.scanMusic(mContext, new MediaUtil.ForeachListener() {
                 @Override
-                public void foreach(AudioInfo audioInfo) {
-                    if (audioInfo != null) {
-                        audioInfos.add(audioInfo);
+                public void before() {
+                    AudioInfoDB.getAudioInfoDB(mContext).deleteTab();
+                }
+
+                @Override
+                public void foreach(List<AudioInfo> audioInfoList) {
+                    if (audioInfoList != null) {
+                        audioInfos.clear();
+                        audioInfos.addAll(audioInfoList);
                     }
                 }
 
                 @Override
                 public boolean filter(String hash) {
-                    return AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(hash);
+                    return AudioInfoDB.getAudioInfoDB(mContext).isExists(hash);
                 }
             });
             if (audioInfos.size() > 0) {
-                AudioInfoDB.getAudioInfoDB(getApplicationContext()).add(audioInfos);
+                AudioInfoDB.getAudioInfoDB(mContext).add(audioInfos);
             }
 
             //设置延迟时间

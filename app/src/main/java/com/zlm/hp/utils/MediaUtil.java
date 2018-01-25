@@ -1,26 +1,27 @@
 package com.zlm.hp.utils;
 
-import android.Manifest;
-import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.audiofx.AudioEffect;
+import android.net.Uri;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
+import android.support.annotation.NonNull;
 
-import com.zlm.hp.media.audio.AudioFileReader;
-import com.zlm.hp.media.audio.TrackInfo;
-import com.zlm.hp.media.audio.utils.AudioUtil;
+import com.zlm.hp.R;
 import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.model.StorageInfo;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import base.utils.DateUtil;
-import base.utils.LoggerUtil;
+import base.utils.PreferencesUtil;
 
 /**
  * 媒体处理娄
@@ -28,178 +29,90 @@ import base.utils.LoggerUtil;
  */
 public class MediaUtil {
 
-    // Storage Permissions
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
+    private static final String SELECTION = MediaStore.Audio.AudioColumns.SIZE + " >= ? AND " + MediaStore.Audio.AudioColumns.DURATION + " >= ?";
 
+    public interface ForeachListener {
+        /**
+         * 遍历前
+         */
+        void before();
+        /**
+         * 遍历
+         *
+         * @param audioInfoList
+         */
+        void foreach(List<AudioInfo> audioInfoList);
+
+        /**
+         * 过滤 true则跳过
+         *
+         * @param hash
+         * @return
+         */
+        boolean filter(String hash);
+    }
 
     /**
-     * 获取音频文件Cursor，过滤小于1分钟的音频文件
-     *
-     * @return
+     * 扫描歌曲
      */
-    private static Cursor getAudioCursor(Context context) {
+    @NonNull
+    public static void scanMusic(Context context, ForeachListener foreachListener) {
+        List<AudioInfo> musicList = new ArrayList<>();
+
+        long filterSize = Long.parseLong(getFilterSize(context)) * 1024;
+        long filterTime = Long.parseLong(getFilterTime(context)) * 1000;
+
+        String fileSizeStr = getFileSize(filterSize);
+        String durationStr = parseTimeToString(filterTime);
+        System.out.printf("过滤文件大小：" + fileSizeStr + ", 过滤文件时长：" + durationStr);
 
         Cursor cursor = context.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, null, null,
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[]{
+                        BaseColumns._ID,
+                        MediaStore.Audio.AudioColumns.IS_MUSIC,
+                        MediaStore.Audio.AudioColumns.TITLE,
+                        MediaStore.Audio.AudioColumns.ARTIST,
+                        MediaStore.Audio.AudioColumns.ALBUM,
+                        MediaStore.Audio.AudioColumns.ALBUM_ID,
+                        MediaStore.Audio.AudioColumns.DATA,
+                        MediaStore.Audio.AudioColumns.DISPLAY_NAME,
+                        MediaStore.Audio.AudioColumns.SIZE,
+                        MediaStore.Audio.AudioColumns.DURATION
+                },
+                SELECTION,
+                new String[]{
+                        String.valueOf(filterSize),
+                        String.valueOf(filterTime)
+                },
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
-
-        return cursor;
-    }
-
-    /**
-     * 扫描本地歌曲
-     *
-     * @param activity
-     * @param foreachListener
-     */
-    public static void scanLocalMusic(Activity activity, ForeachListener foreachListener) {
-        // Check if we have write permission
-        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-
-        List<StorageInfo> list = StorageListUtil
-                .listAvaliableStorage(activity.getApplicationContext());
-        for (int i = 0; i < list.size(); i++) {
-            StorageInfo storageInfo = list.get(i);
-            scanLocalAudioFile(storageInfo.path, foreachListener);
-        }
-    }
-
-    /**
-     * 扫描本地音频文件
-     *
-     * @param path
-     * @param foreachListener
-     */
-    private static void scanLocalAudioFile(String path, ForeachListener foreachListener) {
-        File[] files = new File(path).listFiles();
-        if (files != null && files.length > 0) {
-            for (int i = 0; i < files.length; i++) {
-                File temp = files[i];
-                if (temp.isFile()) {
-
-                    String fileName = temp.getName();
-                    String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
-                    String filterFormats = "ape,flac,mp3,wav";
-                    if (filterFormats.indexOf(fileExt) == -1) {
-                        continue;
-                    }
-
-                    handlerAudio(temp, foreachListener);
-
-                } else if (temp.isDirectory() && temp.getPath().indexOf("/.") == -1) // 忽略点文件（隐藏文件/文件夹）
-                {
-                    scanLocalAudioFile(temp.getPath(), foreachListener);
-                }
-            }
-        }
-    }
-
-    /**
-     * 处理歌曲
-     *
-     * @param audioFile
-     * @param foreachListener
-     */
-    private static void handlerAudio(File audioFile, ForeachListener foreachListener) {
-
-
-        //歌曲文件hash值
-        String hash = MD5Util.getFileMd5(audioFile).toLowerCase();
-
-        if (foreachListener != null) {
-            if (foreachListener.filter(hash)) {
-                return;
-            }
-        }
-        //
-        String singerName = "未知";
-        String fileName = getFileNameWithoutExt(audioFile);
-        String songName = fileName;
-        if (fileName.contains("-")) {
-            String regex = "\\s*-\\s*";
-            String[] temps = fileName.split(regex);
-            if (temps.length >= 2) {
-                //去掉首尾空格
-                singerName = fileName.split(regex)[0].trim();
-                songName = fileName.split(regex)[1].trim();
-            }
-        }
-
-        String filePath = audioFile.getPath();
-        //歌曲文件后缀名
-        String fileExt = getFileExt(filePath);
-
-        //
-        AudioFileReader audioFileReader = AudioUtil
-                .getAudioFileReaderByFilePath(filePath);
-        if (audioFileReader == null)
-            return;
-        TrackInfo trackInfoData = audioFileReader.read(audioFile);
-        if (trackInfoData == null) {
+        if (cursor == null) {
             return;
         }
 
-        //过滤时间短的歌曲
-        int duration = (int) trackInfoData.getDuration();
-        if (audioFile.length() < 1024 * 1024 || duration < 5000) {
-            return;
+        if(foreachListener != null) {
+            foreachListener.before();
         }
 
-        String durationText = parseTimeToString(duration);
+        while (cursor.moveToNext()) {
+            // 是否为音乐，魅族手机上始终为0
+            int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
+            OSUtils.ROM romType = OSUtils.getRomType();
+            if (!(romType == OSUtils.ROM.Flyme) && isMusic == 0) {
+                continue;
+            }
 
-        // 歌曲文件的大小 ：MediaStore.Audio.Media.SIZE
-        long fileSize = audioFile.length();
-        String fileSizeText = getFileSize(fileSize);
+            long id = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+            String title = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE)));
+            String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST));
+            String album = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM)));
+            long albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID));
+            long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
+            String filePath = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA));
+            String fileName = cursor.getString((cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DISPLAY_NAME)));
+            long fileSize = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
 
-
-        if (foreachListener != null) {
-            //
-            AudioInfo audioInfo = new AudioInfo();
-            audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
-            audioInfo.setDuration(duration);
-            audioInfo.setDurationText(durationText);
-            audioInfo.setFileExt(fileExt);
-            audioInfo.setFilePath(filePath);
-            audioInfo.setFileSize(fileSize);
-            audioInfo.setFileSizeText(fileSizeText);
-            audioInfo.setHash(hash);
-            audioInfo.setSongName(songName);
-            audioInfo.setSingerName(singerName);
-            audioInfo.setType(AudioInfo.LOCAL);
-            audioInfo.setStatus(AudioInfo.FINISH);
-            //
-            foreachListener.foreach(audioInfo);
-        }
-    }
-
-    /**
-     * 扫描本地歌曲
-     *
-     * @param context
-     */
-    public static void scanLocalMusicByContentResolver(Context context, ForeachListener foreachListener) {
-
-        LoggerUtil logger = LoggerUtil.getZhangLogger(context);
-        Cursor cursor = getAudioCursor(context);
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToNext();
-
-            // 歌曲文件的路径 ：MediaStore.Audio.Media.DATA
-            String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
             File audioFile = new File(filePath);
-
             //歌曲文件hash值
             String hash = MD5Util.getFileMd5(audioFile).toLowerCase();
 
@@ -209,84 +122,31 @@ public class MediaUtil {
                 }
             }
 
-            // 歌曲的歌手名： MediaStore.Audio.Media.ARTIST
-            String singerName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST));
-            // 歌曲的名称 ：MediaStore.Audio.Media.TITLE
-            String songName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
-            if (singerName.equals("<unknown>")) {
-                String fileName = getFileNameWithoutExt(audioFile);
-                if (fileName.contains("-")) {
-                    String regex = "\\s*-\\s*";
-                    String[] temps = fileName.split(regex);
-                    if (temps.length >= 2) {
-                        //去掉首尾空格
-                        singerName = fileName.split(regex)[0].trim();
-                        songName = fileName.split(regex)[1].trim();
-                    }
-                } else {
-                    singerName = "未知";
-                }
-            }
-
-
+            String fileSizeText = getFileSize(fileSize);
+            String durationText = parseTimeToString(duration);
             //歌曲文件后缀名
             String fileExt = getFileExt(filePath);
 
-            //歌曲ID：MediaStore.Audio.Media._ID
-            //int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
+            AudioInfo audioInfo = new AudioInfo();
+            audioInfo.setHash(hash);
+            audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
+            audioInfo.setDuration(duration);
+            audioInfo.setDurationText(durationText);
+            audioInfo.setType(AudioInfo.LOCAL);
+            audioInfo.setStatus(AudioInfo.FINISH);
+            audioInfo.setSongName(fileName);
+            audioInfo.setSingerName(artist);
+            audioInfo.setFileExt(fileExt);
+            audioInfo.setFilePath(filePath);
+            audioInfo.setFileSize(fileSize);
+            audioInfo.setFileSizeText(fileSizeText);
 
+            musicList.add(audioInfo);
+        }
+        cursor.close();
 
-            // 歌曲的专辑名：MediaStore.Audio.Media.ALBUM
-            // String album = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
-
-            //歌曲的总播放时长 ：MediaStore.Audio.Media.DURATION
-            int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
-
-            //如果时长为0，则自行解析
-            if (duration == 0) {
-                //
-                AudioFileReader audioFileReader = AudioUtil
-                        .getAudioFileReaderByFilePath(filePath);
-                if (audioFileReader == null)
-                    continue;
-                TrackInfo trackInfoData = audioFileReader.read(audioFile);
-                if (trackInfoData == null) {
-                    continue;
-                }
-                duration = (int) trackInfoData.getDuration();
-            }
-
-
-            String durationText = parseTimeToString(duration);
-
-            // 歌曲文件的大小 ：MediaStore.Audio.Media.SIZE
-            long fileSize = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE));
-            String fileSizeText = getFileSize(fileSize);
-
-            //歌曲类型
-            //String mimeType = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.MIME_TYPE));
-
-
-            if (foreachListener != null) {
-                //
-                AudioInfo audioInfo = new AudioInfo();
-                audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
-                audioInfo.setDuration(duration);
-                audioInfo.setDurationText(durationText);
-                audioInfo.setFileExt(fileExt);
-                audioInfo.setFilePath(filePath);
-                audioInfo.setFileSize(fileSize);
-                audioInfo.setFileSizeText(fileSizeText);
-                audioInfo.setHash(hash);
-                audioInfo.setSongName(songName);
-                audioInfo.setSingerName(singerName);
-                audioInfo.setType(AudioInfo.LOCAL);
-                audioInfo.setStatus(AudioInfo.FINISH);
-                //
-                foreachListener.foreach(audioInfo);
-            }
-
-
+        if(foreachListener != null) {
+            foreachListener.foreach(musicList);
         }
     }
 
@@ -309,6 +169,64 @@ public class MediaUtil {
             fileSizeString = df.format((double) fileS / 1073741824) + "G";
         }
         return fileSizeString;
+    }
+
+    /**
+     * 整数时间转换成字符串
+     *
+     * @param time
+     * @return
+     */
+    public static String parseTimeToString(long time) {
+
+        time /= 1000;
+        long minute = time / 60;
+        // int hour = minute / 60;
+        long second = time % 60;
+        minute %= 60;
+        return String.format("%02d:%02d", minute, second);
+    }
+
+    /**
+     * 获取文件的后缀名
+     *
+     * @param filePath
+     * @return
+     */
+    public static String getFileExt(String filePath) {
+        int pos = filePath.lastIndexOf(".");
+        if (pos == -1)
+            return "";
+        return filePath.substring(pos + 1).toLowerCase();
+    }
+
+    public static Uri getMediaStoreAlbumCoverUri(long albumId) {
+        Uri artworkUri = Uri.parse("content://media/external/audio/albumart");
+        return ContentUris.withAppendedId(artworkUri, albumId);
+    }
+
+    public static boolean isAudioControlPanelAvailable(Context context) {
+        return isIntentAvailable(context, new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL));
+    }
+
+    private static boolean isIntentAvailable(Context context, Intent intent) {
+        return context.getPackageManager().resolveActivity(intent, PackageManager.GET_RESOLVED_FILTER) != null;
+    }
+
+    public static String getFilterSize(Context context) {
+        return PreferencesUtil.getStringValue(context, context.getString(R.string.setting_key_filter_size), "0");
+    }
+
+    public static void setFilterSize(Context context, String value) {
+        PreferencesUtil.putValue(context, context.getString(R.string.setting_key_filter_size), value);
+    }
+
+    public static String getFilterTime(Context context) {
+        return PreferencesUtil.getStringValue(context, context.getString(R.string.setting_key_filter_time), "0");
+    }
+
+    public static void setFilterTime(Context context, String value) {
+        PreferencesUtil.putValue(context, context.getString(R.string.setting_key_filter_time), value);
     }
 
     /**
@@ -345,54 +263,6 @@ public class MediaUtil {
             }
         }
         return 0;
-    }
-
-
-    /**
-     * 获取文件的后缀名
-     *
-     * @param filePath
-     * @return
-     */
-    public static String getFileExt(String filePath) {
-        int pos = filePath.lastIndexOf(".");
-        if (pos == -1)
-            return "";
-        return filePath.substring(pos + 1).toLowerCase();
-    }
-
-    /**
-     * 获取不带后缀名的文件名
-     */
-    public static String getFileNameWithoutExt(File file) {
-        String filename = file.getName();
-        if ((filename != null) && (filename.length() > 0)) {
-            int dot = filename.lastIndexOf('.');
-            if ((dot > -1) && (dot < (filename.length()))) {
-                return filename.substring(0, dot);
-            }
-        }
-        return filename;
-    }
-
-    /**
-     *
-     */
-    public interface ForeachListener {
-        /**
-         * 遍历
-         *
-         * @param audioInfo
-         */
-        public void foreach(AudioInfo audioInfo);
-
-        /**
-         * 过滤 true则跳过
-         *
-         * @param hash
-         * @return
-         */
-        public boolean filter(String hash);
     }
 
 }

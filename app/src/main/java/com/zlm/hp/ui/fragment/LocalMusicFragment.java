@@ -164,7 +164,7 @@ public class LocalMusicFragment extends BaseFragment {
                 }
             }
         };
-        ThreadUtil.runInThread(runnable);
+        ThreadUtil.runOnUiThread(runnable);
     }
 
     /**
@@ -195,7 +195,7 @@ public class LocalMusicFragment extends BaseFragment {
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
         if(runnable != null) {
-            ThreadUtil.cancelThread(runnable);
+            ThreadUtil.cancelUIThread(runnable);
         }
         super.onDestroy();
     }

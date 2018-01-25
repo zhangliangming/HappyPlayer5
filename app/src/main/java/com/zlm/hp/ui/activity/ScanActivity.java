@@ -213,20 +213,20 @@ public class ScanActivity extends BaseActivity {
      * 扫描
      */
     private void doScaningHandler() {
-        new Thread() {
+        ThreadUtil.runInThread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                MediaUtil.scanLocalMusic(ScanActivity.this, new MediaUtil.ForeachListener() {
+                MediaUtil.scanMusic(mContext, new MediaUtil.ForeachListener() {
                     @Override
-                    public void foreach(AudioInfo audioInfo) {
+                    public void before() {
+                        AudioInfoDB.getAudioInfoDB(mContext).deleteTab();
+                    }
 
-                        if (audioInfo != null) {
-                            mAudioInfoLists.add(audioInfo);
+                    @Override
+                    public void foreach(List<AudioInfo> audioInfoList) {
+                        if (audioInfoList != null) {
+                            mAudioInfoLists.clear();
+                            mAudioInfoLists.addAll(audioInfoList);
                         }
 
                         mHandler.sendEmptyMessage(SCANING);
@@ -234,14 +234,16 @@ public class ScanActivity extends BaseActivity {
 
                     @Override
                     public boolean filter(String hash) {
-                        return AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(hash);
+                        return AudioInfoDB.getAudioInfoDB(mContext).isExists(hash);
                     }
                 });
+                if (mAudioInfoLists.size() > 0) {
+                    AudioInfoDB.getAudioInfoDB(mContext).add(mAudioInfoLists);
+                }
+
                 mHandler.sendEmptyMessage(FINISH);
             }
-        }.start();
-
-
+        });
     }
 
     /**
