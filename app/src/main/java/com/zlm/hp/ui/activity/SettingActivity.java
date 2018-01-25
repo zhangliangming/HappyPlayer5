@@ -7,6 +7,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zlm.hp.R;
+import com.zlm.hp.ui.fragment.SettingFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +53,12 @@ public class SettingActivity extends BaseActivity {
                 finish();
             }
         });
+
+        SettingFragment settingFragment = new SettingFragment();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.ll_fragment_container, settingFragment)
+                .commit();
     }
 
     @Override

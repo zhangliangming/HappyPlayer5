@@ -50,10 +50,8 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference_setting);
 
-//        mSoundEffect = findPreference(getString(R.string.setting_key_sound_effect));
         mFilterSize = findPreference(getString(R.string.setting_key_filter_size));
         mFilterTime = findPreference(getString(R.string.setting_key_filter_time));
-//        mSoundEffect.setOnPreferenceClickListener(this);
         mFilterSize.setOnPreferenceChangeListener(this);
         mFilterTime.setOnPreferenceChangeListener(this);
 

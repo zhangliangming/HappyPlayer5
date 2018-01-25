@@ -52,6 +52,7 @@ public class SkinActivity extends BaseActivity {
                 overridePendingTransition(0, 0);
             }
         });
+        swipebackLayout.setAllowDrag(false);
         boolean shadowEnable = getIntent().getBooleanExtra(PreferencesConstants.shadowEnable_KEY, true);
         swipebackLayout.setShadowEnable(shadowEnable);
 

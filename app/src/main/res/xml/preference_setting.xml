@@ -14,13 +14,6 @@
             android:title="@string/mobile_network_download" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/play">
-
-        <Preference
-            android:key="@string/setting_key_sound_effect"
-            android:title="@string/sound_effect" />
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="文件过滤">
 
         <ListPreference

@@ -28,7 +28,7 @@ public class NaviMenuHelper {
                 startActivity(activity, SettingActivity.class);
                 return true;
             case R.id.action_skin_peeler:
-                updateSkin(activity);
+                startActivity(activity, SkinActivity.class);
                 return true;
             case R.id.action_night:
 //                nightMode(activity);
@@ -69,14 +69,6 @@ public class NaviMenuHelper {
                     }
                 })
                 .show();
-    }
-
-    private static void updateSkin(BaseActivity activity) {
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.setType("image/*");
-//        activity.startActivityForResult(intent, MainActivity.PHOTO_REQUEST_GALLERY);
-        Intent intent = new Intent(activity, SkinActivity.class);
-        activity.startActivity(intent);
     }
 
     private static void startTimer(Context context, int minute) {
