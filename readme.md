@@ -5,6 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-24(@zlm)：修复歌手写真界面点击下载按钮，触发多行歌词转双行歌词的问题
 - 2018-01-24：
 1.修复了点击退出APP导致播放状态没有改变的bug
 2.在“我的页面”隐藏了退出APP按钮
