@@ -174,18 +174,13 @@ public class SearchSingerActivity extends BaseActivity {
                 InputMethodManager im = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                ThreadUtil.runInThread(new Runnable() {
+                    @Override public void run() {
+                        try { Thread.sleep(200);  } catch (InterruptedException e) { e.printStackTrace();  }
                         finish();
                         overridePendingTransition(0, 0);
-                    }
-                }.start();
+                    }  });
+
             }
         });
 

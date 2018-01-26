@@ -49,6 +49,7 @@ import java.util.List;
 import java.util.Map;
 
 import base.utils.ColorUtil;
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import base.widget.ButtonRelativeLayout;
 import base.widget.IconfontImageButtonTextView;
@@ -1599,6 +1600,9 @@ public class LrcActivity extends BaseActivity {
         }
     }
 
+
+    Runnable runnable;
+
     /**
      * 保存歌词文件
      *
@@ -1607,27 +1611,20 @@ public class LrcActivity extends BaseActivity {
      * @param playOffset  lrc歌词快进进度
      */
     private void saveLrcFile(final String lrcFilePath, final LyricsInfo lyricsInfo, final int playOffset) {
-        new Thread() {
 
-            @Override
-            public void run() {
-
+        runnable=new Runnable() {
+            @Override public void run() {
                 Map<String, Object> tags = lyricsInfo.getLyricsTags();
-
                 tags.put(LyricsTag.TAG_OFFSET, playOffset);
                 lyricsInfo.setLyricsTags(tags);
 
-
-                //保存修改的歌词文件
                 try {
-                    LyricsIOUtils.getLyricsFileWriter(lrcFilePath).writer(lyricsInfo, lrcFilePath);
-                } catch (Exception e) {
+                    LyricsIOUtils.getLyricsFileWriter(lrcFilePath).writer(lyricsInfo, lrcFilePath);  //保存修改的歌词文件
+                } catch (Exception e) {  e.printStackTrace();  }
 
-                    e.printStackTrace();
-                }
-            }
+            }  };
+       ThreadUtil.runInThread(runnable);
 
-        }.start();
     }
 
 
@@ -1895,25 +1892,18 @@ public class LrcActivity extends BaseActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-
-        //注销广播
-        mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
-
-        //在线歌曲
-        mOnLineAudioReceiver.unregisterReceiver(getApplicationContext());
+    @Override protected void onDestroy() {
+        mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext()); //注销广播
+        mOnLineAudioReceiver.unregisterReceiver(getApplicationContext()); //在线歌曲
         super.onDestroy();
+        ThreadUtil.cancelThread(runnable);
     }
 
-    @Override
-    public void onBackPressed() {
+    @Override public void onBackPressed() {
         if (isPLPopViewShow) {
-            hidePlPopView();
-            return;
+            hidePlPopView(); return;
         } else if (isSPLPopViewShow) {
-            hideSPLPopView();
-            return;
+            hideSPLPopView(); return;
         }
         mRotateLinearLayout.finish();
     }
@@ -1921,4 +1911,6 @@ public class LrcActivity extends BaseActivity {
     public interface LrcActivityListener {
         void closeSingerPopListView();
     }
+
+
 }

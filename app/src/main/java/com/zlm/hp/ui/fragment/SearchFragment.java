@@ -192,22 +192,14 @@ public class SearchFragment extends BaseFragment {
                 InputMethodManager im = (InputMethodManager) mActivity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 im.hideSoftInputFromWindow(mActivity.getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
-                new Thread() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                ThreadUtil.runInThread(new Runnable() {
+                    @Override public void run() {
+                        try { Thread.sleep(200);  } catch (InterruptedException e) { e.printStackTrace();  }
 
-                        //
                         Intent closeIntent = new Intent(FragmentReceiver.ACTION_CLOSEDFRAGMENT);
                         closeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mActivity.sendBroadcast(closeIntent);
-
-                    }
-                }.start();
+                    }  });
             }
         });
 

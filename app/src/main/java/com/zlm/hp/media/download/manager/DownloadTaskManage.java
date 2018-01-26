@@ -12,6 +12,7 @@ import java.util.List;
 
 import base.utils.DateUtil;
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 
 
 /**
@@ -258,19 +259,16 @@ public class DownloadTaskManage {
      * @throws Exception
      */
     public synchronized void addMultiThreadMultiTask(final DownloadTask task) throws Exception {
-        new Thread() {
-            @Override
-            public void run() {
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
                 TaskThreadUtil taskThreadUtil = new TaskThreadUtil(mContext, task, taskEvent,
                         isTheOneTaskThreadFristStart);
                 taskThreadUtil.startTask(mContext);
                 task.setTaskThreadUtil(taskThreadUtil);
             }
-        }.start();
+        });
 
-        if (taskEvent != null) {
-
-        }
+        if (taskEvent != null) {  }
     }
 
     /**
