@@ -455,12 +455,15 @@ public class SearchSingerActivity extends BaseActivity {
                 if (mDatas == null) {
                     mDatas = new ArrayList<SearchArtistPicResult>();
                 }
-                //
-                mAdapter = new SearchSingerAdapter(mContext, mDatas, mAudioInfo, mSelectDatas, mSearchSingerListener);
-                mRecyclerView.setAdapter(mAdapter);
-                mHandler.sendEmptyMessage(INITSELECTED);
 
-                showContentView();
+            runOnUiThread(new Runnable() {
+                @Override public void run() {
+                    mAdapter = new SearchSingerAdapter(mContext, mDatas, mAudioInfo, mSelectDatas, mSearchSingerListener);
+                    mRecyclerView.setAdapter(mAdapter);
+                    mHandler.sendEmptyMessage(INITSELECTED);
+                    showContentView();
+                } });//切换至主线程更新ui
+
             }
         };
         ThreadUtil.runInThread(runnable);

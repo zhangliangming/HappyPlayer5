@@ -227,10 +227,12 @@ public class DownloadMusicFragment extends BaseFragment {
                 category.setCategoryItem(downloadInfos);
                 mDatas.add(category);
 
-                if (mDatas.size() > 0) {
-                    mAdapter.notifyDataSetChanged();
-                }
-                showContentView();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        if (mDatas.size() > 0) { mAdapter.notifyDataSetChanged();  }
+                        showContentView();
+                    }  });//切换至主线程更新ui
+
             }
         };
         ThreadUtil.runInThread(runnable);

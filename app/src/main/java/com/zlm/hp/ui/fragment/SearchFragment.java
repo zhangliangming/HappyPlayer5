@@ -349,16 +349,22 @@ public class SearchFragment extends BaseFragment {
                             mDatas.add(datas.get(i));
                         }
                     }
-                    mAdapter.notifyDataSetChanged();
-                    if (showView) {
-                        showContentView();
-                    }
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override  public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            if (showView) { showContentView();  }
+                        } });//切换至主线程更新ui
+
 
                 } else {
-                    if (showView) {
-                        showContentView();
-                    }
-                    ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
+
+                    final String errotMsg =httpResult.getErrorMsg();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override  public void run() {
+                            if (showView) { showContentView();   }
+                            ToastUtil.showTextToast(mActivity.getApplicationContext(), errotMsg);
+                        } }); //切换至主线程更新ui
+
                 }
             }
         };
