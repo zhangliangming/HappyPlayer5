@@ -231,7 +231,6 @@ public class RankSongFragment extends BaseFragment {
 
                 } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
-                    //
                     Map<String, Object> returnResult = (Map<String, Object>) httpResult.getResult();
 
                     ArrayList<AudioInfo> datas = (ArrayList<AudioInfo>) returnResult.get("rows");
@@ -250,16 +249,21 @@ public class RankSongFragment extends BaseFragment {
                             mDatas.add(datas.get(i));
                         }
                     }
-                    mAdapter.notifyDataSetChanged();
-                    if (showView) {
-                        showContentView();
-                    }
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                if (showView) {  showContentView();  }
+                            } });  //切换至主线程更新ui
 
                 } else {
-                    if (showView) {
-                        showContentView();
-                    }
-                    ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
+                    final String errorMsg = httpResult.getErrorMsg();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            if (showView) {  showContentView();  }
+                            ToastUtil.showTextToast(mActivity.getApplicationContext(), errorMsg);
+                        }  }); //切换至主线程更新ui
+
                 }
             }
         };
