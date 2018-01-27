@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.zlm.hp.R;
 import com.zlm.hp.media.lyrics.model.LyricsLineInfo;
@@ -132,6 +133,15 @@ public class FloatLyricsView extends View {
 
         //初始化画笔颜色
         initColor();
+
+        //加载完成后回调
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                initFontSize();
+            }
+        });
     }
 
     /**

@@ -570,7 +570,7 @@ public class MainActivity extends BaseActivity {
             mSingerImg.setImageDrawable(new BitmapDrawable(bitmap));
 
             //
-            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
+            mFloatLyricsView.setLyricsUtil(null, 0);
 
             //重置弹出窗口播放列表
             if (isPopViewShow) {
@@ -611,7 +611,7 @@ public class MainActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mContext).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
+            mFloatLyricsView.setLyricsUtil(null, 0);
 
             //设置弹出窗口播放列表
             if (isPopViewShow) {
