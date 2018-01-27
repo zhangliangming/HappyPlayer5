@@ -1,6 +1,5 @@
 package base.widget.lrc;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -8,6 +7,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -101,7 +101,7 @@ public class FloatLyricsView extends View {
         init(context);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public FloatLyricsView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -290,10 +290,10 @@ public class FloatLyricsView extends View {
         return mLyricsUtil;
     }
 
-    public void setLyricsUtil(LyricsUtil mLyricsUtil) {
+    public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth) {
         this.mLyricsUtil = mLyricsUtil;
-        if (mLyricsUtil != null && getWidth() != 0) {
-            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(getWidth() / 4 * 3, mPaint);
+        if (mLyricsUtil != null) {
+            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(textMaxWidth, mPaint);
         } else {
             mLyricsLineTreeMap = null;
         }
