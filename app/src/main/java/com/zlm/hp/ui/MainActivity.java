@@ -489,7 +489,7 @@ public class MainActivity extends BaseActivity {
             mSingerImg.setImageDrawable(new BitmapDrawable(bitmap));
 
             //
-            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
+            mFloatLyricsView.setLyricsUtil(null, 0);
 
             //重置弹出窗口播放列表
             if (isPopViewShow) {
@@ -530,7 +530,7 @@ public class MainActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
+            mFloatLyricsView.setLyricsUtil(null, 0);
 
             //设置弹出窗口播放列表
             if (isPopViewShow) {
@@ -988,10 +988,8 @@ public class MainActivity extends BaseActivity {
         mSwipeoutLayout = findViewById(R.id.playerBar);
         mSwipeoutLayout.setBackgroundColor(ColorUtil.parserColor("#ffffff", 245));
         ViewGroup barContentView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_content, null);
-        barContentView.setBackgroundColor(Color.TRANSPARENT);
 
         ViewGroup barMenuView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_menu, null);
-        barMenuView.setBackgroundColor(Color.TRANSPARENT);
         //
         mFloatLyricsView = barMenuView.findViewById(R.id.floatLyricsView);
 

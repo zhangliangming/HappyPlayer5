@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
@@ -128,6 +129,16 @@ public class FloatLyricsView extends View {
 
         //初始化画笔颜色
         initColor();
+
+        //加载完成后回调
+        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                initFontSize();
+            }
+        });
+
     }
 
     /**
@@ -288,7 +299,7 @@ public class FloatLyricsView extends View {
 
     public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth) {
         this.mLyricsUtil = mLyricsUtil;
-        if (mLyricsUtil != null && getWidth() != 0) {
+        if (mLyricsUtil != null) {
             mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(textMaxWidth, mPaint);
         } else {
             mLyricsLineTreeMap = null;
@@ -296,6 +307,7 @@ public class FloatLyricsView extends View {
         resetData();
         invalidateView();
     }
+
 
     /**
      * 重置数据
