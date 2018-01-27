@@ -110,3 +110,14 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 # 联系方式 #
 316257874@qq.com
+
+# 捐赠 #
+如果该项目对您有所帮助，欢迎您的赞赏
+
+- 微信
+
+![](https://i.imgur.com/e3hERHh.png)
+
+- 支付宝
+
+![](https://i.imgur.com/29AcEPA.png)
