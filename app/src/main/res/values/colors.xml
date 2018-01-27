@@ -8,7 +8,7 @@
     <color name="transparent">#00000000</color>
     <color name="white_50p">#80FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="defColor">#0288d1</color>
+    <color name="defColor">#3F51B5</color>
     <color name="def_bar_title_color">#555555</color>
     <color name="white_8p">#14FFFFFF</color>
 </resources>

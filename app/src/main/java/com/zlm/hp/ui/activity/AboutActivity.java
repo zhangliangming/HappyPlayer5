@@ -45,7 +45,7 @@ public class AboutActivity extends BaseActivity {
 
         //
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
-        mSwipeBackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
+        mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
                 finish();

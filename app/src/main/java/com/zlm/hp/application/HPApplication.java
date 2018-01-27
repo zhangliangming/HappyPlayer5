@@ -3,14 +3,12 @@ package com.zlm.hp.application;
 import android.app.Activity;
 import android.app.Application;
 
-import com.tencent.bugly.Bugly;
-import com.zlm.hp.constants.Constant;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.media.net.entity.RankListResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.media.net.entity.RankListResult;
 import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.SerializableObjUtil;
 
@@ -61,7 +59,7 @@ public class HPApplication extends Application {
         super.onCreate();
         instance = this;
         registerActivityLifecycleCallbacks(new LifeCallbackActivity());
-        Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
+       // Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
 
     }
 

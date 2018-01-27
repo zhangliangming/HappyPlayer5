@@ -45,7 +45,7 @@ public class SkinActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
         //
-        swipebackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
+        swipebackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
                 finish();

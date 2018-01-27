@@ -3,6 +3,8 @@ package base.widget;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +19,7 @@ import base.utils.LoggerUtil;
  * @Param:
  * @Return:
  * @Author: zhangliangming
- * @Date: 2017/7/26 19:19
+ * @Date: 2018/1/27
  * @Throws:
  */
 public class OverScrollView extends ScrollView {
@@ -28,11 +30,7 @@ public class OverScrollView extends ScrollView {
      * 判断view是点击还是移动的距离
      */
     private int mTouchSlop;
-    /**
-     * 触摸最后一次的坐标
-     */
-    private float mLastX;
-    private float mLastY;
+
     /**
      * 日志
      */
@@ -40,10 +38,14 @@ public class OverScrollView extends ScrollView {
     private Context mContext;
     //ScrollView的子View
     private View mContentView;
-    /**
-     * 是否正在移动
-     */
-    private boolean isMoved = false;
+
+    //拦截的x轴位置
+    private float mLastXIntercept = 0;
+    private float mLastYIntercept = 0;
+
+    //是否越界滑动
+    private boolean isOverScroll = false;
+
     //用于记录正常的布局位置
     private Rect originalRect = new Rect();
 
@@ -75,6 +77,7 @@ public class OverScrollView extends ScrollView {
         init(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public OverScrollView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -86,51 +89,44 @@ public class OverScrollView extends ScrollView {
         mTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
     }
 
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
+        boolean intercepted = false;
         try {
-            if (mContentView == null) {
-                return super.onInterceptTouchEvent(event);
-            }
+
+            float curX = event.getX();
+            float curY = event.getY();
+
             int actionId = event.getAction();
             switch (actionId) {
+
                 case MotionEvent.ACTION_DOWN:
-                    mLastX = event.getX();
-                    mLastY = event.getY();
                     break;
+
                 case MotionEvent.ACTION_MOVE:
-                    float curX = event.getX();
-                    float curY = event.getY();
-                    int deltaX = (int) (mLastX - curX);
-                    int deltaY = (int) (mLastY - curY);
 
-                    //事件为上下移动，并且可以下拉和上拉
+                    int deltaX = (int) (mLastXIntercept - curX);
+                    int deltaY = (int) (mLastYIntercept - curY);
+
                     if (Math.abs(deltaX) < mTouchSlop && Math.abs(deltaY) > mTouchSlop && canPullUpOrDown()) {
-
-                        isMoved = true;
-                        return true;
-
+                        intercepted = true;
                     }
-
-                    //mLastY = event.getY();
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-
-                    mLastX = 0;
-                    mLastY = 0;
-
 
                     break;
                 default:
                     break;
             }
+
+            mLastXIntercept = curX;
+            mLastYIntercept = curY;
+
         } catch (Exception e) {
             logger.e(e.getMessage());
         }
-        return false;
+
+        return intercepted;
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -140,22 +136,25 @@ public class OverScrollView extends ScrollView {
 
         try {
 
+            float curX = event.getX();
+            float curY = event.getY();
+
             int actionId = event.getAction();
             switch (actionId) {
                 case MotionEvent.ACTION_DOWN:
-                    mLastX = event.getX();
-                    mLastY = event.getY();
+
+                    mLastXIntercept = curX;
+                    mLastYIntercept = curY;
+
                     break;
                 case MotionEvent.ACTION_MOVE:
 
-                    float curX = event.getX();
-                    float curY = event.getY();
-                    int deltaY = (int) ((mLastY - curY));
-                    int deltaX = (int) (mLastX - curX);
+                    int deltaX = (int) (mLastXIntercept - curX);
+                    int deltaY = (int) (mLastYIntercept - curY);
                     //事件为上下移动，并且可以下拉和上拉
-                    if (isMoved || (Math.abs(deltaX) < mTouchSlop && Math.abs(deltaY) > mTouchSlop && canPullUpOrDown())) {
+                    if (isOverScroll || (Math.abs(deltaX) < mTouchSlop && Math.abs(deltaY) > mTouchSlop && canPullUpOrDown())) {
 
-                        isMoved = true;
+                        isOverScroll = true;
                         //计算偏移量
                         int offset = (int) (deltaY * MOVE_FACTOR);
                         //随着手指的移动而移动布局
@@ -168,11 +167,10 @@ public class OverScrollView extends ScrollView {
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-                    mLastX = 0;
-                    mLastY = 0;
-                    if (!isMoved) break;
 
-                    isMoved = false;
+                    if (!isOverScroll) break;
+
+                    isOverScroll = false;
 
                     resetView();
 
@@ -180,6 +178,7 @@ public class OverScrollView extends ScrollView {
                 default:
                     break;
             }
+
         } catch (Exception e) {
             logger.e(e.getMessage());
         }

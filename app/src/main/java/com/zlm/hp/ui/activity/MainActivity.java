@@ -1155,7 +1155,7 @@ public class MainActivity extends BaseActivity {
 //                }
 //            }
 //        });
-        mSwipeoutLayout.setPlayerBarOnCloseListener(new SwipeoutLayout.PlayerBarOnCloseListener() {
+        mSwipeoutLayout.setPlayerBarListener(new SwipeoutLayout.PlayerBarListener() {
             @Override
             public void onClose() {
 //                if (mBarCloseFlagView.getVisibility() != View.VISIBLE) {

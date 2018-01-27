@@ -5,6 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-27(@zlm)：优化SwipeoutLayout、SwipeBackLayout、SlidingMenuLayout和OverScrollView的事件分发和冲突。
 - 2018-01-26(@lp):修正几处子线程更新ui的bug,替换几处new Thread()为ThreadUtil
 - 2018-01-25：增加音乐文件过滤功能
 - 2018-01-24(@zlm)：修复歌手写真界面点击下载按钮，触发多行歌词转双行歌词的问题
