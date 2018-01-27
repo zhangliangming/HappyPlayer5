@@ -118,7 +118,7 @@ public class SwipeoutLayout extends LinearLayout {
     /**
      * 打开事件
      */
-    private PlayerBarOnCloseListener playerBarOnCloseListener;
+    private PlayerBarListener playerBarListener;
 
 
     public SwipeoutLayout(Context context) {
@@ -437,13 +437,13 @@ public class SwipeoutLayout extends LinearLayout {
             int scrollX = mScroller.getFinalX();
             if (scrollX <= -mMenuView.getWidth()) {
                 mCurrentView = mMenuView;
-                if (playerBarOnCloseListener != null) {
-                    playerBarOnCloseListener.onOpen();
+                if (playerBarListener != null) {
+                    playerBarListener.onOpen();
                 }
             } else if (scrollX >= 0) {
                 mCurrentView = mContentView;
-                if (playerBarOnCloseListener != null) {
-                    playerBarOnCloseListener.onClose();
+                if (playerBarListener != null) {
+                    playerBarListener.onClose();
                 }
             }
         }
@@ -506,17 +506,13 @@ public class SwipeoutLayout extends LinearLayout {
         void onClick();
     }
 
-    public interface PlayerBarOnCloseListener {
+    public interface PlayerBarListener {
         void onClose();
 
         void onOpen();
     }
 
-    public void setPlayerBarOnCloseListener(PlayerBarOnCloseListener playerBarOnCloseListener) {
-        this.playerBarOnCloseListener = playerBarOnCloseListener;
+    public void setPlayerBarListener(PlayerBarListener playerBarListener) {
+        this.playerBarListener = playerBarListener;
     }
-
-    //    public void setDragViewOnClickListener(DragViewOnClickListener dragViewOnClickListener) {
-//        this.dragViewOnClickListener = dragViewOnClickListener;
-//    }
 }

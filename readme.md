@@ -4,6 +4,7 @@ branch-master：该分支代码是我与DyncKathline、liupeng110参与开发，
 branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码会一直更新、优化和修复bug。
 
 # 更新日志 #
+- 2018-01-27：优化SwipeoutLayout、SwipeBackLayout、SlidingMenuLayout和OverScrollView的事件分发和冲突。
 - 2018-01-24：修复歌手写真界面，点击下载按钮触发多行歌词转换双行歌词的问题
 - 2018-01-22：修改应用的主题样式；修复item点击透明问题；修复拼音类处理获取歌手拼音时，歌手字符串中存在符号，导致奔溃的错误
 - 2018-01-22：修复layout view的动画

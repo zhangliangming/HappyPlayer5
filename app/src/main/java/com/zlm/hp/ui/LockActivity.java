@@ -287,7 +287,7 @@ public class LockActivity extends BaseActivity {
         //
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
         mSwipeBackLayout.setPaintFade(false);
-        mSwipeBackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
+        mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
                 finish();
