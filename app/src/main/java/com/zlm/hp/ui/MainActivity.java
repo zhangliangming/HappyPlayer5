@@ -284,7 +284,7 @@ public class MainActivity extends BaseActivity {
                     Intent playerServiceIntent = new Intent(getApplicationContext(), AudioPlayerService.class);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         mHPApplication.startForegroundService(playerServiceIntent);
-                    }else{
+                    } else {
                         mHPApplication.startService(playerServiceIntent);
                     }
 
@@ -489,7 +489,7 @@ public class MainActivity extends BaseActivity {
             mSingerImg.setImageDrawable(new BitmapDrawable(bitmap));
 
             //
-            mFloatLyricsView.setLyricsUtil(null);
+            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
 
             //重置弹出窗口播放列表
             if (isPopViewShow) {
@@ -530,7 +530,7 @@ public class MainActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mFloatLyricsView.setLyricsUtil(null);
+            mFloatLyricsView.setLyricsUtil(null, mFloatLyricsView.getWidth() / 4 * 3);
 
             //设置弹出窗口播放列表
             if (isPopViewShow) {
@@ -575,7 +575,7 @@ public class MainActivity extends BaseActivity {
 
             }
 
-        }else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
             if (mHPApplication.getCurAudioMessage() != null && mHPApplication.getCurAudioInfo() != null) {
                 //歌词加载完成
                 AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
@@ -589,7 +589,7 @@ public class MainActivity extends BaseActivity {
                             //已加载歌词，不用重新加载
                         } else {
                             lyricsUtil.setHash(hash);
-                            mFloatLyricsView.setLyricsUtil(lyricsUtil);
+                            mFloatLyricsView.setLyricsUtil(lyricsUtil, mFloatLyricsView.getWidth() / 4 * 3);
                             mFloatLyricsView.updateView((int) curAudioMessage.getPlayProgress());
                         }
                     }
@@ -637,7 +637,7 @@ public class MainActivity extends BaseActivity {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mHPApplication.startForegroundService(playerServiceIntent);
-        }else{
+        } else {
             mHPApplication.startService(playerServiceIntent);
         }
 
@@ -1283,7 +1283,7 @@ public class MainActivity extends BaseActivity {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mHPApplication.startForegroundService(playerServiceIntent);
-        }else{
+        } else {
             mHPApplication.startService(playerServiceIntent);
         }
 
@@ -1338,7 +1338,7 @@ public class MainActivity extends BaseActivity {
                 Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     mHPApplication.startForegroundService(playerServiceIntent);
-                }else{
+                } else {
                     mHPApplication.startService(playerServiceIntent);
                 }
 

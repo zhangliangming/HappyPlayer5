@@ -286,10 +286,10 @@ public class FloatLyricsView extends View {
         return mLyricsUtil;
     }
 
-    public void setLyricsUtil(LyricsUtil mLyricsUtil) {
+    public void setLyricsUtil(LyricsUtil mLyricsUtil, int textMaxWidth) {
         this.mLyricsUtil = mLyricsUtil;
         if (mLyricsUtil != null && getWidth() != 0) {
-            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(getWidth() / 4 * 3, mPaint);
+            mLyricsLineTreeMap = mLyricsUtil.getReconstructLyrics(textMaxWidth, mPaint);
         } else {
             mLyricsLineTreeMap = null;
         }
