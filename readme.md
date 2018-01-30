@@ -19,6 +19,7 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 使用一些android特有的数据结构
 
 # 更新日志 #
+- 2018-01-30：事件分发和冲突博客; https://www.jianshu.com/p/38015afcdb58
 - 2018-01-27：修复主界面底部的右滑显示的双行歌词的换行问题。
 - 2018-01-27：优化SwipeoutLayout、SwipeBackLayout、SlidingMenuLayout和OverScrollView的事件分发和冲突。
 - 2018-01-24：修复歌手写真界面，点击下载按钮触发多行歌词转换双行歌词的问题
