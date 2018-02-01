@@ -21,9 +21,10 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - SeekBar后期修改为自定义view的方式来实现
 
 # 更新日志 #
+- 2018-02-02：RotateLinearLayout中setRotation时，因为把硬件加速关闭了（[https://github.com/zhangliangming/HappyPlayer5/issues/6](https://github.com/zhangliangming/HappyPlayer5/issues/6 "RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁")），导致旋转动画时，界面上的文字出现了晃动,这个问题我会在后期修复,目前能想到的方法是：到时开启硬件启动，然后优化LrcActivity的页面布局。
+- 2018-02-01：优化SwipeBackLayout
 - 2018-01-31：最近看了一下事件分发和冲突，感觉旋转界面和多行歌词的代码，可以优化为如下的事件分发图，大家也可以尝试一下修改一下：
 ![](https://i.imgur.com/60rKre3.png)
-- 2018-02-01：优化SwipeBackLayout
 - 2018-01-30：事件分发和冲突博客; https://www.jianshu.com/p/38015afcdb58
 - 2018-01-30：关于move和up事件，该博客描述得比较好:https://www.jianshu.com/p/e99b5e8bd67b
 - 2018-01-27：修复主界面底部的右滑显示的双行歌词的换行问题。
