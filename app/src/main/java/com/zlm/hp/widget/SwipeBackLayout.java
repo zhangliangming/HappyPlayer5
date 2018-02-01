@@ -144,8 +144,8 @@ public class SwipeBackLayout extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (mContentView == null) return;
-        mContentView.layout(mContentViewCurX, 0, mContentViewCurX + mContentView.getWidth(), mContentView.getHeight());
+        if (mContentView != null)
+            mContentView.layout(mContentViewCurX, 0, mContentViewCurX + mContentView.getWidth(), mContentView.getHeight());
     }
 
 
@@ -274,9 +274,8 @@ public class SwipeBackLayout extends LinearLayout {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if (changedView == mContentView) {
                 drawMask();
-                mContentViewCurX = left;
                 //因为view的位置发生了改变，需要重新布局，如果不进行此操作，存在刷新时，view的位置被还原的问题.之前老是因为view中动态添加数据后，导致还原view位置的问题
-                requestLayout();
+                mContentView.layout(left, 0, left + mContentView.getWidth(), mContentView.getHeight());
             }
         }
 
