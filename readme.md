@@ -19,7 +19,8 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 使用一些android特有的数据结构
 - 添加歌曲的mv功能
 - SeekBar后期修改为自定义view的方式来实现
-- 右滑关闭界面（添加上下左关闭功能）、SlidingMenu（添加左侧边栏）、旋转界面（左、右滑关闭界面）、歌词解析（动感歌词和lrc歌词格式）和动感歌词显示（支持动感歌词和lrc歌词）到时会优化成一个开源框架，独立出来
+- 右滑关闭界面（添加上下左关闭功能）、SlidingMenu（添加左侧边栏）、旋转界面（左、右滑关闭界面）、歌词解析（动感歌词和lrc歌词格式）和动感歌词显示（支持动感歌词和lrc歌词）到时会优化成开源框架，独立出来
+- 歌词分享，歌词文件生成视频（思路暂时如下：歌词文件生成动感歌词图片，再将动感歌词图片合成视频）
 
 # 更新日志 #
 - 2018-02-02：RotateLinearLayout中setRotation时，因为把硬件加速关闭了（[https://github.com/zhangliangming/HappyPlayer5/issues/6](https://github.com/zhangliangming/HappyPlayer5/issues/6 "RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁")），导致旋转动画时，界面上的文字出现了晃动,这个问题我会在后期修复,目前能想到的方法是：到时开启硬件启动，然后优化LrcActivity的页面布局。
