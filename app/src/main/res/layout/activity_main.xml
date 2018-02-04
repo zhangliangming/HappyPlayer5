@@ -56,10 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="2dp" />
 
-            <com.zlm.hp.widget.SwipeoutLayout
+            <com.zlm.hp.widget.SwipeOutLayout
                 android:id="@+id/playerBar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/player_height"></com.zlm.hp.widget.SwipeoutLayout>
+                android:layout_height="@dimen/player_height"></com.zlm.hp.widget.SwipeOutLayout>
         </LinearLayout>
     </RelativeLayout>
 

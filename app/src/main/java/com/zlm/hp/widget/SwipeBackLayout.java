@@ -126,8 +126,8 @@ public class SwipeBackLayout extends LinearLayout {
             public void onGlobalLayout() {
                 getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 //执行打开页面动画
-                mViewDragHelper.smoothSlideViewTo(mContentView, 0, 0);
-                ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
+                if (mViewDragHelper.smoothSlideViewTo(mContentView, 0, 0))
+                    ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
 
             }
         });
@@ -144,8 +144,9 @@ public class SwipeBackLayout extends LinearLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        if (mContentView != null)
+        if (mContentView != null) {
             mContentView.layout(mContentViewCurX, 0, mContentViewCurX + mContentView.getWidth(), mContentView.getHeight());
+        }
     }
 
 
@@ -273,9 +274,10 @@ public class SwipeBackLayout extends LinearLayout {
         public void onViewPositionChanged(View changedView, int left, int top, int dx, int dy) {
             super.onViewPositionChanged(changedView, left, top, dx, dy);
             if (changedView == mContentView) {
+                mContentViewCurX = left;
                 drawMask();
                 //因为view的位置发生了改变，需要重新布局，如果不进行此操作，存在刷新时，view的位置被还原的问题.之前老是因为view中动态添加数据后，导致还原view位置的问题
-                mContentView.layout(left, 0, left + mContentView.getWidth(), mContentView.getHeight());
+                invalidate();
             }
         }
 
@@ -301,19 +303,19 @@ public class SwipeBackLayout extends LinearLayout {
 
                 if (Math.abs(xVelocity) > mMinimumVelocity && xvel > 0) {
 
-                    mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
-                    ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
+                    if (mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0))
+                        ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
 
                 } else {
 
                     if (releasedChild.getLeft() < getWidth() / 2) {
                         //在左半边
-                        mViewDragHelper.smoothSlideViewTo(releasedChild, 0, 0);
-                        ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
+                        if (mViewDragHelper.smoothSlideViewTo(releasedChild, 0, 0))
+                            ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
                     } else {
                         //在右半边
-                        mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
-                        ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
+                        if (mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0))
+                            ViewCompat.postInvalidateOnAnimation(SwipeBackLayout.this);
                     }
 
                 }
@@ -345,14 +347,12 @@ public class SwipeBackLayout extends LinearLayout {
             float percent = mContentView.getLeft() * 1.0f / getWidth();
             int alpha = 200 - (int) (200 * percent);
             mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
-
-            invalidate();
         }
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
-        super.dispatchDraw(canvas);
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
         if (isPaintFade && mContentView.getLeft() > 0) {
             canvas.drawRect(0, 0, mContentView.getLeft(), getHeight(), mFadePaint);
         }
@@ -360,20 +360,16 @@ public class SwipeBackLayout extends LinearLayout {
 
     @Override
     public void computeScroll() {
+        super.computeScroll();
         if (mViewDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
-
-            invalidate();
         } else {
-
-            if (mContentView.getLeft() >= getWidth()) {
+            if (mContentViewCurX >= getWidth()) {
                 if (mSwipeBackLayoutListener != null) {
                     mSwipeBackLayoutListener.finishView();
                 }
             }
-
         }
-
     }
 
     public void setPaintFade(boolean paintFade) {
@@ -384,8 +380,8 @@ public class SwipeBackLayout extends LinearLayout {
      * 关闭
      */
     public void finish() {
-        mViewDragHelper.smoothSlideViewTo(mContentView, getWidth(), 0);
-        ViewCompat.postInvalidateOnAnimation(this);
+        if (mViewDragHelper.smoothSlideViewTo(mContentView, getWidth(), 0))
+            ViewCompat.postInvalidateOnAnimation(this);
     }
 
     /////////////////////////////////////////////////////////////////////

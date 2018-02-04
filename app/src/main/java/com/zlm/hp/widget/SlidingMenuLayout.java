@@ -84,7 +84,6 @@ public class SlidingMenuLayout extends FrameLayout {
      */
     private Fragment mCurrentFragment;
     private FragmentManager mFragmentManager;
-    private boolean isHandToClose = false;
     /////////////////////////////////////////////
 
     /**
@@ -186,9 +185,9 @@ public class SlidingMenuLayout extends FrameLayout {
         mFragmentManager.beginTransaction().add(mMenuFrameLayout.getId(), mCurrentFragment).commit();
 
         //
-        isHandToClose = false;
-        mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, 0, 0);
-        ViewCompat.postInvalidateOnAnimation(this);
+
+        if (mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, 0, 0))
+            ViewCompat.postInvalidateOnAnimation(this);
 
     }
 
@@ -196,9 +195,9 @@ public class SlidingMenuLayout extends FrameLayout {
      * 隐藏菜单界面
      */
     public void hideMenuView(FragmentManager supportFragmentManager) {
-        isHandToClose = true;
-        mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, getWidth(), 0);
-        ViewCompat.postInvalidateOnAnimation(this);
+
+        if (mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, getWidth(), 0))
+            ViewCompat.postInvalidateOnAnimation(this);
 
     }
 
@@ -293,12 +292,9 @@ public class SlidingMenuLayout extends FrameLayout {
 
         if (mViewDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
-
-            invalidate();
         } else {
 
-            if (isHandToClose) {
-                isHandToClose = false;
+            if (mMenuCurLeftX >= getWidth()) {
 
                 if (mCurrentFragment != null) {
 
@@ -391,7 +387,7 @@ public class SlidingMenuLayout extends FrameLayout {
             float percent = mMenuFrameLayout.getLeft() * 1.0f / getWidth();
             int alpha = 200 - (int) (200 * percent);
             mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
-            invalidate();
+
         }
     }
 
@@ -457,11 +453,11 @@ public class SlidingMenuLayout extends FrameLayout {
                 ViewHelper.setScaleX(mainLinearLayoutContainer, 0.9f + 0.1f * percent);
                 ViewHelper.setScaleY(mainLinearLayoutContainer, 0.9f + 0.1f * percent);
 
-                drawFade();
                 //
                 mMenuCurLeftX = left;
+                drawFade();
                 //因为view的位置发生了改变，需要重新布局，如果不进行此操作，存在刷新时，view的位置被还原的问题.之前老是因为view中动态添加数据后，导致还原view位置的问题
-                requestLayout();
+                invalidate();
             }
         }
 
@@ -488,26 +484,21 @@ public class SlidingMenuLayout extends FrameLayout {
 
                 if (Math.abs(xVelocity) > mMinimumVelocity && xvel > 0) {
 
-
-                    isHandToClose = true;
-                    mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
-                    ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
+                    if (mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0))
+                        ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
 
 
                 } else {
                     if (releasedChild.getLeft() < getWidth() / 2) {
 
-
-                        isHandToClose = false;
                         //在左半边
-                        mViewDragHelper.smoothSlideViewTo(releasedChild, 0, 0);
-                        ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
+                        if (mViewDragHelper.smoothSlideViewTo(releasedChild, 0, 0))
+                            ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
                     } else {
                         //在右半边
 
-                        isHandToClose = true;
-                        mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
-                        ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
+                        if (mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0))
+                            ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
                     }
 
                 }

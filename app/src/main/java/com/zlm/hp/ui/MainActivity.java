@@ -62,7 +62,7 @@ import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.LrcSeekBar;
 import com.zlm.hp.widget.SlidingMenuLayout;
-import com.zlm.hp.widget.SwipeoutLayout;
+import com.zlm.hp.widget.SwipeOutLayout;
 import com.zlm.hp.widget.lrc.FloatLyricsView;
 
 import java.util.ArrayList;
@@ -126,7 +126,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 底部播放器的布局
      */
-    private SwipeoutLayout mSwipeoutLayout;
+    private SwipeOutLayout mSwipeOutLayout;
     /**
      * 歌手头像
      */
@@ -985,8 +985,8 @@ public class MainActivity extends BaseActivity {
         //
         mPlayerBarParentLinearLayout = findViewById(R.id.playerBarParent);
 
-        mSwipeoutLayout = findViewById(R.id.playerBar);
-        mSwipeoutLayout.setBackgroundColor(ColorUtil.parserColor("#ffffff", 245));
+        mSwipeOutLayout = findViewById(R.id.playerBar);
+        mSwipeOutLayout.setBackgroundColor(ColorUtil.parserColor("#ffffff", 245));
         ViewGroup barContentView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_content, null);
 
         ViewGroup barMenuView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_menu, null);
@@ -1004,9 +1004,9 @@ public class MainActivity extends BaseActivity {
         mBarOpenFlagView = barContentView.findViewById(R.id.bar_dragflagOpen);
         //
         if (mHPApplication.isBarMenuShow()) {
-            mSwipeoutLayout.initViewAndShowMenuView(barContentView, barMenuView, mSingerImg);
+            mSwipeOutLayout.initViewAndShowMenuView(barContentView, barMenuView, mSingerImg);
         } else {
-            mSwipeoutLayout.initViewAndShowContentView(barContentView, barMenuView, mSingerImg);
+            mSwipeOutLayout.initViewAndShowContentView(barContentView, barMenuView, mSingerImg);
         }
 
 //        playerBarLinearLayout.setDragViewOnClickListener(new PlayerBarLinearLayout.DragViewOnClickListener() {
@@ -1023,7 +1023,7 @@ public class MainActivity extends BaseActivity {
 //                }
 //            }
 //        });
-        mSwipeoutLayout.setPlayerBarListener(new SwipeoutLayout.PlayerBarListener() {
+        mSwipeOutLayout.setPlayerBarListener(new SwipeOutLayout.PlayerBarListener() {
             @Override
             public void onClose() {
 //                if (mBarCloseFlagView.getVisibility() != View.VISIBLE) {
@@ -1053,7 +1053,7 @@ public class MainActivity extends BaseActivity {
                 mHPApplication.setBarMenuShow(true);
             }
         });
-        mSwipeoutLayout.setPlayerBarOnClickListener(new SwipeoutLayout.PlayerBarOnClickListener() {
+        mSwipeOutLayout.setPlayerBarOnClickListener(new SwipeOutLayout.PlayerBarOnClickListener() {
             @Override
             public void onClick() {
 
