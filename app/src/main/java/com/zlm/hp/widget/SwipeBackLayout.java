@@ -351,8 +351,8 @@ public class SwipeBackLayout extends LinearLayout {
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    protected void dispatchDraw(Canvas canvas) {
+        super.dispatchDraw(canvas);
         if (isPaintFade && mContentView.getLeft() > 0) {
             canvas.drawRect(0, 0, mContentView.getLeft(), getHeight(), mFadePaint);
         }
