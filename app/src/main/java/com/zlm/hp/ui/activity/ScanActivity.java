@@ -219,7 +219,7 @@ public class ScanActivity extends BaseActivity {
                 MediaUtil.scanMusic(mContext, new MediaUtil.ForeachListener() {
                     @Override
                     public void before() {
-                        AudioInfoDB.getAudioInfoDB(mContext).deleteTab();
+                        AudioInfoDB.getAudioInfoDB(mContext).delete(AudioInfo.LOCAL);
                     }
 
                     @Override

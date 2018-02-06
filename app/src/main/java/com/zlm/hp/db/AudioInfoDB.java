@@ -165,6 +165,19 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     }
 
     /**
+     * 删除type对应的数据
+     * @param type
+     */
+    public void delete(int type) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.delete(TBL_NAME, "type=?", new String[]{type + ""});
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 是否存在
      *
      * @param hash

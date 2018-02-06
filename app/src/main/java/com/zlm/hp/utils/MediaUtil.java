@@ -122,6 +122,20 @@ public class MediaUtil {
                 }
             }
 
+            if (artist.equals("<unknown>")) {
+                if (title.contains("-")) {
+                    String regex = "\\s*-\\s*";
+                    String[] temps = title.split(regex);
+                    if (temps.length >= 2) {
+                        //去掉首尾空格
+                        artist = title.split(regex)[0].trim();
+                        title = title.split(regex)[1].trim();
+                    }
+                } else {
+                    artist = context.getString(R.string.unknown);
+                }
+            }
+
             String fileSizeText = getFileSize(fileSize);
             String durationText = parseTimeToString(duration);
             //歌曲文件后缀名

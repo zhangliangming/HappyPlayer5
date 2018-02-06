@@ -105,7 +105,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
                 MediaUtil.scanMusic(mContext, new MediaUtil.ForeachListener() {
                     @Override
                     public void before() {
-                        AudioInfoDB.getAudioInfoDB(mContext).deleteTab();
+                        AudioInfoDB.getAudioInfoDB(mContext).delete(AudioInfo.LOCAL);
                     }
 
                     @Override
