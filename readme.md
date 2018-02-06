@@ -24,6 +24,7 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 制作歌词(将pc制作歌词功能移植到app)
 
 # 更新日志 #
+- 2018-02-06：部分jar包修改为gradle方式引入
 - 2018-02-05：修复和优化SwipeBackLayout、SlidingMenuLayout，SwipeoutLayout类修改为：SwipeOutLayout
 - 2018-02-02：RotateLinearLayout中setRotation时，因为把硬件加速关闭了（[https://github.com/zhangliangming/HappyPlayer5/issues/6](https://github.com/zhangliangming/HappyPlayer5/issues/6 "RotateLinearLayout旋转角度在0.x时LrcActivity页面layout_lrc_playbar布局会闪烁")），导致旋转动画时，界面上的文字出现了晃动,这个问题我会在后期修复,目前能想到的方法是：到时开启硬件启动，然后优化LrcActivity的页面布局。
 - 2018-02-01：优化SwipeBackLayout
