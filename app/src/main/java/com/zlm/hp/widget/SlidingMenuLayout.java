@@ -91,12 +91,6 @@ public class SlidingMenuLayout extends FrameLayout {
      */
     private Paint mFadePaint;
 
-
-    /**
-     * 是否允许拖动
-     */
-    private boolean isAllowDrag = true;
-
     /**
      * 是否绘画阴影
      */
@@ -212,7 +206,6 @@ public class SlidingMenuLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (!isAllowDrag) return super.onInterceptTouchEvent(event);
         boolean intercepted = false;
         try {
 
@@ -277,7 +270,6 @@ public class SlidingMenuLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (!isAllowDrag) return super.onTouchEvent(event);
         try {
             obtainVelocityTracker(event);
             mViewDragHelper.processTouchEvent(event);
@@ -523,10 +515,6 @@ public class SlidingMenuLayout extends FrameLayout {
     }
 
     ///////////////////////////
-
-    public void setAllowDrag(boolean allowDrag) {
-        isAllowDrag = allowDrag;
-    }
 
     public void setPaintFade(boolean paintFade) {
         isPaintFade = paintFade;

@@ -740,8 +740,6 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                //不允许拖动
-                slidingMenuLayout.setAllowDrag(false);
                 mFragmentListener.openFragment(new SearchFragment());
 
 
