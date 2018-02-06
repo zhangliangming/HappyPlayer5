@@ -16,6 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -180,17 +182,6 @@ public class MainActivity extends BaseActivity {
      * 音频广播
      */
     private AudioBroadcastReceiver mAudioBroadcastReceiver;
-
-    /**
-     * 广播监听
-     */
-    private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            doAudioReceive(context, intent);
-        }
-    };
-
     /**
      * 在线音乐广播
      */
@@ -201,7 +192,6 @@ public class MainActivity extends BaseActivity {
             doNetMusicReceive(context, intent);
         }
     };
-
     /**
      * 耳机广播
      */
@@ -210,7 +200,6 @@ public class MainActivity extends BaseActivity {
      * 监听电话
      */
     private MobliePhoneReceiver mMobliePhoneReceiver;
-
     /**
      * 系统广播
      */
@@ -221,7 +210,6 @@ public class MainActivity extends BaseActivity {
             doSystemReceive(context, intent);
         }
     };
-
     /**
      * Fragment广播
      */
@@ -242,7 +230,6 @@ public class MainActivity extends BaseActivity {
             doLockLrcReceiver(context, intent);
         }
     };
-
     /**
      *
      */
@@ -295,17 +282,16 @@ public class MainActivity extends BaseActivity {
             mCheckServiceHandler.postDelayed(mCheckServiceRunnable, mCheckServiceTime);
         }
     };
-
-    ///////////////////////////pop///////////////////////////////////////
-
     /**
      * 弹出窗口是否显示
      */
     private boolean isPopViewShow = false;
+
+    ///////////////////////////pop///////////////////////////////////////
     /**
      * 弹出窗口全屏界面
      */
-    private LinearLayout mListPopLinearLayout;
+    private RelativeLayout mListPopLinearLayout;
     /**
      * 弹出视图
      */
@@ -314,11 +300,19 @@ public class MainActivity extends BaseActivity {
      * 当前播放列表
      */
     private LinearLayoutRecyclerView mCurRecyclerView;
-
     /**
      *
      */
     private MainPopPlayListAdapter mPopPlayListAdapter;
+    /**
+     * 广播监听
+     */
+    private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            doAudioReceive(context, intent);
+        }
+    };
     /**
      * 当前播放列表歌曲总数
      */
@@ -343,9 +337,6 @@ public class MainActivity extends BaseActivity {
 
         //初始化底部播放器视图
         initPlayerViews();
-
-        //初始化播放列表
-        initListPopView();
 
         //初始化服务
         initService();
@@ -809,6 +800,10 @@ public class MainActivity extends BaseActivity {
      * 初始化播放列表
      */
     private void initListPopView() {
+
+        ViewStub stub = findViewById(R.id.viewstub_main_pop);
+        stub.inflate();
+
         mCurPLSizeTv = findViewById(R.id.list_size);
         mCurRecyclerView = findViewById(R.id.curplaylist_recyclerView);
         //初始化内容视图
@@ -921,7 +916,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
-
+        mPopMenuRelativeLayout.clearAnimation();
         mPopMenuRelativeLayout.startAnimation(translateAnimation);
     }
 
@@ -929,6 +924,11 @@ public class MainActivity extends BaseActivity {
      * 显示popview
      */
     private void showPopView() {
+
+        if (mListPopLinearLayout == null) {
+            //初始化播放列表
+            initListPopView();
+        }
 
         initPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
         //加载当前播放列表数据
@@ -939,27 +939,45 @@ public class MainActivity extends BaseActivity {
         mCurPLSizeTv.setText(curAudioInfos.size() + "");
         mPopPlayListAdapter = new MainPopPlayListAdapter(mHPApplication, getApplicationContext(), curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
+        //滚动到当前播放位置
+        int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
+        if (position >= 0)
+            mCurRecyclerView.move(position,
+                    LinearLayoutRecyclerView.scroll);
 
+        /**
+         * 如果该界面还没初始化，则监听
+         */
+        if (mPopMenuRelativeLayout.getHeight() == 0) {
+            mPopMenuRelativeLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mPopMenuRelativeLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    showPopViewHandler();
+                }
+            });
 
+        } else {
+            showPopViewHandler();
+        }
+    }
+
+    /**
+     * 动画处理
+     */
+    private void showPopViewHandler() {
         //
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mPopMenuRelativeLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
+        translateAnimation.setDuration(350);//设置动画持续时间
         translateAnimation.setFillAfter(true);
         translateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 0));
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 120));
-
-                //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
-                if (position >= 0)
-                    mCurRecyclerView.move(position,
-                            LinearLayoutRecyclerView.smoothScroll);
             }
 
             @Override
@@ -967,11 +985,13 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+        //
         mListPopLinearLayout.setVisibility(View.VISIBLE);
+        mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 0));
+        //
+        mPopMenuRelativeLayout.clearAnimation();
         mPopMenuRelativeLayout.startAnimation(translateAnimation);
         isPopViewShow = true;
-
-
     }
 
 

@@ -1,72 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/title_height"
     android:background="@color/defColor">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="20dp"
+        android:layout_toLeftOf="@+id/right_flag">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <com.zlm.hp.widget.IconfontTextView
+            android:layout_width="@dimen/title_height"
+            android:layout_height="@dimen/title_height"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
-            android:layout_toLeftOf="@+id/right_flag">
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/title_search"
+            android:textColor="#eee"
+            android:textSize="@dimen/title_icon_size" />
 
-            <com.zlm.hp.widget.IconfontTextView
-                android:layout_width="@dimen/title_height"
-                android:layout_height="@dimen/title_height"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/title_search"
-                android:textColor="#eee"
-                android:textSize="@dimen/title_icon_size" />
-
-            <com.zlm.hp.widget.SearchEditText
-                android:id="@+id/search"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:paddingLeft="40dp"
-                android:paddingRight="@dimen/title_height"
-                android:singleLine="true"
-                android:textColor="#fff"
-                android:textCursorDrawable="@drawable/edit_cursor"
-                android:textSize="15dp" />
+        <com.zlm.hp.widget.SearchEditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:paddingLeft="40dp"
+            android:paddingRight="@dimen/title_height"
+            android:singleLine="true"
+            android:textColor="#fff"
+            android:textCursorDrawable="@drawable/edit_cursor"
+            android:textSize="15dp" />
 
 
-            <com.zlm.hp.widget.IconfontTextView
-                android:id="@+id/clean_img"
-                android:layout_width="@dimen/title_height"
-                android:layout_height="@dimen/title_height"
-                android:layout_alignParentRight="true"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="@string/clean_img"
-                android:textColor="#eee"
-                android:textSize="@dimen/title_icon_size"
-                android:visibility="invisible" />
-
-        </RelativeLayout>
-
-
-        <TextView
-            android:id="@+id/right_flag"
+        <com.zlm.hp.widget.IconfontTextView
+            android:id="@+id/clean_img"
             android:layout_width="@dimen/title_height"
             android:layout_height="@dimen/title_height"
             android:layout_alignParentRight="true"
-            android:layout_margin="5dp"
-            android:gravity="center"
-            android:text="@string/title_cancel"
-            android:textColor="#fff"
-            android:textSize="@dimen/title_size"></TextView>
+            android:gravity="center_vertical|center_horizontal"
+            android:text="@string/clean_img"
+            android:textColor="#eee"
+            android:textSize="@dimen/title_icon_size"
+            android:visibility="invisible" />
+
     </RelativeLayout>
 
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/right_flag"
+        android:layout_width="@dimen/title_height"
+        android:layout_height="@dimen/title_height"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:text="@string/title_cancel"
+        android:textColor="#fff"
+        android:textSize="@dimen/title_size"></TextView>
+
+
+</RelativeLayout>

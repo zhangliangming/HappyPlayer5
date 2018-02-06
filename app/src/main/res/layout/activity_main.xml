@@ -40,9 +40,12 @@
 
         </com.zlm.hp.widget.SlidingMenuLayout>
 
-        <include
-            layout="@layout/layout_main_pop"
-            android:paddingBottom="@dimen/player_height"></include>
+        <ViewStub
+            android:id="@+id/viewstub_main_pop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/layout_main_pop"
+            android:paddingBottom="@dimen/player_height"></ViewStub>
 
         <LinearLayout
             android:id="@+id/playerBarParent"

@@ -175,7 +175,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
             //下载
-            if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash())|| AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
+            if (DownloadInfoDB.getAudioInfoDB(mContext).isExists(audioInfo.getHash()) || AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
 
                 viewHolder.getDownloadedImg().setVisibility(View.VISIBLE);
                 viewHolder.getDownloadImg().setVisibility(View.INVISIBLE);
@@ -303,21 +303,25 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
      * @param audioInfo
      */
     public void reshViewHolder(AudioInfo audioInfo) {
-        if (playIndexPosition != -1) {
-            notifyItemChanged(playIndexPosition);
-        }
         if (audioInfo == null) {
+
+            if (playIndexPosition != -1) {
+                notifyItemChanged(playIndexPosition);
+            }
+
             playIndexPosition = -1;
             playIndexHash = "-1";
             return;
         }
-        //;
-        playIndexPosition = getPlayIndexPosition(audioInfo);
-        if (playIndexPosition != -1) {
+        //
+        int newPlayIndexPosition = getPlayIndexPosition(audioInfo);
+        if (playIndexPosition != newPlayIndexPosition && newPlayIndexPosition != -1) {
+            if (playIndexPosition != -1)
+                notifyItemChanged(playIndexPosition);
+            playIndexPosition = newPlayIndexPosition;
             playIndexHash = audioInfo.getHash();
             notifyItemChanged(playIndexPosition);
         }
-
     }
 
     /**

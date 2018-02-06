@@ -11,10 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.zlm.hp.application.HPApplication;
@@ -36,14 +36,14 @@ public abstract class BaseFragment extends StatedFragment {
     /**
      * 内容布局
      */
-    private LinearLayout mContentContainer;
+    private ViewStub mContentContainer;
 
     //////////////////////////////////////////////////////////////////////
 
     /**
      * 加载中布局
      */
-    private LinearLayout mLoadingContainer;
+    private ViewStub mLoadingContainer;
     /**
      * 加载图标
      */
@@ -58,7 +58,7 @@ public abstract class BaseFragment extends StatedFragment {
     /**
      * 无网络
      */
-    private LinearLayout mNetContainer;
+    private ViewStub mNetContainer;
 
     /**
      *
@@ -108,17 +108,6 @@ public abstract class BaseFragment extends StatedFragment {
         ViewGroup.LayoutParams vlp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         //
-        mContentContainer = mainView.findViewById(R.id.content_container);
-        View contentView = inflater.inflate(setContentViewId(), null, false);
-        //
-        mLoadingContainer = mainView.findViewById(R.id.loading_container);
-        View loadingView = inflater.inflate(R.layout.layout_fragment_loading, null, false);
-
-        //
-        mNetContainer = mainView.findViewById(R.id.net_container);
-        View noNetView = inflater.inflate(R.layout.layout_fragment_nonet, null, false);
-
-        //
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isAddStatusBar()) {
                 View statusBarView = new View(mActivity.getApplicationContext());
@@ -131,7 +120,6 @@ public abstract class BaseFragment extends StatedFragment {
         //
 
         if (setTitleViewId() != 0) {
-
             View titleView = inflater.inflate(setTitleViewId(), null, false);
             int titleHeight = (int) mActivity.getResources().getDimension(R.dimen.title_height);
             ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, titleHeight);
@@ -139,15 +127,14 @@ public abstract class BaseFragment extends StatedFragment {
             mainView.addView(titleView, 1, tlp);
         }
         //
-        mNetContainer.addView(noNetView, vlp);
-        mLoadingContainer.addView(loadingView, vlp);
-        mContentContainer.addView(contentView, vlp);
-
+        mContentContainer = mainView.findViewById(R.id.viewstub_content_container);
+        mContentContainer.setLayoutResource(setContentViewId());
+        mContentContainer.inflate();
         //
         mHPApplication = (HPApplication) mActivity.getApplication();
         logger = LoggerUtil.getZhangLogger(mActivity.getApplicationContext());
-        //初始化界面
-        initView();
+
+        //
         initViews(savedInstanceState, mainView);
         loadData(false);
     }
@@ -197,17 +184,27 @@ public abstract class BaseFragment extends StatedFragment {
     }
 
     /**
-     * 初始界面
+     * 初始化加载界面
      */
-    private void initView() {
-
-        mLoadImgView = mLoadingContainer.findViewById(R.id.load_img);
+    private void initLoadingView() {
+        mLoadingContainer = mainView.findViewById(R.id.viewstub_loading_container);
+        mLoadingContainer.inflate();
+        mLoadImgView = mainView.findViewById(R.id.load_img);
         rotateAnimation = AnimationUtils.loadAnimation(getContext(),
                 R.anim.anim_rotate);
         rotateAnimation.setInterpolator(new LinearInterpolator());// 匀速
         mLoadImgView.startAnimation(rotateAnimation);
+
+    }
+
+    /**
+     * 初始化没网络界面
+     */
+    private void initNoNetView() {
         //
-        mNetBGLayout = mNetContainer.findViewById(R.id.net_layout);
+        mNetContainer = mainView.findViewById(R.id.viewstub_net_container);
+        mNetContainer.inflate();
+        mNetBGLayout = mainView.findViewById(R.id.net_layout);
         mNetBGLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +219,9 @@ public abstract class BaseFragment extends StatedFragment {
      * 显示加载窗口
      */
     public void showLoadingView() {
+        if (mLoadingContainer == null) {
+            initLoadingView();
+        }
         mShowViewHandler.sendEmptyMessage(SHOWLOADINGVIEW);
     }
 
@@ -229,13 +229,14 @@ public abstract class BaseFragment extends StatedFragment {
      * 显示加载窗口
      */
     private void showLoadingViewHandler() {
-
-        mNetContainer.setVisibility(View.GONE);
+        if (mNetContainer != null)
+            mNetContainer.setVisibility(View.GONE);
         mContentContainer.setVisibility(View.GONE);
-        mLoadingContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
-        mLoadImgView.startAnimation(rotateAnimation);
-
+        if (mLoadingContainer != null) {
+            mLoadingContainer.setVisibility(View.VISIBLE);
+            mLoadImgView.clearAnimation();
+            mLoadImgView.startAnimation(rotateAnimation);
+        }
     }
 
     /**
@@ -250,15 +251,21 @@ public abstract class BaseFragment extends StatedFragment {
      */
     private void showContentViewHandler() {
         mContentContainer.setVisibility(View.VISIBLE);
-        mLoadingContainer.setVisibility(View.GONE);
-        mNetContainer.setVisibility(View.GONE);
-        mLoadImgView.clearAnimation();
+        if (mLoadingContainer != null) {
+            mLoadingContainer.setVisibility(View.GONE);
+            mLoadImgView.clearAnimation();
+        }
+        if (mNetContainer != null)
+            mNetContainer.setVisibility(View.GONE);
     }
 
     /**
      * 显示无网络界面
      */
     public void showNoNetView() {
+        if (mNetContainer == null) {
+            initNoNetView();
+        }
         mShowViewHandler.sendEmptyMessage(SHOWNONETView);
     }
 
@@ -267,9 +274,12 @@ public abstract class BaseFragment extends StatedFragment {
      */
     private void showNoNetViewHandler() {
         mContentContainer.setVisibility(View.GONE);
-        mLoadingContainer.setVisibility(View.GONE);
-        mNetContainer.setVisibility(View.VISIBLE);
-        mLoadImgView.clearAnimation();
+        if (mLoadingContainer != null) {
+            mLoadingContainer.setVisibility(View.GONE);
+            mLoadImgView.clearAnimation();
+        }
+        if (mNetContainer != null)
+            mNetContainer.setVisibility(View.VISIBLE);
     }
 
     /**

@@ -9,6 +9,8 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.Display;
 import android.view.View;
+import android.view.ViewStub;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -167,12 +169,12 @@ public class LrcActivity extends BaseActivity {
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //翻译歌词/音译歌词
                         mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
                         mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                         mHideTTImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //翻译歌词/音译歌词
                         mShowTTToTranslateImg.setVisibility(View.VISIBLE);
                         mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
@@ -186,11 +188,11 @@ public class LrcActivity extends BaseActivity {
                     mHideTranslateImg.setVisibility(View.INVISIBLE);
                     mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //音译歌词
                         mHideTransliterationImg.setVisibility(View.VISIBLE);
                         mShowTransliterationImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //音译歌词
                         mHideTransliterationImg.setVisibility(View.INVISIBLE);
                         mShowTransliterationImg.setVisibility(View.VISIBLE);
@@ -205,11 +207,11 @@ public class LrcActivity extends BaseActivity {
                     break;
                 case HASTRANSLATELRC:
 
-                    if(mManyLineLyricsView.isManyLineLrc()){
+                    if (mManyLineLyricsView.isManyLineLrc()) {
                         //翻译歌词
                         mHideTranslateImg.setVisibility(View.VISIBLE);
                         mShowTranslateImg.setVisibility(View.INVISIBLE);
-                    }else{
+                    } else {
                         //翻译歌词
                         mHideTranslateImg.setVisibility(View.INVISIBLE);
                         mShowTranslateImg.setVisibility(View.VISIBLE);
@@ -259,17 +261,20 @@ public class LrcActivity extends BaseActivity {
 
     //、、、、、、、、、、、、、、、、、、更多弹出窗口、、、、、、、、、、、、、、、、、、、、、、、、、、
     private boolean isPopViewShow = false;
-    private LinearLayout mPopLinearLayout;
+    private ViewStub mViewStubPopLinearLayout;
+    private RelativeLayout mPopLinearLayout;
     private LinearLayout mMenuLayout;
 
     //、、、、、、、、、、、、、、、、、、、当前播放列表窗口、、、、、、、、、、、、、、、、、、、、、、、、
     private boolean isPLPopViewShow = false;
-    private LinearLayout mPlPopLinearLayout;
+    private ViewStub mViewStubPlPopLinearLayout;
+    private RelativeLayout mPlPopLinearLayout;
     private PlayListBGRelativeLayout mPlPLayout;
 
     //、、、、、、、、、、、、、、、、、、、、、、歌手列表、、、、、、、、、、、、、、、、、、、、、、、、
     private boolean isSPLPopViewShow = false;
-    private LinearLayout mSPlPopLinearLayout;
+    private ViewStub mViewStubSPlPopLinearLayout;
+    private RelativeLayout mSPlPopLinearLayout;
     private PlayListBGRelativeLayout mSPlPLayout;
     private LinearLayoutRecyclerView mSingerNameRecyclerView;
     private LrcPopSingerListAdapter mLrcPopSingerListAdapter;
@@ -282,7 +287,8 @@ public class LrcActivity extends BaseActivity {
 
     //、、、、、、、、、、、、、、、、、、、当前歌曲信息窗口、、、、、、、、、、、、、、、、、、、、、、、、
     private boolean isSIPopViewShow = false;
-    private LinearLayout mSIPopLinearLayout;
+    private ViewStub mViewStubSIPopLinearLayout;
+    private RelativeLayout mSIPopLinearLayout;
     private PlayListBGRelativeLayout mSIPLayout;
     private TextView mPopSingerNameTv;
     private TextView mPopFileExtTv;
@@ -390,7 +396,7 @@ public class LrcActivity extends BaseActivity {
             mLrcSeekBar.setMax(0);
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0,0);
+            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
             //歌手写真
             mSingerImageView.setVisibility(View.INVISIBLE);
             mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
@@ -447,7 +453,7 @@ public class LrcActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0,0);
+            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
 
             //设置弹出窗口播放列表
             if (isPLPopViewShow) {
@@ -548,7 +554,7 @@ public class LrcActivity extends BaseActivity {
                 LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
                 if (lyricsUtil != null) {
                     lyricsUtil.setHash(hash);
-                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2,(int) curAudioMessage.getPlayProgress());
+                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2, (int) curAudioMessage.getPlayProgress());
                     mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
                 }
             }
@@ -907,11 +913,6 @@ public class LrcActivity extends BaseActivity {
         mUnLikeImgBtn.setVisibility(View.VISIBLE);
         mLikeImgBtn.setVisibility(View.GONE);
 
-        initPopView();
-        initPLPopView();
-        initSPLPopView();
-        initSIPopView();
-
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         mScreensWidth = display.getWidth();
@@ -943,6 +944,7 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
+        mSIPLayout.clearAnimation();
         mSIPLayout.startAnimation(translateAnimation);
 
     }
@@ -951,25 +953,58 @@ public class LrcActivity extends BaseActivity {
      * 显示歌曲信息
      */
     private void showSPIPopView(AudioInfo audioInfo) {
+        if(mViewStubSIPopLinearLayout == null){
+            initSIPopView();
+        }
+
         //设置歌曲信息
         mPopSingerNameTv.setText(audioInfo.getSingerName());
         mPopFileExtTv.setText(audioInfo.getFileExt());
         mPopTimeTv.setText(audioInfo.getDurationText());
         mPopFileSizeTv.setText(audioInfo.getFileSizeText());
+
+
+        /**
+         * 如果该界面还没初始化，则监听
+         */
+        if (mSIPLayout.getHeight() == 0) {
+            mSIPLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mSIPLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    showSPIPopViewHandler();
+                }
+            });
+
+        } else {
+            showSPIPopViewHandler();
+        }
+
+    }
+
+    /**
+     * 显示歌曲信息动画
+     */
+    private void showSPIPopViewHandler() {
+
         //
         mSIPopLinearLayout.setVisibility(View.VISIBLE);
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSIPLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
+        mSIPLayout.clearAnimation();
         mSIPLayout.startAnimation(translateAnimation);
 
         isSIPopViewShow = true;
+
     }
 
     /**
      * 初始化歌曲信息窗口
      */
     private void initSIPopView() {
+        mViewStubSIPopLinearLayout = findViewById(R.id.viewstub_layout_lrc_songinfo_pop);
+        mViewStubSIPopLinearLayout.inflate();
 
         mSIPopLinearLayout = findViewById(R.id.songinfoPopLayout);
         mSIPopLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -1020,7 +1055,7 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-
+        mSPlPLayout.clearAnimation();
         mSPlPLayout.startAnimation(translateAnimation);
 
     }
@@ -1030,16 +1065,42 @@ public class LrcActivity extends BaseActivity {
      */
     private void showSPLPopView(String[] singerNameArray) {
 
+        if (mViewStubSPlPopLinearLayout == null) {
+            initSPLPopView();
+        }
+
         //
         mLrcPopSingerListAdapter = new LrcPopSingerListAdapter(mHPApplication, getApplicationContext(), singerNameArray, mLrcActivityListener);
         mSingerNameRecyclerView.setAdapter(mLrcPopSingerListAdapter);
+
+        /**
+         * 如果该界面还没初始化，则监听
+         */
+        if (mSPlPLayout.getHeight() == 0) {
+            mSPlPLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mSPlPLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    showSPLPopViewHandler();
+                }
+            });
+
+        } else {
+            showSPLPopViewHandler();
+        }
+    }
+
+    /**
+     * 显示歌手列表弹出窗口动画
+     */
+    private void showSPLPopViewHandler() {
 
         mSPlPopLinearLayout.setVisibility(View.VISIBLE);
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mSPlPLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
+        mSPlPLayout.clearAnimation();
         mSPlPLayout.startAnimation(translateAnimation);
-
         isSPLPopViewShow = true;
     }
 
@@ -1047,6 +1108,8 @@ public class LrcActivity extends BaseActivity {
      * 初始化歌手列表窗口
      */
     private void initSPLPopView() {
+        mViewStubSPlPopLinearLayout = findViewById(R.id.viewstub_layout_lrc_singerlist_pop);
+        mViewStubSPlPopLinearLayout.inflate();
 
         mSPlPopLinearLayout = findViewById(R.id.singerListPopLayout);
         mSPlPopLinearLayout.setOnClickListener(new View.OnClickListener() {
@@ -1075,6 +1138,9 @@ public class LrcActivity extends BaseActivity {
      * 初始化播放列表弹出窗口
      */
     private void initPLPopView() {
+
+        mViewStubPlPopLinearLayout = findViewById(R.id.viewstub_lrc_list_pop);
+        mViewStubPlPopLinearLayout.inflate();
 
         mCurPLSizeTv = findViewById(R.id.list_size);
         mCurRecyclerView = findViewById(R.id.curplaylist_recyclerView);
@@ -1167,6 +1233,10 @@ public class LrcActivity extends BaseActivity {
      * 显示播放列表弹出窗口
      */
     private void showPlPopView() {
+        if (mViewStubPlPopLinearLayout == null) {
+            initPLPopView();
+        }
+
         initPLPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //加载当前播放列表数据
@@ -1177,6 +1247,12 @@ public class LrcActivity extends BaseActivity {
         mCurPLSizeTv.setText(curAudioInfos.size() + "");
         mPopPlayListAdapter = new LrcPopPlayListAdapter(mHPApplication, getApplicationContext(), curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
+
+        //滚动到当前播放位置
+        int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
+        if (position >= 0)
+            mCurRecyclerView.move(position,
+                    LinearLayoutRecyclerView.scroll);
 
              /*
                 参数解释：
@@ -1205,11 +1281,6 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
-                if (position >= 0)
-                    mCurRecyclerView.move(position,
-                            LinearLayoutRecyclerView.smoothScroll);
             }
 
             @Override
@@ -1219,6 +1290,7 @@ public class LrcActivity extends BaseActivity {
         });
 
         mPlPopLinearLayout.setVisibility(View.VISIBLE);
+        mPlPLayout.clearAnimation();
         mPlPLayout.startAnimation(translateAnimation);
 
         isPLPopViewShow = true;
@@ -1266,7 +1338,7 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-
+        mPlPLayout.clearAnimation();
         mPlPLayout.startAnimation(translateAnimation);
 
     }
@@ -1296,7 +1368,7 @@ public class LrcActivity extends BaseActivity {
 
             }
         });
-
+        mMenuLayout.clearAnimation();
         mMenuLayout.startAnimation(translateAnimation);
 
     }
@@ -1305,10 +1377,36 @@ public class LrcActivity extends BaseActivity {
      * 显示popview
      */
     private void showPopView() {
+        if (mViewStubPopLinearLayout == null) {
+            initPopView();
+        }
+        /**
+         * 如果该界面还没初始化，则监听
+         */
+        if (mMenuLayout.getHeight() == 0) {
+            mMenuLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mMenuLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    showPopViewHandler();
+                }
+            });
+
+        } else {
+            showPopViewHandler();
+        }
+    }
+
+    /**
+     *
+     */
+    private void showPopViewHandler() {
         mPopLinearLayout.setVisibility(View.VISIBLE);
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mMenuLayout.getHeight(), 0);
         translateAnimation.setDuration(250);//设置动画持续时间
         translateAnimation.setFillAfter(true);
+
+        mMenuLayout.clearAnimation();
         mMenuLayout.startAnimation(translateAnimation);
 
         isPopViewShow = true;
@@ -1318,7 +1416,8 @@ public class LrcActivity extends BaseActivity {
      * 初始化pop
      */
     private void initPopView() {
-
+        mViewStubPopLinearLayout = findViewById(R.id.viewstub_layout_lrc_pop);
+        mViewStubPopLinearLayout.inflate();
 
         mPopLinearLayout = findViewById(R.id.lrcPopLayout);
         mPopLinearLayout.setVisibility(View.INVISIBLE);

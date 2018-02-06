@@ -224,21 +224,25 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
      * @param audioInfo
      */
     public void reshViewHolder(AudioInfo audioInfo) {
-        if (playIndexPosition != -1) {
-            notifyItemChanged(playIndexPosition);
-        }
         if (audioInfo == null) {
+
+            if (playIndexPosition != -1) {
+                notifyItemChanged(playIndexPosition);
+            }
+
             playIndexPosition = -1;
             playIndexHash = "-1";
             return;
         }
-        //;
-        playIndexPosition = getPlayIndexPosition(audioInfo);
-        if (playIndexPosition != -1) {
+        //
+        int newPlayIndexPosition = getPlayIndexPosition(audioInfo);
+        if (playIndexPosition != newPlayIndexPosition && newPlayIndexPosition != -1) {
+            if (playIndexPosition != -1)
+                notifyItemChanged(playIndexPosition);
+            playIndexPosition = newPlayIndexPosition;
             playIndexHash = audioInfo.getHash();
             notifyItemChanged(playIndexPosition);
         }
-
     }
 
     /**

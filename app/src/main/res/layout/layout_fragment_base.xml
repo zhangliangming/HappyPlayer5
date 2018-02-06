@@ -6,25 +6,24 @@
     android:orientation="vertical">
 
 
-    <LinearLayout
-        android:id="@+id/loading_container"
+    <ViewStub
+        android:id="@+id/viewstub_loading_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:layout="@layout/layout_fragment_loading"></ViewStub>
 
-    <LinearLayout
-        android:id="@+id/content_container"
+    <ViewStub
+        android:id="@+id/viewstub_content_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
+        android:visibility="gone"></ViewStub>
 
 
-    <LinearLayout
-        android:id="@+id/net_container"
+    <ViewStub
+        android:id="@+id/viewstub_net_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone"></LinearLayout>
+        android:layout="@layout/layout_fragment_nonet"
+        android:visibility="gone"></ViewStub>
 
 </LinearLayout>

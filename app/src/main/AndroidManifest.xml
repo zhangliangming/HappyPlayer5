@@ -50,14 +50,13 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/noTransparentTheme" />
-        <activity android:name=".LrcActivity" />
+        <activity
+            android:name=".LrcActivity"
+            android:hardwareAccelerated="true" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".ScanActivity" />
 
-        <service
-            android:name="com.zlm.hp.service.AudioPlayerService"
-            android:enabled="true"
-            android:exported="true" />
+        <service android:name="com.zlm.hp.service.AudioPlayerService" />
 
         <activity android:name=".SearchLrcActivity" />
         <activity android:name=".SearchSingerActivity" />
@@ -74,7 +73,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:taskAffinity="com.zlm.lockscreen"
-            android:theme="@style/LockScreenBase"></activity>
+            android:theme="@style/lockScreenTheme"></activity>
     </application>
 
 </manifest>

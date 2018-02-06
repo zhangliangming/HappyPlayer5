@@ -152,6 +152,7 @@ public class LrcSeekBar extends AppCompatSeekBar {
         this.mContext = context;
         logger = LoggerUtil.getZhangLogger(context);
         initPaint();
+        setBackgroundColor(Color.TRANSPARENT);
     }
 
     private void initPaint() {
@@ -204,7 +205,7 @@ public class LrcSeekBar extends AppCompatSeekBar {
                 if (onChangeListener != null) {
                     onChangeListener.onProgressChanged();
                 }
-
+                invalidate();
             }
 
             @Override

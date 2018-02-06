@@ -195,32 +195,32 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <include
-        layout="@layout/layout_lrc_list_pop"
+    <ViewStub
+        android:id="@+id/viewstub_lrc_list_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:layout="@layout/layout_lrc_list_pop"></ViewStub>
 
-    <include
-        layout="@layout/layout_lrc_pop"
+    <ViewStub
+        android:id="@+id/viewstub_layout_lrc_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:layout="@layout/layout_lrc_pop"></ViewStub>
 
-    <include
-        layout="@layout/layout_lrc_singerlist_pop"
+    <ViewStub
+        android:id="@+id/viewstub_layout_lrc_singerlist_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:layout="@layout/layout_lrc_singerlist_pop"></ViewStub>
 
-    <include
-        layout="@layout/layout_lrc_songinfo_pop"
+    <ViewStub
+        android:id="@+id/viewstub_layout_lrc_songinfo_pop"
+        android:layout="@layout/layout_lrc_songinfo_pop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible"></include>
+        android:layout_alignParentBottom="true"></ViewStub>
 
 </com.zlm.hp.widget.RotateLinearLayout>

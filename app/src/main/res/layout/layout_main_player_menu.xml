@@ -5,18 +5,10 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-
-        <com.zlm.hp.widget.lrc.FloatLyricsView
-            android:id="@+id/floatLyricsView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="5dp" />
-
-
-    </RelativeLayout>
+    <com.zlm.hp.widget.lrc.FloatLyricsView
+        android:id="@+id/floatLyricsView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp" />
 
 </LinearLayout>

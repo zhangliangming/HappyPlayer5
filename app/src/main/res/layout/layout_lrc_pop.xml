@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lrcPopLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,474 +7,470 @@
     android:clickable="true"
     android:orientation="vertical">
 
-    <RelativeLayout
+
+    <LinearLayout
+        android:id="@+id/menuLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#263c56"
+        android:clickable="true"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/menuLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#263c56"
-            android:clickable="true"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lrc_pop_item_hast_height"
-                android:layout_marginTop="2dp"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-
-                    <ImageView
-                        android:id="@+id/search_singer_pic"
-                        android:layout_width="@dimen/lrc_pop_item_img_height"
-                        android:layout_height="@dimen/lrc_pop_item_img_height"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/search_singer_pic"
-                        android:clickable="true" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/search_singer_pic"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_horizontal"
-                        android:text="写真搜索"
-                        android:textColor="#fff"
-                        android:textSize="13dp" />
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-
-                    <ImageView
-                        android:id="@+id/search_lrc"
-                        android:layout_width="@dimen/lrc_pop_item_img_height"
-                        android:layout_height="@dimen/lrc_pop_item_img_height"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/search_lrc"
-                        android:clickable="true" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/search_lrc"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_horizontal"
-                        android:text="歌词搜索"
-                        android:textColor="#fff"
-                        android:textSize="13dp" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-
-                    <ImageView
-                        android:id="@+id/songinfo"
-                        android:layout_width="@dimen/lrc_pop_item_img_height"
-                        android:layout_height="@dimen/lrc_pop_item_img_height"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:background="@drawable/song_info"
-                        android:clickable="true" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/songinfo"
-                        android:layout_marginTop="5dp"
-                        android:gravity="center_horizontal"
-                        android:text="歌曲详情"
-                        android:textColor="#fff"
-                        android:textSize="13dp" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="5dp"
-                android:background="#40ffffff"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lrc_pop_item_height"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="歌词进度"
-                    android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2">
-
-                    <com.zlm.hp.widget.ButtonRelativeLayout
-                        android:id="@+id/lyric_progress_jian"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:text="《《-0.5秒"
-                            android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
-
-
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1">
-
-                    <com.zlm.hp.widget.ButtonRelativeLayout
-                        android:id="@+id/lyric_progress_reset"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:text="重置"
-                            android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
-
-
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="2">
-
-                    <com.zlm.hp.widget.ButtonRelativeLayout
-                        android:id="@+id/lyric_progress_jia"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:clickable="true">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:text="+0.5秒》》"
-                            android:textColor="#fff"
-                            android:textSize="13dp"></TextView>
-
-
-                    </com.zlm.hp.widget.ButtonRelativeLayout>
-                </RelativeLayout>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+            android:layout_height="@dimen/lrc_pop_item_hast_height"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/lrc_pop_item_height">
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+
+                <ImageView
+                    android:id="@+id/search_singer_pic"
+                    android:layout_width="@dimen/lrc_pop_item_img_height"
+                    android:layout_height="@dimen/lrc_pop_item_img_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/search_singer_pic"
+                    android:clickable="true" />
 
                 <TextView
-                    android:id="@+id/fontSize"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="字体大小"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/search_singer_pic"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:text="写真搜索"
                     android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
+                    android:textSize="13dp" />
 
-                <com.zlm.hp.widget.IconfontImageButtonTextView
-                    android:id="@+id/lyric_decrease"
-                    android:layout_width="wrap_content"
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+
+                <ImageView
+                    android:id="@+id/search_lrc"
+                    android:layout_width="@dimen/lrc_pop_item_img_height"
+                    android:layout_height="@dimen/lrc_pop_item_img_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/search_lrc"
+                    android:clickable="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/search_lrc"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:text="歌词搜索"
+                    android:textColor="#fff"
+                    android:textSize="13dp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+
+                <ImageView
+                    android:id="@+id/songinfo"
+                    android:layout_width="@dimen/lrc_pop_item_img_height"
+                    android:layout_height="@dimen/lrc_pop_item_img_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/song_info"
+                    android:clickable="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/songinfo"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:text="歌曲详情"
+                    android:textColor="#fff"
+                    android:textSize="13dp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginTop="5dp"
+            android:background="#40ffffff"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lrc_pop_item_height"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="歌词进度"
+                android:textColor="#fff"
+                android:textSize="13dp"></TextView>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
+
+                <com.zlm.hp.widget.ButtonRelativeLayout
+                    android:id="@+id/lyric_progress_jian"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@+id/fontSize"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/ziti_jian"
-                    android:textColor="#FFF"
-                    android:textSize="16dp" />
-
-
-                <com.zlm.hp.widget.LrcSeekBar
-                    android:id="@+id/fontSizeseekbar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/lyric_increase"
-                    android:layout_toRightOf="@+id/lyric_decrease" />
-
-                <com.zlm.hp.widget.IconfontImageButtonTextView
-                    android:id="@+id/lyric_increase"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="10dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="15dp"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="@string/ziti_jia"
-                    android:textColor="#FFF"
-                    android:textSize="16dp" />
-            </RelativeLayout>
+                    android:layout_marginTop="10dp"
+                    android:clickable="true">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="《《-0.5秒"
+                        android:textColor="#fff"
+                        android:textSize="13dp"></TextView>
+
+
+                </com.zlm.hp.widget.ButtonRelativeLayout>
+            </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lrc_pop_item_height">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
-                <TextView
-                    android:id="@+id/fontColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center_vertical"
-                    android:text="字体颜色"
-                    android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
-
-                <LinearLayout
+                <com.zlm.hp.widget.ButtonRelativeLayout
+                    android:id="@+id/lyric_progress_reset"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_toRightOf="@+id/fontColor"
-                    android:orientation="horizontal">
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true">
 
-                    <RelativeLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel1"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#fada83" />
-
-                        <ImageView
-                            android:id="@+id/color_status1"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="重置"
+                        android:textColor="#fff"
+                        android:textSize="13dp"></TextView>
 
 
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel2"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#fe8db6" />
-
-                        <ImageView
-                            android:id="@+id/color_status2"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel3"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#feb88e" />
-
-                        <ImageView
-                            android:id="@+id/color_status3"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel4"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#adfe8e" />
-
-                        <ImageView
-                            android:id="@+id/color_status4"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
-
-
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel5"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#8dc7ff" />
-
-                        <ImageView
-                            android:id="@+id/color_status5"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
-
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1">
-
-                        <ImageView
-                            android:id="@+id/color_panel6"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="#e69bff" />
-
-                        <ImageView
-                            android:id="@+id/color_status6"
-                            android:layout_width="18dp"
-                            android:layout_height="18dp"
-                            android:layout_centerInParent="true"
-                            android:layout_centerVertical="true"
-                            android:background="@mipmap/kg_skin_color_select_icon"
-                            android:visibility="gone" />
-                    </RelativeLayout>
-
-
-                </LinearLayout>
+                </com.zlm.hp.widget.ButtonRelativeLayout>
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dip"
-                android:layout_marginTop="3dp"
-                android:background="#40ffffff"></View>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2">
 
-            <LinearLayout
-                android:id="@+id/calcel"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/lrc_pop_item_height"
-                android:orientation="horizontal">
-
-                <TextView
+                <com.zlm.hp.widget.ButtonRelativeLayout
+                    android:id="@+id/lyric_progress_jia"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical|center_horizontal"
-                    android:text="取消"
-                    android:textColor="#fff"
-                    android:textSize="13dp"></TextView>
-            </LinearLayout>
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:text="+0.5秒》》"
+                        android:textColor="#fff"
+                        android:textSize="13dp"></TextView>
+
+
+                </com.zlm.hp.widget.ButtonRelativeLayout>
+            </RelativeLayout>
         </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginTop="3dp"
+            android:background="#40ffffff"></View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lrc_pop_item_height">
+
+            <TextView
+                android:id="@+id/fontSize"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="字体大小"
+                android:textColor="#fff"
+                android:textSize="13dp"></TextView>
+
+            <com.zlm.hp.widget.IconfontImageButtonTextView
+                android:id="@+id/lyric_decrease"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/fontSize"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/ziti_jian"
+                android:textColor="#FFF"
+                android:textSize="16dp" />
+
+
+            <com.zlm.hp.widget.LrcSeekBar
+                android:id="@+id/fontSizeseekbar"
+                android:layout_width="fill_parent"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/lyric_increase"
+                android:layout_toRightOf="@+id/lyric_decrease" />
+
+            <com.zlm.hp.widget.IconfontImageButtonTextView
+                android:id="@+id/lyric_increase"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="15dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="@string/ziti_jia"
+                android:textColor="#FFF"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginTop="3dp"
+            android:background="#40ffffff"></View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lrc_pop_item_height">
+
+            <TextView
+                android:id="@+id/fontColor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="字体颜色"
+                android:textColor="#fff"
+                android:textSize="13dp"></TextView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_toRightOf="@+id/fontColor"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#fada83" />
+
+                    <ImageView
+                        android:id="@+id/color_status1"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#fe8db6" />
+
+                    <ImageView
+                        android:id="@+id/color_status2"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#feb88e" />
+
+                    <ImageView
+                        android:id="@+id/color_status3"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#adfe8e" />
+
+                    <ImageView
+                        android:id="@+id/color_status4"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#8dc7ff" />
+
+                    <ImageView
+                        android:id="@+id/color_status5"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/color_panel6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="#e69bff" />
+
+                    <ImageView
+                        android:id="@+id/color_status6"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_centerInParent="true"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/kg_skin_color_select_icon"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dip"
+            android:layout_marginTop="3dp"
+            android:background="#40ffffff"></View>
+
+        <LinearLayout
+            android:id="@+id/calcel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/lrc_pop_item_height"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="取消"
+                android:textColor="#fff"
+                android:textSize="13dp"></TextView>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

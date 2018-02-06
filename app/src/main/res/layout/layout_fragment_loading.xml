@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_marginBottom="@dimen/player_height">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/player_height">
+    <com.zlm.hp.widget.IconfontTextView
+        android:id="@+id/load_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:text="@string/loading_img"
+        android:textColor="@color/def_bar_title_color"
+        android:textSize="@dimen/base_img_height" />
 
-        <com.zlm.hp.widget.IconfontTextView
-            android:id="@+id/load_img"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:text="@string/loading_img"
-            android:textColor="@color/def_bar_title_color"
-            android:textSize="@dimen/base_img_height" />
-
-
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>
