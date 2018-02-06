@@ -36,6 +36,7 @@ import com.zlm.hp.utils.ResourceFileUtil;
 import java.io.File;
 
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
@@ -821,27 +822,19 @@ public class AudioPlayerService extends Service {
                 mMediaPlayer.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
                     @Override
                     public boolean onError(IMediaPlayer mp, int what, int extra) {
-
                         //发送播放错误广播
                         Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
                         errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         sendBroadcast(errorIntent);
-
                         ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
 
-
-                        new Thread() {
-                            @Override
-                            public void run() {
+                        ThreadUtil.runInThread(new Runnable() {
+                            @Override public void run() {
                                 try {
                                     Thread.sleep(1000);
-                                    //播放下一首
                                     nextMusic();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }.start();
+                                } catch (InterruptedException e) { e.printStackTrace(); } //播放下一首
+                            }  });
 
                         return false;
                     }
@@ -890,18 +883,15 @@ public class AudioPlayerService extends Service {
                 sendBroadcast(errorIntent);
 
                 ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-                new Thread() {
-                    @Override
-                    public void run() {
+
+                ThreadUtil.runInThread(new Runnable() {
+                    @Override public void run() {
                         try {
                             Thread.sleep(1000);
-                            //播放下一首
-                            nextMusic();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }.start();
+                            nextMusic();//播放下一首
+                        } catch (InterruptedException e) { e.printStackTrace(); }
+                    }  });
+
             }
 
 
@@ -975,20 +965,13 @@ public class AudioPlayerService extends Service {
                     sendBroadcast(errorIntent);
 
                     ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-
-
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(1000);
-                                //播放下一首
-                                nextMusic();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }.start();
+                     ThreadUtil.runInThread(new Runnable() {
+                         @Override public void run() {
+                             try {
+                                 Thread.sleep(1000);
+                                 nextMusic();//播放下一首
+                             } catch (InterruptedException e) { e.printStackTrace(); }
+                         }  });
 
                     return false;
                 }
@@ -1037,18 +1020,16 @@ public class AudioPlayerService extends Service {
             sendBroadcast(errorIntent);
 
             ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-            new Thread() {
-                @Override
-                public void run() {
+            ThreadUtil.runInThread(new Runnable() {
+                @Override public void run() {
                     try {
                         Thread.sleep(1000);
-                        //播放下一首
-                        nextMusic();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+                        nextMusic(); //播放下一首
+                    } catch (InterruptedException e) {  e.printStackTrace(); }
                 }
-            }.start();
+            });
+
         }
     }
 

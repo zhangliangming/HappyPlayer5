@@ -1,6 +1,8 @@
 package base.widget;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -16,6 +18,7 @@ import android.widget.Scroller;
 import com.zlm.hp.R;
 
 import base.utils.LoggerUtil;
+
 
 /**
  * @Description:底部播放布局
@@ -119,7 +122,7 @@ public class SwipeoutLayout extends LinearLayout {
     /**
      * 打开事件
      */
-    private PlayerBarOnCloseListener playerBarOnCloseListener;
+    private PlayerBarListener playerBarListener;
 
 
     public SwipeoutLayout(Context context) {
@@ -133,6 +136,7 @@ public class SwipeoutLayout extends LinearLayout {
         init(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public SwipeoutLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -438,13 +442,13 @@ public class SwipeoutLayout extends LinearLayout {
             int scrollX = mScroller.getFinalX();
             if (scrollX <= -mMenuView.getWidth()) {
                 mCurrentView = mMenuView;
-                if (playerBarOnCloseListener != null) {
-                    playerBarOnCloseListener.onOpen();
+                if (playerBarListener != null) {
+                    playerBarListener.onOpen();
                 }
             } else if (scrollX >= 0) {
                 mCurrentView = mContentView;
-                if (playerBarOnCloseListener != null) {
-                    playerBarOnCloseListener.onClose();
+                if (playerBarListener != null) {
+                    playerBarListener.onClose();
                 }
             }
         }
@@ -507,17 +511,13 @@ public class SwipeoutLayout extends LinearLayout {
         void onClick();
     }
 
-    public interface PlayerBarOnCloseListener {
+    public interface PlayerBarListener {
         void onClose();
 
         void onOpen();
     }
 
-    public void setPlayerBarOnCloseListener(PlayerBarOnCloseListener playerBarOnCloseListener) {
-        this.playerBarOnCloseListener = playerBarOnCloseListener;
+    public void setPlayerBarListener(PlayerBarListener playerBarListener) {
+        this.playerBarListener = playerBarListener;
     }
-
-    //    public void setDragViewOnClickListener(DragViewOnClickListener dragViewOnClickListener) {
-//        this.dragViewOnClickListener = dragViewOnClickListener;
-//    }
 }

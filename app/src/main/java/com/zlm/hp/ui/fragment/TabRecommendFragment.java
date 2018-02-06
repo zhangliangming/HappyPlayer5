@@ -128,13 +128,21 @@ public class TabRecommendFragment extends BaseFragment {
                         mAdapter.setState(RecommendAdapter.NOMOREDATA);
                     }
 
-                    mAdapter.notifyDataSetChanged();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            showContentView();
+                        }  });//切换至主线程更新ui
 
-                    showContentView();
 
                 } else {
-                    showContentView();
-                    ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
+                    final String errorMsg =  httpResult.getErrorMsg();
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            showContentView();
+                            ToastUtil.showTextToast(mActivity.getApplicationContext(),errorMsg);
+                        }  });//切换至主线程更新ui
+
                 }
             }
         };

@@ -166,7 +166,7 @@ public class SearchSingerActivity extends BaseActivity {
     protected void initViews(Bundle savedInstanceState) {
         //
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
-        mSwipeBackLayout.setmSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
+        mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
             public void finishView() {
 

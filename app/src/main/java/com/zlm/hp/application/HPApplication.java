@@ -3,13 +3,12 @@ package com.zlm.hp.application;
 import android.app.Activity;
 import android.app.Application;
 
-import com.tencent.bugly.Bugly;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
+import com.zlm.hp.media.net.entity.RankListResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
-import com.zlm.hp.media.net.entity.RankListResult;
 import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.SerializableObjUtil;
 
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.utils.PreferencesUtil;
+import base.utils.ThreadUtil;
 
 /**
  * Created by zhangliangming on 2017/7/15.
@@ -59,7 +59,7 @@ public class HPApplication extends Application {
         super.onCreate();
         instance = this;
         registerActivityLifecycleCallbacks(new LifeCallbackActivity());
-        Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
+       // Bugly.init(getApplicationContext(), Constant.BUGLY_APPID, false);
 
     }
 
@@ -173,20 +173,18 @@ public class HPApplication extends Application {
 
     public void setCurAudioInfos(final List<AudioInfo> curAudioInfos) {
         this.curAudioInfos = curAudioInfos;
-        new Thread() {
-            @Override
-            public void run() {
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
+
                 String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfos.ser");
                 if (curAudioInfos != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioInfos);
                 } else {
                     File file = new File(filePath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
+                    if (file.exists()) {  file.delete();  }
                 }
-            }
-        }.start();
+
+            }  });
     }
 
     public AudioInfo getCurAudioInfo() {
@@ -199,21 +197,17 @@ public class HPApplication extends Application {
 
     public void setCurAudioInfo(final AudioInfo curAudioInfo) {
         this.curAudioInfo = curAudioInfo;
-        new Thread() {
-            @Override
-            public void run() {
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
+
                 String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioInfo.ser");
                 if (curAudioInfo != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioInfo);
                 } else {
                     File file = new File(filePath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
+                    if (file.exists()) { file.delete(); }
                 }
-            }
-        }.start();
-
+            }  });
 
     }
 
@@ -227,20 +221,18 @@ public class HPApplication extends Application {
 
     public void setCurAudioMessage(final AudioMessage curAudioMessage) {
         this.curAudioMessage = curAudioMessage;
-        new Thread() {
-            @Override
-            public void run() {
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
+
                 String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "curAudioMessage.ser");
                 if (curAudioMessage != null) {
                     SerializableObjUtil.saveObj(filePath, curAudioMessage);
                 } else {
                     File file = new File(filePath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
+                    if (file.exists()) {  file.delete(); }
                 }
-            }
-        }.start();
+            } });
+
     }
 
     public RankListResult getRankListResult() {
@@ -253,20 +245,17 @@ public class HPApplication extends Application {
 
     public void setRankListResult(final RankListResult rankListResult) {
         this.rankListResult = rankListResult;
-        new Thread() {
-            @Override
-            public void run() {
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
+
                 String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_SERIALIZABLE, "rankListResult.ser");
                 if (rankListResult != null) {
                     SerializableObjUtil.saveObj(filePath, rankListResult);
                 } else {
                     File file = new File(filePath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
+                    if (file.exists()) { file.delete();  }
                 }
-            }
-        }.start();
+            }  });
     }
 
     public boolean isLrcSeekTo() {

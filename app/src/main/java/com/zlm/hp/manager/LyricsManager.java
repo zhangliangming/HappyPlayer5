@@ -158,20 +158,11 @@ public class LyricsManager {
      * @param lyricsInfo  lrc歌词数据
      */
     private void saveLrcFile(final String lrcFilePath, final LyricsInfo lyricsInfo) {
-        new Thread() {
-
-            @Override
-            public void run() {
-
-                //保存修改的歌词文件
-                try {
-                    LyricsIOUtils.getLyricsFileWriter(lrcFilePath).writer(lyricsInfo, lrcFilePath);
-                } catch (Exception e) {
-
-                    e.printStackTrace();
-                }
+        ThreadUtil.runInThread(new Runnable() {
+            @Override public void run() {
+                try { LyricsIOUtils.getLyricsFileWriter(lrcFilePath).writer(lyricsInfo, lrcFilePath);  } catch (Exception e) {  e.printStackTrace();  }  //保存修改的歌词文件
             }
+        });
 
-        }.start();
     }
 }

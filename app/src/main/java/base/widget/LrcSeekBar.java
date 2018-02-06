@@ -24,6 +24,7 @@ import com.zlm.hp.R;
 
 import base.utils.ColorUtil;
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 
 /**
  * @Description: 自定义进度条
@@ -217,30 +218,19 @@ public class LrcSeekBar extends AppCompatSeekBar {
 
             }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-                new Thread() {
-
-                    @Override
-                    public void run() {
+            @Override  public void onStopTrackingTouch(SeekBar seekBar) {
+                ThreadUtil.runInThread(new Runnable() {
+                    @Override public void run() {
                         postInvalidate();
                         mHandler.sendEmptyMessage(HIDEVIEW);
-                        //
-                        if (onChangeListener != null) {
-                            onChangeListener.dragFinish();
-                        }
-                        try {
-                            // 延迟100ms才更新进度
-                            Thread.sleep(200);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+
+                        if (onChangeListener != null) { onChangeListener.dragFinish();  }
+                        try {  Thread.sleep(200);  } catch (InterruptedException e) { e.printStackTrace();  }    // 延迟100ms才更新进度
                         isDrag = false;
                         postInvalidate();
-                    }
+                    }  });
 
-                }.start();
+
             }
         });
     }

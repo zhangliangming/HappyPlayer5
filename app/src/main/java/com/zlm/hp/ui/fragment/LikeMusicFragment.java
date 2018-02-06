@@ -186,8 +186,13 @@ public class LikeMusicFragment extends BaseFragment {
                 } else {
                     mAdapter.setState(RecentOrLikeMusicAdapter.NODATA);
                 }
-                mAdapter.notifyDataSetChanged();
-                showContentView();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override public void run() {
+                        mAdapter.notifyDataSetChanged();
+                        showContentView();
+                    }
+                });//切换至主线程更新ui
+
             }
         };
         ThreadUtil.runInThread(runnable);

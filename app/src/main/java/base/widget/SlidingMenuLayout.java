@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -28,6 +29,7 @@ import com.zlm.hp.R;
 
 import base.utils.ColorUtil;
 import base.utils.LoggerUtil;
+
 
 /**
  * @Description: SlidingMenu布局。因为该界面的view是一层一层的，所以这里使用FrameLayout布局
@@ -58,18 +60,16 @@ public class SlidingMenuLayout extends FrameLayout {
      * 判断view是点击还是移动的距离
      */
     private int mTouchSlop;
-    /**
-     * 触摸最后一次的坐标
-     */
-    private float mLastX;
-    private float mLastY;
 
     /**
      * 日志
      */
     private LoggerUtil logger;
 
-    private ViewDragHelper mDragHelper;
+    //拦截的x轴位置
+    private float mLastXIntercept = 0;
+    private float mLastYIntercept = 0;
+    private ViewDragHelper mViewDragHelper;
     /**
      * 记录手势速度
      */
@@ -93,25 +93,21 @@ public class SlidingMenuLayout extends FrameLayout {
      * 阴影画笔
      */
     private Paint mFadePaint;
-    /**
-     * 是否动画结束
-     */
-    private boolean isDragFinish = true;
 
-    /**
-     * 判断该menu是否正在被触摸移动
-     */
-    private boolean isTouchMove = false;
-
-    /**
-     * 记录menuX轴的位置，用于设置menuview的位置
-     */
-    private int mMenuCurLeftX = 0;
 
     /**
      * 是否允许拖动
      */
     private boolean isAllowDrag = true;
+
+    /**
+     * 是否绘画阴影
+     */
+    private boolean isPaintFade = true;
+    /**
+     * 记录menuX轴的位置，用于设置menuview的位置
+     */
+    private int mMenuCurLeftX = 0;
 
     public SlidingMenuLayout(@NonNull Context context) {
         super(context);
@@ -127,6 +123,7 @@ public class SlidingMenuLayout extends FrameLayout {
         init(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public SlidingMenuLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -141,8 +138,8 @@ public class SlidingMenuLayout extends FrameLayout {
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
         //
         mFadePaint = new Paint();
-        // 去锯齿
         mFadePaint.setAntiAlias(true);
+        mFadePaint.setColor(Color.argb(255, 0, 0, 0));
 
     }
 
@@ -168,9 +165,8 @@ public class SlidingMenuLayout extends FrameLayout {
 
         //
         mMenuCurLeftX = menuLayout.leftMargin;
-
         mTouchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-        mDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
+        mViewDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
         //置顶部
         this.bringChildToFront(mMenuFrameLayout);
 
@@ -194,7 +190,7 @@ public class SlidingMenuLayout extends FrameLayout {
 
         //
         isHandToClose = false;
-        mDragHelper.smoothSlideViewTo(mMenuFrameLayout, 0, 0);
+        mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, 0, 0);
         ViewCompat.postInvalidateOnAnimation(this);
 
     }
@@ -203,83 +199,69 @@ public class SlidingMenuLayout extends FrameLayout {
      * 隐藏菜单界面
      */
     public void hideMenuView(FragmentManager supportFragmentManager) {
-        isAllowDrag = true;
         isHandToClose = true;
-        mDragHelper.smoothSlideViewTo(mMenuFrameLayout, getWidth(), 0);
+        mViewDragHelper.smoothSlideViewTo(mMenuFrameLayout, getWidth(), 0);
         ViewCompat.postInvalidateOnAnimation(this);
 
     }
 
     @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        if (mMenuFrameLayout != null) {
+            mMenuFrameLayout.layout(mMenuCurLeftX, 0, mMenuCurLeftX + mMenuFrameLayout.getWidth(), mMenuFrameLayout.getHeight());
+        }
+    }
+
+
+    @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if (!isAllowDrag) return super.onInterceptTouchEvent(event);
+        boolean intercepted = false;
         try {
+
+            float curX = event.getX();
+            float curY = event.getY();
+
             int actionId = event.getAction();
             switch (actionId) {
-                case MotionEvent.ACTION_DOWN:
-                    mLastX = event.getX();
-                    mLastY = event.getY();
-                    //
-                    mDragHelper.processTouchEvent(event);
-                    break;
-                case MotionEvent.ACTION_MOVE:
 
+                case MotionEvent.ACTION_DOWN:
+
+                    mLastXIntercept = curX;
+                    mLastYIntercept = curY;
+
+                    obtainVelocityTracker(event);
+                    mViewDragHelper.processTouchEvent(event);
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
 
                     int[] location = new int[2];
                     mMenuFrameLayout.getLocationOnScreen(location);
                     int mDragViewLeftX = location[0];
                     int mDragViewRightX = mDragViewLeftX + mMenuFrameLayout.getWidth();
 
-//                logger.e("mDragViewLeftX=" + mDragViewLeftX + "  mDragViewRightX=" + mDragViewRightX);
-//                logger.e("event.getRawX() = " + event.getRawX());
-                    //按下焦点在手动view里面或者菜单界面已打开
+                    //按下焦点在手动view里面
                     if ((mDragViewLeftX <= event.getRawX() && event.getRawX() <= mDragViewRightX)) {
-                        float curX = event.getX();
-                        int deltaX = (int) (mLastX - curX);
-                        float curY = event.getY();
-                        int deltaY = (int) (mLastY - curY);
+
+                        int deltaX = (int) (mLastXIntercept - curX);
+                        int deltaY = (int) (mLastYIntercept - curY);
                         //左右移动事件
                         if (Math.abs(deltaX) > mTouchSlop && Math.abs(deltaY) < mTouchSlop) {
-
-                            isTouchMove = true;
-                            return true;
+                            intercepted = true;
                         }
-
                     }
-
-
-                    //logger.e("isDrag = " + isDrag);
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                case MotionEvent.ACTION_UP:
-
-                    isTouchMove = false;
-                    mLastX = 0;
-                    mDragHelper.cancel();
-
-
-                    if (mMenuFrameLayout.getLeft() < getWidth() / 2) {
-
-                        isHandToClose = false;
-                        //在左半边
-                        mDragHelper.smoothSlideViewTo(mMenuFrameLayout, 0, 0);
-                        ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
-                    } else {
-
-                        //在右半边
-                        isHandToClose = true;
-                        mDragHelper.smoothSlideViewTo(mMenuFrameLayout, getWidth(), 0);
-                        ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
-                    }
-
                     break;
                 default:
                     break;
             }
+
         } catch (Exception e) {
             logger.e(e.getMessage());
         }
-        return false;
+
+        return intercepted;
     }
 
     /**
@@ -302,7 +284,7 @@ public class SlidingMenuLayout extends FrameLayout {
         if (!isAllowDrag) return super.onTouchEvent(event);
         try {
             obtainVelocityTracker(event);
-            mDragHelper.processTouchEvent(event);
+            mViewDragHelper.processTouchEvent(event);
         } catch (Exception e) {
             logger.e(e.getMessage());
         }
@@ -312,12 +294,11 @@ public class SlidingMenuLayout extends FrameLayout {
     @Override
     public void computeScroll() {
 
-        if (mDragHelper.continueSettling(true)) {
+        if (mViewDragHelper.continueSettling(true)) {
             ViewCompat.postInvalidateOnAnimation(this);
-            isDragFinish = false;
+
+            invalidate();
         } else {
-            //结束
-            isDragFinish = true;
 
             if (isHandToClose) {
                 isHandToClose = false;
@@ -400,7 +381,7 @@ public class SlidingMenuLayout extends FrameLayout {
      */
     private int getStatusColor() {
 
-        return ColorUtil.parserColor(ContextCompat.getColor(mContext.getApplicationContext(), R.color.colorPrimary));
+        return ColorUtil.parserColor(ContextCompat.getColor(mContext.getApplicationContext(), R.color.defColor));
 
     }
 
@@ -408,28 +389,20 @@ public class SlidingMenuLayout extends FrameLayout {
      * 绘画阴影
      */
     private void drawFade() {
+        if (isPaintFade) {
 
-        float percent = mMenuFrameLayout.getLeft() * 1.0f / getWidth();
-        int alpha = 200 - (int) (200 * percent);
-        mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
-
-        invalidate();
+            float percent = mMenuFrameLayout.getLeft() * 1.0f / getWidth();
+            int alpha = 200 - (int) (200 * percent);
+            mFadePaint.setColor(Color.argb(Math.max(alpha, 0), 0, 0, 0));
+            invalidate();
+        }
     }
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
-        //拖动未结束或者正在拖动
-        if (!isDragFinish || isTouchMove)
+        if (isPaintFade && mMenuFrameLayout.getLeft() < getWidth())
             canvas.drawRect(0, 0, mMenuFrameLayout.getLeft(), getHeight(), mFadePaint);
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-        if (mMenuFrameLayout != null) {
-            mMenuFrameLayout.layout(mMenuCurLeftX, 0, mMenuCurLeftX + mMenuFrameLayout.getWidth(), mMenuFrameLayout.getHeight());
-        }
     }
 
     /////////////////////////////////
@@ -483,10 +456,10 @@ public class SlidingMenuLayout extends FrameLayout {
                 //1.计算view移动的百分比0~1
                 float percent = left * 1f / getWidth();
 
+
                 //缩放
                 mainLinearLayoutContainer.setScaleX(0.9f + 0.1f * percent);
                 mainLinearLayoutContainer.setScaleY(0.9f + 0.1f * percent);
-
                 drawFade();
                 //
                 mMenuCurLeftX = left;
@@ -520,7 +493,7 @@ public class SlidingMenuLayout extends FrameLayout {
 
 
                     isHandToClose = true;
-                    mDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
+                    mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
                     ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
 
 
@@ -530,24 +503,34 @@ public class SlidingMenuLayout extends FrameLayout {
 
                         isHandToClose = false;
                         //在左半边
-                        mDragHelper.smoothSlideViewTo(releasedChild, 0, 0);
+                        mViewDragHelper.smoothSlideViewTo(releasedChild, 0, 0);
                         ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
                     } else {
                         //在右半边
 
                         isHandToClose = true;
-                        mDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
+                        mViewDragHelper.smoothSlideViewTo(releasedChild, getWidth(), 0);
                         ViewCompat.postInvalidateOnAnimation(SlidingMenuLayout.this);
                     }
 
                 }
 
                 releaseVelocityTracker();
-                mLastX = 0;
-                isTouchMove = false;
-                mDragHelper.cancel();
+                mViewDragHelper.cancel();
 
             }
+        }
+
+        //如果ViewGroup的子控件会消耗点击事件，例如按钮，在触摸屏幕的时候就会先走onInterceptTouchEvent方法，判断是否可以捕获，而在判断的过程中会去判断另外两个回调的方法：getViewHorizontalDragRange和getViewVerticalDragRange，只有这两个方法返回大于0的值才能正常的捕获。
+
+        @Override
+        public int getViewHorizontalDragRange(View child) {
+            return child.getMeasuredWidth();//只要返回大于0的值就行
+        }
+
+        @Override
+        public int getViewVerticalDragRange(View child) {
+            return child.getMeasuredHeight();//只要返回大于0的值就行
         }
     }
 
@@ -555,5 +538,9 @@ public class SlidingMenuLayout extends FrameLayout {
 
     public void setAllowDrag(boolean allowDrag) {
         isAllowDrag = allowDrag;
+    }
+
+    public void setPaintFade(boolean paintFade) {
+        isPaintFade = paintFade;
     }
 }

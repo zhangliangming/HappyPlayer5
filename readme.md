@@ -5,6 +5,9 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-01-27(@zlm)：修复主界面底部的右滑显示的双行歌词的换行问题
+- 2018-01-27(@zlm)：优化SwipeoutLayout、SwipeBackLayout、SlidingMenuLayout和OverScrollView的事件分发和冲突。
+- 2018-01-26(@lp):修正几处子线程更新ui的bug,替换几处new Thread()为ThreadUtil
 - 2018-01-25：增加音乐文件过滤功能
 - 2018-01-24(@zlm)：修复歌手写真界面点击下载按钮，触发多行歌词转双行歌词的问题
 - 2018-01-24：
@@ -18,7 +21,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 - 2018-01-23：
 1.在splash页面增加了权限判断
 2.修复android8.0出现Context.startForegroundService() did not then call Service.startForeground()
-- 2018-01-23:之前退出会黑一下,改为全局退出方式 需要退出的地方调用 HPApplication.getInstance().exit();
+- 2018-01-23(@lp):之前退出会黑一下,改为全局退出方式 需要退出的地方调用 HPApplication.getInstance().exit();
 - 2018-01-22(@zlm)：修复歌曲多个歌手时，获取歌手名称的首字母出错的问题。
 - 2018-01-22：
 1.优化了SwipeBackLayout.java不允许滑动时，没有阴影

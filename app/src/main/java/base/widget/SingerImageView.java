@@ -17,6 +17,7 @@ import com.zlm.hp.utils.ImageUtil;
 import java.util.List;
 
 import base.utils.LoggerUtil;
+import base.utils.ThreadUtil;
 
 /**
  * 歌手写真
@@ -87,7 +88,7 @@ public class SingerImageView extends AppCompatImageView {
 
     private void init(Context context) {
         logger = LoggerUtil.getZhangLogger(context);
-        new Thread(new ChageRunnable()).start();
+        ThreadUtil.runInThread(new ChageRunnable());
     }
 
     public synchronized void setSongSingerInfos(Context context, List<SongSingerInfo> songSingerInfos) {
