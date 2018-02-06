@@ -110,7 +110,6 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
                     @Override
                     public void foreach(List<AudioInfo> audioInfoList) {
-                        AudioInfoDB.getAudioInfoDB(mContext).deleteTab();
                         boolean addResult = AudioInfoDB.getAudioInfoDB(mContext).add(audioInfoList);
                         //发送更新广播
                         Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
