@@ -5,7 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
-- 2018-02-07:修复旋转界面时，文字波浪晃动的问题（开启硬件加速）；修复弹出窗口里面的播放列表动画问题
+- 2018-02-07(@zlm):修复旋转界面时，文字波浪晃动的问题（开启硬件加速）；修复弹出窗口里面的播放列表动画问题
 - 2018-02-06: 修正了扫描部分出现的bug
 - 2018-01-27(@zlm)：修复主界面底部的右滑显示的双行歌词的换行问题
 - 2018-01-27(@zlm)：优化SwipeoutLayout、SwipeBackLayout、SlidingMenuLayout和OverScrollView的事件分发和冲突。
