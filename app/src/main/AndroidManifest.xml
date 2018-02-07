@@ -47,6 +47,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
         <activity
             android:name=".ui.activity.SplashActivity"
             android:theme="@style/LaunchStyle">
@@ -59,7 +60,9 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:theme="@style/noTransparentTheme" />
-        <activity android:name=".ui.activity.LrcActivity" />
+        <activity
+            android:name=".ui.activity.LrcActivity"
+            android:hardwareAccelerated="true" />
         <activity android:name=".ui.activity.AboutActivity" />
         <activity android:name=".ui.activity.ScanActivity" />
 
@@ -85,7 +88,7 @@
             android:taskAffinity="bear.love.peach.ui.lockscreen"
             android:theme="@style/LockScreenBase" />
         <activity android:name=".ui.activity.SkinActivity" />
-        <activity android:name=".ui.activity.SettingActivity"/>
+        <activity android:name=".ui.activity.SettingActivity" />
     </application>
 
 </manifest>
