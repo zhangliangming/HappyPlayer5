@@ -5,13 +5,20 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rank_recyclerView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:divider="@null"
-        android:paddingBottom="@dimen/player_height"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rank_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@null"
+            android:paddingBottom="@dimen/player_height"/>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

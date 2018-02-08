@@ -28,6 +28,8 @@ import base.utils.NetUtil;
  */
 public class RankListHttpUtil {
 
+    static final String url = "http://mobilecdn.kugou.com/api/v3/rank/list";
+
     /**
      * 获取排行 列表
      *
@@ -59,7 +61,6 @@ public class RankListHttpUtil {
 
             Map<String, Object> returnResult = new HashMap<String, Object>();
 
-            String url = "http://mobilecdn.kugou.com/api/v3/rank/list";
             Map<String, Object> params = new HashMap<String, Object>();
 
             params.put("apiver", "4");
@@ -70,7 +71,7 @@ public class RankListHttpUtil {
             params.put("version", "8352");
             params.put("with_res_tag", "1");
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
 
             if (result != null) {
                 result = result.substring(result.indexOf("{"),
@@ -128,6 +129,10 @@ public class RankListHttpUtil {
         }
         return httpResult;
 
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 
 }

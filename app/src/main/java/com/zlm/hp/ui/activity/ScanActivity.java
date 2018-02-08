@@ -282,19 +282,24 @@ public class ScanActivity extends BaseActivity {
                 mAddResult = AudioInfoDB.getAudioInfoDB(getApplicationContext()).add(mAudioInfoLists);
 
                 if (mAddResult) {
+
                     //发送更新广播
                     Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
                     updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     sendBroadcast(updateIntent);
+
+
                     finish();
                     overridePendingTransition(0, 0);
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_success));
+                    runOnUiThread(new Runnable() {
+                        @Override public void run() {
+                            ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_success));
+                        }  });//切换至主线程更新ui
                 } else {
                     runOnUiThread(new Runnable() {
                         @Override public void run() {
                             ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.add_fail));
                         }  });//切换至主线程更新ui
-
                 }
             }
         };

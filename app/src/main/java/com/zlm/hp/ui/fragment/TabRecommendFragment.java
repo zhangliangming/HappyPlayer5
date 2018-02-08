@@ -1,6 +1,7 @@
 package com.zlm.hp.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -30,6 +31,7 @@ public class TabRecommendFragment extends BaseFragment {
     /**
      * 列表视图
      */
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
     /**
@@ -60,6 +62,7 @@ public class TabRecommendFragment extends BaseFragment {
     protected void initViews(Bundle savedInstanceState, View mainView) {
 
         //
+        mSwipeRefreshLayout = mainView.findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = mainView.findViewById(R.id.recyclerView);
         //初始化内容视图
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity.getApplicationContext()));
@@ -76,6 +79,16 @@ public class TabRecommendFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
+                RankListHttpUtil.cancel();
+                loadDataUtil(0);
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RankListHttpUtil.cancel();
+                mDatas.clear();
                 loadDataUtil(0);
             }
         });
@@ -108,42 +121,41 @@ public class TabRecommendFragment extends BaseFragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                HttpResult httpResult = RankListHttpUtil.rankList(mActivity);
-                if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
-                    showNoNetView(R.string.current_network_not_available);
-                } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
-                    showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
-                } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
+                final HttpResult httpResult = RankListHttpUtil.rankList(mActivity);
+                ThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
+                            showNoNetView(R.string.current_network_not_available);
+                        } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                            showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
+                        } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
-                    //
-                    Map<String, Object> returnResult = (Map<String, Object>) httpResult.getResult();
+                            //
+                            Map<String, Object> returnResult = (Map<String, Object>) httpResult.getResult();
 
-                    ArrayList<RankListResult> datas = (ArrayList<RankListResult>) returnResult.get("rows");
-                    if (datas.size() == 0) {
-                        mAdapter.setState(RecommendAdapter.NODATA);
-                    } else {
-                        for (int i = datas.size() - 1; i >= 0; i--) {
-                            mDatas.add(0, datas.get(i));
-                        }
-                        mAdapter.setState(RecommendAdapter.NOMOREDATA);
-                    }
+                            ArrayList<RankListResult> datas = (ArrayList<RankListResult>) returnResult.get("rows");
+                            if (datas.size() == 0) {
+                                mAdapter.setState(RecommendAdapter.NODATA);
+                            } else {
+                                for (int i = datas.size() - 1; i >= 0; i--) {
+                                    mDatas.add(0, datas.get(i));
+                                }
+                                mAdapter.setState(RecommendAdapter.NOMOREDATA);
+                            }
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                            mSwipeRefreshLayout.setRefreshing(false);
                             mAdapter.notifyDataSetChanged();
                             showContentView();
-                        }  });//切换至主线程更新ui
-
-
-                } else {
-                    final String errorMsg =  httpResult.getErrorMsg();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
+                        } else {
+                            final String errorMsg =  httpResult.getErrorMsg();
+                            mSwipeRefreshLayout.setRefreshing(false);
                             showContentView();
                             ToastUtil.showTextToast(mActivity.getApplicationContext(),errorMsg);
-                        }  });//切换至主线程更新ui
 
-                }
+                        }
+                    }
+                });
             }
         };
         ThreadUtil.runInThread(runnable);
@@ -153,6 +165,7 @@ public class TabRecommendFragment extends BaseFragment {
     public void onDestroy() {
         if(runnable != null) {
             ThreadUtil.cancelThread(runnable);
+            runnable = null;
         }
         super.onDestroy();
     }

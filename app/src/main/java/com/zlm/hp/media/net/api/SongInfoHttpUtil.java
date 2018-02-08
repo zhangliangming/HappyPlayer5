@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public class SongInfoHttpUtil {
 
+    static final String url = "http://m.kugou.com/app/i/getSongInfo.php";
     /**
      * 获取歌曲的具体信息
      *
@@ -25,13 +26,11 @@ public class SongInfoHttpUtil {
     public static SongInfoResult songInfo(Context context, String hash) {
 
         try {
-
-            String url = "http://m.kugou.com/app/i/getSongInfo.php";
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("cmd", "playInfo");
             params.put("hash", hash);
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
 
                 JSONObject jsonNode = new JSONObject(result);
@@ -59,5 +58,9 @@ public class SongInfoHttpUtil {
         }
         return null;
 
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }

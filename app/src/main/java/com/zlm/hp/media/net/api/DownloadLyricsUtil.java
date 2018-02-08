@@ -12,13 +12,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import base.utils.NetUtil;
-import okhttp3.Call;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by zhangliangming on 2017/8/13.
@@ -26,18 +22,8 @@ import okhttp3.Response;
 
 public class DownloadLyricsUtil {
 
-    /**
-     * 设置连接超时时间
-     */
-    public final static int CONNECT_TIMEOUT = 60;
-    /**
-     * 设置读取超时时间
-     */
-    public final static int READ_TIMEOUT = 100;
-    /**
-     * 设置写的超时时间
-     */
-    public final static int WRITE_TIMEOUT = 60;
+    static final String url = "http://lyrics.kugou.com/download";
+    static String downloadLyricUrl = "http://mobilecdn.kugou.com/new/app/i/krc.php";
 
     /**
      * 下载歌词文件
@@ -61,7 +47,7 @@ public class DownloadLyricsUtil {
             }
         }
         try {
-            String url = "http://lyrics.kugou.com/download";
+
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("ver", "1");
             params.put("client", "pc");
@@ -70,7 +56,8 @@ public class DownloadLyricsUtil {
             params.put("charset", "utf8");
             params.put("fmt", fmt);
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            ResponseBody response = HttpClientUtils.httpGetRequest(url, params);
+            String result = response.string();
             if (result != null) {
                 JSONObject jsonNode = new JSONObject(result);
                 int status = jsonNode.getInt("status");
@@ -90,6 +77,10 @@ public class DownloadLyricsUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cancelDownloadLyricsFile() {
+        HttpClientUtils.cancelTag(url);
     }
 
     /**
@@ -112,34 +103,30 @@ public class DownloadLyricsUtil {
             }
         }
         try {
-
-            OkHttpClient client = new OkHttpClient.Builder()
-                    .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)// 设置读取超时时间
-                    .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)// 设置写的超时时间
-                    .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)// 设置连接超时时间
-                    .build();
-
-            String url = "http://mobilecdn.kugou.com/new/app/i/krc.php?keyword=" + keyword + "&timelength=" + duration + "&type=1&client=pc&cmd=200&hash=" + hash;
-            Request.Builder builder = new Request.Builder();
-            Request request = builder.get().url(url).build();
-            Call call = client.newCall(request);
-            // 执行请求
-            Response response = call.execute();
-            if (response.isSuccessful()) {
-                //得到输入流
-                InputStream is = response.body().byteStream();
-                ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-                byte[] data = new byte[4096];
-                int count = -1;
-                while ((count = is.read(data, 0, 4096)) != -1)
-                    outStream.write(data, 0, count);
-                is.close();
-                return outStream.toByteArray();
-            }
-
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("keyword", keyword);
+            params.put("timelength", duration);
+            params.put("type", 1);
+            params.put("client", "pc");
+            params.put("hash", hash);
+            params.put("cmd", 200);
+            // 获取数据
+            ResponseBody response = HttpClientUtils.httpGetRequest(downloadLyricUrl, params);
+            InputStream is = response.byteStream();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            byte[] data = new byte[4096];
+            int count = -1;
+            while ((count = is.read(data, 0, 4096)) != -1)
+                outStream.write(data, 0, count);
+            is.close();
+            return outStream.toByteArray();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cancelDownloadLyrics() {
+        HttpClientUtils.cancelTag(downloadLyricUrl);
     }
 }

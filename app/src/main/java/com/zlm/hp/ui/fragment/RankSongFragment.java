@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -15,10 +16,10 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.RankSongAdapter;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.media.net.api.RankSongHttpUtil;
 import com.zlm.hp.media.net.entity.RankListResult;
 import com.zlm.hp.media.net.model.HttpResult;
+import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 
@@ -46,6 +47,7 @@ public class RankSongFragment extends BaseFragment {
     /**
      * 列表视图
      */
+    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
 
     private static final int LOADDATA = 0;
@@ -152,9 +154,10 @@ public class RankSongFragment extends BaseFragment {
 
 
         //
+        mSwipeRefreshLayout = mainView.findViewById(R.id.swipeRefreshLayout);
         mRecyclerView = mainView.findViewById(R.id.rank_recyclerView);
         //初始化内容视图
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity.getApplicationContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(mActivity));
 
         //
         mDatas = new ArrayList<AudioInfo>();
@@ -174,7 +177,18 @@ public class RankSongFragment extends BaseFragment {
             @Override
             public void refresh() {
                 showLoadingView();
-
+                mPage = 1;
+                RankSongHttpUtil.cancel();
+                loadDataUtil(0, true);
+            }
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                RankSongHttpUtil.cancel();
+                mPage = 1;
+                mDatas.clear();
                 loadDataUtil(0, true);
             }
         });
@@ -209,9 +223,10 @@ public class RankSongFragment extends BaseFragment {
      * 加载数据
      */
     private void loadDataUtil(int sleepTime, final boolean showView) {
-        //
-        mAdapter.setState(RankSongAdapter.LOADING);
-        mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
+        if (mPage > 1) {
+            mAdapter.setState(RankSongAdapter.LOADING);
+            mAdapter.notifyItemChanged(mAdapter.getItemCount() - 1);
+        }
 
         if (runnable != null) {
             ThreadUtil.cancelThread(runnable);
@@ -219,52 +234,54 @@ public class RankSongFragment extends BaseFragment {
         runnable = new Runnable() {
             @Override
             public void run() {
-                HttpResult httpResult = RankSongHttpUtil.rankSong(mActivity, mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
-                if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
-                    if (showView) {
-                        showNoNetView(R.string.current_network_not_available);
-                    }
-                    ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
+                final HttpResult httpResult = RankSongHttpUtil.rankSong(mActivity, mRankListResult.getRankId(), mRankListResult.getRankType(), mPage + "", mPageSize + "");
+                ThreadUtil.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
+                            if (showView) {
+                                showNoNetView(R.string.current_network_not_available);
+                            }
+                            ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
 
-                } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
-                    showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
+                        } else if (httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
+                            showNoNetView(R.string.current_network_not_wifi_close_only_wifi_mode);
 
-                } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
+                        } else if (httpResult.getStatus() == HttpResult.STATUS_SUCCESS) {
 
-                    Map<String, Object> returnResult = (Map<String, Object>) httpResult.getResult();
+                            //
+                            Map<String, Object> returnResult = (Map<String, Object>) httpResult.getResult();
 
-                    ArrayList<AudioInfo> datas = (ArrayList<AudioInfo>) returnResult.get("rows");
+                            ArrayList<AudioInfo> datas = (ArrayList<AudioInfo>) returnResult.get("rows");
 
-                    if (mPage == 1 && datas.size() == 0) {
-                        mAdapter.setState(RankSongAdapter.NODATA);
-                    } else {
-                        //没有数据
-                        if (datas.size() < mPageSize) {
-                            mAdapter.setState(RankSongAdapter.NOMOREDATA);
+                            if (mPage == 1 && datas.size() == 0) {
+                                mAdapter.setState(RankSongAdapter.NODATA);
+                            } else {
+                                //没有数据
+                                if (datas.size() < mPageSize) {
+                                    mAdapter.setState(RankSongAdapter.NOMOREDATA);
+                                } else {
+                                    mAdapter.setState(RankSongAdapter.HASMOREDATA);
+                                    mPage++;
+                                }
+                                for (int i = 0; i < datas.size(); i++) {
+                                    mDatas.add(datas.get(i));
+                                }
+                            }
+                            mAdapter.notifyDataSetChanged();
+                            if (showView) {
+                                showContentView();
+                            }
+
                         } else {
-                            mAdapter.setState(RankSongAdapter.HASMOREDATA);
-                            mPage++;
-                        }
-                        for (int i = 0; i < datas.size(); i++) {
-                            mDatas.add(datas.get(i));
+                            if (showView) {
+                                showContentView();
+                            }
+                            ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());
                         }
                     }
-
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override public void run() {
-                                mAdapter.notifyDataSetChanged();
-                                if (showView) {  showContentView();  }
-                            } });  //切换至主线程更新ui
-
-                } else {
-                    final String errorMsg = httpResult.getErrorMsg();
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override public void run() {
-                            if (showView) {  showContentView();  }
-                            ToastUtil.showTextToast(mActivity.getApplicationContext(), errorMsg);
-                        }  }); //切换至主线程更新ui
-
-                }
+                });
             }
         };
         ThreadUtil.runInThread(runnable);

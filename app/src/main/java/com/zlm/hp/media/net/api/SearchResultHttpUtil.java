@@ -4,10 +4,10 @@ import android.content.Context;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.media.net.HttpClientUtils;
 import com.zlm.hp.media.net.entity.SongInfoResult;
 import com.zlm.hp.media.net.model.HttpResult;
+import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.utils.MediaUtil;
 
 import org.json.JSONArray;
@@ -25,6 +25,8 @@ import base.utils.NetUtil;
  * Created by zhangliangming on 2017/8/2.
  */
 public class SearchResultHttpUtil {
+
+    static final String url = "http://mobilecdn.kugou.com/api/v3/search/song";
 
     public static HttpResult search(Context context, String keyword, String page, String pagesize) {
 
@@ -49,15 +51,13 @@ public class SearchResultHttpUtil {
 
         try {
             Map<String, Object> returnResult = new HashMap<String, Object>();
-
-            String url = "http://mobilecdn.kugou.com/api/v3/search/song";
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("format", "json");
             params.put("keyword", keyword);
             params.put("page", page);
             params.put("pagesize", pagesize);
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
 
                 JSONObject jsonNode = new JSONObject(result);
@@ -110,5 +110,9 @@ public class SearchResultHttpUtil {
             httpResult.setErrorMsg(e.getMessage());
         }
         return httpResult;
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }

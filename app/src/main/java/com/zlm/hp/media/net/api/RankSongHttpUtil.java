@@ -4,10 +4,10 @@ import android.content.Context;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
-import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.media.net.HttpClientUtils;
 import com.zlm.hp.media.net.entity.SongInfoResult;
 import com.zlm.hp.media.net.model.HttpResult;
+import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.utils.MediaUtil;
 
 import org.json.JSONArray;
@@ -24,6 +24,8 @@ import base.utils.NetUtil;
  * Created by zhangliangming on 2017/7/30.
  */
 public class RankSongHttpUtil {
+
+    static final String url = "http://mobilecdn.kugou.com/api/v3/rank/song";
 
     /**
      * 获取排行里面的歌曲列表
@@ -62,8 +64,6 @@ public class RankSongHttpUtil {
         try {
 
             Map<String, Object> returnResult = new HashMap<String, Object>();
-
-            String url = "http://mobilecdn.kugou.com/api/v3/rank/song";
             Map<String, Object> params = new HashMap<String, Object>();
 
             params.put("plat", "0");
@@ -74,7 +74,7 @@ public class RankSongHttpUtil {
             params.put("page", page);
             params.put("pagesize", pagesize);
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
                 result = result.substring(result.indexOf("{"),
                         result.lastIndexOf("}") + 1);
@@ -139,5 +139,9 @@ public class RankSongHttpUtil {
         }
         return httpResult;
 
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }

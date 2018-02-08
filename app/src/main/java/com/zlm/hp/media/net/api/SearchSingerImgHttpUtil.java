@@ -19,7 +19,7 @@ import base.utils.NetUtil;
  */
 public class SearchSingerImgHttpUtil {
 
-
+    static final String url = "http://mobilecdn.kugou.com/new/app/i/yueku.php";
     /**
      * 获取歌手头像
      *
@@ -43,8 +43,6 @@ public class SearchSingerImgHttpUtil {
             }
         }
         try {
-
-            String url = "http://mobilecdn.kugou.com/new/app/i/yueku.php";
             Map<String, Object> params = new HashMap<String, Object>();
 
             params.put("singer", singerName);
@@ -52,7 +50,7 @@ public class SearchSingerImgHttpUtil {
             params.put("cmd", "104");
             params.put("type", "softhead");
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
 
                 JSONObject jsonNode = new JSONObject(result);
@@ -72,5 +70,9 @@ public class SearchSingerImgHttpUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }

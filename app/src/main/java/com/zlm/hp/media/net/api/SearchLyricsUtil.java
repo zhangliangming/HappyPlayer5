@@ -23,6 +23,7 @@ import base.utils.NetUtil;
 
 public class SearchLyricsUtil {
 
+    static final String url = "http://lyrics.kugou.com/search";
     /**
      * 搜索歌词
      *
@@ -44,7 +45,6 @@ public class SearchLyricsUtil {
             }
         }
         try {
-            String url = "http://lyrics.kugou.com/search";
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("ver", "1");
             params.put("man", "yes");
@@ -56,7 +56,7 @@ public class SearchLyricsUtil {
             }
 
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
                 JSONObject jsonNode = new JSONObject(result);
                 int status = jsonNode.getInt("status");
@@ -86,5 +86,9 @@ public class SearchLyricsUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }

@@ -24,6 +24,9 @@ import base.utils.NetUtil;
  */
 
 public class SearchArtistPicUtil {
+
+    static final String url = "http://artistpicserver.kuwo.cn/pic.web";
+
     /**
      * 搜索歌手写真图片
      *
@@ -49,8 +52,6 @@ public class SearchArtistPicUtil {
         }
         try {
             Map<String, Object> returnResult = new HashMap<String, Object>();
-
-            String url = "http://artistpicserver.kuwo.cn/pic.web";
             Map<String, Object> params = new HashMap<String, Object>();
 
             params.put("type", "big_artist_pic");
@@ -65,7 +66,7 @@ public class SearchArtistPicUtil {
             params.put("height", height);
 
             // 获取数据
-            String result = HttpClientUtils.httpGetRequest(url, params);
+            String result = HttpClientUtils.httpGetRequest(url, params).string();
             if (result != null) {
 
                 JSONObject jsonNode = new JSONObject(result);
@@ -114,5 +115,9 @@ public class SearchArtistPicUtil {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void cancel() {
+        HttpClientUtils.cancelTag(url);
     }
 }
