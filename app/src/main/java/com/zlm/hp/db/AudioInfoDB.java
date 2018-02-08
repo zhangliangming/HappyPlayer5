@@ -39,15 +39,15 @@ public class AudioInfoDB extends SQLiteOpenHelper {
             + "songName text," + "singerName text," + "hash text,"
             + "fileExt text," + "fileSize long," + "fileSizeText text,"
             + "filePath text," + "duration long," + "durationText text," + "downloadUrl text,"
-            + "createTime text," + "status long,"
-            + "type long," + "category text," + "childCategory text"
+            + "createTime text," + "status int," + "recent int," + "likes int,"
+            + "type int," + "category text," + "childCategory text"
             + ")";
 
 
     private static AudioInfoDB _AudioInfoDB;
 
     public AudioInfoDB(Context context) {
-        super(context, "hp_audioinfo.db", null, 2);
+        super(context, "hp_audioinfo.db", null, 3);
         this.mContext = context;
     }
 
@@ -80,6 +80,8 @@ public class AudioInfoDB extends SQLiteOpenHelper {
         values.put("createTime", audioInfo.getCreateTime());
         values.put("status", audioInfo.getStatus());
         values.put("type", audioInfo.getType());
+        values.put("recent", audioInfo.getRecent());
+        values.put("likes", audioInfo.getLike());
 
 
         //获取索引
@@ -152,6 +154,33 @@ public class AudioInfoDB extends SQLiteOpenHelper {
         return false;
     }
 
+    public boolean update(AudioInfo audioInfo) {
+        List<ContentValues> values = new ArrayList<ContentValues>();
+        ContentValues value = getContentValues(audioInfo);
+        values.add(value);
+        return update(values, audioInfo.getHash());
+    }
+
+    /**
+     * 更新数据
+     */
+    private boolean update(List<ContentValues> values, String hash) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.beginTransaction(); // 手动设置开始事务
+            for (ContentValues value : values) {
+                db.update(TBL_NAME, value, "hash=?", new String[]{hash});
+            }
+            db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction(); // 处理完成
+        }
+        return false;
+    }
+
     /**
      * 删除hash对应的数据
      */
@@ -166,6 +195,7 @@ public class AudioInfoDB extends SQLiteOpenHelper {
 
     /**
      * 删除type对应的数据
+     *
      * @param type
      */
     public void delete(int type) {
@@ -343,6 +373,10 @@ public class AudioInfoDB extends SQLiteOpenHelper {
                 .getColumnIndex("status")));
         audioInfo.setType(cursor.getInt(cursor
                 .getColumnIndex("type")));
+        audioInfo.setRecent(cursor.getInt(cursor
+                .getColumnIndex("recent")));
+        audioInfo.setLike(cursor.getInt(cursor
+                .getColumnIndex("likes")));
         audioInfo.setCategory(cursor.getString(cursor.getColumnIndex("category")));
         audioInfo.setChildCategory(cursor.getString(cursor.getColumnIndex("childCategory")));
 
@@ -503,24 +537,43 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      *
      * @param audioInfo
      */
-
-    public boolean addRecentOrLikeAudio(AudioInfo audioInfo, boolean isRecent) {
+    public boolean addRecentAudio(AudioInfo audioInfo) {
         int type = audioInfo.getType();
+        int recent;
         if (type == AudioInfo.NET) {
-            if (isRecent)
-                type = AudioInfo.RECENT_NET;
-            else type = AudioInfo.LIKE_NET;
+            recent = AudioInfo.RECENT_NET;
+        } else if (type == AudioInfo.THIIRDNET) {
+            recent = AudioInfo.RECENT_THIIRDNET;
         } else {
-            if (isRecent)
-                type = AudioInfo.RECENT_LOCAL;
-            else type = AudioInfo.LIKE_LOCAL;
+            recent = AudioInfo.RECENT_LOCAL;
+        }
+        //更新创建时间
+        audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
+        List<ContentValues> values = new ArrayList<ContentValues>();
+        ContentValues value = getContentValues(audioInfo);
+        value.put("recent", recent);
+
+        values.add(value);
+
+        return insert(values);
+    }
+
+    public boolean addLikeAudio(AudioInfo audioInfo) {
+        int type = audioInfo.getType();
+        int like;
+        if (type == AudioInfo.NET) {
+            like = AudioInfo.LIKE_NET;
+        } else if (type == AudioInfo.THIIRDNET) {
+            like = AudioInfo.LIKE_THIIRDNET;
+        } else {
+            like = AudioInfo.LIKE_LOCAL;
         }
 
         //更新创建时间
         audioInfo.setCreateTime(DateUtil.parseDateToString(new Date()));
         List<ContentValues> values = new ArrayList<ContentValues>();
         ContentValues value = getContentValues(audioInfo);
-        value.put("type", type);
+        value.put("likes", like);
 
         values.add(value);
 
@@ -530,51 +583,90 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     /**
      * 是否存在
      *
-     * @param hash
+     * @param audioInfo
      * @return
      */
-    public boolean isRecentOrLikeExists(String hash, int type, boolean isRecent) {
+    public boolean isRecentExists(AudioInfo audioInfo) {
 
-        String typeString = "";
-        if (type == AudioInfo.NET) {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_NET + "";
-            else typeString = AudioInfo.LIKE_NET + "";
-        } else {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_LOCAL + "";
-            else typeString = AudioInfo.LIKE_LOCAL + "";
-        }
+        String hash = audioInfo.getHash();
+        int recent = audioInfo.getRecent();
 
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TBL_NAME, new String[]{},
-                " hash=? and type=?", new String[]{hash, typeString}, null, null, null);
-        if (!cursor.moveToNext()) {
+                " hash=? and recent=?", new String[]{hash, recent + ""}, null, null, null);
+        if (cursor.moveToNext()) {
+            int recent1 = cursor.getInt(cursor
+                    .getColumnIndex("recent"));
+            cursor.close();
+            return recent1 != -1;
+        } else {//查不到
             cursor.close();
             return false;
         }
-        cursor.close();
-        return true;
+//        if (!cursor.moveToNext()) {
+//            int recent1 = cursor.getInt(cursor
+//                    .getColumnIndex("recent"));
+//            cursor.close();
+//            return false;
+//        }
+//        cursor.close();
+//        return true;
+    }
+
+    /**
+     * 是否存在
+     *
+     * @param audioInfo
+     * @return
+     */
+    public boolean isLikeExists(AudioInfo audioInfo) {
+
+        String hash = audioInfo.getHash();
+        int like = audioInfo.getLike();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(TBL_NAME, new String[]{},
+                " hash=? and likes=?", new String[]{hash, like + ""}, null, null, null);
+        if (cursor.moveToNext()) {
+            int likes = cursor.getInt(cursor
+                    .getColumnIndex("likes"));
+            cursor.close();
+            return likes != -1;
+        } else {//查不到
+            cursor.close();
+            return false;
+        }
+
+//        if (!cursor.moveToNext()) {
+//            int likes = cursor.getInt(cursor
+//                    .getColumnIndex("likes"));
+//            cursor.close();
+//            return false;
+//        }
+//        cursor.close();
+//        return true;
     }
 
     /**
      * 删除hash对应的数据
      */
-    public void deleteRecentOrLikeAudio(String hash, int type, boolean isRecent) {
-        String typeString = "";
-        if (type == AudioInfo.NET) {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_NET + "";
-            else typeString = AudioInfo.LIKE_NET + "";
-        } else {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_LOCAL + "";
-            else typeString = AudioInfo.LIKE_LOCAL + "";
-        }
+    public void deleteRecenteAudio(AudioInfo audioInfo) {
         SQLiteDatabase db = getWritableDatabase();
         try {
-            db.delete(TBL_NAME, "hash=? and type=?", new String[]{hash, typeString});
+            db.delete(TBL_NAME, "hash=? and recent=?",
+                    new String[]{audioInfo.getHash(), audioInfo.getRecent() + ""});
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteLikeAudio(AudioInfo audioInfo) {
+        SQLiteDatabase db = getWritableDatabase();
+        try {
+            db.delete(TBL_NAME, "hash=? and likes=?",
+                    new String[]{audioInfo.getHash(), audioInfo.getLike() + ""});
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -583,27 +675,64 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     /**
      * 更新最近歌曲数据
      *
-     * @param hash
+     * @param audioInfo
      * @return
      */
-    public boolean updateRecentAudio(String hash, int type, boolean isRecent) {
-        String typeString = "";
-        if (type == AudioInfo.NET) {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_NET + "";
-            else typeString = AudioInfo.LIKE_NET + "";
-        } else {
-            if (isRecent)
-                typeString = AudioInfo.RECENT_LOCAL + "";
-            else typeString = AudioInfo.LIKE_LOCAL + "";
+    public boolean updateRecentAudio(AudioInfo audioInfo, boolean isRecent) {
+        int type = audioInfo.getType();
+        if(isRecent) {
+            if (type == AudioInfo.LOCAL) {
+                audioInfo.setRecent(AudioInfo.RECENT_LOCAL);
+            } else if (type == AudioInfo.NET) {
+                audioInfo.setRecent(AudioInfo.RECENT_NET);
+            } else if (type == AudioInfo.THIIRDNET) {
+                audioInfo.setRecent(AudioInfo.RECENT_THIIRDNET);
+            }
+        }else {
+            audioInfo.setRecent(AudioInfo.RECENT_DEFAULT);
         }
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("createTime", DateUtil.parseDateToString(new Date()));
+        values.put("recent", audioInfo.getRecent());
 
         try {
-            db.update(TBL_NAME, values, "hash=? and type=?",
-                    new String[]{hash, typeString});
+            db.update(TBL_NAME, values, "hash=?",
+                    new String[]{audioInfo.getHash()});
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 更新喜欢歌曲数据
+     *
+     * @param audioInfo
+     * @return
+     */
+    public boolean updateLikeAudio(AudioInfo audioInfo, boolean isLike) {
+        int type = audioInfo.getType();
+        if(isLike) {
+            if (type == AudioInfo.LOCAL) {
+                audioInfo.setLike(AudioInfo.LIKE_LOCAL);
+            } else if (type == AudioInfo.NET) {
+                audioInfo.setLike(AudioInfo.LIKE_NET);
+            } else if (type == AudioInfo.THIIRDNET) {
+                audioInfo.setLike(AudioInfo.LIKE_THIIRDNET);
+            }
+        }else {
+            audioInfo.setLike(AudioInfo.LIKE_DEFAULT);
+        }
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("createTime", DateUtil.parseDateToString(new Date()));
+        values.put("likes", audioInfo.getLike());
+
+        try {
+            db.update(TBL_NAME, values, "hash=?",
+                    new String[]{audioInfo.getHash()});
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -618,9 +747,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      */
     public int getRecentAudioCount() {
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + ""};
+        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
-                + " WHERE type=? or type=? ", args);
+                + " WHERE recent=? or recent=? or recent=? ", args);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
@@ -634,9 +763,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      */
     public int getLikeAudioCount() {
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + ""};
+        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
-                + " WHERE type=? or type=? ", args);
+                + " WHERE likes=? or likes=? or likes=? ", args);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
@@ -651,9 +780,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     public List<AudioInfo> getAllRecentAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + ""};
+        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
-                "type=? or type=?", args, null, null,
+                "recent=? or recent=? or recent=?", args, null, null,
                 "createTime desc", null);
         while (cursor.moveToNext()) {
             AudioInfo audioInfo = getAudioInfoFrom(cursor);
@@ -677,9 +806,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     public List<AudioInfo> getAllLikeAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + ""};
+        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
-                "type=? or type=?", args, null, null,
+                "likes=? or likes=? or likes=?", args, null, null,
                 "createTime desc", null);
         while (cursor.moveToNext()) {
             AudioInfo audioInfo = getAudioInfoFrom(cursor);

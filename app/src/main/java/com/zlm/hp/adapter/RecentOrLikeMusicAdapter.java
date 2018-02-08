@@ -143,7 +143,7 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
         if (position == mMenuOpenIndex) {
             if (isRecentAdapter) {
                 //判断是否是喜欢歌曲
-                boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
+                boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isLikeExists(audioInfo);
                 if (isLike) {
                     viewHolder.getLikedImgBtn().setVisibility(View.VISIBLE);
                     viewHolder.getUnLikeImgBtn().setVisibility(View.GONE);
@@ -192,7 +192,22 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
             viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //更新
+                    AudioInfoDB.getAudioInfoDB(mContext).updateLikeAudio(audioInfo, false);
+                    mDatas.remove(position);
+                    if(mDatas.size() == 0) {
+                        setState(NODATA);
+                    }
+                    notifyDataSetChanged();
 
+                    //发送更新喜欢歌曲总数广播
+                    Intent likeUpdateIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEUPDATE);
+                    likeUpdateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(likeUpdateIntent);
+                    //发送更新本地歌曲总数广播
+                    Intent localUpdateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
+                    localUpdateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(localUpdateIntent);
                 }
             });
             //详情按钮

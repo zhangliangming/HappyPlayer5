@@ -500,11 +500,7 @@ public class TabMyFragment extends BaseFragment {
             //将正在播放的歌曲加入最近播放列表中
             AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
             if (audioInfo != null) {
-                if (AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), true)) {
-                    AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo.getHash(), audioInfo.getType(), true);
-                } else {
-                    AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).addRecentOrLikeAudio(audioInfo, true);
-                }
+                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo, true);
                 loadRecentCount();
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE)) {
@@ -512,12 +508,22 @@ public class TabMyFragment extends BaseFragment {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEADD)) {
             //添加喜欢
             AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).addRecentOrLikeAudio(audioInfo, false);
+            if(audioInfo.getType() == AudioInfo.LOCAL) {
+                audioInfo.setLike(AudioInfo.LIKE_LOCAL);
+            }else if(audioInfo.getType() == AudioInfo.NET) {
+                audioInfo.setLike(AudioInfo.LIKE_NET);
+            }
+            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateLikeAudio(audioInfo, true);
             loadLikeCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEDELETE)) {
             //删除喜欢
             AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
+            if(audioInfo.getType() == AudioInfo.LOCAL) {
+                audioInfo.setLike(AudioInfo.LIKE_LOCAL);
+            }else if(audioInfo.getType() == AudioInfo.NET) {
+                audioInfo.setLike(AudioInfo.LIKE_NET);
+            }
+            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateLikeAudio(audioInfo, false);
             loadLikeCount();
         }
     }

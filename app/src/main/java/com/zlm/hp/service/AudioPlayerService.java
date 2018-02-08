@@ -651,8 +651,9 @@ public class AudioPlayerService extends Service {
             if (mMediaPlayer != null) {
                 isSeekTo = true;
                 mMediaPlayer.seekTo(audioMessage.getPlayProgress());
+            }else {
+                playMusic(audioMessage);
             }
-            HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
         }
 
         Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC);
@@ -761,15 +762,10 @@ public class AudioPlayerService extends Service {
                         getSongName() + "  缓存播放时，监听已下载大小：" + downloadedSize);
 
                 mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);
-                if (downloadedSize > 1024 * 200) {
-
-                    if (HPApplication.getInstance().getPlayStatus() != AudioPlayerManager.PAUSE) {
-                        playNetMusic();
-                    }
-
-                } else {
-                    mDownloadHandler.postDelayed(mDownloadCheckRunnable, 1000);
+                if (HPApplication.getInstance().getPlayStatus() != AudioPlayerManager.PAUSE) {
+                    playNetMusic();
                 }
+                mDownloadHandler.postDelayed(mDownloadCheckRunnable, 1000);
             }
         }
     };
@@ -803,7 +799,8 @@ public class AudioPlayerService extends Service {
                             HPApplication.getInstance().setLrcSeekTo(false);
                         }
                         isSeekTo = false;
-
+                        //设置当前播放的状态
+                        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
                     }
                 });
                 mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
@@ -943,7 +940,8 @@ public class AudioPlayerService extends Service {
                         HPApplication.getInstance().setLrcSeekTo(false);
                     }
                     isSeekTo = false;
-
+                    //设置当前播放的状态
+                    HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
                 }
             });
             mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {

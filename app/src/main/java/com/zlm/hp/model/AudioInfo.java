@@ -22,16 +22,24 @@ public class AudioInfo implements Serializable {
     public static final int LOCAL = 0;
     public static final int DOWNLOAD = 1;
     public static final int NET = 2;
+    public static final int THIIRDNET = 3;//第三方播放
+    /**
+     * 最近类型
+     */
+    public static final int RECENT_DEFAULT = -1;
     //最近-本地
-    public static final int RECENT_LOCAL = 3;
+    public static final int RECENT_LOCAL = 0;
     //最近-网络
-    public static final int RECENT_NET = 4;
+    public static final int RECENT_NET = 1;
+    public static final int RECENT_THIIRDNET = 2;
 
     /**
-     * 喜欢（网络-本地）
+     * 喜欢类型（网络-本地）
      */
-    public static final int LIKE_LOCAL = 5;
-    public static final int LIKE_NET = 6;
+    public static final int LIKE_DEFAULT = -1;
+    public static final int LIKE_LOCAL = 0;
+    public static final int LIKE_NET = 1;
+    public static final int LIKE_THIIRDNET = 2;
 
     /**
      * 歌曲名称
@@ -82,6 +90,8 @@ public class AudioInfo implements Serializable {
      * 类型
      */
     private int type = LOCAL;
+    private int recent = RECENT_DEFAULT;
+    private int like = LIKE_DEFAULT;
     /**
      * 分类索引
      */
@@ -197,6 +207,22 @@ public class AudioInfo implements Serializable {
         this.type = type;
     }
 
+    public int getRecent() {
+        return recent;
+    }
+
+    public void setRecent(int recent) {
+        this.recent = recent;
+    }
+
+    public int getLike() {
+        return like;
+    }
+
+    public void setLike(int like) {
+        this.like = like;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -229,6 +255,8 @@ public class AudioInfo implements Serializable {
                 ", createTime='" + createTime + '\'' +
                 ", status=" + status +
                 ", type=" + type +
+                ", recent" + recent +
+                ", like" + like +
                 ", category='" + category + '\'' +
                 ", childCategory='" + childCategory + '\'' +
                 '}';

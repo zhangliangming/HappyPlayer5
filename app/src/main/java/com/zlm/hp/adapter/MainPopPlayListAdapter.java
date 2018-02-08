@@ -123,7 +123,7 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         }
 
         //判断是否是喜欢歌曲
-        boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
+        boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isLikeExists(audioInfo);
         if (isLike) {
             viewHolder.getLikedImg().setVisibility(View.VISIBLE);
             viewHolder.getUnLikeTv().setVisibility(View.INVISIBLE);

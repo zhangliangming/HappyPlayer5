@@ -475,7 +475,7 @@ public class LrcActivity extends BaseActivity {
 
 
             //设置喜欢
-            boolean isLike = AudioInfoDB.getAudioInfoDB(getApplicationContext()).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
+            boolean isLike = AudioInfoDB.getAudioInfoDB(getApplicationContext()).isLikeExists(audioInfo);
             if (isLike) {
                 mUnLikeImgBtn.setVisibility(View.GONE);
                 mLikeImgBtn.setVisibility(View.VISIBLE);

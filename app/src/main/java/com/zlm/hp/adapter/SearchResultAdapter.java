@@ -177,7 +177,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (position == mMenuOpenIndex) {
 
             //判断是否是喜欢歌曲
-            boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
+            boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isLikeExists(audioInfo);
             if (isLike) {
                 viewHolder.getLikedImgBtn().setVisibility(View.VISIBLE);
                 viewHolder.getUnLikeImgBtn().setVisibility(View.GONE);

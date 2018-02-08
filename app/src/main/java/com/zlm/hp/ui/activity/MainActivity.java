@@ -753,6 +753,7 @@ public class MainActivity extends BaseActivity {
         } else {
             HPApplication.getInstance().startService(playerServiceIntent);
         }
+        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.STOP);
 
         //注册接收音频播放广播
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(getApplicationContext());

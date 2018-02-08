@@ -83,11 +83,11 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_local_title, null, false);
             CategoryTitleViewHolder holder = new CategoryTitleViewHolder(view);
             return holder;
-        } else if (viewType == COPYRIGHT) {
+        } /*else if (viewType == COPYRIGHT) {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_copyright, null, false);
             CopyrightViewHolder holder = new CopyrightViewHolder(view);
             return holder;
-        } else {
+        } */else {
             view = LayoutInflater.from(mContext).inflate(R.layout.layout_lvitem_localsong, null, false);
             LocalMusicViewHolder holder = new LocalMusicViewHolder(view);
             return holder;
@@ -145,7 +145,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         if (position == mMenuOpenIndex) {
 
             //判断是否是喜欢歌曲
-            boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isRecentOrLikeExists(audioInfo.getHash(), audioInfo.getType(), false);
+            boolean isLike = AudioInfoDB.getAudioInfoDB(mContext).isLikeExists(audioInfo);
             if (isLike) {
                 viewHolder.getLikedImgBtn().setVisibility(View.VISIBLE);
                 viewHolder.getUnLikeImgBtn().setVisibility(View.GONE);

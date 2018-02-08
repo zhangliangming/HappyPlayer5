@@ -123,39 +123,50 @@ public class LikeMusicFragment extends BaseFragment {
      * @param context
      * @param intent
      */
-    private void doAudioReceive(Context context, Intent intent) {
-        String action = intent.getAction();
+    private void doAudioReceive(Context context, final Intent intent) {
+        final String action = intent.getAction();
 
-
-        if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
-            mAdapter.reshViewHolder(null,false);
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEADD)) {
-            //添加喜欢歌曲
-            AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            mAdapter.reshViewHolder(audioInfo,true);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEDELETE)) {
-            AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            if (audioInfo != null) {
-                //删除喜欢歌曲
-                for (int i = 0; i < mDatas.size(); i++) {
-                    AudioInfo temp = mDatas.get(i);
-                    if (temp.getHash().equals(audioInfo.getHash())) {
-                        mDatas.remove(i);
-                        mAdapter.notifyDataSetChanged();
-                        break;
+        ThreadUtil.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
+                    mAdapter.reshViewHolder(null,false);
+                } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEADD)) {
+                    //添加喜欢歌曲
+                    AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
+                    if (audioInfo.getType() == AudioInfo.LOCAL) {
+                        audioInfo.setLike(AudioInfo.LIKE_LOCAL);
+                    } else if (audioInfo.getType() == AudioInfo.NET) {
+                        audioInfo.setLike(AudioInfo.LIKE_NET);
+                    } else if (audioInfo.getType() == AudioInfo.THIIRDNET) {
+                        audioInfo.setLike(AudioInfo.LIKE_THIIRDNET);
                     }
+                    mAdapter.reshViewHolder(audioInfo,true);
+
+                } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEDELETE)) {
+                    AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
+                    if (audioInfo != null) {
+                        //删除喜欢歌曲
+                        for (int i = 0; i < mDatas.size(); i++) {
+                            AudioInfo temp = mDatas.get(i);
+                            if (temp.getHash().equals(audioInfo.getHash())) {
+                                mDatas.remove(i);
+                                mAdapter.notifyDataSetChanged();
+                                break;
+                            }
+                        }
+                    }
+
+                } else if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
+                    mAdapter.reshViewHolder(null,false);
+                } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
+                    //初始化
+                    // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
+                    AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();//audioMessage.getAudioInfo();
+                    mAdapter.reshViewHolder(audioInfo,false);
                 }
             }
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {
-            mAdapter.reshViewHolder(null,false);
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
-            //初始化
-            // AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-            AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();//audioMessage.getAudioInfo();
-            mAdapter.reshViewHolder(audioInfo,false);
-        }
+        });
     }
 
     @Override
