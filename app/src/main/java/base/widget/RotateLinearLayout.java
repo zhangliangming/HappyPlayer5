@@ -5,7 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.MotionEvent;
@@ -21,7 +23,7 @@ import base.utils.LoggerUtil;
 
 /**
  * @Description: 旋转view，先确定旋转view的旋转中心为Q（width/2，height*1.5），然后根据第一次触摸时，该触摸点在屏幕上面的AXY(ax,ay)坐标，根据A点和Q点，计算出该次的夹角A。滑动时，同理计算滑动时的BXY(bx,by)坐标，计算出B点
- * 和Q点的夹角B，通过B - A，可以得出view的旋转度数。计算夹角时，可以使用tan来计算，如果计算出来的夹角为负数时，需要+180来得到真正的夹角。
+ * 和Q点的夹角B，通过B - A，可以得出view的旋转度数。计算夹角时，可以使用tan来计算，如果计算出来的夹角为负数时，需要+180来得到真正的夹角。注意，需要activity开启硬件加速,动画才流畅。
  * @Param:
  * @Return:
  * @Author: zhangliangming
@@ -42,6 +44,11 @@ public class RotateLinearLayout extends FrameLayout {
      * 窗口的最大旋转度数
      */
     private float mClosedDegree = 85;
+
+    /**
+     * 用于判断旋转的最小角度，避免开启硬件加速后带来的界面布局闪烁问题。暂时这样修复
+     */
+    private float mMinDegree = 0.2f;
 
     /**
      * 触摸最后一次的坐标
@@ -115,6 +122,7 @@ public class RotateLinearLayout extends FrameLayout {
         init(context);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public RotateLinearLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
@@ -274,10 +282,11 @@ public class RotateLinearLayout extends FrameLayout {
                             // logger.e("curDegree = "+  curDegree);
 
                             float degree = curDegree - lastDegree;
-
-
-                            setRotation(degree);
-
+                            if(Math.abs(degree) < mMinDegree){
+                                setRotation(0);
+                            }else{
+                                setRotation(degree);
+                            }
 
                             //绘画遮罩层
                             drawMask();
@@ -438,9 +447,11 @@ public class RotateLinearLayout extends FrameLayout {
                     Number number = (Number) valueAnimator.getAnimatedValue();
                     float rotation = number.floatValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    RotateLinearLayout.this.setRotation(rotation);
-
+                    if(Math.abs(rotation) < mMinDegree){
+                        RotateLinearLayout.this.setRotation(0);
+                    }else {
+                        RotateLinearLayout.this.setRotation(rotation);
+                    }
                     //绘画遮罩层
                     drawMask();
 
@@ -487,8 +498,11 @@ public class RotateLinearLayout extends FrameLayout {
                     Number number = (Number) valueAnimator.getAnimatedValue();
                     float rotation = number.floatValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    RotateLinearLayout.this.setRotation(rotation);
+                    if(Math.abs(rotation) < mMinDegree){
+                        RotateLinearLayout.this.setRotation(0);
+                    }else {
+                        RotateLinearLayout.this.setRotation(rotation);
+                    }
 
                     //绘画遮罩层
                     drawMask();
@@ -531,8 +545,11 @@ public class RotateLinearLayout extends FrameLayout {
                     Number number = (Number) valueAnimator.getAnimatedValue();
                     float rotation = number.floatValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    RotateLinearLayout.this.setRotation(rotation);
+                    if(Math.abs(rotation) < mMinDegree){
+                        RotateLinearLayout.this.setRotation(0);
+                    }else {
+                        RotateLinearLayout.this.setRotation(rotation);
+                    }
 
                     //绘画遮罩层
                     drawMask();
@@ -584,8 +601,11 @@ public class RotateLinearLayout extends FrameLayout {
                     Number number = (Number) valueAnimator.getAnimatedValue();
                     float rotation = number.floatValue();
 
-                    //设置旋转中心，中心位置在view视图下方
-                    RotateLinearLayout.this.setRotation(rotation);
+                    if(Math.abs(rotation) < mMinDegree){
+                        RotateLinearLayout.this.setRotation(0);
+                    }else {
+                        RotateLinearLayout.this.setRotation(rotation);
+                    }
 
                     //绘画遮罩层
                     drawMask();

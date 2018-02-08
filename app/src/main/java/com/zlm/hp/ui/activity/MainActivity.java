@@ -1071,26 +1071,24 @@ public class MainActivity extends BaseActivity {
         mPopPlayListAdapter = new MainPopPlayListAdapter(mContext, curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
 
+        //滚动到当前播放位置
+        int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
+        if (position >= 0)
+            mCurRecyclerView.move(position,
+                    LinearLayoutRecyclerView.scroll);
 
-        //
+//
         TranslateAnimation translateAnimation = new TranslateAnimation(0, 0, mPopMenuRelativeLayout.getHeight(), 0);
-        translateAnimation.setDuration(250);//设置动画持续时间
+        translateAnimation.setDuration(350);//设置动画持续时间
         translateAnimation.setFillAfter(true);
         translateAnimation.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 0));
             }
 
             @Override
             public void onAnimationEnd(Animation animation) {
                 mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 120));
-
-                //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
-                if (position >= 0)
-                    mCurRecyclerView.move(position,
-                            LinearLayoutRecyclerView.smoothScroll);
             }
 
             @Override
@@ -1098,12 +1096,13 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+        //
         mListPopLinearLayout.setVisibility(View.VISIBLE);
+        mListPopLinearLayout.setBackgroundColor(ColorUtil.parserColor(Color.BLACK, 0));
+        //
         mPopMenuRelativeLayout.clearAnimation();
-        mPopMenuRelativeLayout.setAnimation(translateAnimation);
-        translateAnimation.start();
+        mPopMenuRelativeLayout.startAnimation(translateAnimation);
         isPopViewShow = true;
-
 
     }
 

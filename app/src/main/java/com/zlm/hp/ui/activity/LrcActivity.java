@@ -1175,7 +1175,11 @@ public class LrcActivity extends BaseActivity {
         mCurPLSizeTv.setText(curAudioInfos.size() + "");
         mPopPlayListAdapter = new LrcPopPlayListAdapter(mContext, curAudioInfos);
         mCurRecyclerView.setAdapter(mPopPlayListAdapter);
-
+        //滚动到当前播放位置
+        int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
+        if (position >= 0)
+            mCurRecyclerView.move(position,
+                    LinearLayoutRecyclerView.scroll);
              /*
                 参数解释：
                     第一个参数：X轴水平缩放起始位置的大小（fromX）。1代表正常大小
@@ -1203,11 +1207,6 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
 
-                //滚动到当前播放位置
-                int position = mPopPlayListAdapter.getPlayIndexPosition(HPApplication.getInstance().getCurAudioInfo());
-                if (position >= 0)
-                    mCurRecyclerView.move(position,
-                            LinearLayoutRecyclerView.smoothScroll);
             }
 
             @Override
