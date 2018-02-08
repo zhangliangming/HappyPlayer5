@@ -5,10 +5,10 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
-- 2018-02-08:
-1.对AudioInfoDB增加recent和likes字段来区分最近和喜欢，解决了添加最近导致插入重复数据
-2.修复了异常结束APP导致状态不正确的问题
-3.修复了添加喜欢，数据不能正常显示
+- 2018-02-08:  
+1.对AudioInfoDB增加recent和likes字段来区分最近和喜欢，解决了添加最近导致插入重复数据  
+2.修复了异常结束APP导致状态不正确的问题  
+3.修复了添加喜欢，数据不能正常显示  
 - 2018-02-07(@zlm):修复旋转界面时，文字波浪晃动的问题（开启硬件加速）；修复弹出窗口里面的播放列表动画问题
 - 2018-02-06: 修正了扫描部分出现的bug
 - 2018-01-27(@zlm)：修复主界面底部的右滑显示的双行歌词的换行问题
@@ -16,31 +16,31 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 - 2018-01-26(@lp):修正几处子线程更新ui的bug,替换几处new Thread()为ThreadUtil
 - 2018-01-25：增加音乐文件过滤功能
 - 2018-01-24(@zlm)：修复歌手写真界面点击下载按钮，触发多行歌词转双行歌词的问题
-- 2018-01-24：
-1.修复了点击退出APP导致播放状态没有改变的bug
-2.在“我的页面”隐藏了退出APP按钮
-3.增加定时播放功能
-4.修复了线程中开启线程的问题
-- 2018-01-23：
-1.使用线程池替代之前的线程
-2.修复了显示锁屏界面
-- 2018-01-23：
-1.在splash页面增加了权限判断
-2.修复android8.0出现Context.startForegroundService() did not then call Service.startForeground()
+- 2018-01-24：  
+1.修复了点击退出APP导致播放状态没有改变的bug  
+2.在“我的页面”隐藏了退出APP按钮  
+3.增加定时播放功能  
+4.修复了线程中开启线程的问题  
+- 2018-01-23：  
+1.使用线程池替代之前的线程  
+2.修复了显示锁屏界面  
+- 2018-01-23：  
+1.在splash页面增加了权限判断  
+2.修复android8.0出现Context.startForegroundService() did not then call Service.startForeground()  
 - 2018-01-23(@lp):之前退出会黑一下,改为全局退出方式 需要退出的地方调用 HPApplication.getInstance().exit();
 - 2018-01-22(@zlm)：修复歌曲多个歌手时，获取歌手名称的首字母出错的问题。
-- 2018-01-22：
-1.优化了SwipeBackLayout.java不允许滑动时，没有阴影
-2.修复了按返回键，播放列表布局不能隐藏的问题
-3.修复了点击换肤崩溃
+- 2018-01-22：  
+1.优化了SwipeBackLayout.java不允许滑动时，没有阴影  
+2.修复了按返回键，播放列表布局不能隐藏的问题  
+3.修复了点击换肤崩溃  
 - 2018-01-22(@zlm)：去掉歌手写真界面的酷狗背景图片
 - 2018-01-22(@zlm)：修复播放歌曲时，界面无更新问题：修复AudioPlayerService无被调用的问题。
 - 2018-01-22：对SwipeBackLayout.java也增加是否允许滑动
-- 2018-01-22：
-1.使用Dialog替换歌词界面的菜单设置和歌词详情（原因是直接使用会有卡顿）
+- 2018-01-22：  
+1.使用Dialog替换歌词界面的菜单设置和歌词详情（原因是直接使用会有卡顿）  
 2.尝试解决android8.0：java.lang.IllegalStateException
-      Not allowed to start service Intent { cmp=bear.love.peach/.service.AudioPlayerService }: app is in background uid UidRecord
-3.优化了按住item导致能看见上一个页面的问题
+      Not allowed to start service Intent { cmp=bear.love.peach/.service.AudioPlayerService }: app is in background uid UidRecord  
+3.优化了按住item导致能看见上一个页面的问题  
 - 2018-01-22(@zlm)：
 - 加大歌词行的移动时间，让歌词移动动画更流畅，有需要的小伙伴也可以根据当前歌词的行数（因为歌词换行导致动画移动不流畅）适当地动态增加移动的时间，可以使移动动画更流畅。
 - 添加自定义的锁屏界面，其中部分手机（如：我的小米2s，android 5.0），需要到权限设置界面设置“锁屏显示”权限(注：歌曲只有在播放时，才会显示锁屏界面)，实现图片预览：
@@ -51,9 +51,9 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 - 2018-01-21：好高兴这个项目可以邀请到liupeng110参与开发
 - 2018-01-19：把类里面的string字符串提取到string.xml中
 - 2018-01-19：广播不能传参的，初级错误
-- 2018-01-19(@zlm)：
-1.修复通知栏图标
-2.修复android7.0状态栏半透明的问题
+- 2018-01-19(@zlm)：  
+1.修复通知栏图标  
+2.修复android7.0状态栏半透明的问题  
 - 2018-01-19：把之前在application移动的全局方法改回来了，原因是每次启动很慢（暂时不知道原因）
 - 2018-01-19：增加bugly异常上报
 - 2018-01-19(@zlm)：修复RotateLinearLayout旋转角度在0.x时布局闪烁问题，关闭硬件加速。
