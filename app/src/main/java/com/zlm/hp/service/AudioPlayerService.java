@@ -779,6 +779,10 @@ public class AudioPlayerService extends Service {
             String filePath = ResourceFileUtil.getFilePath(getApplicationContext(),
                     ResourceConstants.PATH_CACHE_AUDIO,
                     HPApplication.getInstance().getCurAudioInfo().getHash() + ".temp");
+            File file = new File(filePath);
+            if(!file.exists()) {//没有缓存文件时播放网络地址
+                filePath = HPApplication.getInstance().getCurAudioInfo().getDownloadUrl();
+            }
             try {
                 mMediaPlayer = new IjkMediaPlayer();
                 mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -829,8 +833,8 @@ public class AudioPlayerService extends Service {
                             @Override public void run() {
                                 try {
                                     Thread.sleep(1000);
-                                    nextMusic();
-                                } catch (InterruptedException e) { e.printStackTrace(); } //播放下一首
+                                    nextMusic(); //播放下一首
+                                } catch (InterruptedException e) { e.printStackTrace(); }
                             }  });
 
                         return false;

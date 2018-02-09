@@ -180,6 +180,9 @@ public class HttpClientUtils {
      * @param tag
      */
     public static void cancelTag(Object tag) {
+        if(okHttpClient == null) {
+            return;
+        }
         for (Call call : okHttpClient.dispatcher().queuedCalls()) {
             if (tag.equals(call.request().tag())) {
                 call.cancel();
