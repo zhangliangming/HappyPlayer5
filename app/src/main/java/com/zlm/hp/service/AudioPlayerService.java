@@ -910,7 +910,9 @@ public class AudioPlayerService extends Service {
 
         //下载
         if (!OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).taskIsExists(audioInfo.getHash())) {
-            OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).addTask(audioInfo);
+            if(HPApplication.getInstance().isDownload()) {
+                OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).addTask(audioInfo);
+            }
             mDownloadHandler.postAtTime(mDownloadCheckRunnable, 1000);
             logger.e("准备播放在线歌曲：" + audioInfo.getSongName());
         }

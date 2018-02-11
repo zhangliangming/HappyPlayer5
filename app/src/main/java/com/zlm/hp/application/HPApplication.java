@@ -28,6 +28,7 @@ public class HPApplication extends Application {
     private boolean isFrist = true;//应用是否是第一次启动
     private boolean isSayHello = false;//是否开启问候音
     private boolean isWifi = true;//应用是否在wifi下联网
+    private boolean isDownload = true;//是否允许应用不在wifi下下载
     private boolean isDesktop = false;//应用是否在桌面显示歌词
     private boolean isShowLockScreen = true;//应用是否显示锁屏，isLockScreen为true时才生效
     private boolean isLockScreen = false;//应用是否在锁屏显示歌词
@@ -103,6 +104,14 @@ public class HPApplication extends Application {
 
     public void setWifi(boolean wifi) {
         PreferencesUtil.putValue(getApplicationContext(), PreferencesConstants.isWifi_KEY, wifi);
+    }
+
+    public boolean isDownload() {
+        return PreferencesUtil.getBooleanValue(getApplicationContext(), PreferencesConstants.isDownload_KEY, isDownload);
+    }
+
+    public void setDownload(boolean download) {
+        PreferencesUtil.putValue(getApplicationContext(), PreferencesConstants.isDownload_KEY, download);
     }
 
     public boolean isDesktop() {

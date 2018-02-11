@@ -17,6 +17,11 @@ public class PreferencesConstants {
     public static String isWifi_KEY = "isWifi_KEY";
 
     /**
+     * 应用是否不在wifi下下载key
+     */
+    public static String isDownload_KEY = "isDownload_KEY";
+
+    /**
      * 播放歌曲id key
      */
     public static String playIndexHashID_KEY = "playIndexHashID_KEY";

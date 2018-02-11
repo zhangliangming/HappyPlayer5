@@ -5,6 +5,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
+- 2018-02-11：增加一个是否缓存歌曲的开关，默认开启
 - 2018-02-08:  
 1.对AudioInfoDB增加recent和likes字段来区分最近和喜欢，解决了添加最近导致插入重复数据  
 2.修复了异常结束APP导致状态不正确的问题  

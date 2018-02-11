@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 
 import com.zlm.hp.R;
+import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -28,7 +29,7 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
 
     public Activity mActivity;
     public Context mContext;
-    private Preference mSoundEffect;
+    private Preference mMobileNetworkDownload;
     private Preference mFilterSize;
     private Preference mFilterTime;
 
@@ -50,21 +51,20 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference_setting);
 
+        mMobileNetworkDownload = findPreference(getString(R.string.setting_key_mobile_network_download));
         mFilterSize = findPreference(getString(R.string.setting_key_filter_size));
         mFilterTime = findPreference(getString(R.string.setting_key_filter_time));
+        mMobileNetworkDownload.setOnPreferenceChangeListener(this);
         mFilterSize.setOnPreferenceChangeListener(this);
         mFilterTime.setOnPreferenceChangeListener(this);
 
+        mMobileNetworkDownload.setDefaultValue(HPApplication.getInstance().isDownload());
         mFilterSize.setSummary(getSummary(MediaUtil.getFilterSize(mContext), R.array.filter_size_entries, R.array.filter_size_entry_values));
         mFilterTime.setSummary(getSummary(MediaUtil.getFilterTime(mContext), R.array.filter_time_entries, R.array.filter_time_entry_values));
     }
 
     @Override
     public boolean onPreferenceClick(Preference preference) {
-        if (preference == mSoundEffect) {
-
-            return true;
-        }
         return false;
     }
 
@@ -79,6 +79,10 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
             MediaUtil.setFilterTime(mContext, (String) newValue);
             mFilterTime.setSummary(getSummary(MediaUtil.getFilterTime(mContext), R.array.filter_time_entries, R.array.filter_time_entry_values));
             onFilterChanged();
+            return true;
+        } else if (preference == mMobileNetworkDownload) {
+            boolean value = (boolean) newValue;
+            HPApplication.getInstance().setDownload(value);
             return true;
         }
         return false;
