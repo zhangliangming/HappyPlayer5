@@ -51,7 +51,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         //
         getSupportActionBar().hide();
         ViewGroup layout = (ViewGroup) LayoutInflater.from(this).inflate(setContentViewId(), null);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //透明状态栏
             Window window = getWindow();
@@ -72,12 +71,20 @@ public abstract class BaseActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }
+        preLoad();
+        setContentView(layout);
+        //
+        contentViewFinish(layout);
+        mHPApplication = (HPApplication) getApplication();
+        mStoragePermissionUtil = new StoragePermissionUtil(mHPApplication, this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             //
             if (isAddStatusBar()) {
                 View statusBarView = new View(getApplicationContext());
                 ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, getStatusBarHeight(getApplicationContext()));
                 statusBarView.setBackgroundColor(getStatusColor());
-
 
                 if (setStatusBarParentView() == 0) {
                     layout.addView(statusBarView, 0, lp);
@@ -86,12 +93,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                     newlayout.addView(statusBarView, 0, lp);
                 }
             }
-
         }
-        preLoad();
-        mHPApplication = (HPApplication) getApplication();
-        mStoragePermissionUtil = new StoragePermissionUtil(mHPApplication, this);
-        setContentView(layout);
+
         initViews(savedInstanceState);
 
         //1.先判断文件权限是否已经分配，如果没有分配，则直接退出应用
@@ -107,6 +110,10 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void preLoad() {
+
+    }
+
+    protected void contentViewFinish(View contentView) {
 
     }
 

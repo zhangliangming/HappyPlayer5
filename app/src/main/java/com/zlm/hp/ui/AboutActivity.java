@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zlm.hp.widget.SwipeBackLayout;
+import com.zlm.libs.widget.SwipeBackLayout;
 
 /**
  * @Description: 关于界面
@@ -28,13 +28,19 @@ public class AboutActivity extends BaseActivity {
     }
 
     @Override
+    protected void contentViewFinish(View contentView) {
+        //
+        mSwipeBackLayout = contentView.findViewById(R.id.swipeback_layout);
+        mSwipeBackLayout.setContentView(R.layout.activity_about_layout);
+    }
+
+    @Override
     protected void initViews(Bundle savedInstanceState) {
 
-        //
-        mSwipeBackLayout = findViewById(R.id.swipeback_layout);
         mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
+
             @Override
-            public void finishView() {
+            public void finishActivity() {
                 finish();
                 overridePendingTransition(0, 0);
             }
@@ -48,7 +54,7 @@ public class AboutActivity extends BaseActivity {
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSwipeBackLayout.finish();
+                mSwipeBackLayout.closeView();
 
             }
         });
@@ -71,6 +77,6 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        mSwipeBackLayout.finish();
+        mSwipeBackLayout.closeView();
     }
 }

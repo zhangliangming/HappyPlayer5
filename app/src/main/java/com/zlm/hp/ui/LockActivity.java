@@ -28,10 +28,10 @@ import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.utils.AniUtil;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.widget.SingerImageView;
-import com.zlm.hp.widget.SwipeBackLayout;
 import com.zlm.hp.widget.lock.LockButtonRelativeLayout;
 import com.zlm.hp.widget.lock.LockPalyOrPauseButtonRelativeLayout;
 import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
+import com.zlm.libs.widget.SwipeBackLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -265,6 +265,22 @@ public class LockActivity extends BaseActivity {
 
         }
     };
+    private final int INITDATA = 1;
+    /**
+     *
+     */
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+
+                case INITDATA:
+                    initData();
+                    break;
+            }
+        }
+    };
+
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
 
@@ -279,17 +295,24 @@ public class LockActivity extends BaseActivity {
         super.preLoad();
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+                        | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+                        WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    @Override
+    protected void contentViewFinish(View contentView) {
+        //
+        mSwipeBackLayout = contentView.findViewById(R.id.swipeback_layout);
+        mSwipeBackLayout.setContentView(R.layout.activity_lock_layout, SwipeBackLayout.CONTENTVIEWTYPE_RELATIVELAYOUT);
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
         //
-        mSwipeBackLayout = findViewById(R.id.swipeback_layout);
-        mSwipeBackLayout.setPaintFade(false);
+
         mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
-            public void finishView() {
+            public void finishActivity() {
                 finish();
                 overridePendingTransition(0, 0);
             }
@@ -566,6 +589,13 @@ public class LockActivity extends BaseActivity {
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
+        mHandler.sendEmptyMessage(INITDATA);
+    }
+
+    /**
+     * 初始化数据
+     */
+    private void initData() {
         AniUtil.startAnimation(aniLoading);
         setDate();
 
@@ -812,13 +842,16 @@ public class LockActivity extends BaseActivity {
     @Override
     public void finish() {
         AniUtil.stopAnimation(aniLoading);
+        super.finish();
+    }
 
+    @Override
+    protected void onDestroy() {
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
         //注销分钟变化广播
         unregisterReceiver(mTimeReceiver);
-        //
-        super.finish();
+        super.onDestroy();
     }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) { // 屏蔽按键

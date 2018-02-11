@@ -1,36 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zlm.hp.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zlm.libs.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeback_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent"
-    android:orientation="vertical"
     tools:context="com.zlm.hp.ui.AboutActivity">
 
-    <LinearLayout
-        android:id="@+id/about_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#ffffff"
-        android:orientation="vertical">
 
-
-        <include layout="@layout/layout_title"></include>
-
-        <com.zlm.hp.widget.OverScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:text="乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式(aac，amr，ape，flac，m4r，mmf，mp2，mp3，ogg，wav，wma，wv)和动感歌词格式(ksc，krc，hrc，hrcx)。\n\n联系方式：316257874@qq.com\n声明：仅用于学习用途"
-                android:textColor="@color/def_bar_title_color"
-                android:textSize="15dp" />
-        </com.zlm.hp.widget.OverScrollView>
-
-    </LinearLayout>
-
-</com.zlm.hp.widget.SwipeBackLayout>
+</com.zlm.libs.widget.SwipeBackLayout>

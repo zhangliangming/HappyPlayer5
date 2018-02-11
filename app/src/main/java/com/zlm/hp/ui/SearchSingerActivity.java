@@ -35,7 +35,7 @@ import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.widget.ButtonRelativeLayout;
 import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.SearchEditText;
-import com.zlm.hp.widget.SwipeBackLayout;
+import com.zlm.libs.widget.SwipeBackLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +170,7 @@ public class SearchSingerActivity extends BaseActivity {
         mSwipeBackLayout = findViewById(R.id.swipeback_layout);
         mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
             @Override
-            public void finishView() {
+            public void finishActivity() {
 
                 //关闭输入法
                 InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -196,7 +196,7 @@ public class SearchSingerActivity extends BaseActivity {
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSwipeBackLayout.finish();
+                mSwipeBackLayout.closeView();
             }
         });
 
@@ -347,7 +347,7 @@ public class SearchSingerActivity extends BaseActivity {
                 reloadIntent.putExtra("singerName", mAudioInfo.getSingerName());
                 sendBroadcast(reloadIntent);
 
-                mSwipeBackLayout.finish();
+                mSwipeBackLayout.closeView();
             }
         });
         //索引
@@ -517,7 +517,7 @@ public class SearchSingerActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        mSwipeBackLayout.finish();
+        mSwipeBackLayout.closeView();
     }
 
 

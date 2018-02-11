@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zlm.hp.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zlm.libs.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeback_layout"
     android:layout_width="match_parent"
@@ -152,4 +152,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</com.zlm.hp.widget.SwipeBackLayout>
+</com.zlm.libs.widget.SwipeBackLayout>
