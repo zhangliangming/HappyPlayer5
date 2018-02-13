@@ -9,6 +9,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,7 +49,11 @@ dependencies {
     compile 'com.belerweb:pinyin4j:2.5.0'
 
     /**
-     *右滑动关闭
+     * 右滑动关闭
      */
-    compile 'com.github.zhangliangming:SwipeBackLayout:v1.6'
+    compile 'com.github.zhangliangming:SwipeBackLayout:v2.0'
+    /**
+     * 旋转界面
+     */
+    compile 'com.github.zhangliangming:RotateLayout:v1.6'
 }

@@ -50,9 +50,9 @@ import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.LrcSeekBar;
 import com.zlm.hp.widget.PlayListBGRelativeLayout;
-import com.zlm.hp.widget.RotateLinearLayout;
 import com.zlm.hp.widget.SingerImageView;
 import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
+import com.zlm.libs.widget.RotateLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +74,7 @@ public class LrcActivity extends BaseActivity {
     /**
      * 旋转布局界面
      */
-    private RotateLinearLayout mRotateLinearLayout;
+    private RotateLayout mRotateLayout;
     private LinearLayout mLrcPlaybarLinearLayout;
 
     /**
@@ -620,40 +620,25 @@ public class LrcActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        mRotateLinearLayout = findViewById(R.id.rotateLayout);
-        //mRotateLinearLayout.setBackgroundView(findViewById(R.id.bg_layout));
-        mRotateLinearLayout.setmRotateListener(new RotateLinearLayout.RotateListener() {
+        mRotateLayout = findViewById(R.id.rotateLayout);
+        mRotateLayout.setRotateLayoutListener(new RotateLayout.RotateLayoutListener() {
             @Override
-            public void close() {
-
+            public void finishActivity() {
                 LrcActivity.this.setResult(LRCTOMAINRESULTCODE);
                 finish();
                 overridePendingTransition(0, 0);
             }
-
-            @Override
-            public void onClick() {
-
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setManyLineLrc(!mManyLineLyricsView.isManyLineLrc(), (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setManyLineLrc(!mManyLineLyricsView.isManyLineLrc(), 0);
-                }
-
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-            }
         });
-        mRotateLinearLayout.resetView();
         //
         mLrcPlaybarLinearLayout = findViewById(R.id.lrc_playbar);
-        mRotateLinearLayout.setIgnoreView(mLrcPlaybarLinearLayout);
+        mRotateLayout.addIgnoreView(mLrcPlaybarLinearLayout);
 
         //返回按钮
         RelativeLayout backImg = findViewById(R.id.backImg);
         backImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRotateLinearLayout.finish();
+                mRotateLayout.closeView();
             }
         });
         //
@@ -813,7 +798,6 @@ public class LrcActivity extends BaseActivity {
         });
 
         //
-        mRotateLinearLayout.setVerticalScrollView(mManyLineLyricsView);
         //设置字体大小和歌词颜色
         mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
         int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
@@ -953,7 +937,7 @@ public class LrcActivity extends BaseActivity {
      * 显示歌曲信息
      */
     private void showSPIPopView(AudioInfo audioInfo) {
-        if(mViewStubSIPopLinearLayout == null){
+        if (mViewStubSIPopLinearLayout == null) {
             initSIPopView();
         }
 
@@ -2083,7 +2067,7 @@ public class LrcActivity extends BaseActivity {
             hideSIPopView();
             return;
         }
-        mRotateLinearLayout.finish();
+        mRotateLayout.closeView();
     }
 
 

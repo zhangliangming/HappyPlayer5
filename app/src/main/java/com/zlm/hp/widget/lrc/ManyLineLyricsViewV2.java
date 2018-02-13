@@ -1534,10 +1534,10 @@ public class ManyLineLyricsViewV2 extends View {
             logger.e(e.getMessage());
         }
         //
-        if (mTouchIntercept) {
-            return mTouchIntercept;
-        }
-        return isTouchMove;
+//        if (mTouchIntercept) {
+//            return mTouchIntercept;
+//        }
+        return true;
     }
 
     /**
