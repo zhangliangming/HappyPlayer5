@@ -41,18 +41,14 @@
             app:civ_border_width="2dp" />
 
 
-        <com.zlm.hp.widget.LrcSeekBar
+        <com.zml.libs.widget.MusicSeekBar
             android:id="@+id/seekBar"
             android:layout_width="match_parent"
             android:layout_height="20dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/play_bar_artist"
-            android:max="0"
-            android:progress="0"
-            android:secondaryProgress="0"
-            android:thumb="@null" />
+            android:layout_toRightOf="@+id/play_bar_artist" />
 
 
         <LinearLayout

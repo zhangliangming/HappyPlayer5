@@ -17,7 +17,6 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 分析内存泄露
 - 使用一些android特有的数据结构
 - 添加歌曲的mv功能
-- SeekBar后期修改为自定义view的方式来实现
 - SlidingMenu（添加左侧边栏）、歌词解析（动感歌词和lrc歌词格式）和动感歌词显示（支持动感歌词和lrc歌词）到时会优化成开源框架，独立出来
 - 歌词分享，歌词文件生成视频（思路暂时如下：歌词文件生成动感歌词图片，再将动感歌词图片合成视频）
 - 制作歌词(将pc制作歌词功能移植到app)
@@ -28,7 +27,10 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 -RotateLayout（旋转界面）：https://github.com/zhangliangming/RotateLayout.git
 
+-自定义view实现的进度条：https://github.com/zhangliangming/SeekBar.git
+
 # 更新日志 #
+- 2018-02-21：SeekBar弄成开源控件项目，并修改为自定义view的方式来实现；删除nineoldandroids.jar
 - 2018-02-13：RotateLayout界面抽出来，弄成开源控件项目。主要使用jitpack来实现maven库
 - 2018-02-12：SwipeBackLayout界面抽出来，弄成开源控件项目。主要使用jitpack来实现maven库
 - 2018-02-07：布局文件优化、旋转界面优化（添加硬件加速和硬件加速带来的图标闪烁问题）

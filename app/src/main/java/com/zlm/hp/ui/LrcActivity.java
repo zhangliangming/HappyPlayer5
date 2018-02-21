@@ -48,11 +48,12 @@ import com.zlm.hp.widget.ButtonRelativeLayout;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
 import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
-import com.zlm.hp.widget.LrcSeekBar;
 import com.zlm.hp.widget.PlayListBGRelativeLayout;
 import com.zlm.hp.widget.SingerImageView;
 import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
 import com.zlm.libs.widget.RotateLayout;
+import com.zml.libs.widget.CustomSeekBar;
+import com.zml.libs.widget.MusicSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,7 @@ public class LrcActivity extends BaseActivity {
     private TextView mSingerNameTextView;
     ////////////////////////////底部
 
-    private LrcSeekBar mLrcSeekBar;
+    private MusicSeekBar mMusicSeekBar;
     /**
      * 播放
      */
@@ -358,8 +359,8 @@ public class LrcActivity extends BaseActivity {
             if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
                 double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
-                int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
-                mLrcSeekBar.setSecondaryProgress(downloadProgress);
+                int downloadProgress = (int) (mMusicSeekBar.getMax() * pre);
+                mMusicSeekBar.setSecondaryProgress(downloadProgress);
             }
         } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
@@ -390,10 +391,10 @@ public class LrcActivity extends BaseActivity {
             mSongDurationTv.setText("00:00");
 
             //
-            mLrcSeekBar.setEnabled(false);
-            mLrcSeekBar.setProgress(0);
-            mLrcSeekBar.setSecondaryProgress(0);
-            mLrcSeekBar.setMax(0);
+            mMusicSeekBar.setEnabled(false);
+            mMusicSeekBar.setProgress(0);
+            mMusicSeekBar.setSecondaryProgress(0);
+            mMusicSeekBar.setMax(0);
 
             //
             mManyLineLyricsView.setLyricsUtil(null, 0, 0);
@@ -438,10 +439,10 @@ public class LrcActivity extends BaseActivity {
             mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
             mSongDurationTv.setText(MediaUtil.parseTimeToString((int) audioInfo.getDuration()));
             //
-            mLrcSeekBar.setEnabled(true);
-            mLrcSeekBar.setMax((int) audioInfo.getDuration());
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-            mLrcSeekBar.setSecondaryProgress(0);
+            mMusicSeekBar.setEnabled(true);
+            mMusicSeekBar.setMax((int) audioInfo.getDuration());
+            mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
+            mMusicSeekBar.setSecondaryProgress(0);
 
             //加载歌词
             String keyWords = "";
@@ -508,7 +509,7 @@ public class LrcActivity extends BaseActivity {
             //
             mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
             //
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
+            mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
             //暂停完成
@@ -525,7 +526,7 @@ public class LrcActivity extends BaseActivity {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
                 mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
-                mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
+                mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
                 AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
@@ -537,13 +538,6 @@ public class LrcActivity extends BaseActivity {
             }
 
         }
-//        else if (action.equals(AudioBroadcastReceiver.ACTION_MUSICRESTART)) {
-        //重新启动播放服务
-//            Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-//            mHPApplication.startService(playerServiceIntent);
-//            logger.e("接收广播并且重新启动音频播放服务");
-
-//        }
         else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
             //歌词加载完成
             AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
@@ -563,7 +557,7 @@ public class LrcActivity extends BaseActivity {
             //歌词快进
             if (mHPApplication.getCurAudioMessage() != null) {
                 mSongProgressTv.setText(MediaUtil.parseTimeToString((int) mHPApplication.getCurAudioMessage().getPlayProgress()));
-                mLrcSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                mMusicSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 if (mHPApplication.getCurAudioInfo() != null) {
                     if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
                         mManyLineLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -1552,16 +1546,15 @@ public class LrcActivity extends BaseActivity {
 
 
         //字体大小
-        final LrcSeekBar lrcSizeLrcSeekBar = findViewById(R.id.fontSizeseekbar);
+        final CustomSeekBar lrcSizeLrcSeekBar = findViewById(R.id.fontSizeseekbar);
         lrcSizeLrcSeekBar.setMax(mHPApplication.getMaxLrcFontSize() - mHPApplication.getMinLrcFontSize());
         lrcSizeLrcSeekBar.setProgress((mHPApplication.getLrcFontSize() - mHPApplication.getMinLrcFontSize()));
-        lrcSizeLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor(Color.WHITE, 50));
+        lrcSizeLrcSeekBar.setBackgroundPaintColor(ColorUtil.parserColor(Color.WHITE, 50));
         lrcSizeLrcSeekBar.setProgressColor(Color.WHITE);
         lrcSizeLrcSeekBar.setThumbColor(Color.WHITE);
-        lrcSizeLrcSeekBar.setOnChangeListener(new LrcSeekBar.OnChangeListener() {
+        lrcSizeLrcSeekBar.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
             @Override
-            public void onProgressChanged() {
-                //logger.e("progress=" + lrcSizeLrcSeekBar.getProgress());
+            public void onProgressChanged(CustomSeekBar customSeekBar) {
                 if (mManyLineLyricsView.getLyricsUtil() != null) {
                     if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
                         if (mHPApplication.getCurAudioMessage() != null) {
@@ -1574,17 +1567,7 @@ public class LrcActivity extends BaseActivity {
             }
 
             @Override
-            public String getTimeText() {
-                return null;
-            }
-
-            @Override
-            public String getLrcText() {
-                return null;
-            }
-
-            @Override
-            public void dragFinish() {
+            public void onTrackingTouchFinish(CustomSeekBar customSeekBar) {
                 mHPApplication.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize());
             }
         });
@@ -1800,40 +1783,37 @@ public class LrcActivity extends BaseActivity {
         mSongDurationTv = findViewById(R.id.songDuration);
 
         //进度条
-        mLrcSeekBar = findViewById(R.id.lrcseekbar);
-        mLrcSeekBar.setOnChangeListener(new LrcSeekBar.OnChangeListener() {
-
-            @Override
-            public void onProgressChanged() {
-                int playStatus = mHPApplication.getPlayStatus();
-                if (playStatus != AudioPlayerManager.PLAYING) {
-                    mSongProgressTv.setText(MediaUtil.parseTimeToString((mLrcSeekBar.getProgress())));
-                }
-            }
-
+        mMusicSeekBar = findViewById(R.id.lrcseekbar);
+        mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
-                return MediaUtil.parseTimeToString(mLrcSeekBar.getProgress());
+                return MediaUtil.parseTimeToString(mMusicSeekBar.getProgress());
             }
 
             @Override
             public String getLrcText() {
-
-
                 return null;
             }
 
             @Override
-            public void dragFinish() {
-                seekToMusic(mLrcSeekBar.getProgress(), false);
+            public void onProgressChanged(MusicSeekBar musicSeekBar) {
+                int playStatus = mHPApplication.getPlayStatus();
+                if (playStatus != AudioPlayerManager.PLAYING) {
+                    mSongProgressTv.setText(MediaUtil.parseTimeToString((mMusicSeekBar.getProgress())));
+                }
+            }
+
+            @Override
+            public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
+                seekToMusic(mMusicSeekBar.getProgress(), false);
             }
         });
         //
-        mLrcSeekBar.setBackgroundProgressColorColor(ColorUtil.parserColor("#eeeeee", 50));
-        mLrcSeekBar.setSecondProgressColor(Color.argb(100, 255, 255, 255));
-        mLrcSeekBar.setProgressColor(Color.rgb(255, 64, 129));
-        mLrcSeekBar.setThumbColor(Color.rgb(255, 64, 129));
-        mLrcSeekBar.setTimePopupWindowViewColor(Color.argb(200, 255, 64, 129));
+        mMusicSeekBar.setBackgroundPaintColor(ColorUtil.parserColor("#eeeeee", 50));
+        mMusicSeekBar.setSecondProgressColor(Color.argb(100, 255, 255, 255));
+        mMusicSeekBar.setProgressColor(Color.rgb(255, 64, 129));
+        mMusicSeekBar.setThumbColor(Color.rgb(255, 64, 129));
+        mMusicSeekBar.setTimePopupWindowViewColor(Color.argb(200, 255, 64, 129));
 
         //播放
         mPlayBtn = findViewById(R.id.playbtn);

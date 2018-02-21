@@ -1,5 +1,6 @@
 package com.zlm.hp.widget;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
@@ -9,7 +10,6 @@ import android.view.ViewConfiguration;
 import android.view.animation.Interpolator;
 import android.widget.ScrollView;
 
-import com.nineoldandroids.animation.ValueAnimator;
 import com.zlm.hp.libs.utils.LoggerUtil;
 
 /**

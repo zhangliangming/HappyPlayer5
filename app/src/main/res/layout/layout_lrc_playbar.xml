@@ -93,15 +93,12 @@
             android:textColor="#ffffff"
             android:textSize="12dp" />
 
-        <com.zlm.hp.widget.LrcSeekBar
+        <com.zml.libs.widget.MusicSeekBar
             android:id="@+id/lrcseekbar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_toLeftOf="@+id/songDuration"
-            android:layout_toRightOf="@+id/songProgress"
-            android:max="0"
-            android:progress="0"
-            android:secondaryProgress="0" />
+            android:layout_toRightOf="@+id/songProgress" />
 
         <TextView
             android:id="@+id/songDuration"

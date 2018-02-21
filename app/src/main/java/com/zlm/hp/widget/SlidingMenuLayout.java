@@ -24,7 +24,6 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.nineoldandroids.view.ViewHelper;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.LoggerUtil;
 import com.zlm.hp.ui.R;
@@ -442,8 +441,8 @@ public class SlidingMenuLayout extends FrameLayout {
                 float percent = left * 1f / getWidth();
 
                 //缩放
-                ViewHelper.setScaleX(mainLinearLayoutContainer, 0.9f + 0.1f * percent);
-                ViewHelper.setScaleY(mainLinearLayoutContainer, 0.9f + 0.1f * percent);
+                mainLinearLayoutContainer.setScaleX( 0.9f + 0.1f * percent);
+                mainLinearLayoutContainer.setScaleY(0.9f + 0.1f * percent);
 
                 //
                 mMenuCurLeftX = left;

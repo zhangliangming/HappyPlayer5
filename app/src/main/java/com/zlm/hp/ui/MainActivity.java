@@ -62,10 +62,10 @@ import com.zlm.hp.widget.IconfontImageButtonTextView;
 import com.zlm.hp.widget.IconfontIndicatorTextView;
 import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
-import com.zlm.hp.widget.LrcSeekBar;
 import com.zlm.hp.widget.SlidingMenuLayout;
 import com.zlm.hp.widget.SwipeOutLayout;
 import com.zlm.hp.widget.lrc.FloatLyricsView;
+import com.zml.libs.widget.MusicSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +164,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 歌曲进度
      */
-    private LrcSeekBar mLrcSeekBar;
+    private MusicSeekBar mMusicSeekBar;
     /**
      * 双行歌词
      */
@@ -440,8 +440,8 @@ public class MainActivity extends BaseActivity {
             if (mHPApplication.getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
                 int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
                 double pre = downloadedSize * 1.0 / mHPApplication.getCurAudioInfo().getFileSize();
-                int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
-                mLrcSeekBar.setSecondaryProgress(downloadProgress);
+                int downloadProgress = (int) (mMusicSeekBar.getMax() * pre);
+                mMusicSeekBar.setSecondaryProgress(downloadProgress);
             }
         } else if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICERROR)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
@@ -468,10 +468,10 @@ public class MainActivity extends BaseActivity {
             mPlayImageView.setVisibility(View.VISIBLE);
 
             //
-            mLrcSeekBar.setEnabled(false);
-            mLrcSeekBar.setProgress(0);
-            mLrcSeekBar.setSecondaryProgress(0);
-            mLrcSeekBar.setMax(0);
+            mMusicSeekBar.setEnabled(false);
+            mMusicSeekBar.setProgress(0);
+            mMusicSeekBar.setSecondaryProgress(0);
+            mMusicSeekBar.setMax(0);
             //隐藏
             mSingerImg.setTag(null);
 
@@ -504,10 +504,10 @@ public class MainActivity extends BaseActivity {
             mPlayImageView.setVisibility(View.VISIBLE);
 
             //
-            mLrcSeekBar.setEnabled(true);
-            mLrcSeekBar.setMax((int) audioInfo.getDuration());
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
-            mLrcSeekBar.setSecondaryProgress(0);
+            mMusicSeekBar.setEnabled(true);
+            mMusicSeekBar.setMax((int) audioInfo.getDuration());
+            mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
+            mMusicSeekBar.setSecondaryProgress(0);
             //加载歌手图片
             ImageUtil.loadSingerImage(mHPApplication, getApplicationContext(), mSingerImg, audioInfo.getSingerName());
 
@@ -539,7 +539,7 @@ public class MainActivity extends BaseActivity {
             mPlayImageView.setVisibility(View.INVISIBLE);
 
             //
-            mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
+            mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
             //暂停完成
@@ -555,7 +555,7 @@ public class MainActivity extends BaseActivity {
             //播放中
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
-                mLrcSeekBar.setProgress((int) audioMessage.getPlayProgress());
+                mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
                 AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
@@ -588,7 +588,7 @@ public class MainActivity extends BaseActivity {
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCSEEKTO)) {
             if (mHPApplication.getCurAudioMessage() != null) {
-                mLrcSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                mMusicSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 if (mHPApplication.getCurAudioInfo() != null) {
                     if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
                         mFloatLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
@@ -1159,33 +1159,30 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        mLrcSeekBar = findViewById(R.id.seekBar);
-        mLrcSeekBar.setOnChangeListener(new LrcSeekBar.OnChangeListener() {
-
-            @Override
-            public void onProgressChanged() {
-
-            }
-
+        mMusicSeekBar = findViewById(R.id.seekBar);
+        mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
-                return MediaUtil.parseTimeToString(mLrcSeekBar.getProgress());
+                return MediaUtil.parseTimeToString(mMusicSeekBar.getProgress());
             }
 
             @Override
             public String getLrcText() {
-
                 //获取行歌词
                 if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioMessage().getAudioInfo().getHash())) {
-                    return mFloatLyricsView.getLyricsUtil().getLineLrc(mFloatLyricsView.getLyricsLineTreeMap(), mLrcSeekBar.getProgress());
+                    return mFloatLyricsView.getLyricsUtil().getLineLrc(mFloatLyricsView.getLyricsLineTreeMap(), mMusicSeekBar.getProgress());
                 }
 
                 return null;
             }
 
             @Override
-            public void dragFinish() {
-                //
+            public void onProgressChanged(MusicSeekBar musicSeekBar) {
+
+            }
+
+            @Override
+            public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
                 int playStatus = mHPApplication.getPlayStatus();
                 if (playStatus == AudioPlayerManager.PLAYING) {
                     //正在播放
@@ -1195,7 +1192,7 @@ public class MainActivity extends BaseActivity {
                         //if (audioInfo != null) {
                         //  audioMessage.setAudioInfo(audioInfo);
                         if (audioMessage != null) {
-                            audioMessage.setPlayProgress(mLrcSeekBar.getProgress());
+                            audioMessage.setPlayProgress(mMusicSeekBar.getProgress());
                             Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_SEEKTOMUSIC);
                             resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
                             resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -1205,7 +1202,7 @@ public class MainActivity extends BaseActivity {
                 } else {
 
                     if (mHPApplication.getCurAudioMessage() != null)
-                        mHPApplication.getCurAudioMessage().setPlayProgress(mLrcSeekBar.getProgress());
+                        mHPApplication.getCurAudioMessage().setPlayProgress(mMusicSeekBar.getProgress());
 
                     //歌词快进
                     Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);
