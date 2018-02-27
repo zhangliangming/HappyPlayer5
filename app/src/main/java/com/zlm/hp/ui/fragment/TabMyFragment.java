@@ -500,7 +500,12 @@ public class TabMyFragment extends BaseFragment {
             //将正在播放的歌曲加入最近播放列表中
             AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
             if (audioInfo != null) {
-                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo, true);
+//                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo, true);
+                if (AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).isExists(audioInfo.getHash())) {
+                    AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateRecentAudio(audioInfo, true);
+                } else {
+                    AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).addRecentAudio(audioInfo);
+                }
                 loadRecentCount();
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE)) {
@@ -513,7 +518,12 @@ public class TabMyFragment extends BaseFragment {
             }else if(audioInfo.getType() == AudioInfo.NET) {
                 audioInfo.setLike(AudioInfo.LIKE_NET);
             }
-            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateLikeAudio(audioInfo, true);
+//            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateLikeAudio(audioInfo, true);
+            if (AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).isExists(audioInfo.getHash())) {
+                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).updateLikeAudio(audioInfo, true);
+            } else {
+                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).addLikeAudio(audioInfo);
+            }
             loadLikeCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEDELETE)) {
             //删除喜欢

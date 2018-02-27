@@ -1,10 +1,8 @@
 package base.widget;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.RectF;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -184,6 +182,7 @@ public class LrcSeekBar extends AppCompatSeekBar {
         setSecondProgressColor(secondProgressColor);
         setProgressColor(progressColor);
         setThumbColor(thumbColor);
+        setThumb(getResources().getDrawable(R.drawable.seekbar_thumb));
 
         //
         setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -236,49 +235,49 @@ public class LrcSeekBar extends AppCompatSeekBar {
         });
     }
 
-    @Override
-    protected synchronized void onDraw(Canvas canvas) {
-
-
-        int rSize = getHeight() / 4;
-        if (isDrag) {
-            rSize = getHeight() / 2;
-        }
-        int height = 2;
-        int leftPadding = rSize;
-
-        if (getProgress() > 0) {
-            leftPadding = 0;
-        }
-
-        RectF backgroundRect = new RectF(leftPadding, getHeight() / 2 - height, getWidth(),
-                getHeight() / 2 + height);
-        //backgroundPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawRoundRect(backgroundRect, rSize, rSize, backgroundPaint);
-
-
-        if (getMax() != 0) {
-            RectF secondProgressRect = new RectF(leftPadding, getHeight() / 2 - height,
-                    getSecondaryProgress() * getWidth() / getMax(), getHeight()
-                    / 2 + height);
-            canvas.drawRoundRect(secondProgressRect, rSize, rSize, secondProgressPaint);
-
-            RectF progressRect = new RectF(leftPadding, getHeight() / 2 - height,
-                    getProgress() * getWidth() / getMax(), getHeight() / 2
-                    + height);
-            canvas.drawRoundRect(progressRect, rSize, rSize, progressPaint);
-
-
-            int cx = getProgress() * getWidth() / getMax();
-            if ((cx + rSize) > getWidth()) {
-                cx = getWidth() - rSize;
-            } else {
-                cx = Math.max(cx, rSize);
-            }
-            int cy = getHeight() / 2;
-            canvas.drawCircle(cx, cy, rSize, thumbPaint);
-        }
-    }
+//    @Override
+//    protected synchronized void onDraw(Canvas canvas) {
+//
+//
+//        int rSize = getHeight() / 4;
+//        if (isDrag) {
+//            rSize = getHeight() / 2;
+//        }
+//        int height = 2;
+//        int leftPadding = rSize;
+//
+//        if (getProgress() > 0) {
+//            leftPadding = 0;
+//        }
+//
+//        RectF backgroundRect = new RectF(leftPadding, getHeight() / 2 - height, getWidth(),
+//                getHeight() / 2 + height);
+//        //backgroundPaint.setStyle(Paint.Style.STROKE);
+//        canvas.drawRoundRect(backgroundRect, rSize, rSize, backgroundPaint);
+//
+//
+//        if (getMax() != 0) {
+//            RectF secondProgressRect = new RectF(leftPadding, getHeight() / 2 - height,
+//                    getSecondaryProgress() * getWidth() / getMax(), getHeight()
+//                    / 2 + height);
+//            canvas.drawRoundRect(secondProgressRect, rSize, rSize, secondProgressPaint);
+//
+//            RectF progressRect = new RectF(leftPadding, getHeight() / 2 - height,
+//                    getProgress() * getWidth() / getMax(), getHeight() / 2
+//                    + height);
+//            canvas.drawRoundRect(progressRect, rSize, rSize, progressPaint);
+//
+//
+//            int cx = getProgress() * getWidth() / getMax();
+//            if ((cx + rSize) > getWidth()) {
+//                cx = getWidth() - rSize;
+//            } else {
+//                cx = Math.max(cx, rSize);
+//            }
+//            int cy = getHeight() / 2;
+//            canvas.drawCircle(cx, cy, rSize, thumbPaint);
+//        }
+//    }
 
     @Override
     public synchronized void setProgress(int progress) {
