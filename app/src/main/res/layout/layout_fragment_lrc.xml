@@ -16,7 +16,7 @@
             android:background="#ffffff">
 
 
-            <com.zlm.hp.widget.lrc.ManyLineLyricsViewV2
+            <com.zlm.hp.lyrics.widget.ManyLyricsView
                 android:id="@+id/lrcview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -28,10 +28,12 @@ import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
+import com.zlm.hp.lyrics.LyricsReader;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.model.LyricsTag;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
-import com.zlm.hp.lyrics.utils.LyricsUtil;
+import com.zlm.hp.lyrics.widget.AbstractLrcView;
+import com.zlm.hp.lyrics.widget.ManyLyricsView;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.LyricsManager;
@@ -50,7 +52,6 @@ import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.PlayListBGRelativeLayout;
 import com.zlm.hp.widget.SingerImageView;
-import com.zlm.hp.widget.lrc.ManyLineLyricsViewV2;
 import com.zlm.libs.widget.RotateLayout;
 import com.zml.libs.widget.CustomSeekBar;
 import com.zml.libs.widget.MusicSeekBar;
@@ -119,7 +120,7 @@ public class LrcActivity extends BaseActivity {
     /**
      * 多行歌词视图
      */
-    private ManyLineLyricsViewV2 mManyLineLyricsView;
+    private ManyLyricsView mManyLineLyricsView;
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
     //翻译歌词
@@ -170,17 +171,12 @@ public class LrcActivity extends BaseActivity {
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //翻译歌词/音译歌词
-                        mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
-                        mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
-                        mHideTTImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //翻译歌词/音译歌词
-                        mShowTTToTranslateImg.setVisibility(View.VISIBLE);
-                        mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                        mHideTTImg.setVisibility(View.INVISIBLE);
-                    }
+
+                    //翻译歌词/音译歌词
+                    mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.VISIBLE);
+
 
                     break;
                 case HASTRANSLITERATIONLRC:
@@ -189,15 +185,10 @@ public class LrcActivity extends BaseActivity {
                     mHideTranslateImg.setVisibility(View.INVISIBLE);
                     mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //音译歌词
-                        mHideTransliterationImg.setVisibility(View.VISIBLE);
-                        mShowTransliterationImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //音译歌词
-                        mHideTransliterationImg.setVisibility(View.INVISIBLE);
-                        mShowTransliterationImg.setVisibility(View.VISIBLE);
-                    }
+
+                    //音译歌词
+                    mHideTransliterationImg.setVisibility(View.VISIBLE);
+                    mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
 
                     //翻译歌词/音译歌词
@@ -208,15 +199,10 @@ public class LrcActivity extends BaseActivity {
                     break;
                 case HASTRANSLATELRC:
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //翻译歌词
-                        mHideTranslateImg.setVisibility(View.VISIBLE);
-                        mShowTranslateImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //翻译歌词
-                        mHideTranslateImg.setVisibility(View.INVISIBLE);
-                        mShowTranslateImg.setVisibility(View.VISIBLE);
-                    }
+
+                    //翻译歌词
+                    mHideTranslateImg.setVisibility(View.VISIBLE);
+                    mShowTranslateImg.setVisibility(View.INVISIBLE);
 
 
                     //音译歌词
@@ -397,7 +383,7 @@ public class LrcActivity extends BaseActivity {
             mMusicSeekBar.setMax(0);
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+            mManyLineLyricsView.initLrcData();
             //歌手写真
             mSingerImageView.setVisibility(View.INVISIBLE);
             mSingerImageView.setSongSingerInfos(mHPApplication, getApplicationContext(), null);
@@ -454,7 +440,10 @@ public class LrcActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+            mManyLineLyricsView.initLrcData();
+            //加载中
+            mManyLineLyricsView.setLrcStatus(ManyLyricsView.LRCSTATUS_LOADING);
+
 
             //设置弹出窗口播放列表
             if (isPLPopViewShow) {
@@ -511,45 +500,72 @@ public class LrcActivity extends BaseActivity {
             //
             mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
 
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
-            //暂停完成
-            mPauseBtn.setVisibility(View.INVISIBLE);
-            mPlayBtn.setVisibility(View.VISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
-            //唤醒完成
-            mPauseBtn.setVisibility(View.VISIBLE);
-            mPlayBtn.setVisibility(View.INVISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            //播放中
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
                 mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
                 mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
                 AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
-                        mManyLineLyricsView.updateView((int) audioMessage.getPlayProgress());
+
+                    if (mManyLineLyricsView.getLyricsReader() != null && mManyLineLyricsView.getLyricsReader().getHash().equals(audioInfo.getHash()) && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY) {
+                        mManyLineLyricsView.play((int) audioMessage.getPlayProgress());
                     }
                 }
 
             }
 
-        }
-        else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
+            //暂停完成
+            mPauseBtn.setVisibility(View.INVISIBLE);
+            mPlayBtn.setVisibility(View.VISIBLE);
+
+
+            if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                mManyLineLyricsView.pause();
+            }
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
+            //唤醒完成
+            mPauseBtn.setVisibility(View.VISIBLE);
+            mPlayBtn.setVisibility(View.INVISIBLE);
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.play((int) audioMessage.getPlayProgress());
+                }
+            }
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.seekto((int) audioMessage.getPlayProgress());
+                }
+            }
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
+
+            //播放中
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                mSongProgressTv.setText(MediaUtil.parseTimeToString((int) audioMessage.getPlayProgress()));
+                mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
+
+            }
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCLOADED)) {
             //歌词加载完成
             AudioMessage curAudioMessage = mHPApplication.getCurAudioMessage();
             AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             String hash = audioMessage.getHash();
             if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
                 //
-                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
-                if (lyricsUtil != null) {
-                    lyricsUtil.setHash(hash);
-                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2, (int) curAudioMessage.getPlayProgress());
-                    mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
+                LyricsReader lyricsReader = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
+                if (lyricsReader != null) {
+                    lyricsReader.setHash(hash);
+
+                    mManyLineLyricsView.setLyricsReader(lyricsReader);
+                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
+                        mManyLineLyricsView.play((int) curAudioMessage.getPlayProgress());
                 }
             }
 
@@ -559,8 +575,8 @@ public class LrcActivity extends BaseActivity {
                 mSongProgressTv.setText(MediaUtil.parseTimeToString((int) mHPApplication.getCurAudioMessage().getPlayProgress()));
                 mMusicSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 if (mHPApplication.getCurAudioInfo() != null) {
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
-                        mManyLineLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                    if (mManyLineLyricsView.getLyricsReader() != null && mManyLineLyricsView.getLyricsReader().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
+                        mManyLineLyricsView.seekto((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                     }
                 }
             }
@@ -648,13 +664,11 @@ public class LrcActivity extends BaseActivity {
             public void onClick(View view) {
                 mHideTranslateImg.setVisibility(View.INVISIBLE);
                 mShowTranslateImg.setVisibility(View.VISIBLE);
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
-                }
 
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                }
 
             }
         });
@@ -665,13 +679,10 @@ public class LrcActivity extends BaseActivity {
                 mHideTranslateImg.setVisibility(View.VISIBLE);
                 mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
-                }
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
 
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+                }
 
             }
         });
@@ -683,12 +694,9 @@ public class LrcActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.INVISIBLE);
                 mShowTransliterationImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
 
             }
         });
@@ -699,13 +707,9 @@ public class LrcActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.VISIBLE);
                 mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
@@ -718,12 +722,10 @@ public class LrcActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
+
             }
         });
         mShowTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
@@ -734,12 +736,9 @@ public class LrcActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mHideTTImg = findViewById(R.id.hideTTImg);
@@ -750,53 +749,45 @@ public class LrcActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
-
-        //设置额外歌词回调事件
-        mManyLineLyricsView.setExtraLyricsListener(new ManyLineLyricsViewV2.ExtraLyricsListener() {
-
+        //
+        mManyLineLyricsView.setExtraLyricsListener(new AbstractLrcView.ExtraLyricsListener() {
             @Override
-            public void hasTranslateLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATELRC);
-            }
+            public void extraLrcCallback() {
+                int extraLrcType = mManyLineLyricsView.getExtraLrcType();
+                if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_NOLRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLATELRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATELRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLITERATIONLRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_BOTH) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATEANDTRANSLITERATIONLRC);
+                }
 
-            @Override
-            public void hasTransliterationLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLITERATIONLRC);
-            }
 
-            @Override
-            public void hasTranslateAndTransliterationLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATEANDTRANSLITERATIONLRC);
-            }
-
-            @Override
-            public void noExtraLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
             }
         });
         //
-        mManyLineLyricsView.setOnLrcClickListener(new ManyLineLyricsViewV2.OnLrcClickListener() {
+        mManyLineLyricsView.setOnLrcClickListener(new ManyLyricsView.OnLrcClickListener() {
             @Override
-            public void onLrcPlayClicked(int progress, boolean isLrcSeekTo) {
-                seekToMusic(progress, isLrcSeekTo);
+            public void onLrcPlayClicked(int progress) {
+                seekToMusic(progress, true);
             }
         });
 
         //
         //设置字体大小和歌词颜色
-        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
+        mManyLineLyricsView.setFontSize(mHPApplication.getLrcFontSize(), mHPApplication.getLrcFontSize(), false, false);
         int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-        mManyLineLyricsView.setLrcColor(lrcColor);
-        mManyLineLyricsView.setManyLineLrc(mHPApplication.isManyLineLrc(), 0);
+        mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, false);
+        mManyLineLyricsView.setPaintColor(new int[]{Color.WHITE, Color.WHITE}, false);
+
         //歌手写真
         mSingerImageView = findViewById(R.id.singerimg);
         mSingerImageView.setVisibility(View.INVISIBLE);
@@ -1229,8 +1220,7 @@ public class LrcActivity extends BaseActivity {
         //滚动到当前播放位置
         int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
         if (position >= 0)
-            mCurRecyclerView.move(position,
-                    LinearLayoutRecyclerView.scroll);
+            mCurRecyclerView.moveToPosition(position);
 
              /*
                 参数解释：
@@ -1491,14 +1481,14 @@ public class LrcActivity extends BaseActivity {
         lrcProgressJianBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(mManyLineLyricsView.getLyricsUtil().getOffset() + (-500));
-                    ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
+                if (mManyLineLyricsView.getLyricsReader() != null) {
+                    mManyLineLyricsView.getLyricsReader().setOffset(mManyLineLyricsView.getLyricsReader().getOffset() + (-500));
+                    ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsReader().getOffset() / 1000 + "秒");
+                    if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
 
 
                         //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
+                        saveLrcFile(mManyLineLyricsView.getLyricsReader().getLrcFilePath(), mManyLineLyricsView.getLyricsReader().getLyricsInfo(), mManyLineLyricsView.getLyricsReader().getPlayOffset());
 
                     }
                 }
@@ -1512,13 +1502,13 @@ public class LrcActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(0);
+                if (mManyLineLyricsView.getLyricsReader() != null) {
+                    mManyLineLyricsView.getLyricsReader().setOffset(0);
                     ToastUtil.showTextToast(LrcActivity.this, "还原了");
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
+                    if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
 
                         //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
+                        saveLrcFile(mManyLineLyricsView.getLyricsReader().getLrcFilePath(), mManyLineLyricsView.getLyricsReader().getLyricsInfo(), mManyLineLyricsView.getLyricsReader().getPlayOffset());
 
                     }
                 }
@@ -1531,13 +1521,13 @@ public class LrcActivity extends BaseActivity {
         lrcProgressJiaBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    mManyLineLyricsView.getLyricsUtil().setOffset(mManyLineLyricsView.getLyricsUtil().getOffset() + (500));
-                    ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsUtil().getOffset() / 1000 + "秒");
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
+                if (mManyLineLyricsView.getLyricsReader() != null) {
+                    mManyLineLyricsView.getLyricsReader().setOffset(mManyLineLyricsView.getLyricsReader().getOffset() + (500));
+                    ToastUtil.showTextToast(LrcActivity.this, (float) mManyLineLyricsView.getLyricsReader().getOffset() / 1000 + "秒");
+                    if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
 
                         //保存歌词文件
-                        saveLrcFile(mManyLineLyricsView.getLyricsUtil().getLrcFilePath(), mManyLineLyricsView.getLyricsUtil().getLyricsIfno(), mManyLineLyricsView.getLyricsUtil().getPlayOffset());
+                        saveLrcFile(mManyLineLyricsView.getLyricsReader().getLrcFilePath(), mManyLineLyricsView.getLyricsReader().getLyricsInfo(), mManyLineLyricsView.getLyricsReader().getPlayOffset());
 
                     }
                 }
@@ -1555,15 +1545,10 @@ public class LrcActivity extends BaseActivity {
         lrcSizeLrcSeekBar.setOnChangeListener(new CustomSeekBar.OnChangeListener() {
             @Override
             public void onProgressChanged(CustomSeekBar customSeekBar) {
-                if (mManyLineLyricsView.getLyricsUtil() != null) {
-                    if (mManyLineLyricsView.getLyricsLineTreeMap() != null) {
-                        if (mHPApplication.getCurAudioMessage() != null) {
-                            mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize(), (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                        }
-                    }
-                } else {
-                    mManyLineLyricsView.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize());
-                }
+
+                int fontSize = lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize();
+                mManyLineLyricsView.setFontSize(fontSize, fontSize, true, true);
+
             }
 
             @Override
@@ -1584,6 +1569,9 @@ public class LrcActivity extends BaseActivity {
                     curProgress = 0;
                 }
                 lrcSizeLrcSeekBar.setProgress(curProgress);
+
+                int fontSize = lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize();
+                mManyLineLyricsView.setFontSize(fontSize, fontSize, true, true);
             }
         });
 
@@ -1599,6 +1587,9 @@ public class LrcActivity extends BaseActivity {
                     curProgress = lrcSizeLrcSeekBar.getMax();
                 }
                 lrcSizeLrcSeekBar.setProgress(curProgress);
+
+                int fontSize = lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize();
+                mManyLineLyricsView.setFontSize(fontSize, fontSize, true, true);
             }
         });
 
@@ -1619,7 +1610,7 @@ public class LrcActivity extends BaseActivity {
                     colorStatus[0].setVisibility(View.VISIBLE);
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
                 }
             }
         });
@@ -1639,7 +1630,7 @@ public class LrcActivity extends BaseActivity {
 
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
 
                 }
             }
@@ -1659,7 +1650,7 @@ public class LrcActivity extends BaseActivity {
                     colorStatus[2].setVisibility(View.VISIBLE);
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
                 }
             }
         });
@@ -1678,7 +1669,7 @@ public class LrcActivity extends BaseActivity {
                     colorStatus[3].setVisibility(View.VISIBLE);
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
                 }
             }
         });
@@ -1697,7 +1688,7 @@ public class LrcActivity extends BaseActivity {
                     colorStatus[4].setVisibility(View.VISIBLE);
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
                 }
             }
         });
@@ -1716,7 +1707,7 @@ public class LrcActivity extends BaseActivity {
                     colorStatus[5].setVisibility(View.VISIBLE);
 
                     int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-                    mManyLineLyricsView.setLrcColor(lrcColor);
+                    mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, true);
                 }
             }
         });

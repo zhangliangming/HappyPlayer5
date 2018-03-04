@@ -64,5 +64,10 @@ dependencies {
     /**
      * 进度条
      */
-    compile 'com.github.zhangliangming:SeekBar:v1.1'
+    compile 'com.github.zhangliangming:SeekBar:v1.3'
+
+    /**
+     * 歌词
+     */
+    compile 'com.github.zhangliangming:HPLyrics:v1.8'
 }

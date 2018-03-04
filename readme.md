@@ -7,7 +7,6 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 歌词搜索界面优化
 - 单例优化
 - 引入线程池，统一管理线程
-- 广播每隔100ms频繁更新歌词界面问题优化（感谢一位大神提供的宝贵建议和方案）
 - 桌面歌词
 - 优化网络请求
 - 多线程考虑线程安全问题
@@ -17,7 +16,7 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - 分析内存泄露
 - 使用一些android特有的数据结构
 - 添加歌曲的mv功能
-- SlidingMenu（添加左侧边栏）、歌词解析（动感歌词和lrc歌词格式）和动感歌词显示（支持动感歌词和lrc歌词）到时会优化成开源框架，独立出来
+- SlidingMenu（添加左侧边栏）到时会优化成开源框架，独立出来
 - 歌词分享，歌词文件生成视频（思路暂时如下：歌词文件生成动感歌词图片，再将动感歌词图片合成视频）
 - 制作歌词(将pc制作歌词功能移植到app)
 - 自定义锁屏界面修改为系统锁屏界面
@@ -27,10 +26,28 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 -RotateLayout（旋转界面）：https://github.com/zhangliangming/RotateLayout.git
 
--自定义view实现的进度条：https://github.com/zhangliangming/SeekBar.git
+-SeekBar（自定义view实现）：https://github.com/zhangliangming/SeekBar.git
+
+-HPLyrics（动感歌词解析和歌词显示库）：https://github.com/zhangliangming/HPLyrics.git
 
 # 更新日志 #
-- 2018-02-21：SeekBar弄成开源控件项目，并修改为自定义view的方式来实现；删除nineoldandroids.jar
+- 2018-03-04：
+- 歌词优化，具体可参考：[Android仿酷狗动感歌词（支持翻译和音译歌词）显示效果](http://zhangliangming.github.io/Android%E4%BB%BF%E9%85%B7%E7%8B%97%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D-%E6%98%BE%E7%A4%BA%E6%95%88%E6%9E%9C/)
+- 歌词解析和歌词显示独立成一个开源库
+- 添加对lrc歌词的解析和显示，双行歌词暂时不支持lrc歌词格式的显示
+- 多行歌词添加对翻译歌词变动感歌词的显示，只支持动感歌词格式的翻译歌词，其效果如下：
+
+![](https://i.imgur.com/Is96x66.png)
+
+- 双行歌词的颜色，只要参考酷狗PC版的桌面歌词颜色
+- 双行歌词添加翻译歌词和音译歌词显示，点击底部可对歌词进行切换，效果如下：
+- 
+![](https://i.imgur.com/bEqWNJl.png)
+
+![](https://i.imgur.com/8BDHX3L.png)
+
+- 2018-02-21：SeekBar弄成开源控件项目，主要使用jitpack来实现maven库，并修改为自定义view的方式来实现
+- 2018-02-21：删除nineoldandroids.jar
 - 2018-02-13：RotateLayout界面抽出来，弄成开源控件项目。主要使用jitpack来实现maven库
 - 2018-02-12：SwipeBackLayout界面抽出来，弄成开源控件项目。主要使用jitpack来实现maven库
 - 2018-02-07：布局文件优化、旋转界面优化（添加硬件加速和硬件加速带来的图标闪烁问题）

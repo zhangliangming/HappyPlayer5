@@ -61,6 +61,9 @@ public class AudioBroadcastReceiver {
     public static final String ACTION_SERVICE_PAUSEMUSIC = "com.zlm.hp.service.pause.music";
     //播放器唤醒
     public static final String ACTION_SERVICE_RESUMEMUSIC = "com.zlm.hp.service.resume.music";
+
+    //播放器快进
+    public static final String ACTION_SERVICE_SEEKTOMUSIC = "com.zlm.hp.service.seekto.music";
     //播放器播放中
     public static final String ACTION_SERVICE_PLAYINGMUSIC = "com.zlm.hp.service.playing.music";
     //播放错误
@@ -125,6 +128,7 @@ public class AudioBroadcastReceiver {
 
         mAudioIntentFilter.addAction(ACTION_SERVICE_PLAYMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_PAUSEMUSIC);
+        mAudioIntentFilter.addAction(ACTION_SERVICE_SEEKTOMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_RESUMEMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_PLAYINGMUSIC);
         mAudioIntentFilter.addAction(ACTION_SERVICE_PLAYERRORMUSIC);

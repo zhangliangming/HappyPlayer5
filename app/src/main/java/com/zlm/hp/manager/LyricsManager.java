@@ -6,9 +6,10 @@ import android.content.Intent;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.LoggerUtil;
+import com.zlm.hp.lyrics.LyricsReader;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
-import com.zlm.hp.lyrics.utils.LyricsUtil;
+import com.zlm.hp.lyrics.utils.LyricsUtils;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.net.api.DownloadLyricsUtil;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -38,7 +39,7 @@ public class LyricsManager {
     /**
      *
      */
-    private static Map<String, LyricsUtil> mLyricsUtils = new HashMap<String, LyricsUtil>();
+    private static Map<String, LyricsReader> mLyricsUtils = new HashMap<String, LyricsReader>();
 
     private static LyricsManager _LyricsManager;
 
@@ -97,9 +98,9 @@ public class LyricsManager {
                     return null;
                 }
                 //
-                File lrcFile = LyricsUtil.getLrcFile(mContext, fileName);
+                File lrcFile = LyricsUtils.getLrcFile(fileName, ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LYRICS, null));
                 if (lrcFile != null) {
-                    LyricsUtil lyricsUtil = new LyricsUtil();
+                    LyricsReader lyricsUtil = new LyricsReader();
                     lyricsUtil.loadLrc(lrcFile);
                     mLyricsUtils.put(hash, lyricsUtil);
                 } else {
@@ -114,7 +115,7 @@ public class LyricsManager {
                     File saveLrcFile = new File(ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_LYRICS, fileName + ".krc"));
                     byte[] base64ByteArray = DownloadLyricsUtil.downloadLyric(mHPApplication, mContext, keyword, duration, hash);
                     if (base64ByteArray != null && base64ByteArray.length > 1024) {
-                        LyricsUtil lyricsUtil = new LyricsUtil();
+                        LyricsReader lyricsUtil = new LyricsReader();
                         lyricsUtil.loadLrc(base64ByteArray, saveLrcFile, saveLrcFile.getName());
                         mLyricsUtils.put(hash, lyricsUtil);
                     }
@@ -125,7 +126,7 @@ public class LyricsManager {
         }.execute("");
     }
 
-    public LyricsUtil getLyricsUtil(String hash) {
+    public LyricsReader getLyricsUtil(String hash) {
         return mLyricsUtils.get(hash);
     }
 
@@ -135,7 +136,7 @@ public class LyricsManager {
      * @param hash
      * @param lyricsUtil
      */
-    public void setUseLrcUtil(String hash, LyricsUtil lyricsUtil) {
+    public void setUseLrcUtil(String hash, LyricsReader lyricsUtil) {
         AudioMessage audioMessage = new AudioMessage();
         audioMessage.setHash(hash);
         //发送搜索中广播
@@ -150,7 +151,7 @@ public class LyricsManager {
         mLyricsUtils.put(hash, lyricsUtil);
 
         //保存歌词文件
-        saveLrcFile(lyricsUtil.getLrcFilePath(), lyricsUtil.getLyricsIfno());
+        saveLrcFile(lyricsUtil.getLrcFilePath(), lyricsUtil.getLyricsInfo());
 
         //发送加载完成广播
         Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCLOADED);

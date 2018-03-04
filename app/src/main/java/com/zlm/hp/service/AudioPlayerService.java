@@ -607,9 +607,9 @@ public class AudioPlayerService extends Service {
             }
         }
         mHPApplication.setPlayStatus(AudioPlayerManager.PAUSE);
-        Intent nextIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC);
-        nextIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-        sendBroadcast(nextIntent);
+        Intent pauseIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC);
+        pauseIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        sendBroadcast(pauseIntent);
     }
 
     /**
@@ -723,6 +723,15 @@ public class AudioPlayerService extends Service {
                     @Override
                     public void onSeekComplete(IMediaPlayer mp) {
                         mMediaPlayer.start();
+
+                        AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                        //设置当前播放的状态
+                        mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
+                        audioMessage.setPlayProgress(mMediaPlayer.getCurrentPosition());
+                        Intent seekToIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC);
+                        seekToIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        sendBroadcast(seekToIntent);
+
                         if (mHPApplication.isLrcSeekTo()) {
 
                             try {
@@ -789,17 +798,21 @@ public class AudioPlayerService extends Service {
                                 mMediaPlayer.seekTo(audioMessage.getPlayProgress());
                             } else {
                                 mMediaPlayer.start();
+
+
+                                //设置当前播放的状态
+                                mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
+                                audioMessage.setPlayProgress(mMediaPlayer.getCurrentPosition());
+                                //发送play的广播
+                                Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
+                                playIntent.putExtra(AudioMessage.KEY, audioMessage);
+                                playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                sendBroadcast(playIntent);
+
                             }
 
 
-                            //设置当前播放的状态
-                            mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
 
-                            //发送play的广播
-                            Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
-                            playIntent.putExtra(AudioMessage.KEY, audioMessage);
-                            playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            sendBroadcast(playIntent);
                         }
                     }
                 });
@@ -874,6 +887,15 @@ public class AudioPlayerService extends Service {
                 @Override
                 public void onSeekComplete(IMediaPlayer mp) {
                     mMediaPlayer.start();
+
+                    AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+                    //设置当前播放的状态
+                    mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
+                    audioMessage.setPlayProgress(mMediaPlayer.getCurrentPosition());
+                    Intent seekToIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC);
+                    seekToIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    sendBroadcast(seekToIntent);
+
                     if (mHPApplication.isLrcSeekTo()) {
 
                         try {
@@ -936,17 +958,19 @@ public class AudioPlayerService extends Service {
                             mMediaPlayer.seekTo(audioMessage.getPlayProgress());
                         } else {
                             mMediaPlayer.start();
+
+                            //设置当前播放的状态
+                            mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
+                            audioMessage.setPlayProgress(mMediaPlayer.getCurrentPosition());
+                            //发送play的广播
+                            Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
+                            playIntent.putExtra(AudioMessage.KEY, audioMessage);
+                            playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            sendBroadcast(playIntent);
                         }
 
 
-                        //设置当前播放的状态
-                        mHPApplication.setPlayStatus(AudioPlayerManager.PLAYING);
 
-                        //发送play的广播
-                        Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
-                        //playIntent.putExtra(AudioMessage.KEY, audioMessage);
-                        playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        sendBroadcast(playIntent);
                     }
                 }
             });
@@ -986,26 +1010,33 @@ public class AudioPlayerService extends Service {
     /**
      * 播放线程
      */
+
+    private long mSleepTime = 0;
+
     private class PlayerRunable implements Runnable {
 
         @Override
         public void run() {
+            mSleepTime = 0;
             while (true) {
                 try {
-                    Thread.sleep(100);//方便后面用来刷新歌词
+
                     if (!isSeekTo && mMediaPlayer != null && mMediaPlayer.isPlaying()) {
 
                         if (mHPApplication.getCurAudioMessage() != null) {
                             mHPApplication.getCurAudioMessage().setPlayProgress(mMediaPlayer.getCurrentPosition());
 
-                            //发送正在播放中的广播
-                            Intent playingIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC);
-                            //playingIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
-                            playingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            sendBroadcast(playingIntent);
-
+                            if (mSleepTime % 1000 == 0) {
+                                //发送正在播放中的广播
+                                Intent playingIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC);
+                                //playingIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                                playingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                                sendBroadcast(playingIntent);
+                            }
                         }
                     }
+                    mSleepTime += 100;
+                    Thread.sleep(100);//
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

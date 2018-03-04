@@ -41,7 +41,7 @@ public class AudioMessage implements Serializable {
         return playProgress;
     }
 
-    public void setPlayProgress(long playProgress) {
+    public  void setPlayProgress(long playProgress) {
         this.playProgress = playProgress;
     }
 

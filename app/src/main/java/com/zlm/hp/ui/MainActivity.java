@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -39,7 +40,10 @@ import com.zlm.hp.fragment.TabRecommendFragment;
 import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
-import com.zlm.hp.lyrics.utils.LyricsUtil;
+import com.zlm.hp.lyrics.LyricsReader;
+import com.zlm.hp.lyrics.utils.TimeUtils;
+import com.zlm.hp.lyrics.widget.FloatLyricsView;
+import com.zlm.hp.lyrics.widget.ManyLyricsView;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.manager.OnLineAudioManager;
@@ -64,7 +68,6 @@ import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.SlidingMenuLayout;
 import com.zlm.hp.widget.SwipeOutLayout;
-import com.zlm.hp.widget.lrc.FloatLyricsView;
 import com.zml.libs.widget.MusicSeekBar;
 
 import java.util.ArrayList;
@@ -480,7 +483,7 @@ public class MainActivity extends BaseActivity {
             mSingerImg.setImageDrawable(new BitmapDrawable(bitmap));
 
             //
-            mFloatLyricsView.setLyricsUtil(null, 0);
+            mFloatLyricsView.initLrcData();
 
             //重置弹出窗口播放列表
             if (isPopViewShow) {
@@ -521,7 +524,9 @@ public class MainActivity extends BaseActivity {
             LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mFloatLyricsView.setLyricsUtil(null, 0);
+            mFloatLyricsView.initLrcData();
+            //加载中
+            mFloatLyricsView.setLrcStatus(ManyLyricsView.LRCSTATUS_LOADING);
 
             //设置弹出窗口播放列表
             if (isPopViewShow) {
@@ -541,28 +546,57 @@ public class MainActivity extends BaseActivity {
             //
             mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
 
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
-            //暂停完成
-            mPauseImageView.setVisibility(View.INVISIBLE);
-            mPlayImageView.setVisibility(View.VISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
-            //唤醒完成
-            mPauseImageView.setVisibility(View.VISIBLE);
-            mPlayImageView.setVisibility(View.INVISIBLE);
-
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            //播放中
-            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             if (audioMessage != null) {
                 mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
                 AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
-                    if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
-                        mFloatLyricsView.updateView((int) audioMessage.getPlayProgress());
+
+
+                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(audioInfo.getHash()) && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != FloatLyricsView.LRCPLAYERSTATUS_PLAY) {
+                        mFloatLyricsView.play((int) audioMessage.getPlayProgress());
                     }
                 }
+
+            }
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
+
+            if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                mFloatLyricsView.pause();
+            }
+
+            //暂停完成
+            mPauseImageView.setVisibility(View.INVISIBLE);
+            mPlayImageView.setVisibility(View.VISIBLE);
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    mFloatLyricsView.play((int) audioMessage.getPlayProgress());
+                }
+            }
+
+            //唤醒完成
+            mPauseImageView.setVisibility(View.VISIBLE);
+            mPlayImageView.setVisibility(View.INVISIBLE);
+
+
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    mFloatLyricsView.seekto((int) audioMessage.getPlayProgress());
+                }
+            }
+        } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
+
+            //播放中
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                mMusicSeekBar.setProgress((int) audioMessage.getPlayProgress());
 
             }
 
@@ -574,14 +608,15 @@ public class MainActivity extends BaseActivity {
                 String hash = audioMessage.getHash();
                 if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
                     //
-                    LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
-                    if (lyricsUtil != null) {
-                        if (lyricsUtil.getHash() != null && lyricsUtil.getHash().equals(hash) && mFloatLyricsView.getLyricsUtil() != null) {
+                    LyricsReader lyricsReader = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(hash);
+                    if (lyricsReader != null) {
+                        if (lyricsReader.getHash() != null && lyricsReader.getHash().equals(hash) && mFloatLyricsView.getLyricsReader() != null) {
                             //已加载歌词，不用重新加载
                         } else {
-                            lyricsUtil.setHash(hash);
-                            mFloatLyricsView.setLyricsUtil(lyricsUtil, mFloatLyricsView.getWidth() / 4 * 3);
-                            mFloatLyricsView.updateView((int) curAudioMessage.getPlayProgress());
+                            lyricsReader.setHash(hash);
+                            mFloatLyricsView.setLyricsReader(lyricsReader);
+                            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != FloatLyricsView.LRCPLAYERSTATUS_PLAY)
+                                mFloatLyricsView.play((int) curAudioMessage.getPlayProgress());
                         }
                     }
                 }
@@ -590,8 +625,8 @@ public class MainActivity extends BaseActivity {
             if (mHPApplication.getCurAudioMessage() != null) {
                 mMusicSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 if (mHPApplication.getCurAudioInfo() != null) {
-                    if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioInfo().getHash())) {
-                        mFloatLyricsView.updateView((int) mHPApplication.getCurAudioMessage().getPlayProgress());
+                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(mHPApplication.getCurAudioInfo().getHash()) && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                        mFloatLyricsView.seekto((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                     }
                 }
             }
@@ -942,8 +977,7 @@ public class MainActivity extends BaseActivity {
         //滚动到当前播放位置
         int position = mPopPlayListAdapter.getPlayIndexPosition(mHPApplication.getCurAudioInfo());
         if (position >= 0)
-            mCurRecyclerView.move(position,
-                    LinearLayoutRecyclerView.scroll);
+            mCurRecyclerView.moveToPosition(position);
 
         /**
          * 如果该界面还没初始化，则监听
@@ -1010,6 +1044,10 @@ public class MainActivity extends BaseActivity {
         ViewGroup barMenuView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_menu, null);
         //
         mFloatLyricsView = barMenuView.findViewById(R.id.floatLyricsView);
+        //设置字体文件
+        Typeface typeFace = Typeface.createFromAsset(getAssets(),
+                "fonts/weiruanyahei14M.ttf");
+        mFloatLyricsView.setTypeFace(typeFace, false);
 
         //歌手头像
         mSingerImg = barContentView.findViewById(R.id.play_bar_artist);
@@ -1079,7 +1117,35 @@ public class MainActivity extends BaseActivity {
                     hidePopView();
                     return;
                 }
+                if (mSwipeOutLayout.isMenuViewShow() && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcType() != FloatLyricsView.EXTRALRCTYPE_NOLRC) {
 
+                        if(mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_BOTH){
+                            //有两种歌词
+                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC) {
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                            }else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                            }else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                            }
+                        }else if(mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC){
+                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                            }else{
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                            }
+                        }else{
+                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                            }else{
+                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                            }
+                        }
+
+                        return;
+                    }
+                }
                 //设置底部点击后，下沉动画
                 TranslateAnimation transAnim = new TranslateAnimation(0, 0, 0, mPlayerBarParentLinearLayout.getHeight());
                 transAnim.setDuration(500);
@@ -1123,10 +1189,10 @@ public class MainActivity extends BaseActivity {
                         AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                         if (audioInfo != null) {
                             audioMessage.setAudioInfo(audioInfo);
-                            Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
-                            resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
-                            resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            sendBroadcast(resumeIntent);
+                            Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
+                            playIntent.putExtra(AudioMessage.KEY, audioMessage);
+                            playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            sendBroadcast(playIntent);
                         }
                     }
                 }
@@ -1163,16 +1229,25 @@ public class MainActivity extends BaseActivity {
         mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
-                return MediaUtil.parseTimeToString(mMusicSeekBar.getProgress());
+                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                        //不显示额外歌词
+                        return TimeUtils.parseMMSSString(Math.max(0, mFloatLyricsView.getSplitLineLrcStartTime(mMusicSeekBar.getProgress())));
+                    else
+                        return TimeUtils.parseMMSSString(Math.max(0, mFloatLyricsView.getLineLrcStartTime(mMusicSeekBar.getProgress())));
+                }
+                return TimeUtils.parseMMSSString(mMusicSeekBar.getProgress());
             }
 
             @Override
             public String getLrcText() {
-                //获取行歌词
-                if (mFloatLyricsView.getLyricsUtil() != null && mFloatLyricsView.getLyricsUtil().getHash().equals(mHPApplication.getCurAudioMessage().getAudioInfo().getHash())) {
-                    return mFloatLyricsView.getLyricsUtil().getLineLrc(mFloatLyricsView.getLyricsLineTreeMap(), mMusicSeekBar.getProgress());
+                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                        //不显示额外歌词
+                        return mFloatLyricsView.getSplitLineLrc(mMusicSeekBar.getProgress());
+                    else
+                        return mFloatLyricsView.getLineLrc(mMusicSeekBar.getProgress());
                 }
-
                 return null;
             }
 
@@ -1183,6 +1258,18 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
+                int seekToTime = mMusicSeekBar.getProgress();
+                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+
+                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                        //不显示额外歌词
+                        seekToTime = mFloatLyricsView.getSplitLineLrcStartTime(mMusicSeekBar.getProgress());
+                    else
+                        seekToTime = mFloatLyricsView.getLineLrcStartTime(mMusicSeekBar.getProgress());
+
+                }
+
+
                 int playStatus = mHPApplication.getPlayStatus();
                 if (playStatus == AudioPlayerManager.PLAYING) {
                     //正在播放
@@ -1192,7 +1279,7 @@ public class MainActivity extends BaseActivity {
                         //if (audioInfo != null) {
                         //  audioMessage.setAudioInfo(audioInfo);
                         if (audioMessage != null) {
-                            audioMessage.setPlayProgress(mMusicSeekBar.getProgress());
+                            audioMessage.setPlayProgress(seekToTime);
                             Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_SEEKTOMUSIC);
                             resumeIntent.putExtra(AudioMessage.KEY, audioMessage);
                             resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
@@ -1202,7 +1289,7 @@ public class MainActivity extends BaseActivity {
                 } else {
 
                     if (mHPApplication.getCurAudioMessage() != null)
-                        mHPApplication.getCurAudioMessage().setPlayProgress(mMusicSeekBar.getProgress());
+                        mHPApplication.getCurAudioMessage().setPlayProgress(seekToTime);
 
                     //歌词快进
                     Intent lrcSeektoIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEEKTO);

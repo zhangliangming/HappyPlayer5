@@ -92,7 +92,7 @@
                 android:layout_below="@+id/songer"
                 android:layout_margin="10dp">
 
-                <com.zlm.hp.widget.lrc.ManyLineLyricsViewV2
+                <com.zlm.hp.lyrics.widget.ManyLyricsView
                     android:id="@+id/lock_manyLineLyricsView"
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent" />

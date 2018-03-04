@@ -5,7 +5,7 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <com.zlm.hp.widget.lrc.FloatLyricsView
+    <com.zlm.hp.lyrics.widget.FloatLyricsView
         android:id="@+id/floatLyricsView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
