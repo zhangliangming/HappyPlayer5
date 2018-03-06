@@ -51,9 +51,5 @@ public class ActivityManage {
                 activity.finish();
             }
         }
-        int id = android.os.Process.myPid();
-        if (id != 0) {
-            android.os.Process.killProcess(id);
-        }
     }
 }

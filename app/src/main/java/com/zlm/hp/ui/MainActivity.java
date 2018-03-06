@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -272,11 +271,8 @@ public class MainActivity extends BaseActivity {
 
                     //服务被强迫回收
                     Intent playerServiceIntent = new Intent(getApplicationContext(), AudioPlayerService.class);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        mHPApplication.startForegroundService(playerServiceIntent);
-                    } else {
-                        mHPApplication.startService(playerServiceIntent);
-                    }
+                    mHPApplication.startService(playerServiceIntent);
+
 
                     mHPApplication.setPlayServiceForceDestroy(true);
                     logger.e("重新启动音频播放服务广播");
@@ -661,11 +657,7 @@ public class MainActivity extends BaseActivity {
      */
     private void initService() {
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mHPApplication.startForegroundService(playerServiceIntent);
-        } else {
-            mHPApplication.startService(playerServiceIntent);
-        }
+        mHPApplication.startService(playerServiceIntent);
 
 
         //注册接收音频播放广播
@@ -1120,25 +1112,25 @@ public class MainActivity extends BaseActivity {
                 if (mSwipeOutLayout.isMenuViewShow() && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
                     if (mFloatLyricsView.getExtraLrcType() != FloatLyricsView.EXTRALRCTYPE_NOLRC) {
 
-                        if(mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_BOTH){
+                        if (mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_BOTH) {
                             //有两种歌词
                             if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC) {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
-                            }else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                            } else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                            }else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                            } else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                             }
-                        }else if(mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC){
+                        } else if (mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
                             if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                            }else{
+                            } else {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                             }
-                        }else{
+                        } else {
                             if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                            }else{
+                            } else {
                                 mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                             }
                         }
@@ -1381,11 +1373,8 @@ public class MainActivity extends BaseActivity {
         //
         mCheckServiceHandler.removeCallbacks(mCheckServiceRunnable);
         Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            mHPApplication.startForegroundService(playerServiceIntent);
-        } else {
-            mHPApplication.startService(playerServiceIntent);
-        }
+        mHPApplication.stopService(playerServiceIntent);
+
 
         //注销广播
         mAudioBroadcastReceiver.unregisterReceiver(getApplicationContext());
@@ -1436,11 +1425,8 @@ public class MainActivity extends BaseActivity {
 
                 //服务被强迫回收
                 Intent playerServiceIntent = new Intent(this, AudioPlayerService.class);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    mHPApplication.startForegroundService(playerServiceIntent);
-                } else {
-                    mHPApplication.startService(playerServiceIntent);
-                }
+                mHPApplication.startService(playerServiceIntent);
+
 
                 mHPApplication.setPlayServiceForceDestroy(true);
 
