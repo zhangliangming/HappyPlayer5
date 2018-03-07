@@ -69,5 +69,5 @@ dependencies {
     /**
      * 歌词
      */
-    compile 'com.github.zhangliangming:HPLyrics:v1.8'
+    compile 'com.github.zhangliangming:HPLyrics:v1.9'
 }
