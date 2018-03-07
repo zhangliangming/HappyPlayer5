@@ -2,26 +2,30 @@ package com.zlm.hp.manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 
 import com.zlm.hp.R;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.model.DownloadInfo;
-import com.zlm.hp.model.DownloadMessage;
-import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.media.download.DownloadTask;
 import com.zlm.hp.media.download.constant.DownloadTaskConstant;
 import com.zlm.hp.media.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.media.download.manager.DownloadTaskManage;
 import com.zlm.hp.media.net.api.SongInfoHttpUtil;
 import com.zlm.hp.media.net.entity.SongInfoResult;
+import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.model.DownloadInfo;
+import com.zlm.hp.model.DownloadMessage;
+import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.utils.ResourceFileUtil;
 
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +33,7 @@ import base.utils.DateUtil;
 import base.utils.LoggerUtil;
 import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
+
 
 /**
  * 下载管理
@@ -95,6 +100,8 @@ public class DownloadAudioManager {
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
+                downloadMessage.setTaskFileSize(task.getTaskFileSize());
+                downloadMessage.setTaskCurFileSize(downloadedSize);
 
                 Intent downloadingIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNLOADING);
                 downloadingIntent.putExtra(DownloadMessage.KEY, downloadMessage);
@@ -174,6 +181,20 @@ public class DownloadAudioManager {
                 Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
                 updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(updateIntent);
+
+                //扫描系统媒体数据库库
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//如果是4.4及以上版本
+                    Intent mediaScanIntent = new Intent(
+                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(new File(task.getTaskPath())); //out is your output file
+                    mediaScanIntent.setData(contentUri);
+                    mContext.sendBroadcast(mediaScanIntent);
+                } else {
+                    mContext.sendBroadcast(new Intent(
+                            Intent.ACTION_MEDIA_MOUNTED,
+                            Uri.parse("file://"
+                                    + Environment.getExternalStorageDirectory())));
+                }
 
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务完成，文件大小为：" + downloadedSize);
             }
@@ -348,6 +369,7 @@ public class DownloadAudioManager {
                 mContext.sendBroadcast(updateIntent);
             }
         });
+
     }
 
     /**

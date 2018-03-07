@@ -2,20 +2,23 @@ package com.zlm.hp.manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.model.DownloadMessage;
-import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.media.download.DownloadTask;
 import com.zlm.hp.media.download.constant.DownloadTaskConstant;
 import com.zlm.hp.media.download.interfaces.IDownloadTaskEvent;
 import com.zlm.hp.media.download.manager.DownloadTaskManage;
 import com.zlm.hp.media.net.api.SongInfoHttpUtil;
 import com.zlm.hp.media.net.entity.SongInfoResult;
+import com.zlm.hp.model.AudioInfo;
+import com.zlm.hp.model.DownloadMessage;
+import com.zlm.hp.model.DownloadThreadInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.utils.ResourceFileUtil;
@@ -116,6 +119,21 @@ public class OnLineAudioManager {
                     //任务完成后，重置任务id
                     mCurTaskId = "-1";
                 }
+
+                //扫描系统媒体数据库库
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//如果是4.4及以上版本
+                    Intent mediaScanIntent = new Intent(
+                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    Uri contentUri = Uri.fromFile(new File(task.getTaskPath())); //out is your output file
+                    mediaScanIntent.setData(contentUri);
+                    mContext.sendBroadcast(mediaScanIntent);
+                } else {
+                    mContext.sendBroadcast(new Intent(
+                            Intent.ACTION_MEDIA_MOUNTED,
+                            Uri.parse("file://"
+                                    + Environment.getExternalStorageDirectory())));
+                }
+
                 logger.e("在线播放任务名称：" + task.getTaskName() + " 任务完成，文件大小为：" + downloadedSize);
             }
 
@@ -214,11 +232,13 @@ public class OnLineAudioManager {
             @Override
             public void run() {
                 //获取歌曲下载路径
-
-                SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
-                if (songInfoResult != null) {
-                    audioInfo.setDownloadUrl(songInfoResult.getUrl());
+                if (audioInfo.getType() != AudioInfo.THIIRDNET) {//不是第三方播放
+                    SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
+                    if (songInfoResult != null) {
+                        audioInfo.setDownloadUrl(songInfoResult.getUrl());
+                    }
                 }
+
                 DownloadTask task = new DownloadTask();
                 task.setCreateTime(new Date());
                 task.setStatus(DownloadTaskConstant.INT.getValue());

@@ -76,19 +76,19 @@ public class DownloadMusicFragment extends BaseFragment {
             if (intent.getAction().equals(DownloadAudioReceiver.ACTION_DOWMLOADMUSICWAIT)) {
                 //等待下载
                 if (mAdapter != null) {
-                    mAdapter.reshViewHolder(downloadMessage.getTaskHash());
+                    mAdapter.reshViewHolder(downloadMessage);
                 }
 
             } else if (intent.getAction().equals(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNLOADING)) {
                 //下载中
                 if (mAdapter != null) {
-                    mAdapter.reshViewHolder(downloadMessage.getTaskHash());
+                    mAdapter.reshViewHolder(downloadMessage);
                 }
 
             } else if (intent.getAction().equals(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNPAUSE)) {
                 //下载暂停
                 if (mAdapter != null) {
-                    mAdapter.reshViewHolder(downloadMessage.getTaskHash());
+                    mAdapter.reshViewHolder(downloadMessage);
                 }
 
             } else if (intent.getAction().equals(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNCANCEL)) {
@@ -232,7 +232,6 @@ public class DownloadMusicFragment extends BaseFragment {
                         if (mDatas.size() > 0) { mAdapter.notifyDataSetChanged();  }
                         showContentView();
                     }  });//切换至主线程更新ui
-
             }
         };
         ThreadUtil.runInThread(runnable);

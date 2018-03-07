@@ -14,11 +14,10 @@ import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
-import com.zlm.hp.db.DownloadThreadDB;
-import com.zlm.hp.media.download.constant.DownloadTaskConstant;
-import com.zlm.hp.media.lyrics.utils.FileUtils;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
+import com.zlm.hp.media.download.constant.DownloadTaskConstant;
+import com.zlm.hp.media.lyrics.utils.FileUtils;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.Category;
@@ -197,7 +196,8 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         //
         String fileSizeText = FileUtils.getFileSize(audioInfo.getFileSize());
-        int downloadedSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(downloadInfo.getDHash(), DownloadAudioManager.threadNum);
+//        int downloadedSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(downloadInfo.getDHash(), DownloadAudioManager.threadNum);
+        long downloadedSize = downloadInfo.getDownloadedSize();
         String downloadSizeText = FileUtils.getFileSize(downloadedSize);
         viewHolder.getDlTipTv().setText(downloadSizeText + "/" + fileSizeText);
 
@@ -331,7 +331,13 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //更新
+                    DownloadInfoDB.getAudioInfoDB(mContext).delete(audioInfo.getHash());
 
+                    //发送更新下载歌曲总数广播
+                    Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
+                    updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(updateIntent);
                 }
             });
 
@@ -424,13 +430,20 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
     /**
      * 刷新view
      *
-     * @param hash
+     * @param downloadMessage
      */
-    public void reshViewHolder(String hash) {
+    public void reshViewHolder(DownloadMessage downloadMessage) {
+        if (downloadMessage == null) {
+            return;
+        }
+        String hash = downloadMessage.getTaskHash();
         if (hash == null || hash.equals("")) {
             return;
         }
         int index = getPlayIndexPosition(hash);
+        DownloadInfo downloadInfo = (DownloadInfo) getItem(index);
+        downloadInfo.setDownloadedSize(downloadMessage.getTaskCurFileSize());
+        downloadInfo.getAudioInfo().setFileSize(downloadMessage.getTaskFileSize());
         if (index != -1) {
             notifyItemChanged(index);
         }

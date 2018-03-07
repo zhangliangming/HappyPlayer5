@@ -238,7 +238,7 @@ public class TaskThreadUtil {
                 tempFile.close();
             }
 
-
+            task.setTaskFileSize(fileLength);
             // 2对文件进行多线程下载
             int threadNum = task.getThreadNum();
             int avg = fileLength / threadNum;

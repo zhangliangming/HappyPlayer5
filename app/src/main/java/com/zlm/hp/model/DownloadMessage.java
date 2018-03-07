@@ -24,6 +24,16 @@ public class DownloadMessage implements Serializable {
      */
     private String taskHash;
 
+    /**
+     * 任务文件大小
+     */
+    private long taskFileSize;
+
+    /**
+     * 任务文件当前下载大小
+     */
+    private long taskCurFileSize;
+
     public DownloadMessage() {
 
     }
@@ -52,12 +62,30 @@ public class DownloadMessage implements Serializable {
         this.taskHash = taskHash;
     }
 
+    public long getTaskFileSize() {
+        return taskFileSize;
+    }
+
+    public void setTaskFileSize(long taskFileSize) {
+        this.taskFileSize = taskFileSize;
+    }
+
+    public long getTaskCurFileSize() {
+        return taskCurFileSize;
+    }
+
+    public void setTaskCurFileSize(long taskCurFileSize) {
+        this.taskCurFileSize = taskCurFileSize;
+    }
+
     @Override
     public String toString() {
         return "DownloadMessage{" +
                 "errorMsg='" + errorMsg + '\'' +
                 ", taskId='" + taskId + '\'' +
                 ", taskHash='" + taskHash + '\'' +
+                ", taskFileSize='" + taskFileSize + '\'' +
+                ", taskCurFileSize='" + taskCurFileSize + '\'' +
                 '}';
     }
 }
