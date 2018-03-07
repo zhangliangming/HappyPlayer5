@@ -95,10 +95,9 @@ public class MediaUtil {
         }
 
         while (cursor.moveToNext()) {
-            // 是否为音乐，魅族手机上始终为0
+            // 是否为音乐
             int isMusic = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.IS_MUSIC));
-            OSUtils.ROM romType = OSUtils.getRomType();
-            if (!(romType == OSUtils.ROM.Flyme) && isMusic == 0) {
+            if (isMusic == 0) {
                 continue;
             }
 
@@ -148,7 +147,7 @@ public class MediaUtil {
             audioInfo.setDurationText(durationText);
             audioInfo.setType(AudioInfo.LOCAL);
             audioInfo.setStatus(AudioInfo.FINISH);
-            audioInfo.setSongName(fileName);
+            audioInfo.setSongName(title);
             audioInfo.setSingerName(artist);
             audioInfo.setFileExt(fileExt);
             audioInfo.setFilePath(filePath);
