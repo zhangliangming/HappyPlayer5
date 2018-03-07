@@ -16,7 +16,7 @@
             android:background="#ffffff">
 
 
-            <base.widget.lrc.ManyLineLyricsViewV2
+            <base.lyrics.widget.ManyLyricsView
                 android:id="@+id/lrcview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

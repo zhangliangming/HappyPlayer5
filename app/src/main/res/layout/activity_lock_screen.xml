@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent"
-    android:orientation="vertical"
-    tools:context="com.zlm.hp.ui.activity.LockScreenActivity">
+    android:orientation="vertical">
 
 
     <RelativeLayout
@@ -16,7 +15,8 @@
         <base.widget.SingerImageView
             android:id="@+id/singerimg"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:src="@mipmap/play_page_default_bg" />
 
         <LinearLayout
             android:id="@+id/status_parent_view"
@@ -99,7 +99,7 @@
                     android:layout_below="@+id/songer"
                     android:layout_margin="10dp">
 
-                    <base.widget.lrc.ManyLineLyricsViewV2
+                    <base.lyrics.widget.ManyLyricsView
                         android:id="@+id/lock_manyLineLyricsView"
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent" />

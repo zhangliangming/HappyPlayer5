@@ -6,7 +6,7 @@ import android.app.Application;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.manager.AudioPlayerManager;
-import com.zlm.hp.media.net.entity.RankListResult;
+import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.utils.ResourceFileUtil;

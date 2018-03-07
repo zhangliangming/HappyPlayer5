@@ -16,8 +16,6 @@ import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
-import com.zlm.hp.media.download.constant.DownloadTaskConstant;
-import com.zlm.hp.media.lyrics.utils.FileUtils;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.Category;
@@ -29,6 +27,8 @@ import com.zlm.hp.receiver.DownloadAudioReceiver;
 import java.util.ArrayList;
 import java.util.List;
 
+import base.download.constant.DownloadTaskConstant;
+import base.lyrics.utils.FileUtils;
 import base.utils.ToastUtil;
 import base.widget.IconfontImageButtonTextView;
 import base.widget.IconfontTextView;

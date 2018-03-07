@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loading_text">正在获取歌词...</string>
+    <string name="goto_search_text">搜索歌词</string>
+    <string name="load_error_text">加载歌词出错</string>
+    <string name="nonsupport_text">不支持该格式歌词文件显示</string>
+</resources>

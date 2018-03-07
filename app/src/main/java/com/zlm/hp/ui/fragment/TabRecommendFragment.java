@@ -8,9 +8,9 @@ import android.view.View;
 
 import com.zlm.hp.R;
 import com.zlm.hp.adapter.RecommendAdapter;
-import com.zlm.hp.media.net.api.RankListHttpUtil;
-import com.zlm.hp.media.net.entity.RankListResult;
-import com.zlm.hp.media.net.model.HttpResult;
+import com.zlm.hp.net.api.RankListHttpUtil;
+import com.zlm.hp.net.entity.RankListResult;
+import com.zlm.hp.net.model.HttpResult;
 
 import java.util.ArrayList;
 import java.util.Map;

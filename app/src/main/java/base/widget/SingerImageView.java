@@ -1,6 +1,7 @@
 package base.widget;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -41,6 +42,7 @@ public class SingerImageView extends AppCompatImageView {
     private LoggerUtil logger;
 
     //处理transition的改变
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
 
         @Override

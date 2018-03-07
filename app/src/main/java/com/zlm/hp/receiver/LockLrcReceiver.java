@@ -68,9 +68,8 @@ public class LockLrcReceiver {
 
                 if (intent.getAction().equals(ACTION_LOCKLRCSUCCESS)) {
                     isRegisterSuccess = true;
-                } else {
-                    mLockLrcReceiverListener.onReceive(mContext, intent);
                 }
+                mLockLrcReceiverListener.onReceive(mContext, intent);
             }
         }
     };

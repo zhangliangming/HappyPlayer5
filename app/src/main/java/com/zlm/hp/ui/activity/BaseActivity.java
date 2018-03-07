@@ -88,7 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
-        preLoad();
+        onPreLoad();
         setContentView(layout);
         mActivity = this;
         mContext = this;
@@ -103,7 +103,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         loadData(true);
     }
 
-    protected void preLoad() {
+    protected void onPreLoad() {
 
     }
 

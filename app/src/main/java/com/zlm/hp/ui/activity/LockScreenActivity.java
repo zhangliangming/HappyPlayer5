@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.SongSingerDB;
-import com.zlm.hp.media.lyrics.utils.LyricsUtil;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.model.AudioInfo;
@@ -34,13 +33,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
+import base.lyrics.LyricsReader;
+import base.lyrics.widget.ManyLyricsView;
 import base.utils.ColorUtil;
 import base.widget.SingerImageView;
 import base.widget.SwipeBackLayout;
 import base.widget.lock.LockButtonRelativeLayout;
 import base.widget.lock.LockPalyOrPauseButtonRelativeLayout;
-import base.widget.lrc.ManyLineLyricsViewV2;
-
 /**
  * @Description: 锁屏界面
  * @Param:
@@ -151,7 +150,7 @@ public class LockScreenActivity extends BaseActivity {
     /**
      * 多行歌词视图
      */
-    private ManyLineLyricsViewV2 mManyLineLyricsView;
+    private ManyLyricsView mManyLineLyricsView;
 
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
     //翻译歌词
@@ -208,18 +207,10 @@ public class LockScreenActivity extends BaseActivity {
                     mHideTransliterationImg.setVisibility(View.INVISIBLE);
                     mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //翻译歌词/音译歌词
-                        mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
-                        mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
-                        mHideTTImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //翻译歌词/音译歌词
-                        mShowTTToTranslateImg.setVisibility(View.VISIBLE);
-                        mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
-                        mHideTTImg.setVisibility(View.INVISIBLE);
-                    }
-
+                    //翻译歌词/音译歌词
+                    mShowTTToTranslateImg.setVisibility(View.INVISIBLE);
+                    mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
+                    mHideTTImg.setVisibility(View.VISIBLE);
                     break;
                 case HASTRANSLITERATIONLRC:
 
@@ -227,15 +218,9 @@ public class LockScreenActivity extends BaseActivity {
                     mHideTranslateImg.setVisibility(View.INVISIBLE);
                     mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //音译歌词
-                        mHideTransliterationImg.setVisibility(View.VISIBLE);
-                        mShowTransliterationImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //音译歌词
-                        mHideTransliterationImg.setVisibility(View.INVISIBLE);
-                        mShowTransliterationImg.setVisibility(View.VISIBLE);
-                    }
+                    //音译歌词
+                    mHideTransliterationImg.setVisibility(View.VISIBLE);
+                    mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
 
                     //翻译歌词/音译歌词
@@ -246,15 +231,9 @@ public class LockScreenActivity extends BaseActivity {
                     break;
                 case HASTRANSLATELRC:
 
-                    if (mManyLineLyricsView.isManyLineLrc()) {
-                        //翻译歌词
-                        mHideTranslateImg.setVisibility(View.VISIBLE);
-                        mShowTranslateImg.setVisibility(View.INVISIBLE);
-                    } else {
-                        //翻译歌词
-                        mHideTranslateImg.setVisibility(View.INVISIBLE);
-                        mShowTranslateImg.setVisibility(View.VISIBLE);
-                    }
+                    //翻译歌词
+                    mHideTranslateImg.setVisibility(View.VISIBLE);
+                    mShowTranslateImg.setVisibility(View.INVISIBLE);
 
 
                     //音译歌词
@@ -294,8 +273,8 @@ public class LockScreenActivity extends BaseActivity {
     }
 
     @Override
-    protected void preLoad() {
-        super.preLoad();
+    protected void onPreLoad() {
+        super.onPreLoad();
         getWindow().addFlags(
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
                         | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -421,14 +400,10 @@ public class LockScreenActivity extends BaseActivity {
             public void onClick(View view) {
                 mHideTranslateImg.setVisibility(View.INVISIBLE);
                 mShowTranslateImg.setVisibility(View.VISIBLE);
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
-
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-
             }
         });
         mShowTranslateImg = findViewById(R.id.showTranslateImg);
@@ -438,14 +413,9 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTranslateImg.setVisibility(View.VISIBLE);
                 mShowTranslateImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
-
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-
             }
         });
         //音译歌词
@@ -456,13 +426,9 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.INVISIBLE);
                 mShowTransliterationImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
-
             }
         });
         mShowTransliterationImg = findViewById(R.id.showTransliterationImg);
@@ -472,13 +438,9 @@ public class LockScreenActivity extends BaseActivity {
                 mHideTransliterationImg.setVisibility(View.VISIBLE);
                 mShowTransliterationImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
@@ -491,12 +453,9 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.VISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLATELRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mShowTTToTransliterationImg = findViewById(R.id.showTTToTransliterationImg);
@@ -507,12 +466,9 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.VISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.SHOWTRANSLITERATIONLRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
         mHideTTImg = findViewById(R.id.hideTTImg);
@@ -523,44 +479,34 @@ public class LockScreenActivity extends BaseActivity {
                 mShowTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 mHideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mHPApplication.getCurAudioMessage() != null) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, (int) mHPApplication.getCurAudioMessage().getPlayProgress());
-                } else {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLineLyricsViewV2.NOSHOWEXTRALRC, 0);
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
-                mHPApplication.setManyLineLrc(mManyLineLyricsView.isManyLineLrc());
             }
         });
 
 
         //设置额外歌词回调事件
-        mManyLineLyricsView.setExtraLyricsListener(new ManyLineLyricsViewV2.ExtraLyricsListener() {
-
+        mManyLineLyricsView.setExtraLyricsListener(new ManyLyricsView.ExtraLyricsListener() {
             @Override
-            public void hasTranslateLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATELRC);
-            }
-
-            @Override
-            public void hasTransliterationLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLITERATIONLRC);
-            }
-
-            @Override
-            public void hasTranslateAndTransliterationLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATEANDTRANSLITERATIONLRC);
-            }
-
-            @Override
-            public void noExtraLrcCallback() {
-                mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
+            public void extraLrcCallback() {
+                int extraLrcType = mManyLineLyricsView.getExtraLrcType();
+                if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_NOLRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLATELRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATELRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLITERATIONLRC);
+                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_BOTH) {
+                    mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATEANDTRANSLITERATIONLRC);
+                }
             }
         });
         //设置字体大小和歌词颜色
-        mManyLineLyricsView.setLrcFontSize(mHPApplication.getLrcFontSize());
+        mManyLineLyricsView.setFontSize(mHPApplication.getLrcFontSize(), mHPApplication.getLrcFontSize(), false, false);
         int lrcColor = ColorUtil.parserColor(mHPApplication.getLrcColorStr()[mHPApplication.getLrcColorIndex()]);
-        mManyLineLyricsView.setLrcColor(lrcColor);
-        mManyLineLyricsView.setManyLineLrc(mHPApplication.isManyLineLrc(), 0);
+        mManyLineLyricsView.setPaintHLColor(new int[]{lrcColor, lrcColor}, false);
+        mManyLineLyricsView.setPaintColor(new int[]{Color.WHITE, Color.WHITE}, false);
 
 
         WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -666,7 +612,7 @@ public class LockScreenActivity extends BaseActivity {
             mSingerImageView.setSongSingerInfos(getApplicationContext(), null);
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+            mManyLineLyricsView.initLrcData();
 
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)) {
@@ -710,7 +656,7 @@ public class LockScreenActivity extends BaseActivity {
             LyricsManager.getLyricsManager(getApplicationContext()).loadLyricsUtil(keyWords, keyWords, audioInfo.getDuration() + "", audioInfo.getHash());
 
             //
-            mManyLineLyricsView.setLyricsUtil(null, 0, 0);
+            mManyLineLyricsView.initLrcData();
 
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)) {
@@ -733,13 +679,20 @@ public class LockScreenActivity extends BaseActivity {
             //暂停完成
             pauseImageView.setVisibility(View.INVISIBLE);
             playImageView.setVisibility(View.VISIBLE);
+            if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                mManyLineLyricsView.pause();
+            }
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
             //唤醒完成
             pauseImageView.setVisibility(View.VISIBLE);
             playImageView.setVisibility(View.INVISIBLE);
-
-
+            AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
+            if (audioMessage != null) {
+                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.play((int) audioMessage.getPlayProgress());
+                }
+            }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
             //播放中
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
@@ -751,8 +704,8 @@ public class LockScreenActivity extends BaseActivity {
                 AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
                 if (audioInfo != null) {
                     //更新歌词
-                    if (mManyLineLyricsView.getLyricsUtil() != null && mManyLineLyricsView.getLyricsUtil().getHash().equals(audioInfo.getHash())) {
-                        mManyLineLyricsView.updateView((int) audioMessage.getPlayProgress());
+                    if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                        mManyLineLyricsView.seekto((int) audioMessage.getPlayProgress());
                     }
                 }
 
@@ -765,12 +718,13 @@ public class LockScreenActivity extends BaseActivity {
             AudioMessage audioMessage = (AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
             String hash = audioMessage.getHash();
             if (hash.equals(mHPApplication.getCurAudioInfo().getHash())) {
-                //
-                LyricsUtil lyricsUtil = LyricsManager.getLyricsManager(getApplicationContext()).getLyricsUtil(hash);
-                if (lyricsUtil != null) {
-                    lyricsUtil.setHash(hash);
-                    mManyLineLyricsView.setLyricsUtil(lyricsUtil, mScreensWidth / 3 * 2, (int) curAudioMessage.getPlayProgress());
-                    mManyLineLyricsView.updateView((int) curAudioMessage.getPlayProgress());
+                LyricsReader lyricsReader = LyricsManager.getLyricsManager(getApplicationContext()).getLyricsUtil(hash);
+                if (lyricsReader != null) {
+                    lyricsReader.setHash(hash);
+
+                    mManyLineLyricsView.setLyricsReader(lyricsReader);
+                    if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
+                        mManyLineLyricsView.play((int) curAudioMessage.getPlayProgress());
                 }
             }
 

@@ -1,219 +1,225 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/bg_layout"
+<base.widget.RotateLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rotateLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <base.widget.RotateLinearLayout
-        android:id="@+id/rotateLayout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/black">
+        android:orientation="vertical"
+        android:background="@mipmap/skin_player_bg">
 
-        <base.widget.SingerImageView
-            android:id="@+id/singerimg"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/lrc_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#50000000"
-            android:orientation="vertical">
-
-            <RelativeLayout
+            <base.widget.SingerImageView
+                android:id="@+id/singerimg"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:id="@+id/lrc_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#50000000"
+                android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/title"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/lrc_title_height"
-                    android:layout_alignParentTop="true">
+                    android:layout_height="match_parent">
 
                     <RelativeLayout
-                        android:id="@+id/backImg"
-                        android:layout_width="@dimen/title_height"
-                        android:layout_height="@dimen/title_height"
-                        android:background="@drawable/base_button"
-                        android:clickable="true">
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/lrc_title_height"
+                        android:layout_alignParentTop="true">
 
-                        <ImageView
+                        <RelativeLayout
+                            android:id="@+id/backImg"
                             android:layout_width="@dimen/title_height"
                             android:layout_height="@dimen/title_height"
-                            android:layout_centerInParent="true"
-                            android:layout_marginBottom="2dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_marginTop="2dp"
-                            android:background="@mipmap/aiv" />
+                            android:background="@drawable/base_button"
+                            android:clickable="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/title_height"
+                                android:layout_height="@dimen/title_height"
+                                android:layout_centerInParent="true"
+                                android:layout_marginBottom="2dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_marginTop="2dp"
+                                android:background="@mipmap/aiv" />
+
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toLeftOf="@+id/right_flag"
+                            android:layout_toRightOf="@+id/backImg"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:id="@+id/songName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentTop="true"
+                                android:layout_toEndOf="@+id/backImg"
+                                android:layout_weight="1"
+                                android:ellipsize="marquee"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:gravity="center|center_horizontal"
+                                android:marqueeRepeatLimit="marquee_forever"
+                                android:singleLine="true"
+                                android:text="@string/def_songName"
+                                android:textColor="#fff"
+                                android:textSize="16sp"
+                                android:layout_toRightOf="@+id/backImg" />
+
+                            <TextView
+                                android:id="@+id/singerName"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:ellipsize="marquee"
+                                android:gravity="center|center_horizontal"
+                                android:singleLine="true"
+                                android:text="@string/def_artist"
+                                android:textColor="#fff"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/right_flag"
+                            android:layout_width="@dimen/title_height"
+                            android:layout_height="@dimen/title_height"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true" />
 
 
                     </RelativeLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toLeftOf="@+id/right_flag"
-                        android:layout_toRightOf="@+id/backImg"
-                        android:orientation="vertical">
+                        android:layout_above="@+id/lrc_playbar"
+                        android:layout_below="@+id/title"
+                        android:layout_centerHorizontal="true"
+                        android:layout_margin="10dp">
 
-
-                        <TextView
-                            android:id="@+id/songName"
+                        <base.lyrics.widget.ManyLyricsView
+                            android:id="@+id/manyLineLyricsView"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/backImg"
-                            android:layout_weight="1"
-                            android:ellipsize="marquee"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:gravity="center|center_horizontal"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:singleLine="true"
-                            android:text="@string/def_songName"
-                            android:textColor="#fff"
-                            android:textSize="16sp" />
+                            android:layout_height="match_parent" />
 
-                        <TextView
-                            android:id="@+id/singerName"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:ellipsize="marquee"
-                            android:gravity="center|center_horizontal"
-                            android:singleLine="true"
-                            android:text="@string/def_artist"
-                            android:textColor="#fff"
-                            android:textSize="12sp" />
+                        <ImageView
+                            android:id="@+id/hideTranslateImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bql"
+                            android:clickable="true"
+                            android:visibility="invisible" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/showTranslateImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqm"
+                            android:clickable="true"
+                            android:visibility="invisible" />
 
-                    <View
-                        android:id="@+id/right_flag"
-                        android:layout_width="@dimen/title_height"
-                        android:layout_height="@dimen/title_height"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentTop="true" />
+                        <ImageView
+                            android:id="@+id/showTransliterationImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqo"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/hideTransliterationImg"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqn"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTTToTranslateImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqi"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/showTTToTransliterationImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqj"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                        <ImageView
+                            android:id="@+id/hideTTImg"
+                            android:layout_width="50dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@mipmap/bqk"
+                            android:clickable="true"
+                            android:visibility="invisible" />
+
+                    </RelativeLayout>
 
 
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/lrc_playbar"
-                    android:layout_below="@+id/title"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="10dp">
-
-                    <base.widget.lrc.ManyLineLyricsViewV2
-                        android:id="@+id/manyLineLyricsView"
+                    <include
+                        android:id="@+id/lrc_playbar"
+                        layout="@layout/layout_lrc_playbar"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="@dimen/lrc_bar_height"
+                        android:layout_alignParentBottom="true" />
 
-                    <ImageView
-                        android:id="@+id/hideTranslateImg"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bql"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/showTranslateImg"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqm"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/showTransliterationImg"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqo"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/hideTransliterationImg"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqn"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/showTTToTranslateImg"
-                        android:layout_width="50dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqi"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/showTTToTransliterationImg"
-                        android:layout_width="50dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqj"
-                        android:clickable="true"
-                        android:visibility="invisible" />
-
-                    <ImageView
-                        android:id="@+id/hideTTImg"
-                        android:layout_width="50dp"
-                        android:layout_height="25dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentLeft="true"
-                        android:background="@mipmap/bqk"
-                        android:clickable="true"
-                        android:visibility="invisible" />
 
                 </RelativeLayout>
+            </LinearLayout>
 
+            <include
+                layout="@layout/layout_lrc_list_pop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:visibility="invisible"/>
 
-                <include
-                    android:id="@+id/lrc_playbar"
-                    layout="@layout/layout_lrc_playbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/lrc_bar_height"
-                    android:layout_alignParentBottom="true" />
+            <include
+                layout="@layout/layout_lrc_singerlist_pop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:visibility="invisible"/>
 
+        </RelativeLayout>
 
-            </RelativeLayout>
-        </LinearLayout>
+    </LinearLayout>
 
-    </base.widget.RotateLinearLayout>
-
-    <include
-        layout="@layout/layout_lrc_list_pop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible" />
-
-    <include
-        layout="@layout/layout_lrc_singerlist_pop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="invisible" />
-
-</RelativeLayout>
+</base.widget.RotateLayout>

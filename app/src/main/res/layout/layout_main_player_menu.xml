@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent">
 
-        <base.widget.lrc.FloatLyricsView
+        <base.lyrics.widget.FloatLyricsView
             android:id="@+id/floatLyricsView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
