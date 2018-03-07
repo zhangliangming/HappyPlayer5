@@ -33,6 +33,6 @@ ext {
     targetSdkVersion = 26
     supportLibraryVersion = "26.1.0"
 
-    versionCode = 4
-    versionName = "1.4"
+    versionCode = 5
+    versionName = "1.5"
 }
