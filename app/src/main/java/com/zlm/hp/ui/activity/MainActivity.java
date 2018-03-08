@@ -605,7 +605,7 @@ public class MainActivity extends BaseActivity {
 
             //加载歌词
             String keyWords = "";
-            if (audioInfo.getSingerName().equals("未知")) {
+            if (audioInfo.getSingerName().equals(getString(R.string.unknown))) {
                 keyWords = audioInfo.getSongName();
             } else {
                 keyWords = audioInfo.getSingerName() + " - " + audioInfo.getSongName();

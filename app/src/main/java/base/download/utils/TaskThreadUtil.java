@@ -2,11 +2,6 @@ package base.download.utils;
 
 import android.content.Context;
 
-import base.download.DownloadTask;
-import base.download.interfaces.IDownloadTaskEvent;
-import base.download.interfaces.IDownloadTaskThreadEven;
-import base.download.thread.TaskThread;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -18,6 +13,10 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+import base.download.DownloadTask;
+import base.download.interfaces.IDownloadTaskEvent;
+import base.download.interfaces.IDownloadTaskThreadEven;
+import base.download.thread.TaskThread;
 import base.utils.LoggerUtil;
 
 
@@ -132,13 +131,12 @@ public class TaskThreadUtil {
             int taskDownloadedSize = getTaskDownloadedSize();
             if (taskDownloadedSize >= fileLength && !isFinish) {
                 isFinish = true;
-                if (taskEvent != null) {
-                    taskEvent.taskFinish(task, taskDownloadedSize);
-                }
-
                 if (task.getTaskPath() != null) {
                     // 临时文件复制到真正的路径
                     copyFile(task.getTaskTempPath(), task.getTaskPath());
+                }
+                if (taskEvent != null) {
+                    taskEvent.taskFinish(task, taskDownloadedSize);
                 }
             }
             // 开始其它线程任务

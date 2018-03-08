@@ -11,16 +11,12 @@ import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
-import base.download.DownloadTask;
-import base.download.constant.DownloadTaskConstant;
-import base.download.interfaces.IDownloadTaskEvent;
-import base.download.manager.DownloadTaskManage;
-import com.zlm.hp.net.api.SongInfoHttpUtil;
-import com.zlm.hp.net.entity.SongInfoResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.DownloadThreadInfo;
+import com.zlm.hp.net.api.SongInfoHttpUtil;
+import com.zlm.hp.net.entity.SongInfoResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.DownloadAudioReceiver;
 import com.zlm.hp.utils.ResourceFileUtil;
@@ -29,6 +25,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import base.download.DownloadTask;
+import base.download.constant.DownloadTaskConstant;
+import base.download.interfaces.IDownloadTaskEvent;
+import base.download.manager.DownloadTaskManage;
 import base.utils.DateUtil;
 import base.utils.LoggerUtil;
 import base.utils.ThreadUtil;
@@ -274,7 +274,6 @@ public class DownloadAudioManager {
     public static DownloadAudioManager getDownloadAudioManager(Context context) {
         if (_DownloadAudioManager == null) {
             _DownloadAudioManager = new DownloadAudioManager(context);
-            _DownloadAudioManager = new DownloadAudioManager(context);
         }
         return _DownloadAudioManager;
     }
@@ -335,7 +334,12 @@ public class DownloadAudioManager {
             @Override
             public void run() {
                 //获取歌曲最新的下载路径
-
+                if (audioInfo.getType() == AudioInfo.NET) {//不是第三方播放
+                    SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
+                    if (songInfoResult != null) {
+                        audioInfo.setDownloadUrl(songInfoResult.getUrl());
+                    }
+                }
                 SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
                 if (songInfoResult != null) {
                     audioInfo.setDownloadUrl(songInfoResult.getUrl());

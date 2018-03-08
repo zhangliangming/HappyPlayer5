@@ -5,20 +5,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.text.TextUtils;
 
 import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.DownloadThreadDB;
-import base.download.DownloadTask;
-import base.download.constant.DownloadTaskConstant;
-import base.download.interfaces.IDownloadTaskEvent;
-import base.download.manager.DownloadTaskManage;
-import com.zlm.hp.net.api.SongInfoHttpUtil;
-import com.zlm.hp.net.entity.SongInfoResult;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.DownloadMessage;
 import com.zlm.hp.model.DownloadThreadInfo;
+import com.zlm.hp.net.api.SongInfoHttpUtil;
+import com.zlm.hp.net.entity.SongInfoResult;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.utils.ResourceFileUtil;
@@ -27,6 +24,10 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
+import base.download.DownloadTask;
+import base.download.constant.DownloadTaskConstant;
+import base.download.interfaces.IDownloadTaskEvent;
+import base.download.manager.DownloadTaskManage;
 import base.utils.LoggerUtil;
 import base.utils.ThreadUtil;
 
@@ -120,18 +121,23 @@ public class OnLineAudioManager {
                     mCurTaskId = "-1";
                 }
 
-                //扫描系统媒体数据库库
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//如果是4.4及以上版本
-                    Intent mediaScanIntent = new Intent(
-                            Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                    Uri contentUri = Uri.fromFile(new File(task.getTaskPath())); //out is your output file
-                    mediaScanIntent.setData(contentUri);
-                    mContext.sendBroadcast(mediaScanIntent);
-                } else {
-                    mContext.sendBroadcast(new Intent(
-                            Intent.ACTION_MEDIA_MOUNTED,
-                            Uri.parse("file://"
-                                    + Environment.getExternalStorageDirectory())));
+                if (!TextUtils.isEmpty(task.getTaskPath())) {
+                    //扫描系统媒体数据库库
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//如果是4.4及以上版本
+                        Intent mediaScanIntent = new Intent(
+                                Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                        File file = new File(task.getTaskPath());
+                        if (file.exists()) {
+                            Uri contentUri = Uri.fromFile(file); //out is your output file
+                            mediaScanIntent.setData(contentUri);
+                            mContext.sendBroadcast(mediaScanIntent);
+                        }
+                    } else {
+                        mContext.sendBroadcast(new Intent(
+                                Intent.ACTION_MEDIA_MOUNTED,
+                                Uri.parse("file://"
+                                        + Environment.getExternalStorageDirectory())));
+                    }
                 }
 
                 logger.e("在线播放任务名称：" + task.getTaskName() + " 任务完成，文件大小为：" + downloadedSize);
@@ -232,7 +238,7 @@ public class OnLineAudioManager {
             @Override
             public void run() {
                 //获取歌曲下载路径
-                if (audioInfo.getType() != AudioInfo.THIIRDNET) {//不是第三方播放
+                if (audioInfo.getType() == AudioInfo.NET) {//不是第三方播放
                     SongInfoResult songInfoResult = SongInfoHttpUtil.songInfo(mContext, audioInfo.getHash());
                     if (songInfoResult != null) {
                         audioInfo.setDownloadUrl(songInfoResult.getUrl());
