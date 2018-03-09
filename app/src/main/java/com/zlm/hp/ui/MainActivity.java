@@ -345,15 +345,8 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void loadData(boolean isRestoreInstance) {
         if (!isRestoreInstance) {
-            new AsyncTaskUtil() {
-                @Override
-                protected Void doInBackground(String... strings) {
-                    AudioPlayerManager.getAudioPlayerManager(getApplicationContext(), mHPApplication).initSongInfoData();
-                    return super.doInBackground(strings);
-                }
-            }.execute("");
+            AudioPlayerManager.getAudioPlayerManager(getApplicationContext(), mHPApplication).initSongInfoData();
         }
-
     }
 
     /**
@@ -1140,7 +1133,7 @@ public class MainActivity extends BaseActivity {
                 }
                 //设置底部点击后，下沉动画
                 TranslateAnimation transAnim = new TranslateAnimation(0, 0, 0, mPlayerBarParentLinearLayout.getHeight());
-                transAnim.setDuration(500);
+                transAnim.setDuration(150);
                 transAnim.setFillAfter(true);
                 mPlayerBarParentLinearLayout.startAnimation(transAnim);
 

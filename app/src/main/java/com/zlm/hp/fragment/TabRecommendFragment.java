@@ -78,7 +78,7 @@ public class TabRecommendFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
-                loadDataUtil(500);
+                loadDataUtil(300);
             }
         });
     }
@@ -89,7 +89,7 @@ public class TabRecommendFragment extends BaseFragment {
             if (isRestoreInstance) {
                 mDatas.clear();
             }
-            loadDataUtil(500);
+            loadDataUtil(300);
         }
     }
 

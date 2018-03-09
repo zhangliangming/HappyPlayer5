@@ -59,7 +59,7 @@ public class RankSongFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOADDATA:
-                    loadDataUtil(500, true);
+                    loadDataUtil(300, true);
                     break;
             }
         }
@@ -174,7 +174,7 @@ public class RankSongFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
-                loadDataUtil(500, true);
+                loadDataUtil(300, true);
             }
         });
 
@@ -193,7 +193,7 @@ public class RankSongFragment extends BaseFragment {
             mPage = 1;
             mDatas.clear();
         }
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
+        mHandler.sendEmptyMessage(LOADDATA);
 
     }
 

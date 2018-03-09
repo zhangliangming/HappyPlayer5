@@ -60,7 +60,7 @@ public class SearchFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOADDATA:
-                    loadDataUtil(500, true);
+                    loadDataUtil(300, true);
                     break;
                 case INIT:
                     mSearchEditText.requestFocus();
@@ -237,7 +237,7 @@ public class SearchFragment extends BaseFragment {
             public void refresh() {
                 showLoadingView();
 
-                loadDataUtil(500, true);
+                loadDataUtil(300, true);
             }
         });
 
@@ -264,7 +264,7 @@ public class SearchFragment extends BaseFragment {
         }
         mAdapter.setPlayIndexHash("-1");
         mAdapter.setPlayIndexPosition(-1);
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
+        mHandler.sendEmptyMessage(LOADDATA);
 
     }
 
@@ -303,7 +303,7 @@ public class SearchFragment extends BaseFragment {
         mAdapter.setPlayIndexPosition(-1);
 
         showLoadingView();
-        loadDataUtil(500, true);
+        loadDataUtil(300, true);
     }
 
     /**
@@ -338,7 +338,7 @@ public class SearchFragment extends BaseFragment {
 
             @Override
             public void onPostExecute(HttpResult httpResult) {
-                if (httpResult.getStatus() == HttpResult.STATUS_NONET) {
+                if (httpResult.getStatus() == HttpResult.STATUS_NONET || httpResult.getStatus() == HttpResult.STATUS_NOWIFI) {
                     if (showView)
                         showNoNetView();
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), httpResult.getErrorMsg());

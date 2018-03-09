@@ -47,7 +47,7 @@ public class LikeMusicFragment extends BaseFragment {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOADDATA:
-                    loadDataUtil(500);
+                    loadDataUtil(300);
                     break;
             }
         }
@@ -159,7 +159,7 @@ public class LikeMusicFragment extends BaseFragment {
 
             mDatas.clear();
         }
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
+        mHandler.sendEmptyMessage(LOADDATA);
 
     }
 

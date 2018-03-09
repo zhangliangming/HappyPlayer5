@@ -175,7 +175,7 @@ public class LrcFragment extends BaseFragment {
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 500);
+        mHandler.sendEmptyMessage(LOADDATA);
 
     }
 

@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -76,8 +77,14 @@ public class AudioPlayerService extends Service {
      */
     private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            doAudioReceive(context, intent);
+        public void onReceive(final Context context, final Intent intent) {
+            new AsyncTask<String,Integer,String>(){
+                @Override
+                protected String doInBackground(String... strings) {
+                    doAudioReceive(context, intent);
+                    return null;
+                }
+            }.execute("");
         }
     };
     /**

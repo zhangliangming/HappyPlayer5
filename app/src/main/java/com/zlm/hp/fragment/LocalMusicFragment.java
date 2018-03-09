@@ -133,7 +133,7 @@ public class LocalMusicFragment extends BaseFragment {
         if (isRestoreInstance) {
             mDatas.clear();
         }
-        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
+        mHandler.sendEmptyMessage(LOADDATA);
 
     }
 

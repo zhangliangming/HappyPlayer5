@@ -2,6 +2,7 @@ package com.zlm.hp.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +73,7 @@ public abstract class BaseFragment extends StatedFragment {
     private ViewGroup mainView;
     private final int SHOWLOADINGVIEW = 0;
     private final int SHOWCONTENTVIEW = 1;
-    private final int SHOWNONETView = 2;
+    private final int SHOWNONETVIEW = 2;
 
     private Handler mShowViewHandler = new Handler() {
         @Override
@@ -84,7 +85,7 @@ public abstract class BaseFragment extends StatedFragment {
                 case SHOWLOADINGVIEW:
                     showLoadingViewHandler();
                     break;
-                case SHOWNONETView:
+                case SHOWNONETVIEW:
                     showNoNetViewHandler();
                     break;
             }
@@ -136,7 +137,15 @@ public abstract class BaseFragment extends StatedFragment {
 
         //
         initViews(savedInstanceState, mainView);
-        loadData(false);
+        new AsyncTask<String, Integer, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+
+                loadData(false);
+
+                return null;
+            }
+        }.execute("");
     }
 
 
@@ -266,7 +275,7 @@ public abstract class BaseFragment extends StatedFragment {
         if (mNetContainer == null) {
             initNoNetView();
         }
-        mShowViewHandler.sendEmptyMessage(SHOWNONETView);
+        mShowViewHandler.sendEmptyMessage(SHOWNONETVIEW);
     }
 
     /**

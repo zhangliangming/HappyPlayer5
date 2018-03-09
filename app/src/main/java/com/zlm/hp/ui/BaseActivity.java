@@ -2,6 +2,7 @@ package com.zlm.hp.ui;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -104,9 +105,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
 
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
-        loadData(false);
-
         ActivityManage.getInstance().addActivity(this);
+
+        new AsyncTask<String, Integer, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+
+                loadData(false);
+
+                return null;
+            }
+        }.execute("");
     }
 
     protected void preLoad() {
