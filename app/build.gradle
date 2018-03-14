@@ -46,7 +46,7 @@ dependencies {
     /**
      * ijkplayer
      *
-     *引用下面的so文件，不支持无损歌曲格式
+     * 引用下面的so文件，不支持无损歌曲格式
      compile 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
      compile 'tv.danmaku.ijk.media:ijkplayer-armv5:0.8.4'
      compile 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.4'
@@ -78,5 +78,5 @@ dependencies {
     /**
      * 歌词
      */
-    compile 'com.github.zhangliangming:HPLyrics:v1.10'
+    compile 'com.github.zhangliangming:HPLyrics:v1.12'
 }
