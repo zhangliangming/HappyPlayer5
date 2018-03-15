@@ -18,6 +18,7 @@ import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.lyrics.LyricsReader;
 import com.zlm.hp.lyrics.widget.AbstractLrcView;
 import com.zlm.hp.lyrics.widget.ManyLyricsView;
+import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
@@ -201,7 +202,7 @@ public class LrcFragment extends BaseFragment {
                 lyricsReader.setHash(mHash);
                 lyricsReader.loadLrc(mDownloadLyricsResult.getContent(), null, mLrcFilePath);
                 mManyLineLyricsView.setLyricsReader(lyricsReader);
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
+                if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
                     mManyLineLyricsView.play(mPlayProgress);
 
             }

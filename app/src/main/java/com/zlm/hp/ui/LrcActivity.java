@@ -1750,18 +1750,35 @@ public class LrcActivity extends BaseActivity {
         }.start();
     }
 
+    private static final int LOADDATA = 0;
+    /**
+     *
+     */
+    private Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case LOADDATA:
+
+                    AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
+                    if (curAudioInfo != null) {
+                        Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
+                        doAudioReceive(getApplicationContext(), initIntent);
+                    } else {
+                        Intent nullIntent = new Intent(AudioBroadcastReceiver.ACTION_NULLMUSIC);
+                        doAudioReceive(getApplicationContext(), nullIntent);
+                    }
+
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void loadData(boolean isRestoreInstance) {
         //
-        AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
-        if (curAudioInfo != null) {
-            Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-            doAudioReceive(getApplicationContext(), initIntent);
-        } else {
-            Intent nullIntent = new Intent(AudioBroadcastReceiver.ACTION_NULLMUSIC);
-            doAudioReceive(getApplicationContext(), nullIntent);
-        }
+        mHandler.sendEmptyMessage(LOADDATA);
     }
 
 
