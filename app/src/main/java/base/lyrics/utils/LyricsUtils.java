@@ -30,7 +30,7 @@ public class LyricsUtils {
     public static File getLrcFile(String fileName, String filePathDirectory) {
         List<String> lrcExts = LyricsIOUtils.getSupportLyricsExts();
         for (int i = 0; i < lrcExts.size(); i++) {
-            String lrcFilePath = filePathDirectory + fileName + "." + lrcExts.get(i);
+            String lrcFilePath = filePathDirectory + File.separator + fileName + "." + lrcExts.get(i);
             File lrcFile = new File(lrcFilePath);
             if (lrcFile.exists()) {
                 return lrcFile;
@@ -811,7 +811,7 @@ public class LyricsUtils {
             }
             int endTime = temp.getEndTime();
             if (elapseTime < curPlayingTime && curPlayingTime <= endTime) {
-                return temp.getLyricsWords().length - 1;
+                break;
             }
 
         }
@@ -842,10 +842,6 @@ public class LyricsUtils {
             if (curPlayingTime <= elapseTime) {
                 return j;
             }
-        }
-        int endTime = lyrLine.getEndTime();
-        if (elapseTime < curPlayingTime && curPlayingTime <= endTime) {
-            return lyrLine.getLyricsWords().length - 1;
         }
 
         //整句已经播放完成
@@ -880,7 +876,7 @@ public class LyricsUtils {
             }
             int endTime = temp.getEndTime();
             if (elapseTime < curPlayingTime && curPlayingTime <= endTime) {
-                return temp.getLyricsWords().length - 1;
+                break;
             }
 
         }
@@ -910,10 +906,6 @@ public class LyricsUtils {
             if (curPlayingTime <= elapseTime) {
                 return j;
             }
-        }
-        int endTime = lyrLine.getEndTime();
-        if (elapseTime < curPlayingTime && curPlayingTime <= endTime) {
-            return lyrLine.getLyricsWords().length - 1;
         }
 
         //整句已经播放完成

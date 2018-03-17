@@ -359,10 +359,6 @@ public class ManyLyricsView extends AbstractLrcView {
         float lineBottomY = 0;
 
         int curLyricsLineNum = splitLyricsLineNum;
-        if (splitLyricsWordIndex == -1) {
-            //设置为最后索引，防止跳转到下一句时，前面歌词不是高亮的问题
-            curLyricsLineNum = splitLyricsLineInfos.size() - 1;
-        }
 
         //歌词和空行高度
         int lineHeight = getTextHeight(paint) + spaceLineHeight;
