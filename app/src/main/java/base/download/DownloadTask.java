@@ -1,7 +1,5 @@
 package base.download;
 
-import base.download.utils.TaskThreadUtil;
-
 import java.io.Serializable;
 import java.util.Date;
 
@@ -56,10 +54,6 @@ public class DownloadTask implements Serializable {
      * 任务文件大小
      */
     private long taskFileSize;
-    /**
-     * 任务线程
-     */
-    private TaskThreadUtil taskThreadUtil;
 
     public DownloadTask() {
 
@@ -153,14 +147,6 @@ public class DownloadTask implements Serializable {
         this.taskFileSize = taskFileSize;
     }
 
-    public TaskThreadUtil getTaskThreadUtil() {
-        return taskThreadUtil;
-    }
-
-    public void setTaskThreadUtil(TaskThreadUtil taskThreadUtil) {
-        this.taskThreadUtil = taskThreadUtil;
-    }
-
     @Override
     public String toString() {
         return "DownloadTask{" +
@@ -175,7 +161,6 @@ public class DownloadTask implements Serializable {
                 ", status=" + status +
                 ", threadNum=" + threadNum +
                 ", taskFileSize=" + taskFileSize +
-                ", taskThreadUtil=" + taskThreadUtil +
                 '}';
     }
 }

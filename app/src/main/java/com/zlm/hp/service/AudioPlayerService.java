@@ -22,9 +22,8 @@ import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
-import com.zlm.hp.db.DownloadThreadDB;
+import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.manager.AudioPlayerManager;
-import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -639,8 +638,8 @@ public class AudioPlayerService extends Service {
         if (HPApplication.getInstance().getCurAudioInfo() != null &&
                 HPApplication.getInstance().getCurAudioInfo().getType() == AudioInfo.NET) {
             //如果进度为0，表示上一次下载直接错误。
-            int downloadedSize = DownloadThreadDB.getDownloadThreadDB(
-                    getApplicationContext()).getDownloadedSize(HPApplication.getInstance().getPlayIndexHashID(), OnLineAudioManager.threadNum);
+            int downloadedSize = DownloadInfoDB.getAudioInfoDB(getApplicationContext())
+                    .getDownloadedSize(HPApplication.getInstance().getPlayIndexHashID());
             if (downloadedSize == 0) {
                 //发送init的广播
                 Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
@@ -742,35 +741,6 @@ public class AudioPlayerService extends Service {
             }
         }
     }
-
-    /**
-     * 下载线程
-     */
-    private Handler mDownloadHandler = new Handler();
-
-    /**
-     *
-     */
-    private Runnable mDownloadCheckRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if (HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYNET) {
-
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(
-                        getApplicationContext()).getDownloadedSize(
-                        HPApplication.getInstance().getPlayIndexHashID(),
-                        OnLineAudioManager.threadNum);
-                logger.e("在线播放任务名称：" + HPApplication.getInstance().getCurAudioInfo().
-                        getSongName() + "  缓存播放时，监听已下载大小：" + downloadedSize);
-
-                mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);
-                if (HPApplication.getInstance().getPlayStatus() != AudioPlayerManager.PAUSE) {
-                    playNetMusic();
-                }
-                mDownloadHandler.postDelayed(mDownloadCheckRunnable, 1000);
-            }
-        }
-    };
 
     /**
      * 播放网络歌曲
@@ -919,17 +889,12 @@ public class AudioPlayerService extends Service {
      */
     private void doNetMusic() {
         AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
-        mDownloadHandler.removeCallbacks(mDownloadCheckRunnable);
         //设置当前的播放状态
         HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYNET);
 
-        //下载
-        if (!OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).taskIsExists(audioInfo.getHash())) {
-            if(HPApplication.getInstance().isDownload()) {
-                OnLineAudioManager.getOnLineAudioManager(getApplicationContext()).addTask(audioInfo);
-            }
-            mDownloadHandler.postAtTime(mDownloadCheckRunnable, 1000);
-            logger.e("准备播放在线歌曲：" + audioInfo.getSongName());
+        //缓存下载
+        if (HPApplication.getInstance().getPlayStatus() != AudioPlayerManager.PAUSE) {
+            playNetMusic();
         }
 
     }

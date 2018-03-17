@@ -26,12 +26,10 @@ import com.zlm.hp.adapter.LrcPopSingerListAdapter;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
-import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.db.SongSingerDB;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
 import com.zlm.hp.manager.LyricsManager;
-import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.model.DownloadMessage;
@@ -342,7 +340,8 @@ public class LrcActivity extends BaseActivity {
         if (action.equals(OnLineAudioReceiver.ACTION_ONLINEMUSICDOWNLOADING)) {
             DownloadMessage downloadMessage = (DownloadMessage) intent.getSerializableExtra(DownloadMessage.KEY);
             if (HPApplication.getInstance().getPlayIndexHashID().equals(downloadMessage.getTaskId())) {
-                int downloadedSize = DownloadThreadDB.getDownloadThreadDB(getApplicationContext()).getDownloadedSize(downloadMessage.getTaskId(), OnLineAudioManager.threadNum);
+                int downloadedSize = DownloadInfoDB.getAudioInfoDB(mContext)
+                        .getDownloadedSize(HPApplication.getInstance().getPlayIndexHashID());
                 double pre = downloadedSize * 1.0 / HPApplication.getInstance().getCurAudioInfo().getFileSize();
                 int downloadProgress = (int) (mLrcSeekBar.getMax() * pre);
                 mLrcSeekBar.setSecondaryProgress(downloadProgress);

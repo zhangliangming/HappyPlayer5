@@ -46,8 +46,6 @@ dependencies {
     implementation files('libs/android-logging-log4j-1.0.3.jar')
     //    implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibraryVersion
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
-    compile 'com.squareup.okio:okio:1.13.0'
     implementation 'com.belerweb:pinyin4j:2.5.0'
     //gson
     compile 'com.google.code.gson:gson:2.8.2'
@@ -61,4 +59,7 @@ dependencies {
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
     implementation 'com.tencent.bugly:nativecrashreport:latest.release'
     //其中latest.release指代最新版本号，也可以指定明确的版本号，例如2.2.0
+    //nohttp
+    implementation 'com.yanzhenjie.nohttp:nohttp:1.1.9'
+    implementation 'com.yanzhenjie.nohttp:okhttp:1.1.9'
 }

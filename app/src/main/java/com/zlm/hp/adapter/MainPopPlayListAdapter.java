@@ -14,10 +14,8 @@ import com.zlm.hp.R;
 import com.zlm.hp.application.HPApplication;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
-import com.zlm.hp.db.DownloadThreadDB;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.DownloadAudioManager;
-import com.zlm.hp.manager.OnLineAudioManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
@@ -114,8 +112,9 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         if (AudioInfoDB.getAudioInfoDB(mContext).isNetAudioExists(audioInfo.getHash())) {
             viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
         } else {
-            int downloadSize = DownloadThreadDB.getDownloadThreadDB(mContext).getDownloadedSize(audioInfo.getHash(), OnLineAudioManager.threadNum);
-            if (downloadSize >= audioInfo.getFileSize()) {
+            int downloadedSize = DownloadInfoDB.getAudioInfoDB(mContext)
+                    .getDownloadedSize(HPApplication.getInstance().getPlayIndexHashID());
+            if (downloadedSize >= audioInfo.getFileSize()) {
                 viewHolder.getIslocalImg().setVisibility(View.VISIBLE);
             } else {
                 viewHolder.getIslocalImg().setVisibility(View.GONE);

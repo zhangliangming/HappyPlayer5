@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="download_start">开始下载</string>
+    <string name="download_delete">删除文件</string>
+    <string name="delete_succeed">删除成功</string>
+    <!-- Download status -->
+    <string name="download_progress">已下载：%1$d&#037;&#037;，速度：%2$skb&#047;s</string>
+    <string name="download_status_pause">暂停</string>
+    <string name="download_status_be_pause">下载被暂停</string>
+    <string name="download_status_re_download">重新下载</string>
+    <string name="download_status_again_download">再次尝试</string>
+    <string name="download_status_resume">继续下载</string>
+    <string name="download_status_finish">下载完成！</string>
+    <!-- Download error -->
+    <string name="download_error">下载出错了：%1$s</string>
+    <string name="download_error_server">服务器数据错误！</string>
+    <string name="download_error_network">网络不可用，请检查网络！</string>
+    <string name="download_error_storage">存储卡错误，请检查存储卡！</string>
+    <string name="download_error_space">存储卡空间不足！</string>
+    <string name="download_error_timeout">下载超时！</string>
+    <string name="download_error_un_know_host">找不到服务器。</string>
+    <string name="download_error_url">URL地址错误。</string>
+    <string name="download_error_un">未知错误。</string>
+    <!-- error -->
+    <string name="error_please_check_network">请检查网络。</string>
+    <string name="error_timeout">请求超时，网络不好或者服务器不稳定。</string>
+    <string name="error_not_found_server">未发现指定服务器，清切换网络后重试。</string>
+    <string name="error_url_error">URL错误。</string>
+    <string name="error_not_found_cache">没有找到缓存.</string>
+    <string name="error_unknow">未知错误。</string>
+    <string name="error_response_code">服务器响应码%1$d</string>
+    <string name="error_response_code_dex">服务器响应码%1$d，如果你们服务器在这种情况下也返回数据你可以处理。</string>
+</resources>

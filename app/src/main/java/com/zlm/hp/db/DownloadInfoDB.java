@@ -105,8 +105,6 @@ public class DownloadInfoDB extends SQLiteOpenHelper {
 
             //删除歌曲
             AudioInfoDB.getAudioInfoDB(mContext).deleteDonwloadAudio(dhash);
-            //删除任务线程
-            DownloadThreadDB.getDownloadThreadDB(mContext).delete(dhash, DownloadAudioManager.threadNum);
 
             //删除本地缓存文件
             String tempFilePath = ResourceFileUtil.getFilePath(mContext, ResourceConstants.PATH_AUDIO_TEMP, dhash + ".temp");
@@ -174,7 +172,7 @@ public class DownloadInfoDB extends SQLiteOpenHelper {
      * @param dhash
      * @param downloadedSize
      */
-    public void update(String dhash, int downloadedSize, int status) {
+    public void update(String dhash, long downloadedSize, int status) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("downloadedSize", downloadedSize);
@@ -188,6 +186,16 @@ public class DownloadInfoDB extends SQLiteOpenHelper {
         } catch (SQLException e) {
             Log.i("error", "update failed");
         }
+    }
+
+    public int getDownloadedSize(String dhash) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("select downloadedSize from " + TBL_NAME
+                + " where dhash=?", new String[]{dhash});
+        if (cursor.moveToNext()) {
+            return cursor.getInt(cursor.getColumnIndex("downloadedSize"));
+        }
+        return 0;
     }
 
     @Override
