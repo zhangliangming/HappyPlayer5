@@ -723,7 +723,8 @@ public class AudioPlayerService extends Service {
         }
 
 
-        if (audioInfo.getType() == AudioInfo.LOCAL) {
+        if (audioInfo.getType() == AudioInfo.LOCAL
+                || audioInfo.getType() == AudioInfo.DOWNLOAD) {
             //播放本地歌曲
             playLocalMusic(audioMessage);
         } else {

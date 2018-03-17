@@ -18,7 +18,7 @@ import base.utils.LoggerUtil;
 
 public class SystemReceiver {
 
-    private static final String base_action = "bear.love.peach";
+    private static final String base_action = IReciver.PACKAGE_KEY;
     private LoggerUtil logger;
     /**
      * 是否注册成功

@@ -136,7 +136,9 @@ public class LikeMusicFragment extends BaseFragment {
                     AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
                     if (audioInfo.getType() == AudioInfo.LOCAL) {
                         audioInfo.setLike(AudioInfo.LIKE_LOCAL);
-                    } else if (audioInfo.getType() == AudioInfo.NET) {
+                    } else if (audioInfo.getType() == AudioInfo.DOWNLOAD) {
+                        audioInfo.setLike(AudioInfo.LIKE_DOWNLOAD);
+                    }  else if (audioInfo.getType() == AudioInfo.NET) {
                         audioInfo.setLike(AudioInfo.LIKE_NET);
                     } else if (audioInfo.getType() == AudioInfo.THIIRDNET) {
                         audioInfo.setLike(AudioInfo.LIKE_THIIRDNET);

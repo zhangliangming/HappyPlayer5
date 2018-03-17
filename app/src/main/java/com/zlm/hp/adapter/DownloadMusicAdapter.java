@@ -442,8 +442,10 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
         int index = getPlayIndexPosition(hash);
         DownloadInfo downloadInfo = (DownloadInfo) getItem(index);
-        downloadInfo.setDownloadedSize(downloadMessage.getTaskCurFileSize());
-        downloadInfo.getAudioInfo().setFileSize(downloadMessage.getTaskFileSize());
+        if(downloadInfo != null) {
+            downloadInfo.setDownloadedSize(downloadMessage.getTaskCurFileSize());
+            downloadInfo.getAudioInfo().setFileSize(downloadMessage.getTaskFileSize());
+        }
         if (index != -1) {
             notifyItemChanged(index);
         }

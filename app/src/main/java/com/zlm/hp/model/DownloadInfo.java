@@ -1,5 +1,7 @@
 package com.zlm.hp.model;
 
+import com.zlm.hp.receiver.IReciver;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
  */
 
 public class DownloadInfo implements Serializable {
-    public static final String KEY = "com.zlm.hp.dli.key";
+    public static final String KEY = IReciver.PACKAGE_KEY + ".dli.key";
     /**
      * 歌曲id
      */

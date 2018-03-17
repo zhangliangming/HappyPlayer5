@@ -22,7 +22,7 @@ import base.utils.LoggerUtil;
  */
 public class AudioBroadcastReceiver {
 
-    private static final String base_action = "com.zlm.hp";
+    private static final String base_action = IReciver.PACKAGE_KEY;
 
     private LoggerUtil logger;
     /**

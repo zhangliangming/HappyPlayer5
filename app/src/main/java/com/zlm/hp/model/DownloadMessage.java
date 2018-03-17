@@ -1,5 +1,7 @@
 package com.zlm.hp.model;
 
+import com.zlm.hp.receiver.IReciver;
+
 import java.io.Serializable;
 
 /**
@@ -8,7 +10,7 @@ import java.io.Serializable;
  */
 
 public class DownloadMessage implements Serializable {
-    public static final String KEY = "com.zlm.hp.dm.key";
+    public static final String KEY = IReciver.PACKAGE_KEY + ".dm.key";
     /**
      * 错误信息
      */

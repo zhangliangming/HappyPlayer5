@@ -683,7 +683,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
         if(isRecent) {
             if (type == AudioInfo.LOCAL) {
                 audioInfo.setRecent(AudioInfo.RECENT_LOCAL);
-            } else if (type == AudioInfo.NET) {
+            } else if (type == AudioInfo.DOWNLOAD) {
+                audioInfo.setRecent(AudioInfo.RECENT_DOWNLOAD);
+            }   else if (type == AudioInfo.NET) {
                 audioInfo.setRecent(AudioInfo.RECENT_NET);
             } else if (type == AudioInfo.THIIRDNET) {
                 audioInfo.setRecent(AudioInfo.RECENT_THIIRDNET);
@@ -717,7 +719,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
         if(isLike) {
             if (type == AudioInfo.LOCAL) {
                 audioInfo.setLike(AudioInfo.LIKE_LOCAL);
-            } else if (type == AudioInfo.NET) {
+            } else if (type == AudioInfo.DOWNLOAD) {
+                audioInfo.setLike(AudioInfo.LIKE_DOWNLOAD);
+            }  else if (type == AudioInfo.NET) {
                 audioInfo.setLike(AudioInfo.LIKE_NET);
             } else if (type == AudioInfo.THIIRDNET) {
                 audioInfo.setLike(AudioInfo.LIKE_THIIRDNET);

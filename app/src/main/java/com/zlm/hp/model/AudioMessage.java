@@ -1,5 +1,7 @@
 package com.zlm.hp.model;
 
+import com.zlm.hp.receiver.IReciver;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * Created by zhangliangming on 2017/8/6.
  */
 public class AudioMessage implements Serializable {
-    public static final String KEY = "com.zlm.hp.am.key";
+    public static final String KEY = IReciver.PACKAGE_KEY + ".am.key";
     /**
      * 错误信息
      */

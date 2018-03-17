@@ -18,7 +18,7 @@ import base.utils.LoggerUtil;
 
 public class NotificationReceiver {
 
-    private static final String base_action = "com.zlm.hp";
+    private static final String base_action = IReciver.PACKAGE_KEY;
     private LoggerUtil logger;
     /**
      * 是否注册成功

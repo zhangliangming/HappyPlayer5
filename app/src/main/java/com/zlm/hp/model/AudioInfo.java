@@ -1,5 +1,7 @@
 package com.zlm.hp.model;
 
+import com.zlm.hp.receiver.IReciver;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  */
 public class AudioInfo implements Serializable {
 
-    public static final String KEY = "com.zlm.hp.ai.key";
+    public static final String KEY = IReciver.PACKAGE_KEY + "ai.key";
 
 
     /**
@@ -31,15 +33,17 @@ public class AudioInfo implements Serializable {
     public static final int RECENT_LOCAL = 0;
     //最近-网络
     public static final int RECENT_NET = 1;
-    public static final int RECENT_THIIRDNET = 2;
+    public static final int RECENT_DOWNLOAD = 2;
+    public static final int RECENT_THIIRDNET = 3;
 
     /**
      * 喜欢类型（网络-本地）
      */
     public static final int LIKE_DEFAULT = -1;
     public static final int LIKE_LOCAL = 0;
-    public static final int LIKE_NET = 1;
-    public static final int LIKE_THIIRDNET = 2;
+    public static final int LIKE_DOWNLOAD = 1;
+    public static final int LIKE_NET = 2;
+    public static final int LIKE_THIIRDNET = 3;
 
     /**
      * 歌曲名称
