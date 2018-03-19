@@ -226,6 +226,9 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             public void onClick(View view) {
                 if (DownloadAudioManager.getDownloadAudioManager(mContext).taskIsExists(downloadInfo.getDHash())) {
                     DownloadAudioManager.getDownloadAudioManager(mContext).cancelTask(downloadInfo.getDHash());
+                    DownloadInfoDB.getAudioInfoDB(mContext).delete(downloadInfo.getDHash());
+                    mDatas.remove(downloadInfo);
+                    notifyDataSetChanged();
                 } else {
 
                     //更新

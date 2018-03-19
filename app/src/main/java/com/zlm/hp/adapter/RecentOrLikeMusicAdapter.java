@@ -191,7 +191,7 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
                 @Override
                 public void onClick(View view) {
                     //更新
-                    AudioInfoDB.getAudioInfoDB(mContext).updateLikeAudio(audioInfo, false);
+                    AudioInfoDB.getAudioInfoDB(mContext).deleteRecenteAudio(audioInfo);
                     mDatas.remove(position);
                     if(mDatas.size() == 0) {
                         setState(NODATA);
