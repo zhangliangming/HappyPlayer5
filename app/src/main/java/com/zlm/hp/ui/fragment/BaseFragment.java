@@ -195,6 +195,18 @@ public abstract class BaseFragment extends StatedFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        onAttachToContext(context);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            onAttachToContext(activity);
+        }
+    }
+
+    protected void onAttachToContext(Context context) {
         this.mContext = context;
         this.mActivity = (Activity) context;
     }

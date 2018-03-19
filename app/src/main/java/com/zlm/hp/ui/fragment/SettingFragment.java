@@ -40,10 +40,10 @@ public class SettingFragment extends PreferenceFragment implements Preference.On
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        this.mContext = context;
-        this.mActivity = (Activity) context;
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.mContext = activity;
+        this.mActivity = activity;
     }
 
     @Override
