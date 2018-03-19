@@ -127,14 +127,15 @@ public class SplashActivity extends BaseActivity {
             //设置延迟时间
             mDelayTime *= 2;
             HPApplication.getInstance().setFrist(false);
+            mAnimationHandler.postDelayed(mAnimationRunnable, mDelayTime);
         } else {
             //设置延迟时间
             mDelayTime *= 3;
+            mAnimationHandler.postDelayed(mAnimationRunnable, mDelayTime);
         }
         //初始化配置数据
         initPreferencesData();
         loadSplashMusic();
-        mAnimationHandler.postDelayed(mAnimationRunnable, mDelayTime);
     }
 
     /**

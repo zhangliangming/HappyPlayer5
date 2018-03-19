@@ -693,7 +693,7 @@ public class AudioInfoDB extends SQLiteOpenHelper {
                 audioInfo.setRecent(AudioInfo.RECENT_LOCAL);
             } else if (type == AudioInfo.DOWNLOAD) {
                 audioInfo.setRecent(AudioInfo.RECENT_DOWNLOAD);
-            }   else if (type == AudioInfo.NET) {
+            }  else if (type == AudioInfo.NET) {
                 audioInfo.setRecent(AudioInfo.RECENT_NET);
             } else if (type == AudioInfo.THIIRDNET) {
                 audioInfo.setRecent(AudioInfo.RECENT_THIIRDNET);
@@ -759,9 +759,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      */
     public int getRecentAudioCount() {
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
+        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_DOWNLOAD + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
-                + " WHERE recent=? or recent=? or recent=? ", args);
+                + " WHERE recent=? or recent=? or recent=? or recent=? ", args);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
@@ -775,9 +775,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
      */
     public int getLikeAudioCount() {
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
+        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_DOWNLOAD + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
         Cursor cursor = db.rawQuery("select count(*)from " + TBL_NAME
-                + " WHERE likes=? or likes=? or likes=? ", args);
+                + " WHERE likes=? or likes=? or likes=? or likes=? ", args);
         cursor.moveToFirst();
         int count = cursor.getInt(0);
         cursor.close();
@@ -792,9 +792,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     public List<AudioInfo> getAllRecentAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
+        String args[] = {AudioInfo.RECENT_LOCAL + "", AudioInfo.RECENT_DOWNLOAD + "", AudioInfo.RECENT_NET + "", AudioInfo.RECENT_THIIRDNET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
-                "recent=? or recent=? or recent=?", args, null, null,
+                "recent=? or recent=? or recent=? or recent=?", args, null, null,
                 "createTime desc", null);
         while (cursor.moveToNext()) {
             AudioInfo audioInfo = getAudioInfoFrom(cursor);
@@ -818,9 +818,9 @@ public class AudioInfoDB extends SQLiteOpenHelper {
     public List<AudioInfo> getAllLikeAudio() {
         List<AudioInfo> list = new ArrayList<AudioInfo>();
         SQLiteDatabase db = getReadableDatabase();
-        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
+        String args[] = {AudioInfo.LIKE_LOCAL + "", AudioInfo.LIKE_DOWNLOAD + "", AudioInfo.LIKE_NET + "", AudioInfo.LIKE_THIIRDNET + ""};
         Cursor cursor = db.query(TBL_NAME, null,
-                "likes=? or likes=? or likes=?", args, null, null,
+                "likes=? or likes=? or likes=? or likes=?", args, null, null,
                 "createTime desc", null);
         while (cursor.moveToNext()) {
             AudioInfo audioInfo = getAudioInfoFrom(cursor);

@@ -1,5 +1,6 @@
 package com.zlm.hp.utils;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -39,6 +40,10 @@ public class SerializableObjUtil {
      * @return
      */
     public static Object readObj(String filePath) {
+        File file = new File(filePath);
+        if(!file.exists()) {
+            return null;
+        }
         FileInputStream fileInputStream = null;
         ObjectInputStream objectInputStream = null;
         try {

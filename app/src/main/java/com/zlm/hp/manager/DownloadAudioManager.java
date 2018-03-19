@@ -86,16 +86,23 @@ public class DownloadAudioManager {
 
                 logger.e("下载任务名称：" + task.getTaskName() + " 任务下载失败，错误信息为：" + message);
 
+                //删除任务
+                DownloadInfoDB.getAudioInfoDB(mContext).delete(task.getTaskHash());
+
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
-                downloadMessage.setErrorMsg("下载错误");
 
-                //发送在线播放错误广播
-                Intent errorIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNERROR);
-                errorIntent.putExtra(DownloadMessage.KEY, downloadMessage);
-                errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                mContext.sendBroadcast(errorIntent);
+                //发送取消广播
+                Intent cancelIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNCANCEL);
+                cancelIntent.putExtra(DownloadMessage.KEY, downloadMessage);
+                cancelIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                mContext.sendBroadcast(cancelIntent);
+
+                //发送更新下载歌曲总数广播
+                Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
+                updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                mContext.sendBroadcast(updateIntent);
             }
 
             @Override
@@ -107,7 +114,7 @@ public class DownloadAudioManager {
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
-                downloadMessage.setTaskFileSize(task.getTaskFileSize());
+                downloadMessage.setTaskFileSize(allCount);
                 downloadMessage.setTaskCurFileSize(rangeSize);
 
                 Intent downloadingIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNLOADING);
@@ -126,7 +133,7 @@ public class DownloadAudioManager {
                 DownloadMessage downloadMessage = new DownloadMessage();
                 downloadMessage.setTaskHash(task.getTaskId());
                 downloadMessage.setTaskId(task.getTaskId());
-                downloadMessage.setTaskFileSize(task.getTaskFileSize());
+                downloadMessage.setTaskFileSize(fileCount);
                 downloadMessage.setTaskCurFileSize(downloadCount);
 
                 Intent downloadingIntent = new Intent(DownloadAudioReceiver.ACTION_DOWMLOADMUSICDOWNLOADING);
