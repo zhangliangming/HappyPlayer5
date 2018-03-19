@@ -141,8 +141,12 @@ public class AudioInfoDB extends SQLiteOpenHelper {
             db.beginTransaction(); // 手动设置开始事务
 
             for (ContentValues value : values) {
-
-                db.insert(TBL_NAME, null, value);
+                String hash = value.getAsString("hash");
+                if(isExists(hash)) {
+                    db.update(TBL_NAME, value, "hash=?", new String[]{hash});
+                }else {
+                    db.insert(TBL_NAME, null, value);
+                }
             }
             db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
             return true;
@@ -169,7 +173,11 @@ public class AudioInfoDB extends SQLiteOpenHelper {
         try {
             db.beginTransaction(); // 手动设置开始事务
             for (ContentValues value : values) {
-                db.update(TBL_NAME, value, "hash=?", new String[]{hash});
+                if(isExists(hash)) {
+                    db.update(TBL_NAME, value, "hash=?", new String[]{hash});
+                }else {
+                    db.insert(TBL_NAME, null, value);
+                }
             }
             db.setTransactionSuccessful(); // 设置事务处理成功，不设置会自动回滚不提交
             return true;
