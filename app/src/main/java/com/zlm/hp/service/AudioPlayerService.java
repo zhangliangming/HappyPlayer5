@@ -40,7 +40,6 @@ import org.dync.ijkplayerlib.widget.util.Settings;
 import java.io.File;
 
 import base.utils.LoggerUtil;
-import base.utils.ThreadUtil;
 import base.utils.ToastUtil;
 import tv.danmaku.ijk.media.exo.IjkExoMediaPlayer;
 import tv.danmaku.ijk.media.player.AndroidMediaPlayer;
@@ -88,10 +87,6 @@ public class AudioPlayerService extends Service {
             doAudioReceive(context, intent);
         }
     };
-    /**
-     * 是否正在快进
-     */
-    private boolean isSeekTo = false;
 
     ///////////////////////////////通知栏//////////////////////////////
     private final int NOTIFICATION_INIT = 0;
@@ -699,7 +694,6 @@ public class AudioPlayerService extends Service {
     private void seekToMusic(AudioMessage audioMessage) {
 
         if (mMediaPlayer != null) {
-            isSeekTo = true;
             mMediaPlayer.seekTo(audioMessage.getPlayProgress());
         }
 
@@ -726,8 +720,9 @@ public class AudioPlayerService extends Service {
             doNetMusic();
         } else {
             if (mMediaPlayer != null) {
-                isSeekTo = true;
-                mMediaPlayer.seekTo(audioMessage.getPlayProgress());
+                mMediaPlayer.start();
+                //设置当前播放的状态
+                HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
             }else {
                 playMusic(audioMessage);
             }
@@ -764,39 +759,18 @@ public class AudioPlayerService extends Service {
 
         AudioInfo audioInfo = audioMessage.getAudioInfo();
 
-        if (HPApplication.getInstance().getCurAudioInfo() != null) {
-            if (!HPApplication.getInstance().getCurAudioInfo().getHash().equals(audioInfo.getHash())) {
+        //设置当前播放数据
+        HPApplication.getInstance().setCurAudioMessage(audioMessage);
+        //设置当前正在播放的歌曲数据
+        HPApplication.getInstance().setCurAudioInfo(audioInfo);
+        //设置当前的播放索引
+        HPApplication.getInstance().setPlayIndexHashID(audioInfo.getHash());
 
-
-                //设置当前播放数据
-                HPApplication.getInstance().setCurAudioMessage(audioMessage);
-                //设置当前正在播放的歌曲数据
-                HPApplication.getInstance().setCurAudioInfo(audioInfo);
-                //设置当前的播放索引
-                HPApplication.getInstance().setPlayIndexHashID(audioInfo.getHash());
-
-                //发送init的广播
-                Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-                //initIntent.putExtra(AudioMessage.KEY, audioMessage);
-                initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(initIntent);
-            }
-
-        } else {
-
-            //设置当前播放数据
-            HPApplication.getInstance().setCurAudioMessage(audioMessage);
-            //设置当前正在播放的歌曲数据
-            HPApplication.getInstance().setCurAudioInfo(audioInfo);
-            //设置当前的播放索引
-            HPApplication.getInstance().setPlayIndexHashID(audioInfo.getHash());
-
-            //发送init的广播
-            Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-            //initIntent.putExtra(AudioMessage.KEY, audioMessage);
-            initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-            sendBroadcast(initIntent);
-        }
+        //发送init的广播
+        Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
+        //initIntent.putExtra(AudioMessage.KEY, audioMessage);
+        initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        sendBroadcast(initIntent);
 
 
         if (audioInfo.getType() == AudioInfo.LOCAL
@@ -822,148 +796,6 @@ public class AudioPlayerService extends Service {
     /**
      * 播放网络歌曲
      */
-    private void playNetMusic() {
-        if (HPApplication.getInstance().getCurAudioMessage() != null &&
-                HPApplication.getInstance().getCurAudioInfo() != null) {
-            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(),
-                    ResourceConstants.PATH_CACHE_AUDIO,
-                    HPApplication.getInstance().getCurAudioInfo().getHash() + ".temp");
-            File file = new File(filePath);
-            if(!file.exists()) {//没有缓存文件时播放网络地址
-                filePath = HPApplication.getInstance().getCurAudioInfo().getDownloadUrl();
-            }
-            try {
-                mMediaPlayer = createPlayer(mSettings.getPlayer());
-                mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mMediaPlayer.setDataSource(filePath);
-                mMediaPlayer.prepareAsync();
-                //
-                mMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
-                    @Override
-                    public void onSeekComplete(IMediaPlayer mp) {
-                        mMediaPlayer.start();
-                        if (HPApplication.getInstance().isLrcSeekTo()) {
-
-                            try {
-                                Thread.sleep(300);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            HPApplication.getInstance().setLrcSeekTo(false);
-                        }
-                        isSeekTo = false;
-                        //设置当前播放的状态
-                        HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
-                    }
-                });
-                mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(IMediaPlayer mp) {
-
-                        if (mMediaPlayer.getCurrentPosition() < (HPApplication.getInstance().getCurAudioInfo().getDuration() - 2 * 1000)) {
-                            playNetMusic();
-                        } else {
-                            //播放完成，执行下一首操作
-                            nextMusic();
-                        }
-
-                    }
-                });
-                mMediaPlayer.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(IMediaPlayer mp, int what, int extra) {
-                        //发送播放错误广播
-                        Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
-                        errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        sendBroadcast(errorIntent);
-                        ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-
-                        ThreadUtil.runInThread(new Runnable() {
-                            @Override public void run() {
-                                try {
-                                    Thread.sleep(1000);
-                                    nextMusic(); //播放下一首
-                                } catch (InterruptedException e) { e.printStackTrace(); }
-                            }  });
-
-                        return false;
-                    }
-                });
-                mMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(IMediaPlayer mp) {
-
-                        if (HPApplication.getInstance().getCurAudioMessage() != null) {
-                            AudioMessage audioMessage = HPApplication.getInstance().getCurAudioMessage();
-                            if(audioMessage.getAudioInfo() != null) {
-                                audioMessage.getAudioInfo().setDuration(mMediaPlayer.getDuration());
-                                audioMessage.getAudioInfo().setDurationText(MediaUtil.parseTimeToString(mMediaPlayer.getDuration()));
-                                HPApplication.getInstance().setCurAudioMessage(audioMessage);
-                                HPApplication.getInstance().setCurAudioInfo(audioMessage.getAudioInfo());
-
-                                AudioInfoDB.getAudioInfoDB(mContext).update(audioMessage.getAudioInfo());
-
-                                Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-                                initIntent.putExtra(AudioMessage.KEY, audioMessage);
-                                initIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                                sendBroadcast(initIntent);
-                            }
-                            if (audioMessage.getPlayProgress() > 0) {
-                                isSeekTo = true;
-                                mMediaPlayer.seekTo(audioMessage.getPlayProgress());
-                            } else {
-                                mMediaPlayer.start();
-                            }
-
-
-                            //设置当前播放的状态
-                            HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
-                            audioMessage.setPlayProgress(mMediaPlayer.getCurrentPosition());
-
-                            //发送play的广播
-                            Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC);
-                            playIntent.putExtra(AudioMessage.KEY, audioMessage);
-                            playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                            sendBroadcast(playIntent);
-                        }
-                    }
-                });
-
-                if (mPlayerThread == null) {
-                    mPlayerThread = new Thread(new PlayerRunable());
-                    mPlayerThread.start();
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                logger.e(e.getMessage());
-
-                //发送播放错误广播
-                Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
-                HPApplication.getInstance().getCurAudioMessage().setErrorMsg(e.getMessage());
-                errorIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
-                errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                sendBroadcast(errorIntent);
-
-                ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-
-                ThreadUtil.runInThread(new Runnable() {
-                    @Override public void run() {
-                        try {
-                            Thread.sleep(1000);
-                            nextMusic();//播放下一首
-                        } catch (InterruptedException e) { e.printStackTrace(); }
-                    }  });
-
-            }
-
-
-        }
-    }
-
-    /**
-     * 播放网络歌曲
-     */
     private void doNetMusic() {
         AudioInfo audioInfo = HPApplication.getInstance().getCurAudioInfo();
         //设置当前的播放状态
@@ -981,62 +813,38 @@ public class AudioPlayerService extends Service {
      *
      * @param audioMessage
      */
-    private void playLocalMusic(AudioMessage audioMessage) {
+    private void playLocalMusic(AudioMessage audioMessage)  {
+        initPlayer(audioMessage.getAudioInfo().getFilePath());
+    }
 
+    /**
+     * 播放网络歌曲
+     */
+    private void playNetMusic() {
+        if (HPApplication.getInstance().getCurAudioMessage() != null &&
+                HPApplication.getInstance().getCurAudioInfo() != null) {
+            String filePath = ResourceFileUtil.getFilePath(getApplicationContext(),
+                    ResourceConstants.PATH_CACHE_AUDIO,
+                    HPApplication.getInstance().getCurAudioInfo().getHash() + ".temp");
+            File file = new File(filePath);
+            if(!file.exists()) {//没有缓存文件时播放网络地址
+                filePath = HPApplication.getInstance().getCurAudioInfo().getDownloadUrl();
+            }
+
+            initPlayer(filePath);
+        }
+    }
+
+    private void initPlayer(String url) {
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         try {
             mMediaPlayer = createPlayer(mSettings.getPlayer());
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayer.setDataSource(audioMessage.getAudioInfo().getFilePath());
+            mMediaPlayer.setDataSource(url);
+            mMediaPlayer.setScreenOnWhilePlaying(true);
             mMediaPlayer.prepareAsync();
-            //
-            mMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
-                @Override
-                public void onSeekComplete(IMediaPlayer mp) {
-                    mMediaPlayer.start();
-                    if (HPApplication.getInstance().isLrcSeekTo()) {
 
-                        try {
-                            Thread.sleep(300);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        HPApplication.getInstance().setLrcSeekTo(false);
-                    }
-                    isSeekTo = false;
-                    //设置当前播放的状态
-                    HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
-                }
-            });
-            mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(IMediaPlayer mp) {
-
-                    //播放完成，执行下一首操作
-                    nextMusic();
-
-                }
-            });
-            mMediaPlayer.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(IMediaPlayer mp, int what, int extra) {
-
-                    //发送播放错误广播
-                    Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
-                    errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    sendBroadcast(errorIntent);
-
-                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-                     ThreadUtil.runInThread(new Runnable() {
-                         @Override public void run() {
-                             try {
-                                 Thread.sleep(1000);
-                                 nextMusic();//播放下一首
-                             } catch (InterruptedException e) { e.printStackTrace(); }
-                         }  });
-
-                    return false;
-                }
-            });
             mMediaPlayer.setOnPreparedListener(new IMediaPlayer.OnPreparedListener() {
                 @Override
                 public void onPrepared(IMediaPlayer mp) {
@@ -1057,7 +865,6 @@ public class AudioPlayerService extends Service {
                             sendBroadcast(initIntent);
                         }
                         if (audioMessage.getPlayProgress() > 0) {
-                            isSeekTo = true;
                             mMediaPlayer.seekTo(audioMessage.getPlayProgress());
                         } else {
                             mMediaPlayer.start();
@@ -1076,6 +883,58 @@ public class AudioPlayerService extends Service {
                     }
                 }
             });
+            mMediaPlayer.setOnSeekCompleteListener(new IMediaPlayer.OnSeekCompleteListener() {
+                @Override
+                public void onSeekComplete(IMediaPlayer mp) {
+                    mMediaPlayer.start();
+                    if (HPApplication.getInstance().isLrcSeekTo()) {
+
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        HPApplication.getInstance().setLrcSeekTo(false);
+                    }
+                    //设置当前播放的状态
+                    HPApplication.getInstance().setPlayStatus(AudioPlayerManager.PLAYING);
+                }
+            });
+            mMediaPlayer.setOnCompletionListener(new IMediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(IMediaPlayer mp) {
+                    //播放完成，执行下一首操作
+                    nextMusic();
+                }
+            });
+            mMediaPlayer.setOnErrorListener(new IMediaPlayer.OnErrorListener() {
+                @Override
+                public boolean onError(IMediaPlayer mp, int what, int extra) {
+
+                    //发送播放错误广播
+                    Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
+                    errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    sendBroadcast(errorIntent);
+
+                    ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
+
+
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(1000);
+                                //播放下一首
+                                nextMusic();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }.start();
+
+                    return false;
+                }
+            });
 
             if (mPlayerThread == null) {
                 mPlayerThread = new Thread(new PlayerRunable());
@@ -1088,23 +947,26 @@ public class AudioPlayerService extends Service {
 
             //发送播放错误广播
             Intent errorIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYERRORMUSIC);
-            audioMessage.setErrorMsg(e.getMessage());
-            errorIntent.putExtra(AudioMessage.KEY, audioMessage);
+            HPApplication.getInstance().getCurAudioMessage().setErrorMsg(e.getMessage());
+            errorIntent.putExtra(AudioMessage.KEY, HPApplication.getInstance().getCurAudioMessage());
             errorIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
             sendBroadcast(errorIntent);
 
             ToastUtil.showTextToast(getApplicationContext(), mContext.getString(R.string.play_error_and_play_next_song));
-            ThreadUtil.runInThread(new Runnable() {
-                @Override public void run() {
+            new Thread() {
+                @Override
+                public void run() {
                     try {
                         Thread.sleep(1000);
-
-                        nextMusic(); //播放下一首
-                    } catch (InterruptedException e) {  e.printStackTrace(); }
+                        //播放下一首
+                        nextMusic();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
-            });
-
+            }.start();
         }
+
     }
 
     private long mSleepTime = 0;
@@ -1118,7 +980,8 @@ public class AudioPlayerService extends Service {
             mSleepTime = 0;
             while (true) {
                 try {
-                    if (!isSeekTo && mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+                    boolean isPlaying = HPApplication.getInstance().getPlayStatus() == AudioPlayerManager.PLAYING;
+                    if (isPlaying && mMediaPlayer != null && mMediaPlayer.isPlaying()) {
 
                         if (HPApplication.getInstance().getCurAudioMessage() != null) {
                             HPApplication.getInstance().getCurAudioMessage().setPlayProgress(mMediaPlayer.getCurrentPosition());
@@ -1134,7 +997,8 @@ public class AudioPlayerService extends Service {
                         }
                     }
                     mSleepTime += 100;
-                    Thread.sleep(100);//方便后面用来刷新歌词
+                    long sleepTime = (long) (1000 - Math.random()*10 + 1);
+                    Thread.sleep(sleepTime);//方便后面用来刷新歌词
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -1158,7 +1022,8 @@ public class AudioPlayerService extends Service {
             mMediaPlayer.release();
             mMediaPlayer = null;
         }
-        System.gc();
+        AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        am.abandonAudioFocus(null);
     }
 
     /**

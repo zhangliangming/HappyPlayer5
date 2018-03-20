@@ -156,16 +156,12 @@ public class AudioPlayerManager {
                 if (playIndex < 0) {
                     return null;
                 }
-                ;
-
                 if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
-
                 break;
             case 1:
                 // 随机播放
-
                 playIndex = new Random().nextInt(HPApplication.getInstance().getCurAudioInfos().size());
                 if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
@@ -177,7 +173,6 @@ public class AudioPlayerManager {
                 if (playIndex < 0) {
                     playIndex = 0;
                 }
-                ;
                 if (playIndex >= HPApplication.getInstance().getCurAudioInfos().size()) {
                     playIndex = 0;
                 }
@@ -185,7 +180,6 @@ public class AudioPlayerManager {
                 if (HPApplication.getInstance().getCurAudioInfos().size() != 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
-
                 break;
             case 3:
                 // 单曲播放
@@ -225,11 +219,9 @@ public class AudioPlayerManager {
                 if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
-
                 break;
             case 1:
                 // 随机播放
-
                 playIndex = new Random().nextInt(HPApplication.getInstance().getCurAudioInfos().size());
                 if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
@@ -237,7 +229,6 @@ public class AudioPlayerManager {
                 break;
             case 2:
                 // 循环播放
-
                 playIndex++;
                 if (playIndex >= HPApplication.getInstance().getCurAudioInfos().size()) {
                     playIndex = 0;
@@ -246,7 +237,6 @@ public class AudioPlayerManager {
                 if (HPApplication.getInstance().getCurAudioInfos().size() > 0) {
                     return HPApplication.getInstance().getCurAudioInfos().get(playIndex);
                 }
-
                 break;
             case 3:
                 // 单曲播放
