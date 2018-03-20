@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 
 import base.utils.ColorUtil;
 import base.utils.LoggerUtil;
+import butterknife.ButterKnife;
 
 /**
  * @Description: 所有activity都要继承该类并实现里面的方法
@@ -92,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(layout);
         mActivity = this;
         mContext = this;
+        ButterKnife.bind(this);
         initViews(savedInstanceState);
         loadData(false);
     }

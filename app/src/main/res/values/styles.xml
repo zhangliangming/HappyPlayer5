@@ -31,7 +31,6 @@
         <item name="android:windowIsTranslucent">false</item>
     </style>
 
-
     <style name="alertDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowIsFloating">true</item>
@@ -41,6 +40,31 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
+    <style name="style_item_layout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/selector_item_bg</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="group_detail_arrow">
+        <item name="android:layout_width">6dp</item>
+        <item name="android:layout_height">9dp</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:background">@drawable/btn_more</item>
+    </style>
+
+    <style name="item_me_text">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:textColor">@color/font_color</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 
     <style name="NotificationText">
         <item name="android:textColor">?android:attr/textColorPrimary</item>

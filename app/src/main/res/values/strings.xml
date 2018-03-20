@@ -93,11 +93,13 @@
 
     <string name="menu_setting">功能设置</string>
     <string name="menu_share">推荐给朋友</string>
-    <string name="menu_about">关于乐乐音乐</string>
+    <string name="menu_about">关于更多</string>
     <string name="menu_skin_peeler">换肤</string>
     <string name="menu_night">夜间模式</string>
     <string name="menu_timer">定时停止播放</string>
     <string name="menu_exit">退出应用</string>
+    <string name="menu_update">检查更新</string>
+    <string name="cur_version">当前版本 V%s</string>
     <string name="network">网络</string>
     <string name="mobile_network_play">允许使用移动网络播放视频</string>
     <string name="mobile_network_download">允许使用移动网络下载</string>

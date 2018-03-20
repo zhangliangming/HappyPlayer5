@@ -40,7 +40,6 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
 
         TextView titleView = findViewById(R.id.title);
         titleView.setText(mContext.getString(R.string.menu_setting));

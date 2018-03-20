@@ -1,14 +1,19 @@
 package com.zlm.hp.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tencent.bugly.beta.Beta;
 import com.zlm.hp.R;
-import com.zlm.hp.constants.PreferencesConstants;
+import com.zlm.hp.utils.ApkUtil;
 
-import base.widget.SwipeBackLayout;
+import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @Description: 关于界面
@@ -19,11 +24,20 @@ import base.widget.SwipeBackLayout;
  * @Throws:
  */
 public class AboutActivity extends BaseActivity {
-    /**
-     *
-     */
-    private SwipeBackLayout mSwipeBackLayout;
-
+    @BindView(R.id.backImg)
+    RelativeLayout backImg;
+    @BindView(R.id.title)
+    TextView title;
+    @BindView(R.id.iv_icon)
+    ImageView ivIcon;
+    @BindView(R.id.tv_cur_version)
+    TextView tvCurVersion;
+    @BindView(R.id.tv_update_description)
+    TextView tvUpdateDescription;
+    @BindView(R.id.rl_check_update)
+    RelativeLayout rlCheckUpdate;
+    @BindView(R.id.about_layout)
+    LinearLayout aboutLayout;
 
     @Override
     protected int setContentViewId() {
@@ -32,41 +46,19 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected boolean isAddStatusBar() {
+        setStatusColor(Color.TRANSPARENT);
         return true;
     }
 
     @Override
     public int setStatusBarParentView() {
-        return R.id.about_layout;
+        return 0;
     }
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-
-        //
-        mSwipeBackLayout = findViewById(R.id.swipeback_layout);
-        mSwipeBackLayout.setSwipeBackLayoutListener(new SwipeBackLayout.SwipeBackLayoutListener() {
-            @Override
-            public void finishView() {
-                finish();
-                overridePendingTransition(0, 0);
-            }
-        });
-        boolean shadowEnable = getIntent().getBooleanExtra(PreferencesConstants.shadowEnable_KEY, true);
-        mSwipeBackLayout.setShadowEnable(shadowEnable);
-
-        TextView titleView = findViewById(R.id.title);
-        titleView.setText(mContext.getString(R.string.about));
-
-        //返回
-        RelativeLayout backImg = findViewById(R.id.backImg);
-        backImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSwipeBackLayout.finish();
-
-            }
-        });
+        title.setText(mContext.getString(R.string.about));
+        tvCurVersion.setText(String.format(getString(R.string.cur_version), ApkUtil.getVersionName(mContext)));
     }
 
     @Override
@@ -76,6 +68,18 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        mSwipeBackLayout.finish();
+        finish();
+    }
+
+    @OnClick({R.id.backImg, R.id.rl_check_update})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.backImg:
+                finish();
+                break;
+            case R.id.rl_check_update:
+                Beta.checkUpgrade();
+                break;
+        }
     }
 }

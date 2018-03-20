@@ -59,7 +59,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void initViews(Bundle savedInstanceState) {
-        //
+
         mAnimationHandler = new Handler();
         mAnimationRunnable = new Runnable() {
             @Override

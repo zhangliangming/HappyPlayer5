@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<base.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeback_layout"
     android:layout_width="match_parent"
@@ -11,7 +11,7 @@
         android:id="@+id/about_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ffffff"
+        android:background="#EDEDED"
         android:orientation="vertical">
 
 
@@ -20,23 +20,76 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <include layout="@layout/layout_title"></include>
+            <include layout="@layout/layout_title"/>
 
-            <base.widget.OverScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:id="@+id/ll_cur_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:layout_marginBottom="50dp"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/iv_icon"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@mipmap/ic_launcher"/>
+
+                    <TextView
+                        android:id="@+id/tv_cur_version"
+                        android:layout_marginTop="12dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_check_update"
+                    style="@style/style_item_layout">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="12dp"
+                        android:background="@color/hint"
+                        android:visibility="gone"/>
+
+                    <TextView
+                        android:id="@+id/tv_update_description"
+                        style="@style/item_me_text"
+                        android:text="@string/menu_update" />
+
+                    <ImageView
+                        android:id="@+id/imageView10"
+                        style="@style/group_detail_arrow" />
+
+
+                </RelativeLayout>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式(aac，amr，ape，flac，m4r，mmf，mp2，mp3，ogg，wav，wma，wv)和动感歌词格式(ksc，krc，hrc，hrcx)。\n\n联系方式：316257874@qq.com\n声明：仅用于学习用途"
+                    android:text=""
                     android:textColor="@color/def_bar_title_color"
-                    android:textSize="15dp" />
-            </base.widget.OverScrollView>
+                    android:textSize="15sp" />
+
+                <android.support.v4.widget.Space
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="5"/>
+            </LinearLayout>
 
         </LinearLayout>
 
 
     </LinearLayout>
-</base.widget.SwipeBackLayout>
+</LinearLayout>
