@@ -6,8 +6,8 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 
 # 更新日志 #
 - 2011-03-20：修复了不能播放同一首歌曲在随机模式下  
-- 2018-03-19：  
-1.播放器可以在AndroidMediaPlayer、IjkExoMediaPlayer、IjkMediaPlayerIjkMediaPlayer之间切换  
+- 2018-03-19：  
+1.播放器可以在AndroidMediaPlayer、IjkExoMediaPlayer、IjkMediaPlayer之间切换  
 2.修复了删除按钮的代码逻辑  
 3.android API23以下Fragment不执行onAttach(Context) 方法导致空指针的问题  
 4.修复了下载失败导致在线音频不能播放的问题  
