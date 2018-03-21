@@ -5,7 +5,8 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 这句代码是用于应用崩溃时收集crash，具体可以可以自行查看：https://bugly.qq.com/docs/user-guide/instruction-manual-android-upgrade/?v=20180115122747
 
 # 更新日志 #
-- 2018-03-19：  
+- 2011-03-20：修复了不能播放同一首歌曲在随机模式下  
+- 2018-03-19：  
 1.播放器可以在AndroidMediaPlayer、IjkExoMediaPlayer、IjkMediaPlayerIjkMediaPlayer之间切换  
 2.修复了删除按钮的代码逻辑  
 3.android API23以下Fragment不执行onAttach(Context) 方法导致空指针的问题  
@@ -16,7 +17,7 @@ branch-zlm：该分支代码是我个人开发的（我会不定期同步最新�
 2.去除DownloadThreadDB数据库模块  
 3.修复了添加喜欢有问题的bug  
 4.增加下载歌曲后扫描系统媒体库  
-5.使用IReciver.java的常量来描述receiver包下面的类中 private static final String base_action = "bear.love.peach";方便修改  
+5.使用IReciver.java的常量来描述receiver包下面的类中 private static final String base_action = "com.zlm.hp";方便修改  
 - 2018-03-07：  
 1.删除音频相关的jar包（没有使用到）  
 2.添加了下载完成后扫描系统媒体库  
