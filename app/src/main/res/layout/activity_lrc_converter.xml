@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zlm.libs.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeback_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zlm.hp.ui.LrcConverterActivity">
+
+
+    <LinearLayout
+        android:id="@+id/converter_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_title"></include>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="1.转换器支持ksc、krc和hrc歌词间的相互转换；\n2.支持动感歌词转换成lrc歌词；\n3.不太推荐动感歌词转ksc歌词，因为ksc歌词的格式问题，在转换该格式时会出现歌词字与歌词字时间的个数不对应，导致解析出错，所以乐乐音乐对生成的ksc歌词进行了修改，修改后的ksc歌词不一定能被其它的播放器识别（【爱剪辑】卡拉OK功能可以识别）；\n4.歌词转换文件，默认输出到源文件目录下；\n5.乐乐歌词路径:haplayer/lyrics/。"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="源文件："
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/origSelectFile"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="选择ksc、krc和hrc歌词文件" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/origFilePath"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="源文件路径："
+                android:textColor="@color/def_bar_title_color"
+                android:textSize="15dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="输出格式："
+                    android:textColor="@color/def_bar_title_color"
+                    android:textSize="15dp" />
+
+
+                <RadioGroup
+                    android:id="@+id/outFormats"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/kscRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ksc"
+                        android:theme="@style/radioButton" />
+
+                    <RadioButton
+                        android:id="@+id/krcRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="krc"
+                        android:theme="@style/radioButton" />
+
+                    <RadioButton
+                        android:id="@+id/hrcRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="hrc"
+                        android:theme="@style/radioButton" />
+
+                    <RadioButton
+                        android:id="@+id/lrcRadioButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="lrc"
+                        android:theme="@style/radioButton" />
+
+                </RadioGroup>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/converter"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="转换" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</com.zlm.libs.widget.SwipeBackLayout>

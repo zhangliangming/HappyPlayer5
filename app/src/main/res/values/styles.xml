@@ -19,12 +19,6 @@
 
     </style>
 
-
-    <!-- mainactivity style-->
-    <style name="noTransparentTheme" parent="AppTheme">
-        <item name="android:windowIsTranslucent">false</item>
-    </style>
-
     <style name="lockScreenTheme" parent="AppTheme">
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
@@ -50,6 +44,12 @@
     <style name="NotificationTitle">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="radioButton" parent="AppTheme">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@android:color/holo_green_light</item>
     </style>
 
 </resources>

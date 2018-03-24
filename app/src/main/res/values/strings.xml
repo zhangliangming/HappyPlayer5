@@ -9,9 +9,9 @@
     <string name="title_special">歌单</string>
     <string name="title_search">&#xe600;</string>
 
-    <string name="def_text">乐乐音乐，开心每一天</string>
+    <string name="def_text">乐乐音乐 就是任性</string>
     <string name="def_artist">乐乐音乐</string>
-    <string name="def_songName">开心每一天</string>
+    <string name="def_songName">就是任性</string>
     <string name="copyright">copyright ©2015-2018 zhangliangming All Rights Reserved.</string>
 
     <string name="loadmore">点击加载更多</string>
@@ -36,6 +36,12 @@
     <string name="tab_control_img">&#xe8a1;</string>
     <string name="tab_close">退出程序</string>
     <string name="tab_close_img">&#xe812;</string>
+    <string name="lrc_converter">歌词转换器</string>
+    <string name="lrc_converter_img">&#xe75b;</string>
+    <string name="make_lrc">歌词制作器</string>
+    <string name="make_lrc_img">&#xe62e;</string>
+    <string name="lrc_to_video">歌词图片生成器</string>
+    <string name="lrc_to_video_img">&#xe646;</string>
 
     <string name="no_net_img">&#xe62d;</string>
     <string name="loading_img">&#xe68e;</string>

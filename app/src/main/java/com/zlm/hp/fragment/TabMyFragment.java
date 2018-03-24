@@ -13,10 +13,16 @@ import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.dialog.AlartOneButtonDialog;
 import com.zlm.hp.dialog.AlartTwoButtonDialog;
 import com.zlm.hp.manager.ActivityManage;
+import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
+import com.zlm.hp.ui.LockActivity;
+import com.zlm.hp.ui.LrcConverterActivity;
+import com.zlm.hp.ui.LrcImg2VideoActivity;
+import com.zlm.hp.ui.LrcMakerActivity;
+import com.zlm.hp.ui.MainActivity;
 import com.zlm.hp.ui.R;
 import com.zlm.hp.utils.AppOpsUtils;
 import com.zlm.hp.utils.AsyncTaskUtil;
@@ -89,6 +95,20 @@ public class TabMyFragment extends BaseFragment {
      * 退出设置按钮
      */
     private SetupBGButton mExitSetupBGButton;
+
+    /**
+     * 歌词转换器按钮
+     */
+    private SetupBGButton mConverterSetupBGButton;
+    /**
+     * 歌词生成视频按钮
+     */
+    private SetupBGButton mImg2VideoSetupBGButton;
+
+    /**
+     * 歌词制作器按钮
+     */
+    private SetupBGButton mMakeLrcSetupBGButton;
 
     /**
      * 退出提示窗口
@@ -385,6 +405,59 @@ public class TabMyFragment extends BaseFragment {
 
             }
         });
+
+        //歌词转换器
+        mConverterSetupBGButton = mainView.findViewById(R.id.lrc_converter);
+        mConverterSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent lrcConverterIntent = new Intent(mActivity,
+                        LrcConverterActivity.class);
+                startActivity(lrcConverterIntent);
+                //去掉动画
+                mActivity.overridePendingTransition(0, 0);
+            }
+        });
+
+        //歌词制作器
+        mMakeLrcSetupBGButton = mainView.findViewById(R.id.make_lrc);
+        mMakeLrcSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //如果当前正在播放歌曲，先暂停
+                int playStatus = mHPApplication.getPlayStatus();
+                if (playStatus == AudioPlayerManager.PLAYING) {
+
+                    Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
+                    resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mActivity.sendBroadcast(resumeIntent);
+
+                }
+
+                //打开制作歌词界面
+                Intent lrcMakerIntent = new Intent(mActivity,
+                        LrcMakerActivity.class);
+                startActivity(lrcMakerIntent);
+                //去掉动画
+                mActivity.overridePendingTransition(0, 0);
+            }
+        });
+
+
+        //歌词视频生成器
+        mImg2VideoSetupBGButton = mainView.findViewById(R.id.lrc_to_video);
+        mImg2VideoSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent lrcConverterIntent = new Intent(mActivity,
+                        LrcImg2VideoActivity.class);
+                startActivity(lrcConverterIntent);
+                //去掉动画
+                mActivity.overridePendingTransition(0, 0);
+            }
+        });
+
 
         showContentView();
 

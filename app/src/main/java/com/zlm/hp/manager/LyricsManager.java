@@ -118,6 +118,9 @@ public class LyricsManager {
                         LyricsReader lyricsUtil = new LyricsReader();
                         lyricsUtil.loadLrc(base64ByteArray, saveLrcFile, saveLrcFile.getName());
                         mLyricsUtils.put(hash, lyricsUtil);
+                    }else{
+                        LyricsReader lyricsUtil = new LyricsReader();
+                        mLyricsUtils.put(hash, lyricsUtil);
                     }
                 }
 

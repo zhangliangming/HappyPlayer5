@@ -3,8 +3,6 @@ package com.zlm.hp.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -38,21 +36,7 @@ public class LocalMusicFragment extends BaseFragment {
      * 列表视图
      */
     private RecyclerView mRecyclerView;
-    private static final int LOADDATA = 0;
 
-    /**
-     *
-     */
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOADDATA:
-                    loadDataUtil();
-                    break;
-            }
-        }
-    };
 
     private AudioBroadcastReceiver mAudioBroadcastReceiver;
 
@@ -133,8 +117,7 @@ public class LocalMusicFragment extends BaseFragment {
         if (isRestoreInstance) {
             mDatas.clear();
         }
-        mHandler.sendEmptyMessage(LOADDATA);
-
+        loadDataUtil();
     }
 
 
@@ -153,6 +136,13 @@ public class LocalMusicFragment extends BaseFragment {
 
             @Override
             protected Void doInBackground(String... strings) {
+
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
                 List<String> categorys = AudioInfoDB.getAudioInfoDB(mActivity.getApplicationContext()).getAllLocalCategory();
                 for (int i = 0; i < categorys.size(); i++) {
                     Category category = new Category();

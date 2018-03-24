@@ -568,6 +568,41 @@ public class ImageUtil {
         }
     }
 
+    /**
+     * 保存png图片
+     *
+     * @param bm
+     * @param filePath
+     */
+    public static boolean savePngImage(Bitmap bm, String filePath) {
+        if (bm == null) {
+            return false;
+        }
+        try {
+            // 你要存放的文件
+            File file = new File(filePath);
+            // file文件的上一层文件夹
+            File parentFile = new File(file.getParent());
+            if (!parentFile.exists()) {
+                parentFile.mkdirs();
+            }
+
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            OutputStream outStream = new FileOutputStream(file);
+            // //10 是压缩率，表示压缩90%; 如果不压缩是100，表示压缩率为0
+            bm.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+
+            outStream.flush();
+            outStream.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private static int computeSampleSize(BitmapFactory.Options options,
                                          int minSideLength, int maxNumOfPixels) {
         int initialSize = computeInitialSampleSize(options, minSideLength,

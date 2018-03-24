@@ -640,6 +640,8 @@ public class MainActivity extends BaseActivity {
                 lockIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(lockIntent);
+                //去掉动画
+                overridePendingTransition(0, 0);
             }
 
         }

@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zlm.libs.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeback_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zlm.hp.ui.LrcImg2VideoActivity">
+
+    <LinearLayout
+        android:id="@+id/lrcimgvideo_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_title"></include>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="1.支持ksc、krc、hrc和lrc歌词生成图片；\n2.图片文件默认生成到歌词文件目录；\n3.乐乐歌词路径:haplayer/lyrics/；\n4.生成歌词图片时会耗时，一首歌生成的图片要30多钟，渣渣手机不要尝试；\n5.图片生成后，通过图片生成视频软件生成视频文件；\n6.为什么不直接生成视频？感觉手机太渣，不合理；\n7.若真需要生成视频，可使用【爱剪辑】的卡拉OK功能。"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="歌词文件："
+                android:textColor="@color/def_bar_title_color"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/selectLrcFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="选择ksc、krc、hrc和lrc歌词文件" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lrcFilePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="歌词文件路径："
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <com.zlm.hp.lyrics.widget.LrcImgPreView
+                android:id="@+id/lrcImgPreView"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/bar_height"
+                android:layout_weight="4"
+                android:background="#10000000"
+                android:text="歌词效果预览" />
+
+            <Button
+                android:id="@+id/createBtn"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="生成" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词窗口宽度："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/lrcdialogwidth"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:hint="720"
+                        android:inputType="number"
+                        android:text="720" />
+
+                    <Button
+                        android:id="@+id/lrcdialogwidthbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="修改"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词窗口高度："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/lrcdialogheight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:hint="140"
+                        android:inputType="number"
+                        android:text="140" />
+
+                    <Button
+                        android:id="@+id/lrcdialogheightbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="修改" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词字体："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/lrcfontsize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:hint="70"
+                        android:inputType="number"
+                        android:text="70" />
+
+                    <Button
+                        android:id="@+id/lrcfontsizebtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="修改" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词行间隔："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/lrclineheight"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:hint="30"
+                        android:inputType="number"
+                        android:text="30" />
+
+                    <Button
+                        android:id="@+id/lrclineheightbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="修改" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="左右边框间隔："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <EditText
+                        android:id="@+id/lrcpadding"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:hint="15"
+                        android:inputType="number"
+                        android:text="15" />
+
+                    <Button
+                        android:id="@+id/lrcpaddingbtn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="修改" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词主题："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <RadioGroup
+                        android:id="@+id/themeRG"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/themeBlue"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="蓝"
+                            android:theme="@style/radioButton" />
+
+                        <RadioButton
+                            android:id="@+id/themeWhite"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="白"
+                            android:theme="@style/radioButton" />
+
+                        <RadioButton
+                            android:id="@+id/themeBlack"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="黑"
+                            android:theme="@style/radioButton" />
+
+                        <RadioButton
+                            android:id="@+id/themePurple"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="紫"
+                            android:theme="@style/radioButton" />
+
+                    </RadioGroup>
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="1"
+                        android:text="歌词类型："
+                        android:textColor="@color/def_bar_title_color"
+                        android:textSize="15dp" />
+
+                    <RadioGroup
+                        android:id="@+id/outputlrctype"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/outputlrctypedef"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="默认"
+                            android:theme="@style/radioButton" />
+
+                        <RadioButton
+                            android:id="@+id/outputlrctypeextra1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="翻译"
+                            android:theme="@style/radioButton" />
+
+                        <RadioButton
+                            android:id="@+id/outputlrctypeextra2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="音译"
+                            android:theme="@style/radioButton" />
+
+                    </RadioGroup>
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</com.zlm.libs.widget.SwipeBackLayout>

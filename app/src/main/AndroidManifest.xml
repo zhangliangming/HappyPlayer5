@@ -10,14 +10,12 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
 
-
     <!-- 显示悬浮窗口权限 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- 锁屏权限 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
 
     <!-- 往sdcard中写入数据的权限 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -36,20 +34,17 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:screenOrientation="portrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@style/noTransparentTheme">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/noTransparentTheme" />
+        <activity android:name=".MainActivity" />
         <activity
             android:name=".LrcActivity"
             android:hardwareAccelerated="true" />
@@ -73,7 +68,15 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:taskAffinity="com.zlm.lockscreen"
-            android:theme="@style/lockScreenTheme"></activity>
+            android:theme="@style/lockScreenTheme" />
+        <activity android:name=".LrcConverterActivity" />
+        <activity
+            android:name=".LrcImg2VideoActivity"
+            android:windowSoftInputMode="adjustPan" />
+
+        <service android:name=".LrcImg2VideoActivity$CreateLrcImageIntentService" />
+
+        <activity android:name=".LrcMakerActivity"></activity>
     </application>
 
 </manifest>

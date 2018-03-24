@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:text="乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式(aac，amr，ape，flac，m4r，mmf，mp2，mp3，ogg，wav，wma，wv)和动感歌词格式(ksc，krc，hrc，hrcx)。\n\n联系方式：316257874@qq.com\n声明：仅用于学习用途"
+            android:text="乐乐音乐5.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式(aac，amr，ape，flac，m4r，mmf，mp2，mp3，ogg，wav，wma，wv)和歌词格式(lrc,ksc，krc，hrc)。\n\n联系方式：316257874@qq.com\n声明：仅用于学习用途"
             android:textColor="@color/def_bar_title_color"
             android:textSize="15dp" />
     </com.zlm.hp.widget.OverScrollView>

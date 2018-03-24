@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zlm.libs.widget.SwipeBackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeback_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.zlm.hp.ui.LrcMakerActivity">
+
+
+    <LinearLayout
+        android:id="@+id/maker_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="#fff"
+        android:orientation="vertical">
+
+        <include layout="@layout/layout_title"></include>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="1.目前只支持krc和hrc格式歌词制作额外歌词;\n2.乐乐歌词格式为hrc，保存路径:haplayer/lyrics/。\n3.制作歌词，请先选择歌词；\n4.制作额外歌词，请先选择歌词文件。"
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="歌曲文件："
+                android:textColor="@color/def_bar_title_color"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/selectAudioFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="选择mp3、ape、flac和wav歌词文件" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/audioFilePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="歌曲文件路径："
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/makeLrcBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="制作歌词" />
+
+        </LinearLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:text="歌词文件："
+                android:textColor="@color/def_bar_title_color"
+                android:textSize="15dp" />
+
+            <Button
+                android:id="@+id/selectLrcFile"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="选择ksc、krc、hrc和lrc歌词文件" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/lrcFilePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="歌词文件路径："
+            android:textColor="@color/def_bar_title_color"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/makeExtraLrcBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="制作额外歌词" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.zlm.libs.widget.SwipeBackLayout>

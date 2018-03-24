@@ -1726,7 +1726,7 @@ public class LrcActivity extends BaseActivity {
      * @param lyricsInfo  lrc歌词数据
      * @param playOffset  lrc歌词快进进度
      */
-    private void saveLrcFile(final String lrcFilePath, final LyricsInfo lyricsInfo, final int playOffset) {
+    private void saveLrcFile(final String lrcFilePath, final LyricsInfo lyricsInfo, final long playOffset) {
         new Thread() {
 
             @Override

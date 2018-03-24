@@ -152,7 +152,7 @@ public class DownloadMusicFragment extends BaseFragment {
         if (isRestoreInstance) {
             mDatas.clear();
         }
-        mHandler.sendEmptyMessage(LOADDATA);
+        mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
     }
 
     @Override

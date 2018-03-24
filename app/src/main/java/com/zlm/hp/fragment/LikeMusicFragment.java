@@ -36,22 +36,6 @@ public class LikeMusicFragment extends BaseFragment {
     //
     private RecentOrLikeMusicAdapter mAdapter;
 
-    private static final int LOADDATA = 0;
-
-
-    /**
-     *
-     */
-    private Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case LOADDATA:
-                    loadDataUtil(300);
-                    break;
-            }
-        }
-    };
     private AudioBroadcastReceiver mAudioBroadcastReceiver;
 
     /**
@@ -159,7 +143,7 @@ public class LikeMusicFragment extends BaseFragment {
 
             mDatas.clear();
         }
-        mHandler.sendEmptyMessage(LOADDATA);
+        loadDataUtil(300);
 
     }
 
