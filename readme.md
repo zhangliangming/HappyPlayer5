@@ -36,29 +36,44 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 # 更新日志 #
 - 2018-04-01：PC版制作动感歌词功能移植到APP。
-- 具体参考博客地址：[http://zhangliangming.github.io/Android%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D%E5%88%B6%E4%BD%9C%E5%99%A8-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D/](http://zhangliangming.github.io/Android%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D%E5%88%B6%E4%BD%9C%E5%99%A8-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D/ "Android动感歌词制作器（支持翻译和音译歌词）")
+- 具体参考博客地址：[Android动感歌词制作器（支持翻译和音译歌词）](http://zhangliangming.github.io/Android%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D%E5%88%B6%E4%BD%9C%E5%99%A8-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D/)
 - 入口
 
 ![](https://i.imgur.com/vxX4zYZ.png)
 
 ![](https://i.imgur.com/umR6y6z.png)
 
+
 - 动感歌词制作
+
 
 ![](https://i.imgur.com/R7leu8E.png)
 
+
 注：制作动感歌词时，需要先播放歌曲，并且选中（RadioButton被选中，并且歌词出现红边框）要敲打的行歌词，然后便可以敲打。歌曲读到【字】，对应要敲打到该字，这样才可以保证歌曲与歌词几步，完成后，边框会变成蓝色，全部完成后，才可以进入预览视图。
+
 
 - 翻译歌词制作
 
+
 ![](https://i.imgur.com/YyGfWSy.png)
+
 
 注：制作翻译歌词时，点击item列表，便会弹出输入翻译编辑框，只需要在输入框输入内容，便完成该行对应的翻译歌词，可不填写。
 
+
+
 - 音译歌词制作
+
+
+
 ![](https://i.imgur.com/pkhbA4g.png)
 
+
+
 注：制作音译歌词时，点击item列表，便会弹出输入音译编辑框，输入音译歌词时，输入框下有01/04的进度提示，并且输入对应的【字】后，已经完成的【字】会变成蓝色，然后点击空格，进行分隔，不过这里为了兼容krc歌词格式（经常出现一个字包含多个歌词文字的情况），这里使用“∮”符号来替代空格。
+
+
 
 - 2018-03-25：
 - 添加歌词转换器工具，支持ksc、krc和hrc歌词间的相互转换及转换成lrc歌词。
