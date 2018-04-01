@@ -68,13 +68,8 @@ public class LrcPopSingerListAdapter extends RecyclerView.Adapter<RecyclerView.V
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(mContext, SearchSingerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("singerName", singerName);
-                mContext.startActivity(intent);
-
                 if (mLrcActivityListener != null) {
-                    mLrcActivityListener.closeSingerPopListVeiw();
+                    mLrcActivityListener.closeSingerPopListVeiw(singerName);
                 }
 
             }

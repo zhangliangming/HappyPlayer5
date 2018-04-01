@@ -380,10 +380,10 @@ public class LrcFragment extends BaseFragment {
                     mManyLineLyricsView.getLyricsReader().setLrcFilePath(mLrcFilePath);
                     LyricsManager.getLyricsManager(mHPApplication, mActivity.getApplicationContext()).setUseLrcUtil(mHash, mManyLineLyricsView.getLyricsReader());
 
-                    //发送使用歌词广播
-                    Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCUSE);
-                    searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                    mActivity.sendBroadcast(searchingIntent);
+//                    //发送使用歌词广播
+//                    Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCUSE);
+//                    searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+//                    mActivity.sendBroadcast(searchingIntent);
 
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), "歌词设置成功");
                 }

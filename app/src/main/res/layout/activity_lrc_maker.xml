@@ -63,27 +63,13 @@
             android:textColor="@color/def_bar_title_color"
             android:textSize="15dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/makeLrcBtn"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="制作歌词" />
-
-        </LinearLayout>
-
 
         <View
             android:layout_width="match_parent"
             android:layout_height="5dp"
             android:layout_marginTop="10dp"
             android:background="#f3f3f3"></View>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,6 +104,12 @@
             android:textColor="@color/def_bar_title_color"
             android:textSize="15dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="10dp"
+            android:background="#f3f3f3"></View>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,11 +117,11 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/makeExtraLrcBtn"
+                android:id="@+id/makeLrcBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="制作额外歌词" />
+                android:text="制作歌词" />
 
         </LinearLayout>
 

@@ -103,6 +103,32 @@
                     android:textColor="#fff"
                     android:textSize="13dp" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+
+                <ImageView
+                    android:id="@+id/makelrc"
+                    android:layout_width="@dimen/lrc_pop_item_img_height"
+                    android:layout_height="@dimen/lrc_pop_item_img_height"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/make_lrc"
+                    android:clickable="true" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/makelrc"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_horizontal"
+                    android:text="制作歌词"
+                    android:textColor="#fff"
+                    android:textSize="13dp" />
+            </RelativeLayout>
         </LinearLayout>
 
         <View

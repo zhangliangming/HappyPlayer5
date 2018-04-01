@@ -267,7 +267,15 @@ public class LrcActivity extends BaseActivity {
     private LrcPopSingerListAdapter mLrcPopSingerListAdapter;
     private LrcActivityListener mLrcActivityListener = new LrcActivityListener() {
         @Override
-        public void closeSingerPopListVeiw() {
+        public void closeSingerPopListVeiw(String singerName) {
+
+            Intent intent = new Intent(getApplicationContext(), SearchSingerActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("singerName", singerName);
+            startActivity(intent);
+            //
+            overridePendingTransition(0, 0);
+
             hideSPLPopView();
         }
     };
@@ -1474,6 +1482,50 @@ public class LrcActivity extends BaseActivity {
             }
         });
 
+        //制作歌词
+        ImageView makelrcImg = findViewById(R.id.makelrc);
+        makelrcImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mHPApplication.getCurAudioInfo() == null) {
+
+                    ToastUtil.showTextToast(getApplicationContext(), "请选择歌曲");
+
+                } else {
+                    hidePopView();
+
+                    //如果当前正在播放歌曲，先暂停
+                    int playStatus = mHPApplication.getPlayStatus();
+                    if (playStatus == AudioPlayerManager.PLAYING) {
+
+                        Intent resumeIntent = new Intent(AudioBroadcastReceiver.ACTION_PAUSEMUSIC);
+                        resumeIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        sendBroadcast(resumeIntent);
+
+                    }
+
+
+                    //加载歌曲
+                    Intent lrcMakeIntent = new Intent(LrcActivity.this, LrcMakeSettingActivity.class);
+                    lrcMakeIntent.putExtra("audioFilePath", mHPApplication.getCurAudioInfo().getFilePath());
+
+                    //加载歌词
+                    LyricsReader lyricsReader = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(mHPApplication.getCurAudioInfo().getHash());
+                    if (lyricsReader != null) {
+                        String lrcFilePath = lyricsReader.getLrcFilePath();
+                        if (lrcFilePath != null && !lrcFilePath.equals(""))
+                            lrcMakeIntent.putExtra("lrcFilePath", lrcFilePath);
+                    }
+                    lrcMakeIntent.putExtra("hash", mHPApplication.getCurAudioInfo().getHash());
+                    lrcMakeIntent.putExtra("reloadLrcData", true);
+                    startActivity(lrcMakeIntent);
+                    //
+                    overridePendingTransition(0, 0);
+                }
+
+            }
+        });
+
         //歌词进度减少按钮
         ButtonRelativeLayout lrcProgressJianBtn = findViewById(R.id.lyric_progress_jian);
         lrcProgressJianBtn.setDefFillColor(ColorUtil.parserColor(Color.WHITE, 20));
@@ -2074,6 +2126,6 @@ public class LrcActivity extends BaseActivity {
 
 
     public interface LrcActivityListener {
-        void closeSingerPopListVeiw();
+        void closeSingerPopListVeiw(String singerName);
     }
 }

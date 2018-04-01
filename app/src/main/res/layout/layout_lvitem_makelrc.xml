@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/songitem_height"
+    android:background="@color/transparent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/index"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="2dp"
+            android:gravity="center_vertical"
+            android:text="00"
+            android:textColor="@color/def_bar_title_color" />
+
+        <RadioButton
+            android:id="@+id/select"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/index"
+            android:clickable="false"
+            android:gravity="center_vertical"
+            android:theme="@style/radioButton" />
+
+        <com.zlm.hp.lyrics.widget.MakeLrcPreView
+            android:id="@+id/makeLrcPreView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:layout_toLeftOf="@+id/reset"
+            android:layout_toRightOf="@+id/select" />
+
+        <Button
+            android:id="@+id/reset"
+            android:layout_width="70dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:text="重置" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -76,7 +76,13 @@
 
         <service android:name=".LrcImg2VideoActivity$CreateLrcImageIntentService" />
 
-        <activity android:name=".LrcMakerActivity"></activity>
+        <activity android:name=".LrcMakerActivity" />
+        <activity android:name=".LrcMakeSettingActivity" />
+        <activity
+            android:name=".MakeLrcActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".MakeTranslateLrcActivity" />
+        <activity android:name=".MakeTransliterationLrcActivity"></activity>
     </application>
 
 </manifest>

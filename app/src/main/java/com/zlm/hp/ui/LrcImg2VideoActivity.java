@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.lyrics.LyricsReader;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.model.LyricsLineInfo;
@@ -34,6 +35,7 @@ import com.zlm.hp.lyrics.widget.LrcImgPreView;
 import com.zlm.hp.utils.FileUtils;
 import com.zlm.hp.utils.HelperUtil;
 import com.zlm.hp.utils.ImageUtil;
+import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.ScreenUtil;
 import com.zlm.libs.widget.SwipeBackLayout;
 
@@ -269,13 +271,14 @@ public class LrcImg2VideoActivity extends BaseActivity {
                 Intent intent = null;
                 if (Build.VERSION.SDK_INT < 19) {
                     intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("file/*");
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
 
                 } else {
                     intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                    intent.setType("file/*");
                 }
+
+                String lrcFilePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_LYRICS, null);
+                intent.setDataAndType(Uri.fromFile(new File(lrcFilePath)), "file/*");
                 startActivityForResult(intent, SELECTORIGFILE);
 
             }

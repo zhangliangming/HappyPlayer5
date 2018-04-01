@@ -118,7 +118,7 @@ public class LyricsManager {
                         LyricsReader lyricsUtil = new LyricsReader();
                         lyricsUtil.loadLrc(base64ByteArray, saveLrcFile, saveLrcFile.getName());
                         mLyricsUtils.put(hash, lyricsUtil);
-                    }else{
+                    } else {
                         LyricsReader lyricsUtil = new LyricsReader();
                         mLyricsUtils.put(hash, lyricsUtil);
                     }
@@ -140,6 +140,10 @@ public class LyricsManager {
      * @param lyricsUtil
      */
     public void setUseLrcUtil(String hash, LyricsReader lyricsUtil) {
+        if (mLyricsUtils.containsKey(hash)) {
+            mLyricsUtils.remove(hash);
+        }
+
         AudioMessage audioMessage = new AudioMessage();
         audioMessage.setHash(hash);
         //发送搜索中广播
@@ -148,11 +152,7 @@ public class LyricsManager {
         searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         mContext.sendBroadcast(searchingIntent);
 
-        if (mLyricsUtils.containsKey(hash)) {
-            mLyricsUtils.remove(hash);
-        }
         mLyricsUtils.put(hash, lyricsUtil);
-
         //保存歌词文件
         saveLrcFile(lyricsUtil.getLrcFilePath(), lyricsUtil.getLyricsInfo());
 
@@ -162,6 +162,38 @@ public class LyricsManager {
         loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         mContext.sendBroadcast(loadedIntent);
     }
+
+    /**
+     * 使用歌词处理
+     *
+     * @param hash
+     */
+    public void setUseLrcUtil(String hash, String saveLrcFilePath) {
+        if (mLyricsUtils.containsKey(hash)) {
+            mLyricsUtils.remove(hash);
+        }
+
+        AudioMessage audioMessage = new AudioMessage();
+        audioMessage.setHash(hash);
+        //发送搜索中广播
+        Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCSEARCHING);
+        searchingIntent.putExtra(AudioMessage.KEY, audioMessage);
+        searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        mContext.sendBroadcast(searchingIntent);
+
+        //
+        LyricsReader lyricsUtil = new LyricsReader();
+        File lrcFile = new File(saveLrcFilePath);
+        lyricsUtil.loadLrc(lrcFile);
+        mLyricsUtils.put(hash, lyricsUtil);
+
+        //发送加载完成广播
+        Intent loadedIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCLOADED);
+        loadedIntent.putExtra(AudioMessage.KEY, audioMessage);
+        loadedIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        mContext.sendBroadcast(loadedIntent);
+    }
+
 
     /**
      * 保存歌词文件
