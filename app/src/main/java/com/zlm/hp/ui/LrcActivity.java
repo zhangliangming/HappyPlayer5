@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.zlm.hp.adapter.LrcPopPlayListAdapter;
 import com.zlm.hp.adapter.LrcPopSingerListAdapter;
+import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.db.DownloadInfoDB;
 import com.zlm.hp.db.DownloadThreadDB;
@@ -46,6 +47,7 @@ import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.MediaUtil;
+import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.widget.ButtonRelativeLayout;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
 import com.zlm.hp.widget.IconfontTextView;
@@ -1507,8 +1509,12 @@ public class LrcActivity extends BaseActivity {
 
                     //加载歌曲
                     Intent lrcMakeIntent = new Intent(LrcActivity.this, LrcMakeSettingActivity.class);
-                    lrcMakeIntent.putExtra("audioFilePath", mHPApplication.getCurAudioInfo().getFilePath());
-
+                   if(mHPApplication.getCurAudioInfo().getType() == AudioInfo.NET){
+                       String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_AUDIO, mHPApplication.getCurAudioInfo().getHash() + ".temp");
+                       lrcMakeIntent.putExtra("audioFilePath", filePath);
+                   }else{
+                       lrcMakeIntent.putExtra("audioFilePath", mHPApplication.getCurAudioInfo().getFilePath());
+                   }
                     //加载歌词
                     LyricsReader lyricsReader = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(mHPApplication.getCurAudioInfo().getHash());
                     if (lyricsReader != null) {
