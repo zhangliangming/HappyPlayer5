@@ -23,19 +23,21 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 # 使用注意 #
 - 初次使用时，停留启动页面时间长的原因，主要是因为初次使用的时候需要遍历文件夹扫描本地歌曲，一些无损格式的歌曲获取歌曲时长时，比较耗时。
 - 歌词渐变，有时会有卡顿，其实主要歌词view主要在100ms内刷新一次的话，渐变效果就会流畅，目前歌词是自定义view的方式实现的，每次都使用handler去刷新view，但是如果handler队列中有很多任务执行，那就无法保证歌词每次都在100ms内刷新一次。
-- 对于歌词view，以后考虑使用surfaceview来实现
+- 歌词view，使用surfaceview来实现，注意事项，参考：[HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
+- 歌词view，使用TextureView来实现，注意事项，参考：[HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
+
 
 # 项目中抽出来的开源控件 #
--SwipeBackLayout（右滑动关闭界面）：https://github.com/zhangliangming/SwipeBackLayout.git
+-SwipeBackLayout（右滑动关闭界面）：[https://github.com/zhangliangming/SwipeBackLayout.git](https://github.com/zhangliangming/SwipeBackLayout.git)
 
--RotateLayout（旋转界面）：https://github.com/zhangliangming/RotateLayout.git
+-RotateLayout（旋转界面）：[https://github.com/zhangliangming/RotateLayout.git](https://github.com/zhangliangming/RotateLayout.git)
 
--SeekBar（自定义view实现）：https://github.com/zhangliangming/SeekBar.git
+-SeekBar（自定义进度条）：[https://github.com/zhangliangming/SeekBar.git](https://github.com/zhangliangming/SeekBar.git)
 
--HPLyrics（动感歌词解析和歌词显示库）：https://github.com/zhangliangming/HPLyrics.git
+-HPLyrics（动感歌词解析和歌词显示库）：[https://github.com/zhangliangming/HPLyrics.git](https://github.com/zhangliangming/HPLyrics.git)
 
 # 更新日志 #
-
+- 2018-04-22：歌词view替换成TextureView来实现，关于TextureView、Surfaceview的相关注意事项，可参考：[HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
 - 2018-04-02：修复网络歌曲制作歌词功能。
 - 2018-04-01：PC版制作动感歌词功能移植到APP。
 - 具体参考博客地址：[Android动感歌词制作器（支持翻译和音译歌词）](http://zhangliangming.github.io/Android%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D%E5%88%B6%E4%BD%9C%E5%99%A8-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D/)

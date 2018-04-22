@@ -202,7 +202,7 @@ public class LrcFragment extends BaseFragment {
                 lyricsReader.setHash(mHash);
                 lyricsReader.loadLrc(mDownloadLyricsResult.getContent(), null, mLrcFilePath);
                 mManyLineLyricsView.setLyricsReader(lyricsReader);
-                if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
+                if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY)
                     mManyLineLyricsView.play(mPlayProgress);
 
             }
@@ -226,7 +226,7 @@ public class LrcFragment extends BaseFragment {
 
         //歌词视图
         mManyLineLyricsView = mainView.findViewById(R.id.lrcview);
-        mManyLineLyricsView.setFontSize(30, 30, false, false);
+        mManyLineLyricsView.setSize(30, 30, false);
         mManyLineLyricsView.setPaintColor(new int[]{ColorUtil.parserColor("#888888"), ColorUtil.parserColor("#888888")}, false);
         mManyLineLyricsView.setPaintHLColor(new int[]{ColorUtil.parserColor("#0288d1"), ColorUtil.parserColor("#0288d1")}, false);
         mManyLineLyricsView.setTouchAble(true);
@@ -242,8 +242,8 @@ public class LrcFragment extends BaseFragment {
                 hideTranslateImg.setVisibility(View.INVISIBLE);
                 showTranslateImg.setVisibility(View.VISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
 
             }
@@ -258,8 +258,8 @@ public class LrcFragment extends BaseFragment {
                 hideTranslateImg.setVisibility(View.VISIBLE);
                 showTranslateImg.setVisibility(View.INVISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
 
             }
@@ -275,8 +275,8 @@ public class LrcFragment extends BaseFragment {
                 hideTransliterationImg.setVisibility(View.INVISIBLE);
                 showTransliterationImg.setVisibility(View.VISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
 
 
@@ -292,8 +292,8 @@ public class LrcFragment extends BaseFragment {
                 hideTransliterationImg.setVisibility(View.VISIBLE);
                 showTransliterationImg.setVisibility(View.INVISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
 
             }
@@ -311,8 +311,8 @@ public class LrcFragment extends BaseFragment {
                 showTTToTransliterationImg.setVisibility(View.VISIBLE);
                 hideTTImg.setVisibility(View.INVISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                 }
 
             }
@@ -328,8 +328,8 @@ public class LrcFragment extends BaseFragment {
                 showTTToTransliterationImg.setVisibility(View.INVISIBLE);
                 hideTTImg.setVisibility(View.VISIBLE);
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                 }
 
             }
@@ -345,8 +345,8 @@ public class LrcFragment extends BaseFragment {
                 hideTTImg.setVisibility(View.INVISIBLE);
 
 
-                if (mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.setExtraLrcStatus(ManyLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                if (mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    mManyLineLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                 }
 
             }
@@ -357,13 +357,13 @@ public class LrcFragment extends BaseFragment {
             @Override
             public void extraLrcCallback() {
                 int extraLrcType = mManyLineLyricsView.getExtraLrcType();
-                if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_NOLRC) {
+                if (extraLrcType == AbstractLrcView.EXTRALRCTYPE_NOLRC) {
                     mExtraLrcTypeHandler.sendEmptyMessage(NOEXTRALRC);
-                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLATELRC) {
+                } else if (extraLrcType == AbstractLrcView.EXTRALRCTYPE_TRANSLATELRC) {
                     mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATELRC);
-                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
+                } else if (extraLrcType == AbstractLrcView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
                     mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLITERATIONLRC);
-                } else if (extraLrcType == ManyLyricsView.EXTRALRCTYPE_BOTH) {
+                } else if (extraLrcType == AbstractLrcView.EXTRALRCTYPE_BOTH) {
                     mExtraLrcTypeHandler.sendEmptyMessage(HASTRANSLATEANDTRANSLITERATIONLRC);
                 }
 
@@ -376,7 +376,7 @@ public class LrcFragment extends BaseFragment {
         mUseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                     mManyLineLyricsView.getLyricsReader().setLrcFilePath(mLrcFilePath);
                     LyricsManager.getLyricsManager(mHPApplication, mActivity.getApplicationContext()).setUseLrcUtil(mHash, mManyLineLyricsView.getLyricsReader());
 

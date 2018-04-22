@@ -40,9 +40,10 @@ import com.zlm.hp.libs.utils.ColorUtil;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.libs.widget.CircleImageView;
 import com.zlm.hp.lyrics.LyricsReader;
+import com.zlm.hp.lyrics.utils.ColorUtils;
 import com.zlm.hp.lyrics.utils.TimeUtils;
+import com.zlm.hp.lyrics.widget.AbstractLrcView;
 import com.zlm.hp.lyrics.widget.FloatLyricsView;
-import com.zlm.hp.lyrics.widget.ManyLyricsView;
 import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.manager.LyricsManager;
 import com.zlm.hp.manager.OnLineAudioManager;
@@ -515,7 +516,7 @@ public class MainActivity extends BaseActivity {
             //
             mFloatLyricsView.initLrcData();
             //加载中
-            mFloatLyricsView.setLrcStatus(ManyLyricsView.LRCSTATUS_LOADING);
+            mFloatLyricsView.setLrcStatus(AbstractLrcView.LRCSTATUS_LOADING);
 
             //设置弹出窗口播放列表
             if (isPopViewShow) {
@@ -542,7 +543,7 @@ public class MainActivity extends BaseActivity {
                     //更新歌词
 
 
-                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(audioInfo.getHash()) && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != FloatLyricsView.LRCPLAYERSTATUS_PLAY) {
+                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(audioInfo.getHash()) && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY) {
                         mFloatLyricsView.play((int) audioMessage.getPlayProgress());
                     }
                 }
@@ -551,7 +552,7 @@ public class MainActivity extends BaseActivity {
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
 
-            if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+            if (mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                 mFloatLyricsView.pause();
             }
 
@@ -563,7 +564,7 @@ public class MainActivity extends BaseActivity {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
-                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                     mFloatLyricsView.play((int) audioMessage.getPlayProgress());
                 }
             }
@@ -576,7 +577,7 @@ public class MainActivity extends BaseActivity {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
-                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                     mFloatLyricsView.seekto((int) audioMessage.getPlayProgress());
                 }
             }
@@ -604,7 +605,7 @@ public class MainActivity extends BaseActivity {
                         } else {
                             lyricsReader.setHash(hash);
                             mFloatLyricsView.setLyricsReader(lyricsReader);
-                            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != FloatLyricsView.LRCPLAYERSTATUS_PLAY)
+                            if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mFloatLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY)
                                 mFloatLyricsView.play((int) curAudioMessage.getPlayProgress());
                         }
                     }
@@ -614,7 +615,7 @@ public class MainActivity extends BaseActivity {
             if (mHPApplication.getCurAudioMessage() != null) {
                 mMusicSeekBar.setProgress((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                 if (mHPApplication.getCurAudioInfo() != null) {
-                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(mHPApplication.getCurAudioInfo().getHash()) && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getLyricsReader() != null && mFloatLyricsView.getLyricsReader().getHash().equals(mHPApplication.getCurAudioInfo().getHash()) && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                         mFloatLyricsView.seekto((int) mHPApplication.getCurAudioMessage().getPlayProgress());
                     }
                 }
@@ -1031,6 +1032,21 @@ public class MainActivity extends BaseActivity {
         ViewGroup barMenuView = (ViewGroup) LayoutInflater.from(this).inflate(R.layout.layout_main_player_menu, null);
         //
         mFloatLyricsView = barMenuView.findViewById(R.id.floatLyricsView);
+        //默认颜色
+        int[] paintColors = new int[]{
+                ColorUtils.parserColor("#00348a"),
+                ColorUtils.parserColor("#0080c0"),
+                ColorUtils.parserColor("#03cafc")
+        };
+        mFloatLyricsView.setPaintColor(paintColors);
+
+        //高亮颜色
+        int[] paintHLColors = new int[]{
+                ColorUtils.parserColor("#82f7fd"),
+                ColorUtils.parserColor("#ffffff"),
+                ColorUtils.parserColor("#03e9fc")
+        };
+        mFloatLyricsView.setPaintHLColor(paintHLColors);
         //设置字体文件
         Typeface typeFace = Typeface.createFromAsset(getAssets(),
                 "fonts/weiruanyahei14M.ttf");
@@ -1104,29 +1120,29 @@ public class MainActivity extends BaseActivity {
                     hidePopView();
                     return;
                 }
-                if (mSwipeOutLayout.isMenuViewShow() && mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                    if (mFloatLyricsView.getExtraLrcType() != FloatLyricsView.EXTRALRCTYPE_NOLRC) {
+                if (mSwipeOutLayout.isMenuViewShow() && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcType() != AbstractLrcView.EXTRALRCTYPE_NOLRC) {
 
-                        if (mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_BOTH) {
+                        if (mFloatLyricsView.getExtraLrcType() == AbstractLrcView.EXTRALRCTYPE_BOTH) {
                             //有两种歌词
-                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC) {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
-                            } else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
-                            } else if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                            if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC) {
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                            } else if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                            } else if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                             }
-                        } else if (mFloatLyricsView.getExtraLrcType() == FloatLyricsView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
-                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                        } else if (mFloatLyricsView.getExtraLrcType() == AbstractLrcView.EXTRALRCTYPE_TRANSLITERATIONLRC) {
+                            if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC) {
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                             } else {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLITERATIONLRC);
                             }
                         } else {
-                            if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
+                            if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC) {
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC);
                             } else {
-                                mFloatLyricsView.setExtraLrcStatus(FloatLyricsView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
+                                mFloatLyricsView.setExtraLrcStatus(AbstractLrcView.EXTRALRCSTATUS_SHOWTRANSLATELRC);
                             }
                         }
 
@@ -1216,8 +1232,8 @@ public class MainActivity extends BaseActivity {
         mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
-                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                if (mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
                         //不显示额外歌词
                         return TimeUtils.parseMMSSString(Math.max(0, mFloatLyricsView.getSplitLineLrcStartTime(mMusicSeekBar.getProgress())));
                     else
@@ -1228,8 +1244,8 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public String getLrcText() {
-                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
-                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                if (mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
+                    if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
                         //不显示额外歌词
                         return mFloatLyricsView.getSplitLineLrc(mMusicSeekBar.getProgress());
                     else
@@ -1246,9 +1262,9 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
                 int seekToTime = mMusicSeekBar.getProgress();
-                if (mFloatLyricsView.getLrcStatus() == FloatLyricsView.LRCSTATUS_LRC) {
+                if (mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
 
-                    if (mFloatLyricsView.getExtraLrcStatus() == FloatLyricsView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
+                    if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
                         //不显示额外歌词
                         seekToTime = mFloatLyricsView.getSplitLineLrcStartTime(mMusicSeekBar.getProgress());
                     else

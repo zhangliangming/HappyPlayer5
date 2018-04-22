@@ -44,7 +44,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity
+            android:name=".MainActivity"
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".LrcActivity"
             android:hardwareAccelerated="true" />
@@ -53,7 +55,9 @@
 
         <service android:name="com.zlm.hp.service.AudioPlayerService" />
 
-        <activity android:name=".SearchLrcActivity" />
+        <activity
+            android:name=".SearchLrcActivity"
+            android:hardwareAccelerated="true" />
         <activity android:name=".SearchSingerActivity" />
 
         <receiver android:name="com.zlm.hp.receiver.PhoneReceiver">
@@ -65,6 +69,7 @@
         <activity
             android:name=".LockActivity"
             android:excludeFromRecents="true"
+            android:hardwareAccelerated="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:taskAffinity="com.zlm.lockscreen"
@@ -80,9 +85,14 @@
         <activity android:name=".LrcMakeSettingActivity" />
         <activity
             android:name=".MakeLrcActivity"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".MakeTranslateLrcActivity" />
-        <activity android:name=".MakeTransliterationLrcActivity"></activity>
+        <activity
+            android:name=".MakeTranslateLrcActivity"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".MakeTransliterationLrcActivity"
+            android:hardwareAccelerated="true" />
     </application>
 
 </manifest>

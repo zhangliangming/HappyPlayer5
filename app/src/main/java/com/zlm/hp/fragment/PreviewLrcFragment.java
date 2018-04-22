@@ -17,6 +17,7 @@ import com.zlm.hp.lyrics.model.LyricsLineInfo;
 import com.zlm.hp.lyrics.utils.ColorUtils;
 import com.zlm.hp.lyrics.utils.LyricsUtils;
 import com.zlm.hp.lyrics.utils.TimeUtils;
+import com.zlm.hp.lyrics.widget.AbstractLrcView;
 import com.zlm.hp.lyrics.widget.ManyLyricsView;
 import com.zlm.hp.ui.MakeLrcActivity;
 import com.zlm.hp.ui.R;
@@ -124,7 +125,7 @@ public class PreviewLrcFragment extends BaseFragment {
 
 
                         //更新歌词视图
-                        if (mManyLyricsView.getLyricsReader() != null && mManyLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY) {
+                        if (mManyLyricsView.getLyricsReader() != null && mManyLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mManyLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY) {
                             mManyLyricsView.play((int) mMediaPlayer.getCurrentPosition());
                         }
 
@@ -145,7 +146,7 @@ public class PreviewLrcFragment extends BaseFragment {
 
                 case AUDIO_PAUSE:
 
-                    if (mManyLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+                    if (mManyLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
                         mManyLyricsView.pause();
                     }
 
@@ -200,7 +201,7 @@ public class PreviewLrcFragment extends BaseFragment {
                     //加载歌词
                     mManyLyricsView.setLyricsReader(lyricsReader);
                     if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
-                        if (mManyLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC && mManyLyricsView.getLrcPlayerStatus() != ManyLyricsView.LRCPLAYERSTATUS_PLAY)
+                        if (mManyLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mManyLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY)
                             mManyLyricsView.play((int) mMediaPlayer.getCurrentPosition());
                     }
 
@@ -432,7 +433,7 @@ public class PreviewLrcFragment extends BaseFragment {
             mMediaPlayer = null;
         }
 
-        if (mManyLyricsView.getLrcStatus() == ManyLyricsView.LRCSTATUS_LRC) {
+        if (mManyLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
             mManyLyricsView.pause();
         }
     }
