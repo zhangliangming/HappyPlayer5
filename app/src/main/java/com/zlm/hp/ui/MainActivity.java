@@ -575,6 +575,10 @@ public class MainActivity extends BaseActivity {
 
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
+            //唤醒完成
+            mPauseImageView.setVisibility(View.VISIBLE);
+            mPlayImageView.setVisibility(View.INVISIBLE);
+
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
                 if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {

@@ -38,6 +38,8 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 # 更新日志 #
 - 2018-04-22：歌词view替换成TextureView来实现，关于TextureView、Surfaceview的相关注意事项，可参考：[HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
+- 修复快进后播放状态出错的问题
+- 缩短启动页的停留赶时间
 - 2018-04-02：修复网络歌曲制作歌词功能。
 - 2018-04-01：PC版制作动感歌词功能移植到APP。
 - 具体参考博客地址：[Android动感歌词制作器（支持翻译和音译歌词）](http://zhangliangming.github.io/Android%E5%8A%A8%E6%84%9F%E6%AD%8C%E8%AF%8D%E5%88%B6%E4%BD%9C%E5%99%A8-%E6%94%AF%E6%8C%81%E7%BF%BB%E8%AF%91%E5%92%8C%E9%9F%B3%E8%AF%91%E6%AD%8C%E8%AF%8D/)

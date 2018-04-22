@@ -78,7 +78,7 @@ public class AudioPlayerService extends Service {
     private AudioBroadcastReceiver.AudioReceiverListener mAudioReceiverListener = new AudioBroadcastReceiver.AudioReceiverListener() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            new AsyncTask<String,Integer,String>(){
+            new AsyncTask<String, Integer, String>() {
                 @Override
                 protected String doInBackground(String... strings) {
                     doAudioReceive(context, intent);
@@ -410,7 +410,7 @@ public class AudioPlayerService extends Service {
                             R.id.singPic, R.mipmap.singer_def);// 显示专辑封面图片
                 }
 
-            } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC) || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)) {
+            } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC) || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC) || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.play,
                         View.INVISIBLE);
                 mNotifyPlayBarRemoteViews.setViewVisibility(R.id.pause,
@@ -494,6 +494,7 @@ public class AudioPlayerService extends Service {
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_INITMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SINGERPICLOADED)
+                || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_RESUMEMUSIC)
                 || action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PAUSEMUSIC)) {
@@ -819,7 +820,6 @@ public class AudioPlayerService extends Service {
                             }
 
 
-
                         }
                     }
                 });
@@ -975,7 +975,6 @@ public class AudioPlayerService extends Service {
                             playIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                             sendBroadcast(playIntent);
                         }
-
 
 
                     }

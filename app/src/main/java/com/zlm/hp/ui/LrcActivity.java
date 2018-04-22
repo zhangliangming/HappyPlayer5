@@ -546,6 +546,10 @@ public class LrcActivity extends BaseActivity {
             }
 
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_SEEKTOMUSIC)) {
+            //唤醒完成
+            mPauseBtn.setVisibility(View.VISIBLE);
+            mPlayBtn.setVisibility(View.INVISIBLE);
+
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
                 if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {

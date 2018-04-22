@@ -32,7 +32,7 @@ public class SplashActivity extends BaseActivity {
 
     private Handler mAnimationHandler;
     private Runnable mAnimationRunnable;
-    private int mDelayTime = 1000;
+    private int mDelayTime = 500;
 
 
     @Override
@@ -73,13 +73,10 @@ public class SplashActivity extends BaseActivity {
             if (audioInfos.size() > 0) {
                 AudioInfoDB.getAudioInfoDB(getApplicationContext()).add(audioInfos);
             }
-
-            //设置延迟时间
-            mDelayTime *= 2;
             mHPApplication.setFrist(false);
         } else {
             //设置延迟时间
-            mDelayTime *= 3;
+            mDelayTime *= 2;
         }
 
         //注册捕捉全局异常
