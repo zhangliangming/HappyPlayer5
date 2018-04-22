@@ -727,7 +727,7 @@ public class LockActivity extends BaseActivity {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
                 if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.seekto((int) audioMessage.getPlayProgress());
+                    mManyLineLyricsView.play((int) audioMessage.getPlayProgress());
                 }
             }
         }else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {

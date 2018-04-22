@@ -582,7 +582,7 @@ public class MainActivity extends BaseActivity {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
                 if (mFloatLyricsView != null && mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
-                    mFloatLyricsView.seekto((int) audioMessage.getPlayProgress());
+                    mFloatLyricsView.play((int) audioMessage.getPlayProgress());
                 }
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {

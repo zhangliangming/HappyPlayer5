@@ -553,7 +553,7 @@ public class LrcActivity extends BaseActivity {
             AudioMessage audioMessage = mHPApplication.getCurAudioMessage();
             if (audioMessage != null) {
                 if (mManyLineLyricsView != null && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
-                    mManyLineLyricsView.seekto((int) audioMessage.getPlayProgress());
+                    mManyLineLyricsView.play((int) audioMessage.getPlayProgress());
                 }
             }
         } else if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
@@ -1514,12 +1514,12 @@ public class LrcActivity extends BaseActivity {
 
                     //加载歌曲
                     Intent lrcMakeIntent = new Intent(LrcActivity.this, LrcMakeSettingActivity.class);
-                   if(mHPApplication.getCurAudioInfo().getType() == AudioInfo.NET){
-                       String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_AUDIO, mHPApplication.getCurAudioInfo().getHash() + ".temp");
-                       lrcMakeIntent.putExtra("audioFilePath", filePath);
-                   }else{
-                       lrcMakeIntent.putExtra("audioFilePath", mHPApplication.getCurAudioInfo().getFilePath());
-                   }
+                    if (mHPApplication.getCurAudioInfo().getType() == AudioInfo.NET) {
+                        String filePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_CACHE_AUDIO, mHPApplication.getCurAudioInfo().getHash() + ".temp");
+                        lrcMakeIntent.putExtra("audioFilePath", filePath);
+                    } else {
+                        lrcMakeIntent.putExtra("audioFilePath", mHPApplication.getCurAudioInfo().getFilePath());
+                    }
                     //加载歌词
                     LyricsReader lyricsReader = LyricsManager.getLyricsManager(mHPApplication, getApplicationContext()).getLyricsUtil(mHPApplication.getCurAudioInfo().getHash());
                     if (lyricsReader != null) {
