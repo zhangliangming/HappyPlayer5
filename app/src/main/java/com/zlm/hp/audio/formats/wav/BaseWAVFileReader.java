@@ -1,7 +1,5 @@
 package com.zlm.hp.audio.formats.wav;
 
-import android.util.Log;
-
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;

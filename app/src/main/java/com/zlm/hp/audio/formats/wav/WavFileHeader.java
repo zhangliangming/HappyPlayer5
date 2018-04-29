@@ -2,11 +2,7 @@ package com.zlm.hp.audio.formats.wav;
 
 public class WavFileHeader
 {
-  public static final int WAV_FILE_HEADER_SIZE = 44;
-  public static final int WAV_CHUNKSIZE_EXCLUDE_DATA = 36;
-  public static final int WAV_CHUNKSIZE_OFFSET = 4;
-  public static final int WAV_SUB_CHUNKSIZE1_OFFSET = 16;
-  public static final int WAV_SUB_CHUNKSIZE2_OFFSET = 40;
+
   public String mChunkID = "RIFF";
   public int mChunkSize = 0;
   public String mFormat = "WAVE";
