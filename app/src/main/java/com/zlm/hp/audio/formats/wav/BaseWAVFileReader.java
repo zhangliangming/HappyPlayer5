@@ -123,7 +123,7 @@ public class BaseWAVFileReader {
                     }
                 }
                 //
-                if (dataTagIndex > 0) {
+                if (dataTagIndex >= 0) {
                     int index = dataTagIndex + dataTag.length();
                     byte[] data = new byte[4];
                     for (int i = index, j = 0; j < data.length; j++, i++) {
