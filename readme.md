@@ -37,6 +37,12 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 -HPLyrics（动感歌词解析和歌词显示库）：[https://github.com/zhangliangming/HPLyrics.git](https://github.com/zhangliangming/HPLyrics.git)
 
 # 更新日志 #
+
+- 2018-04-29：修复获取wav格式音频文件的时间长度不正确的问题
+- 参考博客：[Android音频开发](https://github.com/Jhuster/AudioDemo)
+- 参考博客：[WAVE PCM soundfile format](http://soundfile.sapp.org/doc/WaveFormat/)
+- 参考博客：[各种WAV文件头格式](http://www.xuebuyuan.com/840670.html)
+
 - 2018-04-22：歌词view替换成TextureView来实现，关于TextureView、Surfaceview的相关注意事项，可参考：[HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
 - 修复快进后播放状态出错的问题
 - 缩短启动页的停留赶时间

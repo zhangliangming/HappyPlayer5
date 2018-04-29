@@ -1,5 +1,7 @@
 package com.zlm.hp.audio.formats.wav;
 
+import android.util.Log;
+
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -93,19 +95,53 @@ public class BaseWAVFileReader {
             this.mDataInputStream.read(shortValue);
             header.mBitsPerSample = byteArrayToShort(shortValue);
 
-            header.mSubChunk2ID = "" +
+            //获取data标签
+            String dataTag = "data";
+            byte[] findDataByte = new byte[200];
+            this.mDataInputStream.read(findDataByte);
+            String findDataString = new String(findDataByte);
 
-                    ((char) this.mDataInputStream.readByte() + (char) this.mDataInputStream.readByte() + (char) this.mDataInputStream.readByte() + (char) this.mDataInputStream.readByte());
+            if (findDataString != null && findDataString.lastIndexOf(dataTag) > 0 && findDataByte != null) {
+                String flagString = "";
+                int dataTagIndex = -1;
+                for (int i = findDataByte.length - 1; i >= 0; i--) {
+                    char c = (char) findDataByte[i];
+                    if (dataTag.contains(c + "")) {
+                        flagString = c + flagString;
+                        if (c == 't') {
+                            if (!flagString.equals("ta")) {
+                                flagString = "";
+                            }
+                        } else if (c == 'd') {
+                            if (!flagString.equals(dataTag)) {
+                                flagString = "";
+                            } else {
+                                dataTagIndex = i;
+                                break;
+                            }
+                        }
+                    }
+                }
+                //
+                if (dataTagIndex > 0) {
+                    int index = dataTagIndex + dataTag.length();
+                    byte[] data = new byte[4];
+                    for (int i = index, j = 0; j < data.length; j++, i++) {
+                        data[j] = findDataByte[i];
+                    }
 
-            this.mDataInputStream.read(intValue);
-            header.mSubChunk2Size = byteArrayToInt(intValue);
+                    header.mSubChunk2Size = byteArrayToInt(data);
+                    this.mWavFileHeader = header;
+
+                    return true;
+                }
+
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
-        this.mWavFileHeader = header;
-
-        return true;
+        return false;
     }
 
     private static short byteArrayToShort(byte[] b) {
