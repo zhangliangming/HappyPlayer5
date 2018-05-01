@@ -1,6 +1,6 @@
 package com.zlm.hp.application;
 
-import android.app.Application;
+import android.support.multidex.MultiDexApplication;
 
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by zhangliangming on 2017/7/15.
  */
-public class HPApplication extends Application {
+public class HPApplication extends MultiDexApplication {
     /**
      * 播放服务是否被强迫回收
      */
