@@ -24,6 +24,7 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 
 # 更新日志 #
 - 2018-05-01
+- 修复进度条快进时位置回滚问题
 - 修复[android4.4(api19)无法安装，也无法真机、模拟机调试](https://github.com/zhangliangming/HappyPlayer5/issues/18)
 - 2018-04-30
 - 独立音频解析库，目前只支持wav,mp3,flac和ape格式文件获取歌曲头文件信息

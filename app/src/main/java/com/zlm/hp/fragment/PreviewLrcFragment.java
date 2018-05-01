@@ -251,6 +251,7 @@ public class PreviewLrcFragment extends BaseFragment {
 
         //进度条
         mMusicSeekBar = mainView.findViewById(R.id.seekBar);
+        mMusicSeekBar.setTrackingTouchSleepTime(200);
         mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
@@ -264,6 +265,11 @@ public class PreviewLrcFragment extends BaseFragment {
 
             @Override
             public void onProgressChanged(MusicSeekBar musicSeekBar) {
+
+            }
+
+            @Override
+            public void onTrackingTouchStart(MusicSeekBar musicSeekBar) {
 
             }
 

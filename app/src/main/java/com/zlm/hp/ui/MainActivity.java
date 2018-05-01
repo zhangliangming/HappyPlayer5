@@ -1264,8 +1264,14 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
+            public void onTrackingTouchStart(MusicSeekBar musicSeekBar) {
+
+            }
+
+            @Override
             public void onTrackingTouchFinish(MusicSeekBar musicSeekBar) {
                 int seekToTime = mMusicSeekBar.getProgress();
+                mMusicSeekBar.setTrackingTouchSleepTime(1000);
                 if (mFloatLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC) {
 
                     if (mFloatLyricsView.getExtraLrcStatus() == AbstractLrcView.EXTRALRCSTATUS_NOSHOWEXTRALRC)
@@ -1274,6 +1280,7 @@ public class MainActivity extends BaseActivity {
                     else
                         seekToTime = mFloatLyricsView.getLineLrcStartTime(mMusicSeekBar.getProgress());
 
+                    mMusicSeekBar.setTrackingTouchSleepTime(0);
                 }
 
 

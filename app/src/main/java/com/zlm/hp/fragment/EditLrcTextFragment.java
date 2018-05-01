@@ -207,6 +207,7 @@ public class EditLrcTextFragment extends BaseFragment {
         mLrcEditText = mainView.findViewById(R.id.lrctext_edittext);
         //进度条
         mMusicSeekBar = mainView.findViewById(R.id.seekBar);
+        mMusicSeekBar.setTrackingTouchSleepTime(1000);
         mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
@@ -220,6 +221,11 @@ public class EditLrcTextFragment extends BaseFragment {
 
             @Override
             public void onProgressChanged(MusicSeekBar musicSeekBar) {
+
+            }
+
+            @Override
+            public void onTrackingTouchStart(MusicSeekBar musicSeekBar) {
 
             }
 

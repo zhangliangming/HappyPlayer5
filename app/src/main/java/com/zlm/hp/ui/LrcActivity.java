@@ -1615,6 +1615,11 @@ public class LrcActivity extends BaseActivity {
             }
 
             @Override
+            public void onTrackingTouchStart(CustomSeekBar customSeekBar) {
+
+            }
+
+            @Override
             public void onTrackingTouchFinish(CustomSeekBar customSeekBar) {
                 mHPApplication.setLrcFontSize(lrcSizeLrcSeekBar.getProgress() + mHPApplication.getMinLrcFontSize());
             }
@@ -1855,6 +1860,7 @@ public class LrcActivity extends BaseActivity {
 
         //进度条
         mMusicSeekBar = findViewById(R.id.lrcseekbar);
+        mMusicSeekBar.setTrackingTouchSleepTime(1000);
         mMusicSeekBar.setOnMusicListener(new MusicSeekBar.OnMusicListener() {
             @Override
             public String getTimeText() {
@@ -1872,6 +1878,11 @@ public class LrcActivity extends BaseActivity {
                 if (playStatus != AudioPlayerManager.PLAYING) {
                     mSongProgressTv.setText(MediaUtil.parseTimeToString((mMusicSeekBar.getProgress())));
                 }
+            }
+
+            @Override
+            public void onTrackingTouchStart(MusicSeekBar musicSeekBar) {
+
             }
 
             @Override
