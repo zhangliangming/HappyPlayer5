@@ -609,6 +609,6 @@ public class RankSongAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public interface RankSongListener {
-        public void loadMoreData();
+        void loadMoreData();
     }
 }

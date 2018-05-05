@@ -93,7 +93,7 @@
             android:textColor="#ffffff"
             android:textSize="12dp" />
 
-        <com.zml.libs.widget.MusicSeekBar
+        <com.zlm.libs.widget.MusicSeekBar
             android:id="@+id/lrcseekbar"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

@@ -20,7 +20,7 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月8日
 	 */
-	public void taskWaiting(DownloadTask task);
+    void taskWaiting(DownloadTask task);
 
 	/**
 	 * 
@@ -34,7 +34,7 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月8日
 	 */
-	public void taskDownloading(DownloadTask task, int downloadedSize);
+    void taskDownloading(DownloadTask task, int downloadedSize);
 
 	/**
 	 * 
@@ -48,7 +48,7 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月8日
 	 */
-	public void taskPause(DownloadTask task, int downloadedSize);
+    void taskPause(DownloadTask task, int downloadedSize);
 	
 	/**
 	 * 
@@ -57,7 +57,7 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月9日
 	 */
-	public void taskCancel(DownloadTask task);
+    void taskCancel(DownloadTask task);
 
 	/**
 	 * 
@@ -71,7 +71,7 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月8日
 	 */
-	public void taskFinish(DownloadTask task, int downloadedSize);
+    void taskFinish(DownloadTask task, int downloadedSize);
 
 	/**
 	 * 
@@ -85,6 +85,6 @@ public interface IDownloadTaskEvent extends IDownloadTaskThreadEven {
 	 * @author zhangliangming
 	 * @date 2017年7月8日
 	 */
-	public void taskError(DownloadTask task, String msg);
+    void taskError(DownloadTask task, String msg);
 
 }

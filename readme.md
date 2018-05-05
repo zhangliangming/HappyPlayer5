@@ -25,6 +25,8 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 # 更新日志 #
 - 2018-05-05
 - 添加歌词刷新时间接口
+- 依赖包添加代码混淆
+- 音频解析库添加ogg、wv和修改wav解析
 - 2018-05-01
 - 修复进度条快进时位置回滚问题
 - 修复[android4.4(api19)无法安装，也无法真机、模拟机调试](https://github.com/zhangliangming/HappyPlayer5/issues/18)

@@ -21,7 +21,7 @@ import com.zlm.hp.lyrics.widget.AbstractLrcView;
 import com.zlm.hp.lyrics.widget.ManyLyricsView;
 import com.zlm.hp.ui.MakeLrcActivity;
 import com.zlm.hp.ui.R;
-import com.zml.libs.widget.MusicSeekBar;
+import com.zlm.libs.widget.MusicSeekBar;
 
 import java.io.IOException;
 import java.util.List;

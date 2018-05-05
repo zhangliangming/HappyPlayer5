@@ -20,7 +20,7 @@ import com.zlm.hp.lyrics.utils.StringUtils;
 import com.zlm.hp.lyrics.utils.TimeUtils;
 import com.zlm.hp.ui.MakeLrcActivity;
 import com.zlm.hp.ui.R;
-import com.zml.libs.widget.MusicSeekBar;
+import com.zlm.libs.widget.MusicSeekBar;
 
 import java.io.File;
 import java.io.IOException;

@@ -81,7 +81,6 @@ public class HPApplication extends MultiDexApplication {
      * 排行数据
      */
     private RankListResult rankListResult;
-    ;
     /**
      *
      */

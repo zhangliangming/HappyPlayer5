@@ -597,7 +597,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public TextView getCategoryTextTextView() {
             if (categoryTextTextView == null) {
-                categoryTextTextView = (TextView) itemView
+                categoryTextTextView = itemView
                         .findViewById(R.id.category_text);
             }
             return categoryTextTextView;
@@ -858,7 +858,7 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         public TextView getFooterTextView() {
             if (footerTextView == null) {
-                footerTextView = (TextView) itemView
+                footerTextView = itemView
                         .findViewById(R.id.list_size_text);
             }
             return footerTextView;

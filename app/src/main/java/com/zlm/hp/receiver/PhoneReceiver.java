@@ -263,7 +263,7 @@ public class PhoneReceiver extends BroadcastReceiver {
 
             // 耳机事件 Intent 附加值为(Extra)点击MEDIA_BUTTON的按键码
 
-            KeyEvent event = (KeyEvent) intent
+            KeyEvent event = intent
                     .getParcelableExtra(Intent.EXTRA_KEY_EVENT);
             if (event == null)
                 return;

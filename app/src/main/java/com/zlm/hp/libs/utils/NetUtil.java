@@ -44,11 +44,8 @@ public class NetUtil {
 		ConnectivityManager cm = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo networkINfo = cm.getActiveNetworkInfo();
-		if (networkINfo != null
-				&& networkINfo.getType() == ConnectivityManager.TYPE_WIFI) {
-			return true;
-		}
-		return false;
-	}
+        return networkINfo != null
+                && networkINfo.getType() == ConnectivityManager.TYPE_WIFI;
+    }
 
 }

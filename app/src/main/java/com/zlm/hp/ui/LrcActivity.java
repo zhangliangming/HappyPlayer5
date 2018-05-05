@@ -55,8 +55,8 @@ import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.PlayListBGRelativeLayout;
 import com.zlm.hp.widget.SingerImageView;
 import com.zlm.libs.widget.RotateLayout;
-import com.zml.libs.widget.CustomSeekBar;
-import com.zml.libs.widget.MusicSeekBar;
+import com.zlm.libs.widget.CustomSeekBar;
+import com.zlm.libs.widget.MusicSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;

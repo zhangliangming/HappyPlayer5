@@ -16,7 +16,7 @@ public interface IDownloadTaskThreadEven {
      * @param threadId
      * @return
      */
-    public int getTaskThreadDownloadedSize(DownloadTask task, int threadId);
+    int getTaskThreadDownloadedSize(DownloadTask task, int threadId);
 
     /**
      * 任务线程下载中
@@ -28,8 +28,8 @@ public interface IDownloadTaskThreadEven {
      * @author zhangliangming
      * @date 2017年7月8日
      */
-    public void taskThreadDownloading(DownloadTask task, int threadId,
-                                      int downloadedSize);
+    void taskThreadDownloading(DownloadTask task, int threadId,
+                               int downloadedSize);
 
     /**
      * 任务线程暂停
@@ -41,7 +41,7 @@ public interface IDownloadTaskThreadEven {
      * @author zhangliangming
      * @date 2017年7月8日
      */
-    public void taskThreadPause(DownloadTask task, int threadId, int downloadedSize);
+    void taskThreadPause(DownloadTask task, int threadId, int downloadedSize);
 
     /***
      *
@@ -57,7 +57,7 @@ public interface IDownloadTaskThreadEven {
      * @author zhangliangming
      * @date 2017年7月8日
      */
-    public void taskThreadFinish(DownloadTask task, int threadId, int downloadedSize);
+    void taskThreadFinish(DownloadTask task, int threadId, int downloadedSize);
 
     /***
      *
@@ -71,6 +71,6 @@ public interface IDownloadTaskThreadEven {
      * @author zhangliangming
      * @date 2017年7月8日
      */
-    public void taskThreadError(DownloadTask task, int threadId, String msg);
+    void taskThreadError(DownloadTask task, int threadId, String msg);
 
 }

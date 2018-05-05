@@ -34,7 +34,7 @@ public enum DownloadTaskConstant {
 
 	private int value;
 
-	private DownloadTaskConstant(int value) {
+	DownloadTaskConstant(int value) {
 
 		this.value = value;
 	}

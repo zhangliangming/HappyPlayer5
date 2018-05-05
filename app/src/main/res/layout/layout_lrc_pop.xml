@@ -273,7 +273,7 @@
                 android:textSize="16dp" />
 
 
-            <com.zml.libs.widget.CustomSeekBar
+            <com.zlm.libs.widget.CustomSeekBar
                 android:id="@+id/fontSizeseekbar"
                 android:layout_width="fill_parent"
                 android:layout_height="20dp"

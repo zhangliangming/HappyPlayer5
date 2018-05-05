@@ -50,16 +50,16 @@ public class AlartTwoButtonDialog extends Dialog {
                 .getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         getWindow().setAttributes(lp);
 
         setCanceledOnTouchOutside(false);
 
-        tipTextView = (TextView) findViewById(R.id.tipCom);
-        leftTextView = (TextView) findViewById(R.id.leftTip);
-        rightTextView = (TextView) findViewById(R.id.rightTip);
+        tipTextView = findViewById(R.id.tipCom);
+        leftTextView = findViewById(R.id.leftTip);
+        rightTextView = findViewById(R.id.rightTip);
 
-        alartDialogLeftButton = (AlartDialogLeftButton) findViewById(R.id.alartDialogLeftButton);
+        alartDialogLeftButton = findViewById(R.id.alartDialogLeftButton);
         alartDialogLeftButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -71,7 +71,7 @@ public class AlartTwoButtonDialog extends Dialog {
             }
         });
 
-        alartDialogRightButton = (AlartDialogRightButton) findViewById(R.id.alartDialogRightButton);
+        alartDialogRightButton = findViewById(R.id.alartDialogRightButton);
         alartDialogRightButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -108,9 +108,9 @@ public class AlartTwoButtonDialog extends Dialog {
     }
 
     public interface TwoButtonDialogListener {
-        public void oneButtonClick();
+        void oneButtonClick();
 
-        public void twoButtonClick();
+        void twoButtonClick();
     }
 
 }

@@ -565,7 +565,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public TextView getCategoryTextTextView() {
             if (categoryTextTextView == null) {
-                categoryTextTextView = (TextView) itemView
+                categoryTextTextView = itemView
                         .findViewById(R.id.category_text);
             }
             return categoryTextTextView;
@@ -585,7 +585,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
         public TextView getFooterTextView() {
             if (footerTextView == null) {
-                footerTextView = (TextView) itemView
+                footerTextView = itemView
                         .findViewById(R.id.list_size_text);
             }
             return footerTextView;

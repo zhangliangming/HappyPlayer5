@@ -44,10 +44,10 @@ public class LyricsManager {
     private static LyricsManager _LyricsManager;
 
     public LyricsManager(Context context, HPApplication hPApplication) {
-        this.mHPApplication = hPApplication;
+        mHPApplication = hPApplication;
         //
         logger = LoggerUtil.getZhangLogger(context);
-        this.mContext = context;
+        mContext = context;
     }
 
     public static LyricsManager getLyricsManager(HPApplication hPApplication, Context context) {

@@ -27,7 +27,7 @@ import com.zlm.hp.ui.MakeTranslateLrcActivity;
 import com.zlm.hp.ui.MakeLrcActivity;
 import com.zlm.hp.ui.R;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
-import com.zml.libs.widget.MusicSeekBar;
+import com.zlm.libs.widget.MusicSeekBar;
 
 import java.io.File;
 import java.io.IOException;

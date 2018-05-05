@@ -54,15 +54,8 @@ public class StoragePermissionUtil {
 
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
 
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-                    return true;
-
-                } else {
-
-                    return false; // 默认返回 false
-
-                }
+                // 默认返回 false
+                return keyCode == KeyEvent.KEYCODE_BACK;
 
             }
 
@@ -101,7 +94,7 @@ public class StoragePermissionUtil {
         /**
          * 授权成功回调
          */
-        public void acceptedCallback();
+        void acceptedCallback();
     }
 
     //用户处理权限反馈，在这里判断用户是否授予相应的权限

@@ -594,6 +594,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface SearchResultListener {
-        public void loadMoreData();
+        void loadMoreData();
     }
 }

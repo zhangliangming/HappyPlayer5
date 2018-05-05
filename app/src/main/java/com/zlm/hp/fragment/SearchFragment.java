@@ -182,7 +182,6 @@ public class SearchFragment extends BaseFragment {
                 }
             }
         });
-        ;
 
         //取消
         TextView backTextView = mainView.findViewById(R.id.right_flag);

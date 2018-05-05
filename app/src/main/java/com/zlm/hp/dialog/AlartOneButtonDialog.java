@@ -43,15 +43,15 @@ public class AlartOneButtonDialog extends Dialog {
                 .getSystemService(Context.WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
         WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.width = (int) (display.getWidth()); // 设置宽度
+        lp.width = display.getWidth(); // 设置宽度
         getWindow().setAttributes(lp);
 
         setCanceledOnTouchOutside(false);
 
-        tipTextView = (TextView) findViewById(R.id.tipCom);
-        centerTextView = (TextView) findViewById(R.id.centerTip);
+        tipTextView = findViewById(R.id.tipCom);
+        centerTextView = findViewById(R.id.centerTip);
 
-        alartDialogCenterButton = (AlartDialogCenterButton) findViewById(R.id.alartDialogCenterButton);
+        alartDialogCenterButton = findViewById(R.id.alartDialogCenterButton);
         alartDialogCenterButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -87,7 +87,7 @@ public class AlartOneButtonDialog extends Dialog {
     }
 
     public interface ButtonDialogListener {
-        public void ButtonClick();
+        void ButtonClick();
 
     }
 

@@ -155,7 +155,6 @@ public class AudioPlayerManager {
                 if (playIndex < 0) {
                     return null;
                 }
-                ;
 
                 if (mHPApplication.getCurAudioInfos().size() > 0) {
                     return mHPApplication.getCurAudioInfos().get(playIndex);
@@ -176,7 +175,6 @@ public class AudioPlayerManager {
                 if (playIndex < 0) {
                     playIndex = 0;
                 }
-                ;
                 if (playIndex >= mHPApplication.getCurAudioInfos().size()) {
                     playIndex = 0;
                 }

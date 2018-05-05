@@ -68,7 +68,7 @@ import com.zlm.hp.widget.IconfontTextView;
 import com.zlm.hp.widget.LinearLayoutRecyclerView;
 import com.zlm.hp.widget.SlidingMenuLayout;
 import com.zlm.hp.widget.SwipeOutLayout;
-import com.zml.libs.widget.MusicSeekBar;
+import com.zlm.libs.widget.MusicSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;

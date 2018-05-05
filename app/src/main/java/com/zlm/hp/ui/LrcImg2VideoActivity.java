@@ -193,7 +193,6 @@ public class LrcImg2VideoActivity extends BaseActivity {
         mOutputTranslateLrcRadioButton.setEnabled(false);
         //
         mOutputTransliterationLrcRadioButton.setEnabled(false);
-        ;
     }
 
     /**

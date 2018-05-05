@@ -66,13 +66,8 @@ public class HelperUtil {
      * @return 存在就返回true，不存在则返回发false
      */
     public boolean isLoading() {
-        if (progressDialog != null && progressDialog.isShowing()) {
-            return true;
-        }
-        return false;
+        return progressDialog != null && progressDialog.isShowing();
     }
-
-    ;
 
     /**
      * 关闭加载对话
@@ -82,7 +77,5 @@ public class HelperUtil {
             progressDialog.dismiss();
         }
     }
-
-    ;
 
 }

@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -64,22 +63,22 @@ dependencies {
     /**
      * 右滑动关闭
      */
-    compile 'com.github.zhangliangming:SwipeBackLayout:v2.0'
+    compile 'com.github.zhangliangming:SwipeBackLayout:v2.2'
     /**
      * 旋转界面
      */
-    compile 'com.github.zhangliangming:RotateLayout:v1.6'
+    implementation 'com.github.zhangliangming:RotateLayout:v2.2'
     /**
      * 进度条
      */
-    compile 'com.github.zhangliangming:SeekBar:v2.1'
+    implementation 'com.github.zhangliangming:SeekBar:v3.0'
     /**
      * 歌词
      */
-    compile 'com.github.zhangliangming:HPLyrics:v3.1'
+    compile 'com.github.zhangliangming:HPLyrics:v3.2'
 
     /**
      * 音频
      */
-    implementation 'com.github.zhangliangming:HPAudio:v1.0'
+    implementation 'com.github.zhangliangming:HPAudio:v2.1'
 }

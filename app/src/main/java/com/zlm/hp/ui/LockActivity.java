@@ -288,23 +288,23 @@ public class LockActivity extends BaseActivity {
         });
 
         //提示右滑动图标
-        lockImageView = (ImageView) findViewById(R.id.tip_image);
+        lockImageView = findViewById(R.id.tip_image);
         aniLoading = (AnimationDrawable) lockImageView.getBackground();
 
         //时间
-        timeTextView = (TextView) findViewById(R.id.time);
-        dateTextView = (TextView) findViewById(R.id.date);
-        dayTextView = (TextView) findViewById(R.id.day);
+        timeTextView = findViewById(R.id.time);
+        dateTextView = findViewById(R.id.date);
+        dayTextView = findViewById(R.id.day);
 
         //歌手与歌名
-        songNameTextView = (TextView) findViewById(R.id.songName);
-        songerTextView = (TextView) findViewById(R.id.songer);
+        songNameTextView = findViewById(R.id.songName);
+        songerTextView = findViewById(R.id.songer);
 
 
-        playImageView = (ImageView) findViewById(R.id.play);
-        pauseImageView = (ImageView) findViewById(R.id.pause);
+        playImageView = findViewById(R.id.play);
+        pauseImageView = findViewById(R.id.pause);
         //播放按钮、上一首，下一首
-        prewButton = (LockButtonRelativeLayout) findViewById(R.id.prev_button);
+        prewButton = findViewById(R.id.prev_button);
         prewButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -317,7 +317,7 @@ public class LockActivity extends BaseActivity {
             }
         });
 
-        nextButton = (LockButtonRelativeLayout) findViewById(R.id.next_button);
+        nextButton = findViewById(R.id.next_button);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -330,7 +330,7 @@ public class LockActivity extends BaseActivity {
             }
         });
 
-        playOrPauseButton = (LockPalyOrPauseButtonRelativeLayout) findViewById(R.id.play_pause_button);
+        playOrPauseButton = findViewById(R.id.play_pause_button);
         playOrPauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

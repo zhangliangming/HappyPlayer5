@@ -644,7 +644,7 @@ public class ImageUtil {
 
 
     public interface ImageLoadCallBack {
-        public void callback(Bitmap bitmap);
+        void callback(Bitmap bitmap);
     }
 
 }

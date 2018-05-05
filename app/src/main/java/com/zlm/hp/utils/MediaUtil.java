@@ -367,7 +367,7 @@ public class MediaUtil {
          *
          * @param audioInfo
          */
-        public void foreach(AudioInfo audioInfo);
+        void foreach(AudioInfo audioInfo);
 
         /**
          * 过滤 true则跳过
@@ -375,7 +375,7 @@ public class MediaUtil {
          * @param hash
          * @return
          */
-        public boolean filter(String hash);
+        boolean filter(String hash);
     }
 
 }
