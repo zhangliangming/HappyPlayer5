@@ -1017,13 +1017,10 @@ public class AudioPlayerService extends Service {
      * 播放线程
      */
 
-    private long mSleepTime = 0;
-
     private class PlayerRunable implements Runnable {
 
         @Override
         public void run() {
-            mSleepTime = 0;
             while (true) {
                 try {
 
@@ -1032,17 +1029,17 @@ public class AudioPlayerService extends Service {
                         if (mHPApplication.getCurAudioMessage() != null) {
                             mHPApplication.getCurAudioMessage().setPlayProgress(mMediaPlayer.getCurrentPosition());
 
-                            if (mSleepTime % 1000 == 0) {
-                                //发送正在播放中的广播
-                                Intent playingIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC);
-                                //playingIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
-                                playingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                                sendBroadcast(playingIntent);
-                            }
+
+                            //发送正在播放中的广播
+                            Intent playingIntent = new Intent(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC);
+                            //playingIntent.putExtra(AudioMessage.KEY, mHPApplication.getCurAudioMessage());
+                            playingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                            sendBroadcast(playingIntent);
+
                         }
                     }
-                    mSleepTime += 100;
-                    Thread.sleep(100);//
+
+                    Thread.sleep(1000);//
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

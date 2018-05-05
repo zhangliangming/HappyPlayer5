@@ -76,7 +76,7 @@ dependencies {
     /**
      * 歌词
      */
-    compile 'com.github.zhangliangming:HPLyrics:v3.0'
+    compile 'com.github.zhangliangming:HPLyrics:v3.1'
 
     /**
      * 音频
