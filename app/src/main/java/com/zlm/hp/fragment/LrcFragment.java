@@ -40,11 +40,6 @@ public class LrcFragment extends BaseFragment {
     //多行歌词
     private ManyLyricsView mManyLineLyricsView;
 
-    /**
-     * 当前播放进度
-     */
-    private int mPlayProgress = 0;
-
     //、、、、、、、、、、、、、、、、、、、、、、、、、翻译和音译歌词、、、、、、、、、、、、、、、、、、、、、、、、、、、
     //翻译歌词
     private ImageView hideTranslateImg;
@@ -201,9 +196,11 @@ public class LrcFragment extends BaseFragment {
                 LyricsReader lyricsReader = new LyricsReader();
                 lyricsReader.setHash(mHash);
                 lyricsReader.loadLrc(mDownloadLyricsResult.getContent(), null, mLrcFilePath);
+                mManyLineLyricsView.setTextMaxWidth(mScreensWidth / 3 * 2);
                 mManyLineLyricsView.setLyricsReader(lyricsReader);
                 if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING && mManyLineLyricsView.getLrcStatus() == AbstractLrcView.LRCSTATUS_LRC && mManyLineLyricsView.getLrcPlayerStatus() != AbstractLrcView.LRCPLAYERSTATUS_PLAY)
-                    mManyLineLyricsView.play(mPlayProgress);
+
+                    mManyLineLyricsView.play((int) mHPApplication.getCurAudioMessage().getPlayProgress());
 
             }
         }
@@ -229,8 +226,8 @@ public class LrcFragment extends BaseFragment {
         mManyLineLyricsView.setSize(30, 30, false);
         mManyLineLyricsView.setPaintColor(new int[]{ColorUtil.parserColor("#888888"), ColorUtil.parserColor("#888888")}, false);
         mManyLineLyricsView.setPaintHLColor(new int[]{ColorUtil.parserColor("#0288d1"), ColorUtil.parserColor("#0288d1")}, false);
-        mManyLineLyricsView.setTouchAble(true);
-        mManyLineLyricsView.setTextMaxWidth(mScreensWidth / 3 * 2);
+        mManyLineLyricsView.setTouchAble(false);
+
 
         //翻译歌词
         hideTranslateImg = mainView.findViewById(R.id.hideTranslateImg);
@@ -380,30 +377,16 @@ public class LrcFragment extends BaseFragment {
                     mManyLineLyricsView.getLyricsReader().setLrcFilePath(mLrcFilePath);
                     LyricsManager.getLyricsManager(mHPApplication, mActivity.getApplicationContext()).setUseLrcUtil(mHash, mManyLineLyricsView.getLyricsReader());
 
-//                    //发送使用歌词广播
-//                    Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCUSE);
-//                    searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-//                    mActivity.sendBroadcast(searchingIntent);
+                    //发送使用歌词广播
+                    Intent searchingIntent = new Intent(AudioBroadcastReceiver.ACTION_LRCUSE);
+                    searchingIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mActivity.sendBroadcast(searchingIntent);
 
                     ToastUtil.showTextToast(mActivity.getApplicationContext(), "歌词设置成功");
                 }
             }
         });
 
-    }
-
-    /**
-     * 更新视图
-     *
-     * @param playProgress
-     */
-    public void updateView(int playProgress, String hash) {
-
-        //更新歌词
-        if (mManyLineLyricsView != null && mManyLineLyricsView.getLyricsReader() != null && mManyLineLyricsView.getLyricsReader().getHash().equals(hash)) {
-            this.mPlayProgress = playProgress;
-            mManyLineLyricsView.seekto(playProgress);
-        }
     }
 
     @Override

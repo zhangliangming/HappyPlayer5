@@ -27,7 +27,6 @@ import com.zlm.hp.adapter.TabFragmentAdapter;
 import com.zlm.hp.fragment.LrcFragment;
 import com.zlm.hp.libs.utils.ToastUtil;
 import com.zlm.hp.model.AudioInfo;
-import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.net.api.DownloadLyricsUtil;
 import com.zlm.hp.net.api.SearchLyricsUtil;
 import com.zlm.hp.net.entity.DownloadLyricsResult;
@@ -59,7 +58,6 @@ public class SearchLrcActivity extends BaseActivity {
     private String mDuration = "";
     private String mHash = "";
     private AudioInfo mCurAudioInfo;
-    private boolean mResetLrcViewFlag = false;
     //
     private final int LOADDATA = 0;
     private final int INITDATA = 1;
@@ -256,11 +254,6 @@ public class SearchLrcActivity extends BaseActivity {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
 
-                    //关闭输入法
-                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-
                     doSearch();
                 }
                 return false;
@@ -406,6 +399,12 @@ public class SearchLrcActivity extends BaseActivity {
      * 搜索歌词
      */
     private void doSearch() {
+
+        //关闭输入法
+        InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        im.hideSoftInputFromWindow(getCurrentFocus().getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+
         String songName = mSongNameEditText.getText().toString();
         String singerName = mSingerNameEditText.getText().toString();
         if (songName.equals("") && singerName.equals("")) {
@@ -512,32 +511,7 @@ public class SearchLrcActivity extends BaseActivity {
 
     private void doAudioReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        if (action.equals(AudioBroadcastReceiver.ACTION_SERVICE_PLAYINGMUSIC)) {
-            AudioInfo audioInfo = mHPApplication.getCurAudioInfo();
-            if (audioInfo != null && audioInfo.getHash().equals(mHash)) {
-                //播放中
-                AudioMessage audioMessage = mHPApplication.getCurAudioMessage();//(AudioMessage) intent.getSerializableExtra(AudioMessage.KEY);
-                if (audioMessage != null) {
-                    if (mLrcViews != null && mLrcViews.size() > 0) {
-                        for (int i = 0; i < mLrcViews.size(); i++) {
-                            LrcFragment lrcFragment = (LrcFragment) mLrcViews.get(i);
-                            lrcFragment.updateView((int) audioMessage.getPlayProgress(), audioInfo.getHash());
-                        }
-                    }
-                }
-            } else {
-                if (!mResetLrcViewFlag) {
-                    mResetLrcViewFlag = true;
-                    if (mLrcViews != null && mLrcViews.size() > 0) {
-                        for (int i = 0; i < mLrcViews.size(); i++) {
-                            LrcFragment lrcFragment = (LrcFragment) mLrcViews.get(i);
-                            lrcFragment.updateView(0, mHash);
-                        }
-                    }
-                }
-
-            }
-        } else if (action.equals(AudioBroadcastReceiver.ACTION_LRCUSE)) {
+        if (action.equals(AudioBroadcastReceiver.ACTION_LRCUSE)) {
             finish();
         }
     }
