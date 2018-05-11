@@ -86,6 +86,15 @@ public class LikeMusicFragment extends BaseFragment {
         mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas,false);
         mRecyclerView.setAdapter(mAdapter);
 
+        RecentOrLikeMusicAdapter.LikeCallBack likeCallBack = new RecentOrLikeMusicAdapter.LikeCallBack() {
+            @Override
+            public void delete() {
+                loadDataUtil(300);
+            }
+        };
+        mAdapter.setLikeCallBack(likeCallBack);
+
+
         showLoadingView();
 
         //

@@ -58,9 +58,7 @@ import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.receiver.PhoneReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.service.AudioPlayerService;
-import com.zlm.hp.utils.AsyncTaskUtil;
 import com.zlm.hp.utils.ImageUtil;
-import com.zlm.hp.utils.MediaUtil;
 import com.zlm.hp.utils.ToastShowUtil;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
 import com.zlm.hp.widget.IconfontIndicatorTextView;
@@ -240,7 +238,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 检测时间
      */
-    private int mCheckServiceTime = 500;
+    private int mCheckServiceTime = 1000;
     /**
      * 当前播放歌曲的索引
      */

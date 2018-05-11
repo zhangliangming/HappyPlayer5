@@ -6,9 +6,9 @@ android {
     defaultConfig {
         applicationId "com.zlm.hp"
         minSdkVersion 19
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        targetSdkVersion 22
+        versionCode 5
+        versionName "v5.0"
         /**添加多 dex分包支持*/
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -80,5 +80,5 @@ dependencies {
     /**
      * 音频
      */
-    implementation 'com.github.zhangliangming:HPAudio:v2.1'
+    implementation 'com.github.zhangliangming:HPAudio:v2.2'
 }

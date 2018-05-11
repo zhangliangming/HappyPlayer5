@@ -187,7 +187,13 @@ public class DownloadMusicFragment extends BaseFragment {
         mDatas = new ArrayList<Category>();
         mAdapter = new DownloadMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
         mRecyclerView.setAdapter(mAdapter);
-
+        DownloadMusicAdapter.CallBack callBack = new DownloadMusicAdapter.CallBack() {
+            @Override
+            public void delete() {
+                mHandler.sendEmptyMessageDelayed(LOADDATA, 300);
+            }
+        };
+        mAdapter.setCallBack(callBack);
 
         //注册下载广播
         mDownloadAudioReceiver = new DownloadAudioReceiver(mActivity.getApplicationContext(), mHPApplication);

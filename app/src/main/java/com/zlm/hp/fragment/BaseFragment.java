@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ import com.zlm.hp.widget.IconfontTextView;
 /**
  * Created by zhangliangming on 2017/7/23.
  */
-public abstract class BaseFragment extends StatedFragment {
+public abstract class BaseFragment extends Fragment {
     /**
      *
      */
@@ -147,29 +148,6 @@ public abstract class BaseFragment extends StatedFragment {
             }
         }.execute("");
     }
-
-
-    /**
-     * Save Fragment's State here
-     */
-    @Override
-    protected void onSaveState(Bundle outState) {
-        super.onSaveState(outState);
-        // For example:
-        //outState.putString("text", tvSample.getText().toString());
-    }
-
-    /**
-     * Restore Fragment's State here
-     */
-    @Override
-    protected void onRestoreState(Bundle savedInstanceState) {
-        super.onRestoreState(savedInstanceState);
-        // For example:
-        //tvSample.setText(savedInstanceState.getString("text"));
-        loadData(true);
-    }
-
 
     /**
      * 加载数据

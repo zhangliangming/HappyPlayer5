@@ -221,6 +221,17 @@ public class ScanActivity extends BaseActivity {
 
                     @Override
                     public boolean filter(String hash) {
+                        boolean flag = false;
+                        for (int i = 0; i < mAudioInfoLists.size(); i++) {
+                            AudioInfo audioInfo = mAudioInfoLists.get(i);
+                            if (audioInfo.getHash().equals(hash)) {
+                                flag = true;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            return true;
+                        }
                         return AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(hash);
                     }
                 });

@@ -60,6 +60,7 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private HPApplication mHPApplication;
 
 
+    private CallBack mCallBack;
     /////////////////////////////////////////
     /**
      * 菜单打开索引
@@ -190,11 +191,33 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    AudioInfoDB.getAudioInfoDB(mContext).delete(audioInfo.getHash());
+                    if (playIndexPosition == position) {
+                        //发送空数据广播
+                        Intent nullIntent = new Intent(AudioBroadcastReceiver.ACTION_NULLMUSIC);
+                        nullIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        mContext.sendBroadcast(nullIntent);
+                    }
 
+                    //发送更新本地歌曲总数广播
+                    Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_LOCALUPDATE);
+                    updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(updateIntent);
+
+                    //
+                    if (mMenuOpenIndex != -1) {
+                        mMenuOpenIndex = -1;
+                    }
+
+                    //更新界面
+                    if (mCallBack != null) {
+                        mCallBack.delete();
+                    }
                 }
             });
 
             //详情按钮
+            viewHolder.getDetailImgBtn().setVisibility(View.GONE);
             viewHolder.getDetailImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -591,5 +614,11 @@ public class LocalMusicAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return footerTextView;
         }
     }
+    public void setCallBack(CallBack mCallBack) {
+        this.mCallBack = mCallBack;
+    }
 
+    public interface CallBack {
+        void delete();
+    }
 }

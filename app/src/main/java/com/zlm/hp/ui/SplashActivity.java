@@ -67,6 +67,17 @@ public class SplashActivity extends BaseActivity {
 
                 @Override
                 public boolean filter(String hash) {
+                    boolean flag = false;
+                    for (int i = 0; i < audioInfos.size(); i++) {
+                        AudioInfo audioInfo = audioInfos.get(i);
+                        if (audioInfo.getHash().equals(hash)) {
+                            flag = true;
+                            break;
+                        }
+                    }
+                    if (flag) {
+                        return true;
+                    }
                     return AudioInfoDB.getAudioInfoDB(getApplicationContext()).isExists(hash);
                 }
             });

@@ -68,6 +68,8 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
     private int playIndexPosition = -1;
     private String playIndexHash = "-1";
 
+    private CallBack mCallBack;
+
     public DownloadMusicAdapter(HPApplication hPApplication, Context context, ArrayList<Category> datas) {
         this.mHPApplication = hPApplication;
         this.mContext = context;
@@ -332,11 +334,33 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    DownloadInfoDB.getAudioInfoDB(mContext).delete(audioInfo.getHash());
+                    if (playIndexPosition == position) {
+                        //发送空数据广播
+                        Intent nullIntent = new Intent(AudioBroadcastReceiver.ACTION_NULLMUSIC);
+                        nullIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        mContext.sendBroadcast(nullIntent);
+                    }
 
+                    //发送更新下载歌曲总数广播
+                    Intent updateIntent = new Intent(AudioBroadcastReceiver.ACTION_DOWNLOADUPDATE);
+                    updateIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                    mContext.sendBroadcast(updateIntent);
+
+                    //
+                    if (mMenuOpenIndex != -1) {
+                        mMenuOpenIndex = -1;
+                    }
+
+                    //更新界面
+                    if (mCallBack != null) {
+                        mCallBack.delete();
+                    }
                 }
             });
 
             //详情按钮
+            viewHolder.getDetailImgBtn().setVisibility(View.GONE);
             viewHolder.getDetailImgBtn().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -363,6 +387,11 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             @Override
             public void onClick(View view) {
 
+                if (mMenuOpenIndex != -1) {
+                    notifyItemChanged(mMenuOpenIndex);
+                    mMenuOpenIndex = -1;
+                }
+
 
                 if (playIndexPosition == position) {
                     if (mHPApplication.getPlayStatus() == AudioPlayerManager.PLAYING) {
@@ -385,13 +414,17 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 }
 
+                //
+                playIndexHash = audioInfo.getHash();
+                mHPApplication.setPlayIndexHashID(playIndexHash);
+
                 //设置界面ui
                 viewHolder.getStatusView().setVisibility(View.VISIBLE);
                 //
                 if (playIndexPosition != -1) {
                     notifyItemChanged(playIndexPosition);
                 }
-
+                playIndexPosition = position;
 
                 //设置当前播放列表
                 List<AudioInfo> curData = new ArrayList<AudioInfo>();
@@ -403,11 +436,6 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
                 mHPApplication.setCurAudioInfos(curData);
 
-
-                //
-                playIndexPosition = position;
-                playIndexHash = audioInfo.getHash();
-                mHPApplication.setPlayIndexHashID(playIndexHash);
 
                 Intent playIntent = new Intent(AudioBroadcastReceiver.ACTION_PLAYMUSIC);
                 AudioMessage audioMessage = new AudioMessage();
@@ -863,5 +891,13 @@ public class DownloadMusicAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
             return footerTextView;
         }
+    }
+
+    public void setCallBack(CallBack mCallBack) {
+        this.mCallBack = mCallBack;
+    }
+
+    public interface CallBack {
+        void delete();
     }
 }

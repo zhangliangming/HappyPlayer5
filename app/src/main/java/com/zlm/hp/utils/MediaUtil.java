@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.zlm.hp.audio.AudioFileReader;
 import com.zlm.hp.audio.TrackInfo;
@@ -49,12 +50,15 @@ public class MediaUtil {
 
         List<StorageInfo> list = StorageListUtil
                 .listAvaliableStorage(activity.getApplicationContext());
-        if(list == null || list.size() == 0){
+        if (list == null || list.size() == 0) {
 
-        }else{
+        } else {
+            List<String> filterFormatList = AudioUtil.getSupportAudioExts();
+            String[] filterFormat = new String[filterFormatList.size()];
+            filterFormatList.toArray(filterFormat);
             for (int i = 0; i < list.size(); i++) {
                 StorageInfo storageInfo = list.get(i);
-                scanLocalAudioFile(storageInfo.path, foreachListener);
+                scanLocalAudioFile(storageInfo.path, filterFormat, foreachListener);
             }
         }
     }
@@ -65,7 +69,7 @@ public class MediaUtil {
      * @param path
      * @param foreachListener
      */
-    private static void scanLocalAudioFile(String path, ForeachListener foreachListener) {
+    private static void scanLocalAudioFile(String path, String[] filterFormat, ForeachListener foreachListener) {
         File[] files = new File(path).listFiles();
         if (files != null && files.length > 0) {
             for (int i = 0; i < files.length; i++) {
@@ -74,16 +78,17 @@ public class MediaUtil {
 
                     String fileName = temp.getName();
                     String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1, fileName.length()).toLowerCase();
-                    String filterFormats = "ape,flac,mp3,wav";
-                    if (filterFormats.indexOf(fileExt) == -1) {
-                        continue;
-                    }
 
-                    handlerAudio(temp, foreachListener);
+                    for (int j = 0; j < filterFormat.length; j++) {
+                        if (fileExt.equals(filterFormat[j])) {
+                            handlerAudio(temp, foreachListener);
+                            break;
+                        }
+                    }
 
                 } else if (temp.isDirectory() && temp.getPath().indexOf("/.") == -1) // 忽略点文件（隐藏文件/文件夹）
                 {
-                    scanLocalAudioFile(temp.getPath(), foreachListener);
+                    scanLocalAudioFile(temp.getPath(), filterFormat, foreachListener);
                 }
             }
         }

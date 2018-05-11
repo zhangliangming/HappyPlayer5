@@ -83,6 +83,13 @@ public class RecentMusicFragment extends BaseFragment {
         mDatas = new ArrayList<AudioInfo>();
         mAdapter = new RecentOrLikeMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas, true);
         mRecyclerView.setAdapter(mAdapter);
+        RecentOrLikeMusicAdapter.RecentCallBack recentCallBack = new RecentOrLikeMusicAdapter.RecentCallBack() {
+            @Override
+            public void delete() {
+                loadDataUtil(300);
+            }
+        };
+        mAdapter.setRecentCallBack(recentCallBack);
 
         showLoadingView();
 

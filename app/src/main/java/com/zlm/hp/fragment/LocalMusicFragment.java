@@ -102,6 +102,15 @@ public class LocalMusicFragment extends BaseFragment {
         mAdapter = new LocalMusicAdapter(mHPApplication, mActivity.getApplicationContext(), mDatas);
         mRecyclerView.setAdapter(mAdapter);
 
+        LocalMusicAdapter.CallBack callBack = new LocalMusicAdapter.CallBack() {
+            @Override
+            public void delete() {
+                mDatas.clear();
+                loadDataUtil();
+            }
+        };
+        mAdapter.setCallBack(callBack);
+
 
         showLoadingView();
 
