@@ -128,6 +128,7 @@ public class SplashActivity extends BaseActivity {
     private void initPreferencesData() {
         mHPApplication.setPlayStatus(AudioPlayerManager.STOP);
         //桌面歌词
+        mHPApplication.setDesktopLyricsIsMove((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.desktopLyricsIsMove_KEY, true));
         mHPApplication.setShowDesktop((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowDesktop_KEY, false));
         //锁屏标志
         mHPApplication.setShowLockScreen((boolean) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.isShowLockScreen_KEY, false));

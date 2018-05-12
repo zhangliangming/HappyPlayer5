@@ -58,6 +58,7 @@ import com.zlm.hp.receiver.OnLineAudioReceiver;
 import com.zlm.hp.receiver.PhoneReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.service.AudioPlayerService;
+import com.zlm.hp.service.FloatService;
 import com.zlm.hp.utils.ImageUtil;
 import com.zlm.hp.utils.ToastShowUtil;
 import com.zlm.hp.widget.IconfontImageButtonTextView;
@@ -238,7 +239,7 @@ public class MainActivity extends BaseActivity {
     /**
      * 检测时间
      */
-    private int mCheckServiceTime = 1000;
+    private int mCheckServiceTime = 200;
     /**
      * 当前播放歌曲的索引
      */
@@ -264,6 +265,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
 
+            //
             if (!isServiceRunning(AudioPlayerService.class.getName())) {
                 logger.e("监听音频服务初始回收");
                 if (!mHPApplication.isAppClose()) {
@@ -277,6 +279,37 @@ public class MainActivity extends BaseActivity {
                     logger.e("重新启动音频播放服务广播");
                 }
             }
+
+            //
+            if (isBackgroundRunning(getApplicationContext())) {
+                logger.e("正在后台运行");
+                if (!isServiceRunning(FloatService.class.getName())) {
+
+                    if (mHPApplication.isShowDesktop()) {
+                        //启动悬浮窗口服务
+                        Intent floatServiceIntent = new Intent(getApplicationContext(), FloatService.class);
+                        mHPApplication.startService(floatServiceIntent);
+                    }
+                } else {
+                    //悬浮窗口服务已经启动
+                    if (!mHPApplication.isShowDesktop()) {
+                        //不显示桌面歌词
+                        //关闭悬浮窗口服务
+                        Intent floatServiceIntent = new Intent(getApplicationContext(), FloatService.class);
+                        mHPApplication.stopService(floatServiceIntent);
+                    }
+                }
+            } else {
+                logger.e("正在前台运行");
+                if (isServiceRunning(FloatService.class.getName())) {
+                    //关闭悬浮窗口服务
+                    Intent floatServiceIntent = new Intent(getApplicationContext(), FloatService.class);
+                    mHPApplication.stopService(floatServiceIntent);
+
+                }
+            }
+
+
             mCheckServiceHandler.postDelayed(mCheckServiceRunnable, mCheckServiceTime);
         }
     };
@@ -1427,6 +1460,29 @@ public class MainActivity extends BaseActivity {
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceName.equals(service.service.getClassName())) {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 是否在后台运行
+     *
+     * @param context
+     * @return
+     */
+    private boolean isBackgroundRunning(Context context) {
+        ActivityManager activityManager = (ActivityManager) context
+                .getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> appProcesses = activityManager
+                .getRunningAppProcesses();
+        for (ActivityManager.RunningAppProcessInfo appProcess : appProcesses) {
+            if (appProcess.processName.equals(context.getPackageName())) {
+                if (appProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
         }
         return false;

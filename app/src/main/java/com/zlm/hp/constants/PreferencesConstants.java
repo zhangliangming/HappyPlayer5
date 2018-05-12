@@ -1,5 +1,9 @@
 package com.zlm.hp.constants;
 
+import android.graphics.Color;
+
+import com.zlm.hp.lyrics.utils.ColorUtils;
+
 /**
  * 配置文件
  * Created by zhangliangming on 2017/8/6.
@@ -76,4 +80,74 @@ public class PreferencesConstants {
      * 播放状态key
      */
     public static String playStatus_KEY = "playStatus_KEY";
+
+    //////////////////////////////////////桌面歌词/////////////////////////////////////////
+    /**
+     * 桌面歌词是否可以移动
+     */
+    public static String desktopLyricsIsMove_KEY = "desktopLyricsIsMove_KEY";
+    /***
+     * 桌面歌词颜色索引
+     */
+    public static String desktopLrcColorIndex_KEY = "desktopLrcColorIndex_KEY";
+
+    /**
+     * 桌面歌词字体大小key
+     */
+    public static String desktopLrcFontSize_KEY = "desktopLrcFontSize_KEY";
+
+    /**
+     * 歌词窗口y坐标
+     */
+    public static String desktopLrcY_KEY = "desktopLrcY_KEY";
+
+    /**
+     * 桌面歌词未读颜色
+     */
+    public static int desktopLrcNotReadColors[][] = {{
+            ColorUtils.parserColor("#00348a"),
+            ColorUtils.parserColor("#0080c0"),
+            ColorUtils.parserColor("#03cafc")
+    }, {
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#ffffff")
+    }, {
+            ColorUtils.parserColor("#02a6ae"),
+            ColorUtils.parserColor("#80ffff"),
+            ColorUtils.parserColor("#02a6ae")
+    }, {
+            ColorUtils.parserColor("#ffac00"),
+            ColorUtils.parserColor("#ff0000"),
+            ColorUtils.parserColor("#aa0000")
+    }, {
+            ColorUtils.parserColor("#93ff26"),
+            ColorUtils.parserColor("#46b000"),
+            ColorUtils.parserColor("#005500")
+    }};
+
+    /**
+     * 桌面歌词已读颜色
+     */
+    public static int desktopLrcReadedColors[][] = {{
+            ColorUtils.parserColor("#82f7fd"),
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#03e9fc")
+    }, {
+            ColorUtils.parserColor("#ffff00"),
+            ColorUtils.parserColor("#ffff00"),
+            ColorUtils.parserColor("#ffff00")
+    }, {
+            ColorUtils.parserColor("#f78426"),
+            ColorUtils.parserColor("#ffff00"),
+            ColorUtils.parserColor("#f78426")
+    }, {
+            ColorUtils.parserColor("#ffffa4"),
+            ColorUtils.parserColor("#ffff00"),
+            ColorUtils.parserColor("#ff641a")
+    }, {
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#9aff11"),
+            ColorUtils.parserColor("#ffff00")
+    }};
 }

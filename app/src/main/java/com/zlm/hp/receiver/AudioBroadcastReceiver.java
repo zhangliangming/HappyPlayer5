@@ -104,6 +104,11 @@ public class AudioBroadcastReceiver {
     public static String ACTION_RELOADSINGERIMG = "com.zlm.hp.reload.singerimg";
     public static String ACTION_SINGERIMGLOADED = "com.zlm.hp.singerimg.loaded";
 
+    /**
+     * 通知栏桌面歌词加锁/解锁
+     */
+    public static String ACTION_DESLRC_LOCKORUNLOCK = "com.zlm.hp.des.lrc.lockorunlock";
+
     private BroadcastReceiver mAudioBroadcastReceiver;
     private IntentFilter mAudioIntentFilter;
     private AudioReceiverListener mAudioReceiverListener;
@@ -152,6 +157,10 @@ public class AudioBroadcastReceiver {
         //
         mAudioIntentFilter.addAction(ACTION_RELOADSINGERIMG);
         mAudioIntentFilter.addAction(ACTION_SINGERIMGLOADED);
+
+        //
+        mAudioIntentFilter.addAction(ACTION_DESLRC_LOCKORUNLOCK);
+
     }
 
     /**

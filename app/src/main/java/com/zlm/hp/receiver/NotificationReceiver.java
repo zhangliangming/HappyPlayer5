@@ -60,9 +60,18 @@ public class NotificationReceiver {
      */
     public static String NOTIFIATION_DESLRC_HIDE = "com.notification.des.lrc.hide";
     /**
+     * 显示和隐藏
+     */
+    public static String NOTIFIATION_DESLRC_SHOWORHIDE = "com.notification.des.lrc.showOrHide";
+    /**
      * 通知栏桌面歌词解锁
      */
     public static String NOTIFIATION_DESLRC_UNLOCK = "com.notification.des.lrc.unlock";
+
+    /**
+     * 通知栏桌面歌词加锁
+     */
+    public static String NOTIFIATION_DESLRC_LOCK = "com.notification.des.lrc.lock";
 
     private BroadcastReceiver mNotificationBroadcastReceiver;
     private IntentFilter mNotificationIntentFilter;
@@ -82,9 +91,9 @@ public class NotificationReceiver {
         mNotificationIntentFilter.addAction(NOTIFIATION_APP_NEXTMUSIC);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_SHOW);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_HIDE);
+        mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_SHOWORHIDE);
         mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_UNLOCK);
-
-
+        mNotificationIntentFilter.addAction(NOTIFIATION_DESLRC_LOCK);
     }
 
     /**

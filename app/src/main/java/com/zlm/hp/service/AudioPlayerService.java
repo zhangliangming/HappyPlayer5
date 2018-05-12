@@ -144,7 +144,7 @@ public class AudioPlayerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mHPApplication = (HPApplication) getApplication();
+        mHPApplication = HPApplication.getInstance();
         logger = LoggerUtil.getZhangLogger(getApplicationContext());
 
         //注册接收音频播放广播
@@ -247,10 +247,10 @@ public class AudioPlayerService extends Service {
         AudioInfo curAudioInfo = mHPApplication.getCurAudioInfo();
         if (curAudioInfo != null) {
             Intent initIntent = new Intent(AudioBroadcastReceiver.ACTION_INITMUSIC);
-            doNotificationReceive(getApplicationContext(), initIntent);
+            doNotification(getApplicationContext(), initIntent);
         } else {
             Intent nullIntent = new Intent(AudioBroadcastReceiver.ACTION_NULLMUSIC);
-            doNotificationReceive(getApplicationContext(), nullIntent);
+            doNotification(getApplicationContext(), nullIntent);
         }
     }
 
@@ -320,14 +320,40 @@ public class AudioPlayerService extends Service {
             sendBroadcast(nextIntent);
 
         } else if (intent.getAction().equals(
-                NotificationReceiver.NOTIFIATION_DESLRC_SHOW)) {
-
-        } else if (intent.getAction().equals(
+                NotificationReceiver.NOTIFIATION_DESLRC_SHOW) || intent.getAction().equals(
                 NotificationReceiver.NOTIFIATION_DESLRC_HIDE)) {
+            if (intent.getAction().equals(
+                    NotificationReceiver.NOTIFIATION_DESLRC_HIDE)) {
+                mHPApplication.setShowDesktop(false);
+                mHPApplication.setDesktopLyricsIsMove(false);
+            } else {
+                mHPApplication.setShowDesktop(true);
+                mHPApplication.setDesktopLyricsIsMove(true);
+            }
+
+            //
+            Intent showOrHideIntent = new Intent(NotificationReceiver.NOTIFIATION_DESLRC_SHOWORHIDE);
+            showOrHideIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            sendBroadcast(showOrHideIntent);
+
+            doNotification(context, intent);
 
         } else if (intent.getAction().equals(
-                NotificationReceiver.NOTIFIATION_DESLRC_UNLOCK)) {
+                NotificationReceiver.NOTIFIATION_DESLRC_UNLOCK) || intent.getAction().equals(
+                NotificationReceiver.NOTIFIATION_DESLRC_LOCK)) {
+            if (intent.getAction().equals(
+                    NotificationReceiver.NOTIFIATION_DESLRC_UNLOCK)) {
+                mHPApplication.setDesktopLyricsIsMove(true);
+            } else {
+                mHPApplication.setDesktopLyricsIsMove(false);
+            }
 
+            //
+            Intent lockOrUnlockIntent = new Intent(AudioBroadcastReceiver.ACTION_DESLRC_LOCKORUNLOCK);
+            lockOrUnlockIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+            sendBroadcast(lockOrUnlockIntent);
+
+            doNotification(context, intent);
         }
     }
 
@@ -368,6 +394,57 @@ public class AudioPlayerService extends Service {
 
         mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.prew,
                 pendprewButtonIntent);
+
+        // 设置歌词显示状态和解锁歌词
+
+        Intent buttonDesLrcUnlockIntent = new Intent(
+                NotificationReceiver.NOTIFIATION_DESLRC_UNLOCK);
+        PendingIntent pendDesLrcUnlockIntent = PendingIntent.getBroadcast(
+                AudioPlayerService.this, 0, buttonDesLrcUnlockIntent, 0);
+
+        mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.deslrcUnlock,
+                pendDesLrcUnlockIntent);
+
+        Intent buttonDesLrcHideIntent = new Intent(
+                NotificationReceiver.NOTIFIATION_DESLRC_HIDE);
+        PendingIntent pendDesLrcHideIntent = PendingIntent.getBroadcast(
+                AudioPlayerService.this, 0, buttonDesLrcHideIntent, 0);
+
+        mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.showdeslrc,
+                pendDesLrcHideIntent);
+
+        Intent buttonDesLrcShowIntent = new Intent(
+                NotificationReceiver.NOTIFIATION_DESLRC_SHOW);
+        PendingIntent pendDesLrcShowIntent = PendingIntent.getBroadcast(
+                AudioPlayerService.this, 0, buttonDesLrcShowIntent, 0);
+
+        mNotifyPlayBarRemoteViews.setOnClickPendingIntent(R.id.hidedeslrc,
+                pendDesLrcShowIntent);
+
+        if (mHPApplication.isShowDesktop()) {
+            if (mHPApplication.isDesktopLyricsIsMove()) {
+                mNotifyPlayBarRemoteViews.setViewVisibility(R.id.showdeslrc,
+                        View.VISIBLE);
+                mNotifyPlayBarRemoteViews.setViewVisibility(R.id.hidedeslrc,
+                        View.INVISIBLE);
+                mNotifyPlayBarRemoteViews.setViewVisibility(
+                        R.id.deslrcUnlock, View.INVISIBLE);
+            } else {
+                mNotifyPlayBarRemoteViews.setViewVisibility(
+                        R.id.deslrcUnlock, View.VISIBLE);
+                mNotifyPlayBarRemoteViews.setViewVisibility(R.id.hidedeslrc,
+                        View.INVISIBLE);
+                mNotifyPlayBarRemoteViews.setViewVisibility(R.id.showdeslrc,
+                        View.INVISIBLE);
+            }
+        } else {
+            mNotifyPlayBarRemoteViews.setViewVisibility(R.id.hidedeslrc,
+                    View.VISIBLE);
+            mNotifyPlayBarRemoteViews.setViewVisibility(R.id.showdeslrc,
+                    View.INVISIBLE);
+            mNotifyPlayBarRemoteViews.setViewVisibility(R.id.deslrcUnlock,
+                    View.INVISIBLE);
+        }
 
         String action = intent.getAction();
         if (action.equals(AudioBroadcastReceiver.ACTION_NULLMUSIC)) {

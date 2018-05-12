@@ -110,6 +110,19 @@ public class HPApplication extends MultiDexApplication {
     private int lrcColorIndex = 0;
 
     /**
+     * 桌面歌词颜色索引
+     */
+    private int desktopLrcColorIndex = 0;
+    /**
+     * 桌面歌词大小
+     */
+    private int desktopLrcFontSize = 0;
+    /**
+     * 桌面歌词的位置
+     */
+    private int desktopLrcY = 0;
+
+    /**
      * 歌词颜色集合
      */
     private String[] lrcColorStr = {"#fada83", "#fe8db6", "#feb88e",
@@ -135,6 +148,13 @@ public class HPApplication extends MultiDexApplication {
      * 是否是多行歌词
      */
     private boolean isManyLineLrc = true;
+
+    /**
+     * 桌面歌词是否可以移动
+     */
+    private boolean desktopLyricsIsMove = true;
+
+
     private static HPApplication instance;
 
     public static HPApplication getInstance() {
@@ -373,6 +393,34 @@ public class HPApplication extends MultiDexApplication {
         PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.lrcColorIndex_KEY, lrcColorIndex);
     }
 
+    public int getDesktopLrcColorIndex() {
+        return (int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.desktopLrcColorIndex_KEY, desktopLrcColorIndex);
+    }
+
+    public void setDesktopLrcColorIndex(int desktopLrcColorIndex) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.desktopLrcColorIndex_KEY, desktopLrcColorIndex);
+
+    }
+
+    public int getDesktopLrcFontSize() {
+        return (int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.desktopLrcFontSize_KEY, desktopLrcFontSize);
+    }
+
+    public void setDesktopLrcFontSize(int desktopLrcFontSize) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.desktopLrcFontSize_KEY, desktopLrcFontSize);
+
+    }
+
+    public int getDesktopLrcY() {
+        return (int) PreferencesUtil.getValue(getApplicationContext(), PreferencesConstants.desktopLrcY_KEY, desktopLrcY);
+
+    }
+
+    public void setDesktopLrcY(int desktopLrcY) {
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.desktopLrcY_KEY, desktopLrcY);
+
+    }
+
     public boolean isWire() {
         return isWire;
     }
@@ -423,5 +471,16 @@ public class HPApplication extends MultiDexApplication {
 
     public int getMaxLrcFontSize() {
         return maxLrcFontSize;
+    }
+
+    public boolean isDesktopLyricsIsMove() {
+        return desktopLyricsIsMove;
+    }
+
+    public void setDesktopLyricsIsMove(boolean desktopLyricsIsMove) {
+        this.desktopLyricsIsMove = desktopLyricsIsMove;
+
+        PreferencesUtil.saveValue(getApplicationContext(), PreferencesConstants.desktopLyricsIsMove_KEY, desktopLyricsIsMove);
+
     }
 }

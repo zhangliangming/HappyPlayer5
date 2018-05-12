@@ -83,6 +83,8 @@
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MakeTranslateLrcActivity" />
         <activity android:name=".MakeTransliterationLrcActivity" />
+
+        <service android:name="com.zlm.hp.service.FloatService"></service>
     </application>
 
 </manifest>

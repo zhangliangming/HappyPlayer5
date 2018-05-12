@@ -17,6 +17,7 @@ import com.zlm.hp.manager.AudioPlayerManager;
 import com.zlm.hp.model.AudioInfo;
 import com.zlm.hp.receiver.AudioBroadcastReceiver;
 import com.zlm.hp.receiver.FragmentReceiver;
+import com.zlm.hp.receiver.NotificationReceiver;
 import com.zlm.hp.receiver.SystemReceiver;
 import com.zlm.hp.ui.LockActivity;
 import com.zlm.hp.ui.LrcConverterActivity;
@@ -203,6 +204,23 @@ public class TabMyFragment extends BaseFragment {
         }
     };
 
+    /**
+     *
+     */
+    private NotificationReceiver mNotificationReceiver;
+    /**
+     *
+     */
+    private NotificationReceiver.NotificationReceiverListener mNotificationReceiverListener = new NotificationReceiver.NotificationReceiverListener() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            doNotificationReceive(context, intent);
+
+
+        }
+    };
+
 
     public TabMyFragment() {
 
@@ -337,8 +355,15 @@ public class TabMyFragment extends BaseFragment {
                         return;
                     }
                 }
-                mHPApplication.setShowDesktop(!selected);
-                mFloatWSetupBGButton.setSelect(mHPApplication.isShowDesktop());
+
+                Intent intent = null;
+                if (!selected) {
+                    intent = new Intent(NotificationReceiver.NOTIFIATION_DESLRC_SHOW);
+                } else {
+                    intent = new Intent(NotificationReceiver.NOTIFIATION_DESLRC_HIDE);
+                }
+                intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                mActivity.sendBroadcast(intent);
 
             }
         });
@@ -466,6 +491,25 @@ public class TabMyFragment extends BaseFragment {
         mAudioBroadcastReceiver = new AudioBroadcastReceiver(mActivity.getApplicationContext(), mHPApplication);
         mAudioBroadcastReceiver.setAudioReceiverListener(mAudioReceiverListener);
         mAudioBroadcastReceiver.registerReceiver(mActivity.getApplicationContext());
+
+        //注册通知栏广播
+        mNotificationReceiver = new NotificationReceiver(mActivity.getApplicationContext(), mHPApplication);
+        mNotificationReceiver.setNotificationReceiverListener(mNotificationReceiverListener);
+        mNotificationReceiver.registerReceiver(mActivity.getApplicationContext());
+    }
+
+    /**
+     * 通知栏事件广播
+     *
+     * @param context
+     * @param intent
+     */
+    private void doNotificationReceive(Context context, Intent intent) {
+
+        if (intent.getAction().equals(
+                NotificationReceiver.NOTIFIATION_DESLRC_SHOWORHIDE)) {
+            mFloatWSetupBGButton.setSelect(mHPApplication.isShowDesktop());
+        }
     }
 
     @Override
@@ -605,6 +649,7 @@ public class TabMyFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         mAudioBroadcastReceiver.unregisterReceiver(mActivity.getApplicationContext());
+        mNotificationReceiver.unregisterReceiver(mActivity.getApplicationContext());
         super.onDestroy();
     }
 

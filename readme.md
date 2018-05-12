@@ -6,7 +6,6 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 # 后期将会修复、优化和新开发的功能 #
 
 - 引入线程池，统一管理线程、多进程、多线程考虑线程安全问题
-- 桌面歌词
 - 优化网络请求
 - 修改MVP模式
 - 引用多一些好的第三方开源框架
@@ -25,6 +24,20 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 # 更新日志 #
 - 2018-05-12
 - 修复删除功能及隐藏删除播放列表功能
+- 添加桌面歌词功能，实现桌面歌词锁定、解锁、歌词窗口移动
+- 预览图
+- ![](https://i.imgur.com/0k1hjIZ.png)
+
+- ![](https://i.imgur.com/ewkQfpB.png)
+
+- ![](https://i.imgur.com/480Odxp.png)
+
+- ![](https://i.imgur.com/MP26VRK.png)
+
+- ![](https://i.imgur.com/V35IUF1.png)
+
+- ![](https://i.imgur.com/NVCaoH0.png)
+
 
 - 2018-05-11
 - 修复扫描重复歌曲问题
