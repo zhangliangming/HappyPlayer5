@@ -126,7 +126,7 @@ public class RecentMusicFragment extends BaseFragment {
 
             mDatas.clear();
         }
-        loadDataUtil(300);
+        loadDataUtil(0);
 
     }
 

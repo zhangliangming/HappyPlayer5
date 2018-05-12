@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"
-                android:layout_toLeftOf="@+id/hLine"
+                android:layout_alignParentRight="true"
                 android:text="@string/mode_all"
                 android:textColor="#fff"
                 android:textSize="22dp"
@@ -70,7 +70,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/hLine"
+                android:layout_alignParentRight="true"
                 android:text="@string/mode_random"
                 android:textColor="#fff"
                 android:textSize="22dp" />
@@ -83,12 +83,12 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/hLine"
+                android:layout_alignParentRight="true"
                 android:text="@string/mode_single"
                 android:textColor="#fff"
                 android:textSize="25dp" />
 
-
+<!--
             <View
                 android:id="@+id/hLine"
                 android:layout_width="0.5dip"
@@ -110,6 +110,8 @@
                 android:text="@string/delete_img"
                 android:textColor="#fff"
                 android:textSize="25dp" />
+
+                -->
 
 
         </RelativeLayout>

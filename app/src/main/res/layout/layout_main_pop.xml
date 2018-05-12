@@ -52,9 +52,9 @@
                 android:id="@+id/modeAll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_margin="10dp"
-                android:layout_toLeftOf="@+id/hLine"
                 android:text="@string/mode_all"
                 android:textColor="#888"
                 android:textSize="22dp"
@@ -65,10 +65,10 @@
                 android:id="@+id/modeRandom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/hLine"
                 android:text="@string/mode_random"
                 android:textColor="#888"
                 android:textSize="22dp" />
@@ -78,14 +78,15 @@
                 android:id="@+id/modeSingle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/hLine"
                 android:text="@string/mode_single"
                 android:textColor="#888"
                 android:textSize="25dp" />
 
+            <!--
 
             <View
                 android:id="@+id/hLine"
@@ -107,8 +108,8 @@
                 android:layout_margin="10dp"
                 android:text="@string/delete_img"
                 android:textColor="#888"
-                android:textSize="25dp" />
-
+                android:textSize="25dp"/>
+-->
 
         </RelativeLayout>
 

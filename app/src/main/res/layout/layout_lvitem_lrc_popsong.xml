@@ -98,6 +98,7 @@
 
         </LinearLayout>
 
+        <!--
         <com.zlm.hp.widget.IconfontTextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
@@ -107,7 +108,7 @@
             android:layout_margin="10dp"
             android:text="@string/delete_img"
             android:textColor="#fff"
-            android:textSize="25dp" />
+            android:textSize="25dp" /> -->
         />
 
     </com.zlm.hp.widget.PopListItemRelativeLayout>

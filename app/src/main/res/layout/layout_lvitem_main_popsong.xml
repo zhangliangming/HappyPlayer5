@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/delete"
+            android:layout_alignParentRight="true"
             android:text="@string/like_img"
             android:textColor="#888"
             android:textSize="25dp" />
@@ -135,11 +135,11 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_margin="10dp"
-            android:layout_toLeftOf="@+id/delete"
+            android:layout_alignParentRight="true"
             android:background="@mipmap/bhc"
             android:visibility="invisible" />
 
-
+<!--
         <com.zlm.hp.widget.IconfontTextView
             android:id="@+id/delete"
             android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
             android:layout_margin="10dp"
             android:text="@string/delete_img"
             android:textColor="#888"
-            android:textSize="25dp" />
+            android:textSize="25dp" /> -->
 
         <com.zlm.hp.widget.DividerView
             android:layout_width="match_parent"

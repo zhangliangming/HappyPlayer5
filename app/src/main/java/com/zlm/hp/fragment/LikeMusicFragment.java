@@ -89,7 +89,7 @@ public class LikeMusicFragment extends BaseFragment {
         RecentOrLikeMusicAdapter.LikeCallBack likeCallBack = new RecentOrLikeMusicAdapter.LikeCallBack() {
             @Override
             public void delete() {
-                loadDataUtil(300);
+                loadDataUtil(0);
             }
         };
         mAdapter.setLikeCallBack(likeCallBack);

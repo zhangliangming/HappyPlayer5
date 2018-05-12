@@ -122,13 +122,14 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         }
 
-        //删除按钮
-        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        //删除按钮
+//
+//        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         if (audioInfo.getHash().equals(mHPApplication.getPlayIndexHashID())) {
             playIndexPosition = position;
@@ -307,10 +308,10 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
          */
         private ImageView islocalImg;
 
-        /**
-         * 删除按钮
-         */
-        private IconfontTextView deleteImgBtn;
+//        /**
+//         * 删除按钮
+//         */
+//        private IconfontTextView deleteImgBtn;
 
 
         public LrcPopListViewHolder(View view) {
@@ -361,12 +362,12 @@ public class LrcPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             return songIndexTv;
         }
 
-        public IconfontTextView getDeleteImgBtn() {
-            if (deleteImgBtn == null) {
-                deleteImgBtn = view.findViewById(R.id.delete);
-            }
-            return deleteImgBtn;
-        }
+//        public IconfontTextView getDeleteImgBtn() {
+//            if (deleteImgBtn == null) {
+//                deleteImgBtn = view.findViewById(R.id.delete);
+//            }
+//            return deleteImgBtn;
+//        }
     }
 
 

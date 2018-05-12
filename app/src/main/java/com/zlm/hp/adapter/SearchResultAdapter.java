@@ -195,9 +195,11 @@ public class SearchResultAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     viewHolder.getUnLikeImgBtn().setVisibility(View.VISIBLE);
                     ToastUtil.showTextToast(mContext, "取消成功");
 
+                    AudioInfoDB.getAudioInfoDB(mContext).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
+
+
                     //删除喜欢歌曲
                     Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                    delIntent.putExtra(AudioInfo.KEY, audioInfo);
                     delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                     mContext.sendBroadcast(delIntent);
                 }

@@ -141,9 +141,11 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 viewHolder.getUnLikeTv().setVisibility(View.VISIBLE);
                 ToastUtil.showTextToast(mContext, "取消成功");
 
+                AudioInfoDB.getAudioInfoDB(mContext).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
+
+
                 //删除喜欢歌曲
                 Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                delIntent.putExtra(AudioInfo.KEY, audioInfo);
                 delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                 mContext.sendBroadcast(delIntent);
             }
@@ -165,12 +167,12 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         });
 
         //删除
-        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        viewHolder.getDeleteImgBtn().setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
 
         if (audioInfo.getType() == AudioInfo.NET || audioInfo.getType() == AudioInfo.DOWNLOAD) {
 
@@ -404,10 +406,10 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         private ImageView likeImg;
 
 
-        /**
-         * 删除按钮
-         */
-        private IconfontTextView deleteImgBtn;
+//        /**
+//         * 删除按钮
+//         */
+//        private IconfontTextView deleteImgBtn;
 
         public PopListViewHolder(View view) {
             super(view);
@@ -485,12 +487,12 @@ public class MainPopPlayListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             return likeImg;
         }
 
-        public IconfontTextView getDeleteImgBtn() {
-            if (deleteImgBtn == null) {
-                deleteImgBtn = view.findViewById(R.id.delete);
-            }
-            return deleteImgBtn;
-        }
+//        public IconfontTextView getDeleteImgBtn() {
+//            if (deleteImgBtn == null) {
+//                deleteImgBtn = view.findViewById(R.id.delete);
+//            }
+//            return deleteImgBtn;
+//        }
     }
 
 }

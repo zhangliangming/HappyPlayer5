@@ -575,10 +575,6 @@ public class TabMyFragment extends BaseFragment {
         if (action.equals(AudioBroadcastReceiver.ACTION_LOCALUPDATE)) {
             loadLocalCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_RECENTUPDATE)) {
-            AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            if (audioInfo != null) {
-                AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), true);
-            }
             loadRecentCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEUPDATE)) {
             loadLikeCount();
@@ -602,8 +598,6 @@ public class TabMyFragment extends BaseFragment {
             loadLikeCount();
         } else if (action.equals(AudioBroadcastReceiver.ACTION_LIKEDELETE)) {
             //删除喜欢
-            AudioInfo audioInfo = (AudioInfo) intent.getSerializableExtra(AudioInfo.KEY);
-            AudioInfoDB.getAudioInfoDB(mActivity.getApplication()).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
             loadLikeCount();
         }
     }

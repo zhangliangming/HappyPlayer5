@@ -165,9 +165,11 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
                         viewHolder.getUnLikeImgBtn().setVisibility(View.VISIBLE);
                         ToastUtil.showTextToast(mContext, "取消成功");
 
+                        AudioInfoDB.getAudioInfoDB(mContext).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
+
+
                         //删除喜欢歌曲
                         Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                        delIntent.putExtra(AudioInfo.KEY, audioInfo);
                         delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(delIntent);
                     }
@@ -193,21 +195,22 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
                     @Override
                     public void onClick(View view) {
 
+                        AudioInfoDB.getAudioInfoDB(mContext).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), true);
+
+                        //删除最近歌曲
+                        Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_RECENTUPDATE);
+                        delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+                        mContext.sendBroadcast(delIntent);
+
                         //
                         if (mMenuOpenIndex != -1) {
                             mMenuOpenIndex = -1;
                         }
 
-
-                        //删除最近歌曲
-                        Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_RECENTUPDATE);
-                        delIntent.putExtra(AudioInfo.KEY, audioInfo);
-                        delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
-                        mContext.sendBroadcast(delIntent);
-
                         if(mRecentCallBack != null){
                             mRecentCallBack.delete();
                         }
+
                     }
                 });
             } else {
@@ -219,9 +222,11 @@ public class RecentOrLikeMusicAdapter extends RecyclerView.Adapter<RecyclerView.
 
                         ToastUtil.showTextToast(mContext, "取消成功");
 
+                        AudioInfoDB.getAudioInfoDB(mContext).deleteRecentOrLikeAudio(audioInfo.getHash(), audioInfo.getType(), false);
+
+
                         //删除喜欢歌曲
                         Intent delIntent = new Intent(AudioBroadcastReceiver.ACTION_LIKEDELETE);
-                        delIntent.putExtra(AudioInfo.KEY, audioInfo);
                         delIntent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
                         mContext.sendBroadcast(delIntent);
 

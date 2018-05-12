@@ -321,9 +321,6 @@ public class MainActivity extends BaseActivity {
     private IconfontTextView modeRandomTv;
     private IconfontTextView modeSingleTv;
 
-    //删除
-    private IconfontTextView mDeleteTv;
-
     @Override
     protected void initViews(Bundle savedInstanceState) {
 
@@ -874,13 +871,13 @@ public class MainActivity extends BaseActivity {
         initPlayModeView(mHPApplication.getPlayModel(), modeAllTv, modeRandomTv, modeSingleTv, false);
 
         //删除播放列表按钮
-        mDeleteTv = findViewById(R.id.delete);
-        mDeleteTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
+//        IconfontTextView deleteTv = findViewById(R.id.delete);
+//        deleteTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//            }
+//        });
     }
 
     /**
