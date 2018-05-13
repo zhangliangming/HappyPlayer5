@@ -348,7 +348,7 @@ public class FloatService extends Service {
         int fontSize = Math.max(mHPApplication.getDesktopLrcFontSize(), minFontSize);
         //设置字体文件
         Typeface typeFace = Typeface.createFromAsset(getAssets(),
-                "fonts/weiruanyahei14M.ttf");
+                "fonts/pingguolihei.ttf");
         mFloatLyricsView.setTypeFace(typeFace);
         final Paint paint = new Paint();
         paint.setTypeface(typeFace);
