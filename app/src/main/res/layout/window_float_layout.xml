@@ -233,8 +233,9 @@
                 android:id="@+id/color_panel3"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
-                android:layout_centerInParent="true"
-                android:background="#f78426" />
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="#e17db3" />
 
             <ImageView
                 android:id="@+id/color_status3"

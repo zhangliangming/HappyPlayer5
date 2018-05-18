@@ -8,6 +8,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zlm.hp.db.AudioInfoDB;
 import com.zlm.hp.dialog.AlartOneButtonDialog;
@@ -110,6 +111,10 @@ public class TabMyFragment extends BaseFragment {
      * 歌词制作器按钮
      */
     private SetupBGButton mMakeLrcSetupBGButton;
+    /**
+     * 定时关闭按钮
+     */
+    private SetupBGButton mTimerPowerOffSetupBGButton;
 
     /**
      * 退出提示窗口
@@ -217,6 +222,35 @@ public class TabMyFragment extends BaseFragment {
 
             doNotificationReceive(context, intent);
 
+
+        }
+    };
+
+    /**
+     * 定时关闭
+     */
+    private Handler mTimerPowerOffHandler = new Handler();
+    /**
+     * 关闭时间
+     */
+    private int mTimerPowerOffTime = 1000 * 60 * 60;
+    /**
+     * 当前时间
+     */
+    private int mCurTime = 0;
+    /**
+     * 定时关闭线程
+     */
+    private Runnable mTimerPowerOffRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (mCurTime >= mTimerPowerOffTime) {
+                //关闭应用
+                ActivityManage.getInstance().exit();
+            } else {
+                mCurTime += 1000;
+                mTimerPowerOffHandler.postDelayed(mTimerPowerOffRunnable, 1000);
+            }
 
         }
     };
@@ -480,6 +514,25 @@ public class TabMyFragment extends BaseFragment {
                 startActivity(lrcConverterIntent);
                 //去掉动画
                 mActivity.overridePendingTransition(0, 0);
+            }
+        });
+
+        //定时关闭按钮
+        mTimerPowerOffSetupBGButton = mainView.findViewById(R.id.timer_power_off);
+        mTimerPowerOffSetupBGButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean select = mTimerPowerOffSetupBGButton.isSelect();
+                mCurTime = 0;
+                mTimerPowerOffHandler.removeCallbacks(mTimerPowerOffRunnable);
+                if (select) {
+                    Toast.makeText(mActivity.getApplicationContext(), "你取消了定时关闭", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mActivity.getApplicationContext(), "1小时后关闭应用", Toast.LENGTH_SHORT).show();
+                    mTimerPowerOffHandler.post(mTimerPowerOffRunnable);
+                }
+                mTimerPowerOffSetupBGButton.setSelect(!select);
+
             }
         });
 

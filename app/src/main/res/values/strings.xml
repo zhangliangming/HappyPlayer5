@@ -42,6 +42,8 @@
     <string name="make_lrc_img">&#xe62e;</string>
     <string name="lrc_to_video">歌词图片生成器</string>
     <string name="lrc_to_video_img">&#xe646;</string>
+    <string name="timer_power_off">定时关闭</string>
+    <string name="timer_power_off_img">&#xe688;</string>
 
     <string name="no_net_img">&#xe62d;</string>
     <string name="loading_img">&#xe68e;</string>

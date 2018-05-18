@@ -113,9 +113,9 @@ public class PreferencesConstants {
             ColorUtils.parserColor("#ffffff"),
             ColorUtils.parserColor("#ffffff")
     }, {
-            ColorUtils.parserColor("#02a6ae"),
-            ColorUtils.parserColor("#80ffff"),
-            ColorUtils.parserColor("#02a6ae")
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#ffffff"),
+            ColorUtils.parserColor("#ffffff")
     }, {
             ColorUtils.parserColor("#ffac00"),
             ColorUtils.parserColor("#ff0000"),
@@ -138,9 +138,9 @@ public class PreferencesConstants {
             ColorUtils.parserColor("#ffff00"),
             ColorUtils.parserColor("#ffff00")
     }, {
-            ColorUtils.parserColor("#f78426"),
-            ColorUtils.parserColor("#ffff00"),
-            ColorUtils.parserColor("#f78426")
+            ColorUtils.parserColor("#e17db3"),
+            ColorUtils.parserColor("#e17db3"),
+            ColorUtils.parserColor("#e17db3")
     }, {
             ColorUtils.parserColor("#ffffa4"),
             ColorUtils.parserColor("#ffff00"),

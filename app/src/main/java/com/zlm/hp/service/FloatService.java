@@ -233,7 +233,7 @@ public class FloatService extends Service {
         // 设置显示的模式
         mLayout.format = PixelFormat.RGBA_8888;
         // 设置对齐的方法
-        mLayout.gravity = Gravity.CENTER_HORIZONTAL;
+        mLayout.gravity = Gravity.CENTER_HORIZONTAL | Gravity.TOP;
         // 设置窗体宽度和高度
         DisplayMetrics dm = new DisplayMetrics();
         mWindowManager.getDefaultDisplay().getMetrics(dm);
@@ -244,12 +244,9 @@ public class FloatService extends Service {
         // 设置窗体焦点及触摸：
         boolean desktopLyricsIsMove = HPApplication.getInstance().isDesktopLyricsIsMove();
         if (desktopLyricsIsMove) {
-            mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+            mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
         } else {
-            mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+            mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
         }
 
         mWindowY = mLayout.y;
@@ -836,12 +833,9 @@ public class FloatService extends Service {
         } else if (action.equals(AudioBroadcastReceiver.ACTION_DESLRC_LOCKORUNLOCK)) {
             //歌词解锁或者加锁
             if (mHPApplication.isDesktopLyricsIsMove()) {
-                mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+                mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
             } else {
-                mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                        | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                        | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
+                mLayout.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE;
             }
             if (mFloatLinearLayout.getParent() != null) {
                 mWindowManager.updateViewLayout(mFloatLinearLayout, mLayout);

@@ -622,6 +622,57 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/item_height"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="3">
+
+
+                        <com.zlm.hp.widget.SetupBGButton
+                            android:id="@+id/timer_power_off"
+                            android:layout_width="@dimen/item_imgSize"
+                            android:layout_height="@dimen/item_imgSize"
+                            android:layout_centerInParent="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:clickable="true">
+
+                            <com.zlm.hp.widget.IconfontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerInParent="true"
+                                android:layout_centerVertical="true"
+                                android:text="@string/timer_power_off_img"
+                                android:textSize="@dimen/item_text_Size" />
+
+                        </com.zlm.hp.widget.SetupBGButton>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerInParent="true"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:text="@string/timer_power_off"
+                            android:textColor="@color/def_bar_title_color" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -732,7 +783,8 @@
                     android:layout_height="@dimen/item_height"
                     android:layout_weight="1"
                     android:clickable="true"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
