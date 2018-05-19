@@ -31,8 +31,15 @@
 -dontskipnonpubliclibraryclassmembers
 -dontpreverify
 -verbose
--ignorewarning
--printmapping proguardMapping.txt
+#-ignorewarning
+# 混淆前后的映射
+-printmapping mapping.txt
+# apk 包内所有 class 的内部结构
+-dump class_files.txt
+# 未混淆的类和成员
+-printseeds seeds.txt
+# 列出从 apk 中删除的代码
+-printusage unused.txt
 -optimizations !code/simplification/cast,!field/*,!class/merging/*
 -keepattributes *Annotation*,InnerClasses
 -keepattributes Signature
@@ -105,18 +112,37 @@
 #android-logging-log4j-1.0.3.jar
 -keep class de.mindpipe.android.logging.log4j.** { *; }
 #log4j-1.2.17.jar
+-dontwarn org.apache.log4j.**
 -keep class org.apache.log4j.** { *; }
 
 #5complie包
 #com.belerweb:pinyin4j:2.5.0
 -keep class com.hp.hpl.sparta.** { *; }
 -keep class net.sourceforge.pinyin4j.** { *; }
+
 #com.squareup.okhttp3:okhttp:3.3.1
+-dontwarn okio.**
 -keep class okhttp3.** { *; }
 -keep class okio.** { *; }
+
 #junit:junit:4.12
 -keep class junit.** { *; }
 -keep class org.junit.** { *; }
+
+#com.github.zhangliangming:SwipeBackLayout、com.github.zhangliangming:RotateLayout
+#com.github.zhangliangming:SeekBar
+-keep class com.zlm.libs.widget.** { *; }
+
+#com.github.zhangliangming:HPLyrics
+-keep class com.zlm.hp.lyrics.** { *; }
+
+#com.github.zhangliangming:HPAudio
+-dontwarn javax.**
+-dontwarn java.awt.**
+-keep class org.jaudiotagger.** { *; }
+-keep class davaguine.jmac.** { *; }
+-keep class com.wavpack.** { *; }
+-keep class com.zlm.hp.audio.** { *; }
 
 #6混淆项目代码
 -keep class com.zlm.hp.**

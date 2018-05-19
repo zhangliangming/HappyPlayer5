@@ -15,6 +15,10 @@ android {
     }
     buildTypes {
         release {
+            debuggable false
+            jniDebuggable false
+            shrinkResources true
+            zipAlignEnabled true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -80,5 +84,5 @@ dependencies {
     /**
      * 音频
      */
-    implementation 'com.github.zhangliangming:HPAudio:v2.2'
+    implementation 'com.github.zhangliangming:HPAudio:v2.4'
 }
