@@ -207,14 +207,9 @@ public class FloatService extends Service {
             mWindowManager.addView(mFloatLinearLayout, mLayout);
         }
 
-        /**
-         *
-         */
-        if (mHPApplication.isDesktopLyricsIsMove()) {
-            mHandler.postDelayed(mRunnable, mDelayMs);
-        } else {
-            mHandler.postDelayed(mRunnable, 0);
-        }
+        //
+        mHandler.postDelayed(mRunnable, 0);
+
     }
 
     /**

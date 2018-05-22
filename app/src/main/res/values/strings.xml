@@ -63,6 +63,11 @@
     <string name="liked_img">&#xe628;</string>
     <string name="more_img">&#xe602;</string>
 
+    //文件返回上一级
+    <string name="file_back">&#xe614;</string>
+    <string name="file_name">&#xe65a;</string>
+    <string name="file_directory">&#xe662;</string>
+
     //字体
     <string name="ziti_jia">&#xe6f9;</string>
     <string name="ziti_jian">&#xe6f6;</string>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="vertical">
+
+
+    <com.zlm.hp.widget.ListItemRelativeLayout
+        android:id="@+id/itemBG"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/songitem_height"
+        android:clickable="true">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/fileRadioButton">
+
+            <com.zlm.hp.widget.IconfontTextView
+                android:id="@+id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="@string/file_name"
+                android:textColor="#000"
+                android:textSize="30dp" />
+
+            <TextView
+                android:id="@+id/filename"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/icon"
+                android:layout_weight="1"
+                android:ellipsize="marquee"
+                android:singleLine="true"
+                android:text="文件名"
+                android:textColor="#000"
+                android:textSize="18dp" />
+
+        </RelativeLayout>
+
+
+        <RadioButton
+            android:id="@+id/fileRadioButton"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="false"
+            android:theme="@style/radioButton" />
+
+
+        <com.zlm.hp.widget.DividerView
+            android:layout_width="match_parent"
+            android:layout_height="1.5dip"
+            android:layout_alignParentBottom="true" />
+
+
+    </com.zlm.hp.widget.ListItemRelativeLayout>
+</LinearLayout>
