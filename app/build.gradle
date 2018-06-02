@@ -67,22 +67,28 @@ dependencies {
     /**
      * 右滑动关闭
      */
-    compile 'com.github.zhangliangming:SwipeBackLayout:v2.2'
+    implementation 'com.github.zhangliangming:SwipeBackLayout:v2.5'
     /**
      * 旋转界面
      */
-    implementation 'com.github.zhangliangming:RotateLayout:v2.2'
+    implementation 'com.github.zhangliangming:RotateLayout:v2.5'
     /**
      * 进度条
      */
-    implementation 'com.github.zhangliangming:SeekBar:v3.0'
+    implementation 'com.github.zhangliangming:SeekBar:v3.5'
     /**
      * 歌词
      */
-    compile 'com.github.zhangliangming:HPLyrics:v1.36'
+    implementation 'com.github.zhangliangming:HPLyrics:v1.40'
 
     /**
      * 音频
      */
     implementation 'com.github.zhangliangming:HPAudio:v2.4'
+
+    /**
+     * 注册码
+     */
+    implementation 'com.github.zhangliangming:Register:v1.0'
+
 }

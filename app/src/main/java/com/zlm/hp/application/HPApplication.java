@@ -12,6 +12,7 @@ import com.zlm.hp.model.AudioMessage;
 import com.zlm.hp.net.entity.RankListResult;
 import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.hp.utils.SerializableObjUtil;
+import com.zlm.libs.register.RegisterHelper;
 
 import java.io.File;
 import java.util.List;
@@ -166,6 +167,7 @@ public class HPApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        RegisterHelper.verify();
     }
 
     public boolean isPlayServiceForceDestroy() {

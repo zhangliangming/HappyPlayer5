@@ -144,6 +144,9 @@
 -keep class com.wavpack.** { *; }
 -keep class com.zlm.hp.audio.** { *; }
 
+#com.github.zhangliangming:Register:v1.0
+-keep class com.zlm.libs.register.** { *; }
+
 #6混淆项目代码
 -keep class com.zlm.hp.**
 -keepclassmembers class com.zlm.hp.** {
