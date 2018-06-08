@@ -22,6 +22,9 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - [HPAudio（音频解析库）](https://github.com/zhangliangming/HPAudio.git)
 
 # 更新日志 #
+- 2018-06-08
+- 修复转换歌词的路径
+
 
 - 2018-06-02
 - 添加注册码，试用结束后，直接关闭应用（不提示）

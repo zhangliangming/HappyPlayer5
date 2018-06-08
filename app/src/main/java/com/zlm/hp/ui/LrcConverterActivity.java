@@ -13,12 +13,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.lyrics.formats.LyricsFileReader;
 import com.zlm.hp.lyrics.formats.LyricsFileWriter;
 import com.zlm.hp.lyrics.model.LyricsInfo;
 import com.zlm.hp.lyrics.utils.LyricsIOUtils;
 import com.zlm.hp.utils.FileUtils;
 import com.zlm.hp.utils.HelperUtil;
+import com.zlm.hp.utils.ResourceFileUtil;
 import com.zlm.libs.widget.SwipeBackLayout;
 
 import java.io.File;
@@ -169,7 +171,8 @@ public class LrcConverterActivity extends BaseActivity {
                         //1.先读取源文件歌词
                         LyricsFileReader lyricsFileReader = LyricsIOUtils.getLyricsFileReader(orgFile);
                         String outFileName = FileUtils.removeExt(orgFile.getName());
-                        File outFile = new File(orgFile.getParent() + File.separator + outFileName + "." + outFormat);
+                        String outFilePath = ResourceFileUtil.getFilePath(getApplicationContext(), ResourceConstants.PATH_LYRICS, File.separator + outFileName + "." + outFormat);
+                        File outFile = new File(outFilePath);
                         //2.生成转换歌词文件
                         LyricsFileWriter lyricsFileWriter = LyricsIOUtils.getLyricsFileWriter(outFile);
                         LyricsInfo lyricsInfo = lyricsFileReader.readFile(orgFile);
