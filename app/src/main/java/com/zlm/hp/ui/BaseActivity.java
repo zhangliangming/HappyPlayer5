@@ -208,4 +208,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         ActivityManage.getInstance().removeActivity(this);
         super.finish();
     }
+
+    @Override
+    protected void onDestroy() {
+        HPApplication.getRefWatcher().watch(this);
+        super.onDestroy();
+    }
 }

@@ -471,7 +471,7 @@ public class MakeLrcFragment extends BaseFragment {
                 }
             });
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

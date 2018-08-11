@@ -346,7 +346,7 @@ public class EditLrcTextFragment extends BaseFragment {
                 }
             });
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

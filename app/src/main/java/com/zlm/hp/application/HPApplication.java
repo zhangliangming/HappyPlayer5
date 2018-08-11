@@ -2,6 +2,8 @@ package com.zlm.hp.application;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.zlm.hp.constants.PreferencesConstants;
 import com.zlm.hp.constants.ResourceConstants;
 import com.zlm.hp.libs.utils.LoggerUtil;
@@ -21,6 +23,12 @@ import java.util.List;
  * Created by zhangliangming on 2017/7/15.
  */
 public class HPApplication extends MultiDexApplication {
+
+    /**
+     * 用来后续监控可能发生泄漏的对象
+     */
+    private static RefWatcher sRefWatcher;
+
     /**
      * 播放服务是否被强迫回收
      */
@@ -168,7 +176,23 @@ public class HPApplication extends MultiDexApplication {
         super.onCreate();
         instance = this;
         RegisterHelper.verify();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        sRefWatcher = RefWatcher.DISABLED;
     }
+
+    /**
+     * 用来后续监控可能发生泄漏的对象
+     *
+     * @return
+     */
+    public static RefWatcher getRefWatcher() {
+        return sRefWatcher;
+    }
+
 
     public boolean isPlayServiceForceDestroy() {
         return playServiceForceDestroy;

@@ -642,7 +642,7 @@ public class MakeExtraLrcFragment extends BaseFragment {
                 }
             });
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

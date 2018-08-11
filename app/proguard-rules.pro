@@ -154,3 +154,6 @@
 }
 -keep class tv.danmaku.ijk.media.player.** { *; }
 
+#leakcanary 内存泄露
+-keep public class com.squareup.leakcanary.**{*;}
+

@@ -269,6 +269,12 @@ public abstract class BaseFragment extends Fragment {
             mNetContainer.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onDestroy() {
+        HPApplication.getRefWatcher().watch(this);
+        super.onDestroy();
+    }
+
     /**
      * 设置内容视图
      *

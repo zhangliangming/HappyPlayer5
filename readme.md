@@ -20,9 +20,14 @@ branch-zlm：该分支代码是我个人开发的，目前功能稳定，代码�
 - [HPLyrics（动感歌词解析和歌词显示库）](https://github.com/zhangliangming/HPLyrics.git)
 - [HPAudio（音频解析库）](https://github.com/zhangliangming/HPAudio.git)
 - [Android仿酷狗SlidingMenuLayout界面实现](https://github.com/zhangliangming/SlidingMenuLayout.git)
+- [ijkplayer依赖包（支持无损）](https://github.com/zhangliangming/Player.git)
 
 
 # 更新日志 #
+- 2018-08-11
+- ijkplayer修改为依赖引用
+- 优化歌词
+
 - 2018-06-18
 - 添加SlidingMenuLayout控件，暂时未整合到该项目
 

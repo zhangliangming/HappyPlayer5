@@ -415,7 +415,7 @@ public class PreviewLrcFragment extends BaseFragment {
                 }
             });
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

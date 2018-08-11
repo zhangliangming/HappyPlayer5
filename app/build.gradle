@@ -44,10 +44,17 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:multidex:1.0.1'
-    implementation 'com.android.support:appcompat-v7:26.0.0-beta1'
+    implementation 'com.android.support:appcompat-v7:26.0+'
     testImplementation 'junit:junit:4.12'
     implementation files('libs/log4j-1.2.17.jar')
     implementation files('libs/android-logging-log4j-1.0.3.jar')
+
+
+    //内存泄露 LeakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 
     /**
      * ijkplayer
@@ -61,7 +68,7 @@ dependencies {
      compile 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
      *
      */
-    implementation 'com.android.support:recyclerview-v7:26.0.0-beta1'
+    implementation 'com.android.support:recyclerview-v7:26.0+'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.belerweb:pinyin4j:2.5.0'
     /**
@@ -79,7 +86,7 @@ dependencies {
     /**
      * 歌词
      */
-    implementation 'com.github.zhangliangming:HPLyrics:v1.40'
+    implementation 'com.github.zhangliangming:HPLyrics:v1.44'
 
     /**
      * 音频
@@ -90,5 +97,10 @@ dependencies {
      * 注册码
      */
     implementation 'com.github.zhangliangming:Register:v1.0'
+
+    /**
+     * ijkplayer
+     */
+    implementation 'com.github.zhangliangming:Player:v1.1'
 
 }
