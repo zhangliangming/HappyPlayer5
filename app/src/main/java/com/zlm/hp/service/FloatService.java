@@ -332,7 +332,6 @@ public class FloatService extends Service {
         //双行歌词视图
         mFloatLyricsView = mainView.findViewById(R.id.floatLyricsView);
         mFloatLyricsView.setOrientation(FloatLyricsView.ORIENTATION_CENTER);
-        mFloatLyricsView.setHandToSetFontSize(true);
         //设置字体大小
         final float floatVH = getResources().getDimension(R.dimen.player_height);
         final int minFontSize = (int) (floatVH / 4);

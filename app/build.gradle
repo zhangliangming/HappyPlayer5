@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
     defaultConfig {
         applicationId "com.zlm.hp"
         minSdkVersion 19
@@ -44,18 +44,15 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:multidex:1.0.1'
-    implementation 'com.android.support:appcompat-v7:26.0+'
+    implementation 'com.android.support:appcompat-v7:28.0+'
     testImplementation 'junit:junit:4.12'
     implementation files('libs/log4j-1.2.17.jar')
     implementation files('libs/android-logging-log4j-1.0.3.jar')
-
-
     //内存泄露 LeakCanary
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.1'
     // Optional, if you use support library fragments:
     debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
-
     /**
      * ijkplayer
      *
@@ -74,11 +71,11 @@ dependencies {
     /**
      * 右滑动关闭
      */
-    implementation 'com.github.zhangliangming:SwipeBackLayout:v2.5'
+    implementation 'com.github.zhangliangming:SwipeBackLayout:v2.6'
     /**
      * 旋转界面
      */
-    implementation 'com.github.zhangliangming:RotateLayout:v2.5'
+    implementation 'com.github.zhangliangming:RotateLayout:v2.6'
     /**
      * 进度条
      */
@@ -86,21 +83,17 @@ dependencies {
     /**
      * 歌词
      */
-    implementation 'com.github.zhangliangming:HPLyrics:v1.44'
-
+    implementation 'com.github.zhangliangming:HPLyrics:v1.46'
     /**
      * 音频
      */
     implementation 'com.github.zhangliangming:HPAudio:v2.4'
-
     /**
      * 注册码
      */
     implementation 'com.github.zhangliangming:Register:v1.0'
-
     /**
      * ijkplayer
      */
     implementation 'com.github.zhangliangming:Player:v1.1'
-
 }
