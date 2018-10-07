@@ -83,7 +83,7 @@ dependencies {
     /**
      * 歌词
      */
-    implementation 'com.github.zhangliangming:HPLyrics:v1.46'
+    implementation 'com.github.zhangliangming:HPLyrics:v1.47'
     /**
      * 音频
      */
@@ -91,7 +91,7 @@ dependencies {
     /**
      * 注册码
      */
-    implementation 'com.github.zhangliangming:Register:v1.0'
+    implementation 'com.github.zhangliangming:Register:v1.1'
     /**
      * ijkplayer
      */
