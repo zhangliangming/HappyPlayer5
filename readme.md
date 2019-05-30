@@ -37,9 +37,11 @@ android5.0及以上
 - [jjdxm_dialogui：弹出窗口框架](https://github.com/jjdxmashl/jjdxm_dialogui/ "jjdxm_dialogui")
 - [LRecyclerView：RecyclerView上拉加载更多，下拉刷新](https://github.com/jdsjlzx/LRecyclerView "LRecyclerView")
 
-# 部分效果预览 #
+# 更多效果图及安装包 #
 
-[更多效果图，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
+[更多效果图及安装包，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
+
+# 部分效果预览 #
 
 ![MV](https://i.imgur.com/ZxVROaD.png)
 
