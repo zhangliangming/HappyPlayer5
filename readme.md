@@ -143,6 +143,7 @@ android5.0及以上
 - [Hrc/hrcx歌词制作器（播放器）](https://github.com/zhangliangming/HappyPlayer-PC.git "Hrc/Hrcx歌词制作器（播放器）")
 - [浅谈动感歌词](http://zhangliangming.github.io/ "浅谈动感歌词")
 - [Kugou-api](https://github.com/ecitlm/Kugou-api "Kugou-api")
+- [各大音乐软件API](https://messoer.github.io/mess-api-doc/ "各大音乐软件API")
 
 # 声明 #
 仅用于学习用途
