@@ -1,14 +1,11 @@
-# 重要声明 #
-由于学习交流时间关闭，乐乐音乐6.0不再提供源码下载，乐乐相关的代码及开源的控件仅供于学习用途。
-
 # 简介 #
-乐乐音乐6.0主要是基于ijkplayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词及制作动感歌词、翻译歌词和音译歌词，以及MV功能。
+乐乐音乐6.0主要是基于原生MediaPlayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词及制作动感歌词、翻译歌词和音译歌词，以及MV功能。
 
 # 运行环境 #
 android5.0及以上
 
 # 音频格式 #
-目前用ijkplayer来测试如下音频格式，均可正常播放：aac，amr，ape，flac，m4r，mmf，mp2，mp3，ogg，wav，wma，wv
+原生MediaPlayer支持格式
 
 # 歌词格式 #
 - lrc：普通歌词、 krc：酷狗歌词 、ksc：卡拉OK歌词
@@ -37,11 +34,9 @@ android5.0及以上
 - [jjdxm_dialogui：弹出窗口框架](https://github.com/jjdxmashl/jjdxm_dialogui/ "jjdxm_dialogui")
 - [LRecyclerView：RecyclerView上拉加载更多，下拉刷新](https://github.com/jdsjlzx/LRecyclerView "LRecyclerView")
 
-# 更多效果图(试用安装包不定期更新) #
+# 部分效果预览 #
 
 [更多效果图，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
-
-# 部分效果预览 #
 
 ![MV](https://i.imgur.com/ZxVROaD.png)
 
@@ -68,6 +63,12 @@ android5.0及以上
 [更多版本客户端，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
 
 # 更新日志 #
+
+## 2020-09-09 ##
+- 修复歌词api、优化歌词速度和修复歌词制作
+
+## 2019-08-18 ##
+- 修复歌曲下载
 
 ## 2019-01-24 ##
 - 修复本地歌曲播放报找不到文件路径的问题
@@ -143,7 +144,6 @@ android5.0及以上
 - [Hrc/hrcx歌词制作器（播放器）](https://github.com/zhangliangming/HappyPlayer-PC.git "Hrc/Hrcx歌词制作器（播放器）")
 - [浅谈动感歌词](http://zhangliangming.github.io/ "浅谈动感歌词")
 - [Kugou-api](https://github.com/ecitlm/Kugou-api "Kugou-api")
-- [各大音乐软件API](https://messoer.github.io/mess-api-doc/ "各大音乐软件API")
 
 # 声明 #
 仅用于学习用途
