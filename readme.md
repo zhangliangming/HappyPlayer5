@@ -28,15 +28,12 @@ android5.0及以上
 
 # 客户端试用 #
 
-[更多版本客户端，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
+[乐乐音乐8.0版本](https://pan.bilnn.com/api/v3/file/sourcejump/2lrZXwSG/N9WT11ig89YdGXXlikA1EFwFotG6Y8XliZaJ_p-C77c*)
 
 # 更新日志 #
 
-## 2020-10-11 ##
-- 添加主界面、关于界面及歌词修改为spi
-
-## 2020-09-09 ##
-- 修复歌词api、优化歌词速度和修复歌词制作
+- 界面改版
+- 优化歌词性能
 
 # 传送门 #
 
