@@ -1,3 +1,7 @@
+
+# H5页面版本简介 #
+https://github.com/zhangliangming/HappyPlayer-Uni.git
+
 # 简介 #
 乐乐音乐7.0主要是基于原生MediaPlayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词及制作动感歌词、翻译歌词和音译歌词，以及MV功能。
 
