@@ -3,7 +3,7 @@
 https://github.com/zhangliangming/HappyPlayer-Uni.git
 
 # 简介 #
-乐乐音乐7.0主要是基于原生MediaPlayer框架开发的Android音乐播放器，它支持多种音频格式和动感歌词及制作动感歌词、翻译歌词和音译歌词，以及MV功能。
+乐乐音乐8.0主要是基于原生MediaPlayer框架开发的Android音乐播放器，它支持lrc歌词和动感歌词(ksc歌词、krc歌词、trc歌词、zrce歌词和hrc歌词等)、多种格式歌词转换器及制作动感歌词、翻译歌词和音译歌词。。
 
 # 运行环境 #
 android5.0及以上
