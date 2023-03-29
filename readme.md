@@ -2,6 +2,10 @@
 # H5页面版本简介 #
 https://github.com/zhangliangming/HappyPlayer-Uni.git
 
+# 客户端试用 #
+
+[haplayer-8.0.23032901](https://try.gitea.io/zhangliangming/DataBank/raw/commit/aa86e03d4e70ebfb9929ec07ef3069117f5dfd51/HappyPlayer/apk/haplayer-8.0.23032901.apk)
+
 # 简介 #
 乐乐音乐8.0主要是基于原生MediaPlayer框架开发的Android音乐播放器，它支持lrc歌词和动感歌词(ksc歌词、krc歌词、trc歌词、zrce歌词和hrc歌词等)、多种格式歌词转换器及制作动感歌词、翻译歌词和音译歌词。。
 
@@ -29,10 +33,6 @@ android5.0及以上
 
 [更多效果图，点击此次查看:https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw 提取码: dgtc](https://pan.baidu.com/s/1YkZssna3TO9hKAOXwvxXiw)
 
-
-# 客户端试用 #
-
-[乐乐音乐8.0版本](https://pan.bilnn.com/api/v3/file/sourcejump/2lrZXwSG/N9WT11ig89YdGXXlikA1EFwFotG6Y8XliZaJ_p-C77c*)
 
 # 更新日志 #
 
