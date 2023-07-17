@@ -1,3 +1,14 @@
+#HappyPlayer-JavaFX版本预览
+
+##网络歌曲界面
+![网络歌曲.png](https://upload-images.jianshu.io/upload_images/4111431-7d9a1e54fe923ec5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##多行歌词界面
+![多行歌词.png](https://upload-images.jianshu.io/upload_images/4111431-563d70e67035f526.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+##桌面歌词
+![桌面歌词.png](https://upload-images.jianshu.io/upload_images/4111431-26486b851ee5d995.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 # H5页面版本简介 #
 https://github.com/zhangliangming/HappyPlayer-Uni.git
